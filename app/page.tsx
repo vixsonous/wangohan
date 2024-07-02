@@ -1,112 +1,156 @@
 import Image from "next/image";
+import RecipeSlider from "./components/RecipeSlider";
+import BirthdayAvatar from "./components/BirthdayAvatar";
+import BirthdayContainer from "./components/BirthdayContainer";
 
 export default function Home() {
+  const birthdays = [
+      '/LP/bday-dogs/puppy1.jpg',
+      '/LP/bday-dogs/puppy2.jpg',
+      '/LP/bday-dogs/puppy3.jpg',
+      '/LP/bday-dogs/puppy4.jpg',
+      '/LP/bday-dogs/puppy5.jpg',
+      '/LP/bday-dogs/puppy6.jpg',
+      '/LP/bday-dogs/puppy7.jpg'
+  ];
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <main className="flex p-[20px] min-h-screen flex-col md:items-center">
+      <div className=" flex md:w-full lg:w-[70vw] h-full justify-center items-center flex-col gap-[15px]">
+        <div id="logo-banner">
+          <Image src={'/wangohan_logo.png'} className="rounded-md h-[auto] w-[200px] relative" width={10000} height={10000}  alt="website banner" />
         </div>
-      </div>
+        <div className="w-[100%] h-[100%] relative flex flex-col gap-[10px]">
+          <div className="search-form relative flex justify-end">
+            <form className="flex gap-[10px]" action="">
+              <input className="py-[5px] px-[5px] w-[100px] h-[25px] rounded-[3px] text-[9px]" placeholder="キーワードで検索" type="text" />
+              <input className="px-[10px] w-[50px] h-[25px] rounded-[3px] bg-black text-white text-[9px]" type="submit" value="検索" />
+            </form>
+          </div>
+          <div className="w-full h-full relative">
+            <Image src={'/dashboard.png'} className="rounded-md h-full w-full relative" width={10000} height={10000}  alt="website banner" />
+          </div>
+          <div>
+            <RecipeSlider title={'今週のレシピ'} recipes={[1,2,3,4,5]} width={'175'}/>
+          </div>
+          <div>
+            <RecipeSlider title={'人気レシピ'} recipes={[1,2,3,4,5]} width={'175'}/>
+          </div>
+          <div className="flex flex-col gap-[40px] justify-center items-center mt-[30px] relative">
+            <div className="title">
+              <h1 className="text-[36px] tracking-tighter font-bold text-[#523636] relative after:content-[''] z-[1] after:left-[-10px] after:w-[105%] after:h-[40px] after:top-[10px] after:z-[-1] after:flex after:absolute after:bg-[#FFE9C9]">レシピカテゴリ</h1>
+              <div className="absolute z-[-1] left-[0px] w-full top-[27px] border-[2px] border-solid border-[#523636]"/>
+            </div>
+            <div className="first-row w-full flex gap-[10px] justify-center flex-col items-center  ">
+              <h1 className="text-[26px] text-[#523636] font-semibold">年齢別で探す</h1>
+              <div className="flex">
+                <a href="" className="flex gap-[10px] text-[13px] text-[#523636] font-bold flex-col justify-center items-center">
+                  <Image src={'/LP/puppy.png'} className="rounded-md h-[70px] w-[120px] max-w-none" width={10000} height={10000}  alt="website banner" />子犬用レシピ
+                </a>
+                <a href="" className="flex gap-[10px] text-[13px] text-[#523636] font-bold flex-col justify-center items-center">
+                  <Image src={'/LP/adult.png'} className="rounded-md h-[70px] w-[120px] max-w-none" width={10000} height={10000}  alt="website banner" />成犬用レシピ</a>
+                <a href="" className="flex gap-[10px] text-[13px] text-[#523636] font-bold flex-col justify-center items-center">
+                  <Image src={'/LP/senior.png'} className="rounded-md h-[70px] w-[120px] max-w-none" width={10000} height={10000}  alt="website banner" />シニア犬用レシピ</a>
+              </div>
+            </div>
 
-      <div className="relative z-[-1] flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+            <div className="first-row gap-[10px] w-full flex justify-center flex-col items-center  ">
+              <h1 className="text-[26px] text-[#523636] font-semibold">サイズ別で探す</h1>
+              <div className="flex">
+                <a href="" className="flex gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-center items-center">
+                  <Image src={'/LP/smalldog.png'} className="rounded-md h-[70px] w-[120px] max-w-none" width={10000} height={10000}  alt="website banner" />小型犬用レシピ
+                </a>
+                <a href="" className="flex gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-center items-center">
+                  <Image src={'/LP/middledog.png'} className="rounded-md h-[70px] w-[120px] max-w-none" width={10000} height={10000}  alt="website banner" />中型犬用レシピ</a>
+                <a href="" className="flex gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-center items-center">
+                  <Image src={'/LP/bigdog.png'} className="rounded-md h-[70px] w-[120px] max-w-none" width={10000} height={10000}  alt="website banner" />大型犬用レシピ</a>
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col gap-[40px] justify-center items-center mt-[30px] relative">
+            <div className="title">
+              <h1 className="text-[36px] font-bold text-[#523636] relative after:content-[''] z-[1] after:w-[100%] after:h-[40px] after:top-[10px] after:z-[-1] after:flex after:absolute after:bg-[#FFE9C9]">イベント</h1>
+              <div className="absolute z-[-1] left-[0px] w-full top-[27px] border-[2px] border-solid border-[#523636]"/>
+            </div>
+            <div className="flex flex-wrap gap-y-[30px] justify-center">
+              <div className="w-[29vw] text-white flex justify-center">
+                <a href="" className="flex gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-center items-center">
+                  <Image src={'/LP/event/birthday.png'} className="rounded-md h-[auto] w-[100%] max-w-none" width={10000} height={10000}  alt="website banner" />大型犬用レシピ</a>
+              </div>
+              <div className="w-[29vw] text-white flex justify-center">
+                <a href="" className="flex gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-center items-center">
+                  <Image src={'/LP/event/ouchianniversary.png'} className="rounded-md h-[auto] w-[100%] max-w-none" width={10000} height={10000}  alt="website banner" />大型犬用レシピ</a>
+              </div>
+              <div className="w-[29vw] text-white flex justify-center">
+                <a href="" className="flex gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-center items-center">
+                  <Image src={'/LP/event/newyears.png'} className="rounded-md h-[auto] w-[100%] max-w-none" width={10000} height={10000}  alt="website banner" />大型犬用レシピ</a>
+              </div>
+              <div className="w-[29vw] text-white flex justify-center">
+                <a href="" className="flex gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-center items-center">
+                  <Image src={'/LP/event/setsubun.png'} className="rounded-md h-[auto] w-[100%] max-w-none" width={10000} height={10000}  alt="website banner" />大型犬用レシピ</a>
+              </div>
+              <div className="w-[29vw] text-white flex justify-center">
+                <a href="" className="flex gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-center items-center">
+                  <Image src={'/LP/event/hinamatsuri.png'} className="rounded-md h-[auto] w-[100%] max-w-none" width={10000} height={10000}  alt="website banner" />大型犬用レシピ</a>
+              </div>
+              <div className="w-[29vw] text-white flex justify-center">
+                <a href="" className="flex gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-center items-center">
+                  <Image src={'/LP/event/kodomonohi.png'} className="rounded-md h-[auto] w-[100%] max-w-none" width={10000} height={10000}  alt="website banner" />大型犬用レシピ</a>
+              </div>
+              <div className="w-[29vw] text-white flex justify-center">
+                <a href="" className="flex gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-center items-center">
+                  <Image src={'/LP/event/tanabata.png'} className="rounded-md h-[auto] w-[100%] max-w-none" width={10000} height={10000}  alt="website banner" />大型犬用レシピ</a>
+              </div>
+              <div className="w-[29vw] text-white flex justify-center">
+                <a href="" className="flex gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-center items-center">
+                  <Image src={'/LP/event/halloween.png'} className="rounded-md h-[auto] w-[100%] max-w-none" width={10000} height={10000}  alt="website banner" />大型犬用レシピ</a>
+              </div>
+              <div className="w-[29vw] text-white flex justify-center">
+                <a href="" className="flex gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-center items-center">
+                  <Image src={'/LP/event/christmas.png'} className="rounded-md h-[auto] w-[100%] max-w-none" width={10000} height={10000}  alt="website banner" />大型犬用レシピ</a>
+              </div>
+              <div className="w-[29vw] text-white flex justify-center">
+                <a href="" className="flex gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-center items-center">
+                  <Image src={'/LP/event/snack.png'} className="rounded-md h-[auto] w-[100%] max-w-none" width={10000} height={10000}  alt="website banner" />大型犬用レシピ</a>
+              </div>
+            </div>
+          </div>
 
-      <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-balance text-sm opacity-50">
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
+          {/* Birthday Section */}
+          <BirthdayContainer bdayAvt={birthdays} />
+          <div className="flex flex-col mx-[-20px] relative">
+            <h1 className="flex justify-center w-[100%] items-center top-[70px] absolute text-[23px] font-bold text-[#523636]">コラムはこちら</h1>
+            <div className="absolute flex justify-center w-[100%] top-[120px]">
+              <button className=" bg-black rounded-md text-[8px] text-white py-[2px] px-[10px]">Button</button>
+            </div>
+            <Image src={'/LP/column.png'} className="rounded-md w-[100%] h-[100%] inline max-w-none object-fill" width={10000} height={10000}  alt="website banner" />
+          </div>
+          <div className="border-[1px] border-black" />
+          <div className="relative">
+            <div className="flex items-center">
+              <div className="flex flex-col justify-center items-center gap-[5px] w-[50%]">
+                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" className="w-[40px] h-[40px]" viewBox="0 0 50 50">
+                  <path d="M 16 3 C 8.8324839 3 3 8.8324839 3 16 L 3 34 C 3 41.167516 8.8324839 47 16 47 L 34 47 C 41.167516 47 47 41.167516 47 34 L 47 16 C 47 8.8324839 41.167516 3 34 3 L 16 3 z M 16 5 L 34 5 C 40.086484 5 45 9.9135161 45 16 L 45 34 C 45 40.086484 40.086484 45 34 45 L 16 45 C 9.9135161 45 5 40.086484 5 34 L 5 16 C 5 9.9135161 9.9135161 5 16 5 z M 37 11 A 2 2 0 0 0 35 13 A 2 2 0 0 0 37 15 A 2 2 0 0 0 39 13 A 2 2 0 0 0 37 11 z M 25 14 C 18.936712 14 14 18.936712 14 25 C 14 31.063288 18.936712 36 25 36 C 31.063288 36 36 31.063288 36 25 C 36 18.936712 31.063288 14 25 14 z M 25 16 C 29.982407 16 34 20.017593 34 25 C 34 29.982407 29.982407 34 25 34 C 20.017593 34 16 29.982407 16 25 C 16 20.017593 20.017593 16 25 16 z"></path>
+                </svg>
+                <div className="flex flex-col justify-center items-center">
+                  <h1 className="text-[13px] font-bold text-[#523636]">Instagramをフォロー</h1>
+                  <span className="text-[10px] font-bold text-[#523636]">あなたのレシピがシェア</span>
+                  <span className="text-[10px] font-bold text-[#523636]">されるかも？！</span>
+                </div>
+              </div>
+              <div className="flex flex-wrap gap-[10px] justify-between items-center h-[100%] self-center w-[50%]">
+                <a href="" className="text-[8px] self-center flex">利用規約</a>
+                <a href="" className="text-[8px] self-center flex">免責事項</a>
+                <a href="" className="text-[8px] self-center flex">プライバシーポリシー</a>
+                <a href="" className="text-[8px] self-center flex">Myページ</a>
+                <a href="" className="text-[8px] self-center flex">HOME</a>
+                <a href="" className="text-[8px] self-center flex">ご意見・お問い合わせ</a>
+              </div>
+            </div>
+            <Image src={'/LP/last.png'} className="rounded-md w-[100%] h-[auto] absolute top-[0px] inline max-w-none object-fill" width={10000} height={10000}  alt="website banner" />
+          </div>
+          <h1 className="w-[100%] flex justify-center relative top-[30px] text-[10px]">@Web5Dimensional Inc.</h1>
+        </div>
       </div>
     </main>
   );
