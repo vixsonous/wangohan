@@ -2,6 +2,11 @@ import Image from "next/image";
 import RecipeSlider from "./components/RecipeSlider";
 import BirthdayAvatar from "./components/BirthdayAvatar";
 import BirthdayContainer from "./components/BirthdayContainer";
+import { Metadata } from "next";
+
+export const metadata:Metadata = {
+  title: "Wangohan"
+}
 
 export default function Home() {
   const birthdays = [
