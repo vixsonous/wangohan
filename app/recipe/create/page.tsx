@@ -52,8 +52,8 @@ export default function RecipeCreate() {
                         <label htmlFor="recipe-title" className="flex">
                             <h1 className="font-semibold text-[20px]">カテゴリー</h1>
                         </label>
-                        <div className="flex flex-wrap">
-                            <div className={`ml-[10px] w-[45%] flex flex-col gap-[5px] flex-wrap `}>
+                        <div className="ml-[1px] flex flex-wrap">
+                            <div className={` w-[45%] flex flex-col gap-[5px] flex-wrap `}>
                                 <span className="text-[13px] text-[grey]">年齢を選択</span>
                                 <div className="flex gap-[5px] flex-wrap items-center">
                                     <span className={`bg-[#523636] self-center flex justify-center items-center text-white py-[5px] px-[8px] rounded-[5px] text-[${CardTagSize}]`}>子犬</span>
@@ -61,7 +61,7 @@ export default function RecipeCreate() {
                                     <span className={`bg-[#523636] self-center flex justify-center items-center text-white py-[5px] px-[8px] rounded-[5px] text-[${CardTagSize}]`}>シニア犬</span>
                                 </div>
                             </div>
-                            <div className={`ml-[10px] w-[45%] flex flex-col gap-[5px] flex-wrap `}>
+                            <div className={` w-[45%] flex flex-col gap-[5px] flex-wrap `}>
                                 <span className="text-[13px] text-[grey]">サイズを選択</span>
                                 <div className="flex gap-[5px] flex-wrap items-center">
                                     <span className={`bg-[#523636] self-center flex justify-center items-center text-white py-[5px] px-[8px] rounded-[5px] text-[${CardTagSize}]`}>小型犬</span>
@@ -69,7 +69,7 @@ export default function RecipeCreate() {
                                     <span className={`bg-[#523636] self-center flex justify-center items-center text-white py-[5px] px-[8px] rounded-[5px] text-[${CardTagSize}]`}>大型犬</span>
                                 </div>
                             </div>
-                            <div className={`ml-[10px] mt-[10px] w-[100%] flex flex-col gap-[5px] flex-wrap `}>
+                            <div className={` mt-[10px] w-[100%] flex flex-col gap-[5px] flex-wrap `}>
                                 <span className="text-[13px] text-[grey]">イベントを選択</span>
                                 <div className="flex gap-[5px] flex-wrap items-center">
                                     <span className={`bg-[#523636] self-center flex justify-center items-center text-white py-[5px] px-[8px] rounded-[5px] text-[${CardTagSize}]`}>お誕生日</span>
