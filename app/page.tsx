@@ -23,8 +23,8 @@ export default function Home() {
         </div>
         <div className="w-[100%] h-[100%] relative flex flex-col gap-[10px]">
           <div className="search-form relative flex justify-end">
-            <form className="flex gap-[10px]" action="">
-              <input className="py-[5px] px-[5px] w-[100px] h-[25px] rounded-[3px] text-[9px]" placeholder="キーワードで検索" type="text" />
+            <form className="flex gap-[10px] w-[100%] flex justify-end" action="">
+              <input className="py-[5px] px-[5px] w-[50%] h-[25px] rounded-[3px] text-[9px]" placeholder="キーワードで検索" type="text" />
               <input className="px-[10px] w-[50px] h-[25px] rounded-[3px] bg-black text-white text-[9px]" type="submit" value="検索" />
             </form>
           </div>
@@ -39,8 +39,8 @@ export default function Home() {
           </div>
           <div className="flex flex-col gap-[40px] justify-center items-center mt-[30px] relative">
             <div className="title">
-              <h1 className="text-[36px] tracking-tighter font-bold text-[#523636] relative after:content-[''] z-[1] after:left-[-10px] after:w-[105%] after:h-[40px] after:top-[10px] after:z-[-1] after:flex after:absolute after:bg-[#FFE9C9]">レシピカテゴリ</h1>
-              <div className="absolute z-[-1] left-[0px] w-full top-[27px] border-[2px] border-solid border-[#523636]"/>
+              <h1 className="text-[26px] tracking-tighter font-bold text-[#523636] relative after:content-[''] z-[1] after:left-[-10px] after:w-[110%] after:h-[40px] after:top-[10px] after:z-[-1] after:flex after:absolute after:bg-[#FFE9C9]">レシピカテゴリ</h1>
+              <div className="absolute z-[-1] left-[0px] w-full top-[17px] border-[2px] border-solid border-[#523636]"/>
             </div>
             <div className="first-row w-full flex gap-[10px] justify-center flex-col items-center  ">
               <h1 className="text-[26px] text-[#523636] font-semibold">年齢別で探す</h1>
@@ -70,8 +70,8 @@ export default function Home() {
           </div>
           <div className="flex flex-col gap-[40px] justify-center items-center mt-[30px] relative">
             <div className="title">
-              <h1 className="text-[36px] font-bold text-[#523636] relative after:content-[''] z-[1] after:w-[100%] after:h-[40px] after:top-[10px] after:z-[-1] after:flex after:absolute after:bg-[#FFE9C9]">イベント</h1>
-              <div className="absolute z-[-1] left-[0px] w-full top-[27px] border-[2px] border-solid border-[#523636]"/>
+              <h1 className="text-[26px] font-bold text-[#523636] relative after:content-[''] z-[1] after:w-[125%] after:left-[-15px] after:h-[40px] after:top-[10px] after:z-[-1] after:flex after:absolute after:bg-[#FFE9C9]">イベント</h1>
+              <div className="absolute z-[-1] left-[0px] w-full top-[17px] border-[2px] border-solid border-[#523636]"/>
             </div>
             <div className="flex flex-wrap gap-y-[30px] justify-center">
               <div className="w-[29vw] text-white flex justify-center">
