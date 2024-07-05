@@ -42,29 +42,31 @@ export default function Home() {
               <h1 className="text-[26px] tracking-tighter font-bold text-[#523636] relative after:content-[''] z-[1] after:left-[-10px] after:w-[110%] after:h-[40px] after:top-[10px] after:z-[-1] after:flex after:absolute after:bg-[#FFE9C9]">レシピカテゴリ</h1>
               <div className="absolute z-[-1] left-[0px] w-full top-[17px] border-[2px] border-solid border-[#523636]"/>
             </div>
-            <div className="first-row w-full flex gap-[10px] justify-center flex-col items-center  ">
-              <h1 className="text-[26px] text-[#523636] font-semibold">年齢別で探す</h1>
-              <div className="flex">
-                <a href="" className="flex gap-[10px] text-[13px] text-[#523636] font-bold flex-col justify-center items-center">
-                  <Image src={'/LP/puppy.png'} className="rounded-md h-[70px] w-[120px] max-w-none" width={10000} height={10000}  alt="website banner" />子犬用レシピ
+            <div className="first-row w-full flex mt-[-20px] gap-[10px] justify-center flex-col items-center  ">
+              <h1 className="text-[20px] text-[#523636] font-semibold">年齢別で探す</h1>
+              <div className="flex justify-between sm:justify-center sm:gap-[20px] w-[100%]">
+                <a href="" className="flex w-[105px] gap-[10px] text-[13px] text-[#523636] font-bold flex-col justify-center items-center">
+                  <Image src={'/LP/puppy.png'} className="absolute rounded-md h-[100px] w-[auto] max-w-none" width={10000} height={10000}  alt="website banner" />
+                  <span className="relative top-[39px]">子犬用レシピ</span>
                 </a>
-                <a href="" className="flex gap-[10px] text-[13px] text-[#523636] font-bold flex-col justify-center items-center">
-                  <Image src={'/LP/adult.png'} className="rounded-md h-[70px] w-[120px] max-w-none" width={10000} height={10000}  alt="website banner" />成犬用レシピ</a>
-                <a href="" className="flex gap-[10px] text-[13px] text-[#523636] font-bold flex-col justify-center items-center">
+                <a href="" className="flex w-[105px] gap-[10px] text-[13px] relative text-[#523636] font-bold flex-col justify-center items-center">
+                  <Image src={'/LP/adult.png'} className="absolute rounded-md h-[120px] w-[auto] max-w-none" width={10000} height={10000}  alt="website banner" /><span className="relative top-[39px]">成犬用レシピ</span></a>
+                <a href="" className="flex w-[105px] gap-[10px] text-[13px] text-[#523636] font-bold flex-col justify-center items-center">
                   <Image src={'/LP/senior.png'} className="rounded-md h-[70px] w-[120px] max-w-none" width={10000} height={10000}  alt="website banner" />シニア犬用レシピ</a>
               </div>
             </div>
 
             <div className="first-row gap-[10px] w-full flex justify-center flex-col items-center  ">
-              <h1 className="text-[26px] text-[#523636] font-semibold">サイズ別で探す</h1>
-              <div className="flex">
-                <a href="" className="flex gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-center items-center">
-                  <Image src={'/LP/smalldog.png'} className="rounded-md h-[70px] w-[120px] max-w-none" width={10000} height={10000}  alt="website banner" />小型犬用レシピ
+              <h1 className="text-[20px] text-[#523636] font-semibold">サイズ別で探す</h1>
+              <div className="flex justify-between sm:justify-center sm:gap-[20px] w-[100%]">
+                <a href="" className="flex w-[105px] gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-center items-center">
+                  <Image src={'/LP/smalldog.png'} className="rounded-md h-[70px] w-[120px] max-w-none" width={10000} height={10000}  alt="website banner" />
+                  <span className="relative top-[-6px]">小型犬用レシピ</span>
                 </a>
-                <a href="" className="flex gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-center items-center">
-                  <Image src={'/LP/middledog.png'} className="rounded-md h-[70px] w-[120px] max-w-none" width={10000} height={10000}  alt="website banner" />中型犬用レシピ</a>
-                <a href="" className="flex gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-center items-center">
-                  <Image src={'/LP/bigdog.png'} className="rounded-md h-[70px] w-[120px] max-w-none" width={10000} height={10000}  alt="website banner" />大型犬用レシピ</a>
+                <a href="" className="flex w-[105px] gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-center items-center">
+                  <Image src={'/LP/middledog.png'} className="rounded-md h-[70px] w-[120px] max-w-none" width={10000} height={10000}  alt="website banner" /><span className="relative top-[-6px]">中型犬用レシピ</span></a>
+                <a href="" className="flex w-[105px] gap-[10px] flex-col relative text-[13px] text-[#523636] font-bold justify-center items-center">
+                  <Image src={'/LP/bigdog.png'} className="absolute left-[-15px] top-[-25px] rounded-md h-[100px] w-[auto] max-w-none" width={10000} height={10000}  alt="website banner" /><span className="relative top-[33px]">大型犬用レシピ</span></a>
               </div>
             </div>
           </div>
@@ -150,7 +152,7 @@ export default function Home() {
             </div>
             <Image src={'/LP/last.png'} className="rounded-md w-[100%] h-[auto] absolute top-[0px] inline max-w-none object-fill" width={10000} height={10000}  alt="website banner" />
           </div>
-          <h1 className="w-[100%] flex justify-center relative top-[30px] text-[10px]">@Web5Dimensional Inc.</h1>
+          <h1 className="w-[100%] flex justify-center relative top-[30px] text-[10px]">@Web5Dimensional</h1>
         </div>
       </div>
     </main>
