@@ -4,10 +4,6 @@ import BirthdayAvatar from "./components/BirthdayAvatar";
 import BirthdayContainer from "./components/BirthdayContainer";
 import { Metadata } from "next";
 
-export const metadata:Metadata = {
-  title: "Wangohan"
-}
-
 export default function Home() {
   const birthdays = [
       '/LP/bday-dogs/puppy1.jpg',

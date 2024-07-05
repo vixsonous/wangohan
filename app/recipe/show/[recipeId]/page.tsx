@@ -71,7 +71,7 @@ export default function ShowRecipe() {
     return (
         <section>
             <div className="recipe-image w-[100%]">
-                <Image src={'/dashboard.png'} className="h-[auto] w-[100%] max-w-none" width={10000} height={10000}  alt="website banner" />
+                <Image src={'/dashboard.png'} className="h-[auto] rounded-[0px] w-[100%] max-w-none" width={10000} height={10000}  alt="website banner" />
             </div>
             <div className="content-container p-[20px] flex flex-col justify-center gap-[30px]">
                 <div className="tags-likes flex justify-between items-center">
