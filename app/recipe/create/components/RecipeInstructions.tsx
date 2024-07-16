@@ -24,7 +24,7 @@ export default function RecipeInstructions() {
 
     return (
         <div key={key} className="[100%] flex flex-col gap-[5px]">
-            <label htmlFor="recipe-title" className="flex">
+            <label htmlFor="recipe-instruction-0" className="flex">
                 <h1 className="font-semibold text-[20px]">作り方</h1>
             </label>
             {elements.map((el, idx) => {
@@ -47,7 +47,7 @@ export default function RecipeInstructions() {
                                 if(el !== null) {
                                     inp.current[idx] = el ;
                                 }
-                            }} className="w-[100%] border-[2px] rounded-[5px] border-grey-100 p-[5px] text-[10px] bg-[#fff8ef]" placeholder="レシピの手順を記入" type="text" name="recipe-image" id="recipe-image" />
+                            }} className="w-[100%] border-[2px] rounded-[5px] border-grey-100 p-[5px] text-[10px] bg-[#fff8ef]" placeholder="レシピの手順を記入" type="text" name="recipe-instruction-0" id="recipe-instruction-0" />
                             <button onClick={(e:SyntheticEvent) => {
                                 e.preventDefault();
                                 refs.current[Number(idx)].remove();

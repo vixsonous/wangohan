@@ -29,7 +29,7 @@ export default function RecipeIngredients() {
 
     return (
         <div key={key} className="[100%] flex flex-col gap-[5px]">
-            <label htmlFor="recipe-title" className="flex">
+            <label htmlFor="recipe-ingredient-name-0" className="flex">
                 <h1 className="font-semibold text-[20px]">材料・分量</h1>
             </label>
             {elements.map((el, idx) => {

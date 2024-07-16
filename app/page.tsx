@@ -2,7 +2,13 @@ import Image from "next/image";
 import RecipeSlider from "./components/RecipeSlider";
 import BirthdayAvatar from "./components/BirthdayAvatar";
 import BirthdayContainer from "./components/BirthdayContainer";
+import { Gloria_Hallelujah } from "next/font/google";
 import { Metadata } from "next";
+
+const gloria = Gloria_Hallelujah({
+  weight: '400',
+  subsets: ['latin']
+})
 
 export default function Home() {
   const birthdays = [
@@ -16,10 +22,12 @@ export default function Home() {
   ];
 
   return (
-    <main className="flex p-[20px] min-h-screen flex-col md:items-center">
+    <main className="flex p-[20px] min-h-screen flex-col md:items-center overflow-hidden">
       <div className=" flex md:w-full lg:w-[70vw] h-full justify-center items-center flex-col gap-[15px]">
-        <div id="logo-banner">
-          <Image src={'/wangohan_logo.png'} className="rounded-md h-[auto] w-[200px] relative" width={10000} height={10000}  alt="website banner" />
+        <div id="logo-banner" className="relative flex flex-col justify-center items-center">
+          <Image src={'/icons/logo-new.png'} className="rounded-md h-[auto] relative left-[15px] w-[130px] relative" width={10000} height={10000}  alt="website banner" />
+          <h1 className={`text-[36px] text-[#6b4528] font-bold leading-tight`}>わんごはん</h1>
+          <span className={`text-[10px] text-[#6b4528] ${gloria.className}`}>ALL RECIPES FOR YOUR DOG</span>
         </div>
         <div className="w-[100%] h-[100%] relative flex flex-col gap-[10px]">
           <div className="search-form relative flex justify-end">

@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Image from "next/image";
+import localFont from 'next/font/local';
 
 const inter = Inter({ subsets: ["latin"] });
+const myFont = localFont({src: "./mitimasu.ttf"});
 
 export const metadata:Metadata = {
   title: {
@@ -22,7 +24,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-[#FFE9C9] overflow-x-hidden`}>
+      <body className={`${inter.className} bg-[#FFE9C9]`}>
         <div className="px-[20px] w-[100%] z-[999] fixed bg-[#fefefe] pt-[5px] flex justify-between items-center border-b-[1px] border-[#523636]">
           <Image className="w-[70px] h-[auto]" src={'/wangohan_logo.png'} width={100} height={100} alt="website logo" />
           <div className={'menu flex gap-[1rem]'}>
@@ -34,7 +36,7 @@ export default function RootLayout({
             </div>
           </div>
         </div>
-        <div className="pt-[65.68px] overflow-x-hidden">
+        <div className={`pt-[65.68px] overflow-x-hidden ${myFont.className}`}>
           {children}
         </div>
       </body>

@@ -30,10 +30,10 @@ export default function RecipeCreate() {
                     </div>
 
                     <div className="w-[100%]">
-                        <label htmlFor="recipe-title" className="flex">
+                        <label htmlFor="recipe-description" className="flex">
                             <h1 className="font-semibold text-[20px]">レシピの説明</h1>
                         </label>
-                        <textarea className="w-[100%] p-[10px] text-[10px] bg-[#fff8ef]" placeholder="レシピに説明をしてください例）愛犬が夏バテでなかなかご飯を食べなかったので、お魚ベースの手作りごはんを作りました。たくさん食べてくれたので是非作ってみてください。" rows={5}name="recipe-title" id="recipe-title" />
+                        <textarea className="w-[100%] p-[10px] text-[10px] bg-[#fff8ef]" placeholder="レシピに説明をしてください例）愛犬が夏バテでなかなかご飯を食べなかったので、お魚ベースの手作りごはんを作りました。たくさん食べてくれたので是非作ってみてください。" rows={5} name="recipe-description" id="recipe-description" />
                     </div>
 
                     <div className="[100%] mt-[15%]">
@@ -49,10 +49,10 @@ export default function RecipeCreate() {
                     <RecipeIngredients />
                     <RecipeInstructions />
                     <div className="">
-                        <label htmlFor="recipe-title" className="flex">
+                        <label htmlFor="recipe-category" className="flex">
                             <h1 className="font-semibold text-[20px]">カテゴリー</h1>
                         </label>
-                        <div className="ml-[1px] flex flex-wrap">
+                        <div className="ml-[1px] flex flex-wrap" id="recipe-category">
                             <div className={` w-[45%] flex flex-col gap-[5px] flex-wrap `}>
                                 <span className="text-[13px] text-[grey]">年齢を選択</span>
                                 <div className="flex gap-[5px] flex-wrap items-center">
