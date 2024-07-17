@@ -48,7 +48,7 @@ export default function Home() {
           <div className="flex flex-col gap-[40px] justify-center items-center mt-[30px] relative">
             <div className="title">
               <h1 className="text-[26px] tracking-tighter font-bold text-[#523636] relative after:content-[''] z-[1] after:left-[-10px] after:w-[110%] after:h-[40px] after:top-[10px] after:z-[-1] after:flex after:absolute after:bg-[#FFE9C9]">レシピカテゴリ</h1>
-              <div className="absolute z-[-1] left-[0px] w-full top-[17px] border-[2px] border-solid border-[#523636]"/>
+              <div className="absolute z-[-1] left-[0px] w-full top-[17px] border-[1px] border-solid border-[#523636]"/>
             </div>
             <div className="first-row w-full flex mt-[-20px] gap-[10px] justify-center flex-col items-center  ">
               <h1 className="text-[20px] text-[#523636] font-semibold">年齢別で探す</h1>
@@ -81,7 +81,7 @@ export default function Home() {
           <div className="flex flex-col gap-[40px] justify-center items-center mt-[30px] relative">
             <div className="title">
               <h1 className="text-[26px] font-bold text-[#523636] relative after:content-[''] z-[1] after:w-[125%] after:left-[-15px] after:h-[40px] after:top-[10px] after:z-[-1] after:flex after:absolute after:bg-[#FFE9C9]">イベント</h1>
-              <div className="absolute z-[-1] left-[0px] w-full top-[17px] border-[2px] border-solid border-[#523636]"/>
+              <div className="absolute z-[-1] left-[0px] w-full top-[17px] border-[1px] border-solid border-[#523636]"/>
             </div>
             <div className="flex flex-wrap gap-y-[30px] justify-center">
               <div className="w-[29vw] text-white flex justify-center">
