@@ -13,14 +13,14 @@ export default function Login() {
         <div className={`flex flex-col px-[50px] py-[30px] md:p-[0px] gap-[10px] justify-center items-center ${inter.className}`}>
             <h1 className="font-bold text-[20px]">ログイン</h1>
             <form action="" className="w-[100%] md:max-w-[70%] flex flex-col md:flex-row gap-[10px] items-center">
-                <input className="w-[100%] text-[10px] p-[10px] border-[2px] rounded-md border-[#ffcd92]" type="email" name="recipe-image" placeholder="メールアドレスを入力" id="recipe-image" />
-                <input className={`w-[100%] text-[10px] p-[10px] border-[2px] rounded-md border-[#ffcd92]`} type="password" name="recipe-image" placeholder="パスワードを入力" id="recipe-image" />
+                <input className="w-[100%] text-[13px] px-[10px] py-[5px] border-[2px] rounded-md border-[#ffcd92]" type="email" name="recipe-image" placeholder="メールアドレスを入力" id="recipe-image" />
+                <input className={`w-[100%] text-[13px] px-[10px] py-[5px] border-[2px] rounded-md border-[#ffcd92]`} type="password" name="recipe-image" placeholder="パスワードを入力" id="recipe-image" />
                 <span className="text-[10px] text-[#7f7464] font-semibold">パスワードを忘れた場合</span>
                 <input className="w-[100%] bg-[#ffb762] text-white py-[10px] rounded-md text-[10px]" type="submit" value="ログイン" />
             </form>
             <div className="w-[100%] mt-[30px] gap-[10px] flex flex-col justify-center">
                 <h1 className="text-[10px] font-bold text-center">別の方法でログインする</h1>
-                <button className={`flex justify-center items-center text-[10px] bg-[white] border-[2px] rounded-md border-[#ffcd92] py-[10px] font-bold`}>
+                <button className={`flex justify-center items-center bg-[white] border-[2px] rounded-md border-[#ffcd92] text-[13px] px-[10px] py-[5px] font-bold`}>
                     <svg width="15" height="15" viewBox="0 0 98 87" fill="none" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
                     <rect width="98" height="87" fill="url(#pattern0_50_454)"/>
                     <defs>
@@ -32,7 +32,7 @@ export default function Login() {
                     </svg>
                     Appleで続ける
                 </button>
-                <button className={`flex justify-center items-center gap-[5px] text-[10px] bg-[white] border-[2px] rounded-md border-[#ffcd92] py-[10px] font-bold`}>
+                <button className={`flex justify-center items-center gap-[5px] bg-[white] border-[2px] rounded-md border-[#ffcd92] text-[13px] px-[10px] py-[5px] font-bold`}>
                     <svg width="15" height="15" viewBox="0 0 67 64" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g clip-path="url(#clip0_50_449)">
                         <path d="M66.9643 32.2042C66.9643 29.6139 66.7364 27.7237 66.2431 25.7634H34.167V37.4548H52.9949C52.6155 40.3603 50.5656 44.7359 46.0104 47.6761L45.9465 48.0675L56.0884 55.3126L56.791 55.3773C63.2441 49.8815 66.9643 41.7954 66.9643 32.2042Z" fill="#4285F4"/>

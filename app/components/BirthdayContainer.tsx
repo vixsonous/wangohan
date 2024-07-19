@@ -30,28 +30,8 @@ export default function BirthdayContainer({bdayAvt} : BirthdayAvatars) {
             }
         },35);
 
-        let tx = "HAAPPY BIRTHDAY!!";
-        let idx = 0;
-
-        const int = setInterval(() => {
-            if(tx.length > 0) {
-                console.log(tx[0])
-                setTextDis(prevState => prevState.concat(tx[0] || ''));
-                tx = tx.substring(1);
-            }else if(idx === 2) {
-                clearInterval(int)
-            } else if(tx.length == 0 && idx < 2) {
-                setTextDis('');
-                tx = " HAPPY BIRTHDAY!!"
-                idx++;
-            }
-
-            
-        },500);
-
         return () => {
             clearInterval(sliderInt);
-            clearInterval(int);
         }
       }, []);
     
