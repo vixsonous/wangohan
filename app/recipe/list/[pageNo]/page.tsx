@@ -1,5 +1,20 @@
 import Image from "next/image";
-import RecipeListElement from "./RecipeListElement";
+import RecipeListElement from "../RecipeListElement";
+import { Metadata, ResolvingMetadata } from "next";
+
+type Props = {
+    params: {pageNo: String},
+    searchParams: {[key: string]: string | string[] | undefined}
+}
+
+export async function generateMetadata({params} : Props, parent: ResolvingMetadata):Promise<Metadata> {
+    const {pageNo} = params;
+    const title = `Page ${pageNo}`;
+
+    return {
+        title: title
+    }
+}
 
 export default function RecipeList() {
     return (
