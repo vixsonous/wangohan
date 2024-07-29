@@ -20,7 +20,6 @@ export default function RecipeIngredients() {
     const key = new Date().getTime() * Math.random();
 
     useEffect(() => {
-        console.log(elements);
         for(let i = 0; i < elements.length; i ++) {
             inp1.current[i].value = elements[i].name;
             inp2.current[i].value = elements[i].amount;

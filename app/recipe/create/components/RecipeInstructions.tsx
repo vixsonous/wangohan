@@ -3,7 +3,6 @@ import { MutableRefObject, SyntheticEvent, useEffect, useRef, useState } from "r
 
 export default function RecipeInstructions() {
 
-    const [number,setNumber] = useState(0);
     const refs = useRef<HTMLDivElement[]>(new Array<HTMLDivElement>());
     const inp = useRef<HTMLInputElement[]>(new Array<HTMLInputElement>());
 
@@ -16,7 +15,6 @@ export default function RecipeInstructions() {
     const key = new Date().getTime() * Math.random();
 
     useEffect(() => {
-        console.log(elements);
         for(let i = 0; i < elements.length; i ++) {
             inp.current[i].value = elements[i];
         }

@@ -1,5 +1,4 @@
 import React from "react";
-import {gVar} from '../../gvar';
 import SendInquiryForm from "./form";
 export default function SendInquiry() {
     

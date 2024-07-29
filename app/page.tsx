@@ -2,10 +2,15 @@ import Image from "next/image";
 import RecipeSlider from "./components/RecipeSlider";
 import BirthdayAvatar from "./components/BirthdayAvatar";
 import BirthdayContainer from "./components/BirthdayContainer";
-import { Gloria_Hallelujah } from "next/font/google";
+import { Gloria_Hallelujah, Mochiy_Pop_P_One } from "next/font/google";
 import { Metadata } from "next";
 
 const gloria = Gloria_Hallelujah({
+  weight: '400',
+  subsets: ['latin']
+});
+
+const mochi = Mochiy_Pop_P_One({
   weight: '400',
   subsets: ['latin']
 })
@@ -26,7 +31,7 @@ export default function Home() {
       <div className=" flex md:w-full lg:w-[70vw] h-full justify-center items-center flex-col gap-[15px]">
         <div id="logo-banner" className="relative flex flex-col justify-center items-center">
           <Image src={'/icons/logo-new.png'} className="rounded-md h-[auto] relative left-[15px] w-[130px] relative" width={10000} height={10000}  alt="website banner" />
-          <h1 className={`text-[36px] text-[#6b4528] font-bold leading-tight`}>わんごはん</h1>
+          <h1 className={`text-[36px] text-[#6b4528] font-bold leading-tight ${mochi.className}`}>わんごはん</h1>
           <span className={`text-[10px] text-[#6b4528] ${gloria.className}`}>ALL RECIPES FOR YOUR DOG</span>
         </div>
         <div className="w-[100%] h-[100%] relative flex flex-col gap-[10px]">
@@ -86,43 +91,43 @@ export default function Home() {
             <div className="flex flex-wrap gap-y-[30px] justify-center">
               <div className="w-[29vw] text-white flex justify-center">
                 <a href="" className="flex gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-center items-center">
-                  <Image src={'/LP/event/birthday.png'} className="rounded-md h-[auto] w-[100%] max-w-none" width={10000} height={10000}  alt="website banner" />大型犬用レシピ</a>
+                  <Image src={'/LP/event/birthday.png'} className="rounded-md h-[auto] w-[100%] max-w-none" width={10000} height={10000}  alt="website banner" />お誕生日</a>
               </div>
               <div className="w-[29vw] text-white flex justify-center">
                 <a href="" className="flex gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-center items-center">
-                  <Image src={'/LP/event/ouchianniversary.png'} className="rounded-md h-[auto] w-[100%] max-w-none" width={10000} height={10000}  alt="website banner" />大型犬用レシピ</a>
+                  <Image src={'/LP/event/ouchianniversary.png'} className="rounded-md h-[auto] w-[100%] max-w-none" width={10000} height={10000}  alt="website banner" />おうち記念日</a>
               </div>
               <div className="w-[29vw] text-white flex justify-center">
                 <a href="" className="flex gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-center items-center">
-                  <Image src={'/LP/event/newyears.png'} className="rounded-md h-[auto] w-[100%] max-w-none" width={10000} height={10000}  alt="website banner" />大型犬用レシピ</a>
+                  <Image src={'/LP/event/newyears.png'} className="rounded-md h-[auto] w-[100%] max-w-none" width={10000} height={10000}  alt="website banner" />お正月</a>
               </div>
               <div className="w-[29vw] text-white flex justify-center">
                 <a href="" className="flex gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-center items-center">
-                  <Image src={'/LP/event/setsubun.png'} className="rounded-md h-[auto] w-[100%] max-w-none" width={10000} height={10000}  alt="website banner" />大型犬用レシピ</a>
+                  <Image src={'/LP/event/setsubun.png'} className="rounded-md h-[auto] w-[100%] max-w-none" width={10000} height={10000}  alt="website banner" />節分</a>
               </div>
               <div className="w-[29vw] text-white flex justify-center">
                 <a href="" className="flex gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-center items-center">
-                  <Image src={'/LP/event/hinamatsuri.png'} className="rounded-md h-[auto] w-[100%] max-w-none" width={10000} height={10000}  alt="website banner" />大型犬用レシピ</a>
+                  <Image src={'/LP/event/hinamatsuri.png'} className="rounded-md h-[auto] w-[100%] max-w-none" width={10000} height={10000}  alt="website banner" />ひな祭り</a>
               </div>
               <div className="w-[29vw] text-white flex justify-center">
                 <a href="" className="flex gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-center items-center">
-                  <Image src={'/LP/event/kodomonohi.png'} className="rounded-md h-[auto] w-[100%] max-w-none" width={10000} height={10000}  alt="website banner" />大型犬用レシピ</a>
+                  <Image src={'/LP/event/kodomonohi.png'} className="rounded-md h-[auto] w-[100%] max-w-none" width={10000} height={10000}  alt="website banner" />こどもの日</a>
               </div>
               <div className="w-[29vw] text-white flex justify-center">
                 <a href="" className="flex gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-center items-center">
-                  <Image src={'/LP/event/tanabata.png'} className="rounded-md h-[auto] w-[100%] max-w-none" width={10000} height={10000}  alt="website banner" />大型犬用レシピ</a>
+                  <Image src={'/LP/event/tanabata.png'} className="rounded-md h-[auto] w-[100%] max-w-none" width={10000} height={10000}  alt="website banner" />七夕</a>
               </div>
               <div className="w-[29vw] text-white flex justify-center">
                 <a href="" className="flex gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-center items-center">
-                  <Image src={'/LP/event/halloween.png'} className="rounded-md h-[auto] w-[100%] max-w-none" width={10000} height={10000}  alt="website banner" />大型犬用レシピ</a>
+                  <Image src={'/LP/event/halloween.png'} className="rounded-md h-[auto] w-[100%] max-w-none" width={10000} height={10000}  alt="website banner" />ハロウィン</a>
               </div>
               <div className="w-[29vw] text-white flex justify-center">
                 <a href="" className="flex gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-center items-center">
-                  <Image src={'/LP/event/christmas.png'} className="rounded-md h-[auto] w-[100%] max-w-none" width={10000} height={10000}  alt="website banner" />大型犬用レシピ</a>
+                  <Image src={'/LP/event/christmas.png'} className="rounded-md h-[auto] w-[100%] max-w-none" width={10000} height={10000}  alt="website banner" />クリスマス</a>
               </div>
               <div className="w-[29vw] text-white flex justify-center">
                 <a href="" className="flex gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-center items-center">
-                  <Image src={'/LP/event/snack.png'} className="rounded-md h-[auto] w-[100%] max-w-none" width={10000} height={10000}  alt="website banner" />大型犬用レシピ</a>
+                  <Image src={'/LP/event/snack.png'} className="rounded-md h-[auto] w-[100%] max-w-none" width={10000} height={10000}  alt="website banner" />おやつ</a>
               </div>
             </div>
           </div>
