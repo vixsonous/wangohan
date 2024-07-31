@@ -24,7 +24,7 @@ export default function Settings() {
     useEffect(() => {
         
         function outsideClick(e:MouseEvent) {
-            if(settings.current && btn.current && !btn.current.contains(e.target as Node)  && !settings.current.contains(e.target as Node) && settings.current.style.width === "70%") 
+            if(settings.current && btn.current && !btn.current.contains(e.target as Node)  && !settings.current.contains(e.target as Node) && settings.current.style.width !== "0%") 
                 settings.current.style.width = "0%";
         }
 
@@ -35,7 +35,7 @@ export default function Settings() {
         return () => {
             document.removeEventListener("click", outsideClick);
         };
-    },[settings]);
+    },[settings, btn]);
     return (
         <>
         <Image ref={btn} onClick={openSettings} src={'/icons/bone.png'} className="self-center rounded-md h-[auto] w-[50px] relative" width={10000} height={10000}  alt="website banner" />
