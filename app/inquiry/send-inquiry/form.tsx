@@ -1,5 +1,4 @@
 'use client';
-import { gVar } from "@/app/gvar";
 import { useState } from "react";
 
 export default function SendInquiryForm() {
