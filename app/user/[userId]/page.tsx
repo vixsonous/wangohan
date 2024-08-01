@@ -36,6 +36,18 @@ export default function User() {
             name: 'くるむ',
             birthdate: new Date("2021/01/25"),
             breed: 'まるぷー'
+        },
+        {
+            thumbnail: '/LP/bday-dogs/puppy3.jpg',
+            name: 'John',
+            birthdate: new Date("2019/08/25"),
+            breed: '柴犬'
+        },
+        {
+            thumbnail: '/LP/bday-dogs/puppy4.jpg',
+            name: 'Victor',
+            birthdate: new Date("2024/03/25"),
+            breed: 'まるぷー'
         }
     ];
 
@@ -48,9 +60,9 @@ export default function User() {
     const petContainer = (petData: DogData) => {
         
         return (
-            <div key={new Date().getTime() * Math.random()} className="flex justify-center items-center gap-[20px]">
+            <div key={new Date().getTime() * Math.random()} className="flex flex-grow flex-shrink-0 flex-basis: 50% justify-center items-center gap-[20px]">
                 <div>
-                    <Image src={petData.thumbnail} className="rounded-[50%] w-[100px] h-[100px] object-cover relative" width={10000} height={10000}  alt="website banner" />
+                    <Image src={petData.thumbnail} className="rounded-[50%] w-[50px] h-[50px] object-cover relative" width={10000} height={10000}  alt="website banner" />
                 </div>
                 <div className="flex flex-col gap-[5px] text-[#5b5351]">
                     <p className="text-[16px] font-bold">{petData.name}</p>
@@ -70,7 +82,7 @@ export default function User() {
                 <h1 className="absolute top-[10px] font-semibold text-[#523636]">うちのわん</h1>
                 <Image src={'/icons/ribbon.png'} className="h-[auto] w-[200px] sm:w-[300px] max-w-none" width={10000} height={10000}  alt="website banner" />
             </div>
-            <div className="pet-list flex flex-col gap-[30px] items-center">
+            <div className="pet-list p-[20px] flex flex-wrap gap-[20px] items-center">
                 {
                     pets.map(pet => petContainer(pet))
                 }
