@@ -1,5 +1,7 @@
+
 import { Metadata, ResolvingMetadata } from "next";
 import Image from "next/image";
+import TabList from "./components/TabList";
 
 interface DogData {
     thumbnail: string,
@@ -60,20 +62,20 @@ export default function User() {
     const petContainer = (petData: DogData) => {
         
         return (
-            <div key={new Date().getTime() * Math.random()} className="flex flex-grow flex-shrink-0 flex-basis: 50% justify-center items-center gap-[20px]">
+            <div key={new Date().getTime() * Math.random()} className="flex flex-grow flex-shrink-0 basis-[30%] justify-center items-center gap-[20px]">
                 <div>
                     <Image src={petData.thumbnail} className="rounded-[50%] w-[50px] h-[50px] object-cover relative" width={10000} height={10000}  alt="website banner" />
                 </div>
                 <div className="flex flex-col gap-[5px] text-[#5b5351]">
                     <p className="text-[16px] font-bold">{petData.name}</p>
-                    <p className="text-[10px]">{`(${_calculateAge(petData.birthdate)}才) `}{petData.birthdate.toISOString().split('T')[0]}</p>
+                    <p className="text-[10px] flex gap-[5px] flex-wrap"><span>{`(${_calculateAge(petData.birthdate)}才) `}</span><span>{petData.birthdate.toISOString().split('T')[0]}</span></p>
                     <p className="text-[10px]">{petData.breed}</p>
                 </div> 
             </div>
         )
     }
     return (
-        <div>
+        <div className="relative pb-[100px]">
             <div className="user-image flex flex-col justify-center items-center mt-[30px]">
                 <Image src={'/resource/dog-and-cat.jpg'} className=" h-[auto] rounded-[50%] w-[150px] h-[150px] relative" width={10000} height={10000}  alt="website banner" />
                 <h1 className="text-[36px] font-bold text-[#5b5351]">あみち</h1>
@@ -87,8 +89,10 @@ export default function User() {
                     pets.map(pet => petContainer(pet))
                 }
             </div>
-            <div className="tab-list">
-
+            <TabList />
+            <div className="fixed bottom-[20px] z-[9999] right-[10px]">
+                <Image src={'/Setting/settingpaw.png'} className="h-[auto] w-[120px]  max-w-none" width={10000} height={10000}  alt="website banner" />
+                <span className="relative bottom-[33px] text-[13px] text-white right-[-45px]">設定</span>
             </div>
         </div>
     )
