@@ -35,7 +35,7 @@ return (
     <h1 className={`text-[26px] font-bold tracking-tighter inline-block text-[#523636] relative pb-[10px] after:content-[''] z-[10] after:w-[110%] after:h-[20px] after:top-[5px] after:z-[-1] after:flex after:absolute after:bg-[#FFE9C9]`}>{title}</h1>
     <div className="absolute w-full top-[51px] border-[1px] border-solid border-[#523636]"/>
     <div ref={sliderContainer} className="slider-container flex gap-[5px] overflow-x-scroll">
-        {recipes.map(el => <RecipeElementV1 element={Number(el)} />)}
+        {recipes.map(el => <RecipeElementV1 key={new Date().getTime() * Math.random()} element={Number(el)} />)}
     </div>
     </div>
 )

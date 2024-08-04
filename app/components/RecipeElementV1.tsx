@@ -10,7 +10,7 @@ export default function RecipeElementV1 ({element}:Props) {
     const CardTagSize = '9px';
 
     return (
-    <div key={String(element)} className="sm:w-[44vw] h-full flex flex-col gap-[5px]">
+    <div className="sm:w-[44vw] h-full flex flex-col gap-[5px]">
         <Image src={'/dashboard.png'} className="rounded-md w-[44vw] sm:h-[110px] md:h-[auto] object-cover relative max-w-none" width={10000} height={10000} alt="website banner" />
         <h1 className={`text-[${CardFontSize}]`}>炊飯器で簡単！夏バテでも食べられるご飯</h1>
         <div className="flex items-center ml-[-4px]">

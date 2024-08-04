@@ -48,7 +48,7 @@ export default function BirthdayContainer({bdayAvt} : BirthdayAvatars) {
                 }
             </div>
             <div className="relative top-[-40px]">
-                <Image src={'/LP/bdayvideo.gif'} className="rounded-md w-[100%] h-[100%] inline max-w-none object-fill" width={10000} height={10000}  alt="website banner" />
+                <Image src={'/LP/bdayvideo.gif'} unoptimized className="rounded-md w-[100%] h-[100%] inline max-w-none object-fill" width={10000} height={10000}  alt="website banner" />
             </div>
         </div>
     )
