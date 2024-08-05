@@ -45,7 +45,7 @@ export default function RecipeInstructions() {
                                 if(el !== null) {
                                     inp.current[idx] = el ;
                                 }
-                            }} className="w-[100%] border-[2px] rounded-[5px] border-grey-100 p-[5px] text-[10px] bg-[#fff8ef]" placeholder="レシピの手順を記入" type="text" name="recipe-instruction-0" id="recipe-instruction-0" />
+                            }} className="w-[100%] border-[2px] rounded-[5px] border-grey-100 p-[7px] text-[13px] bg-[#fff8ef]" placeholder="レシピの手順を記入" type="text" name="recipe-instruction-0" id="recipe-instruction-0" />
                             <button onClick={(e:SyntheticEvent) => {
                                 e.preventDefault();
                                 refs.current[Number(idx)].remove();
@@ -59,7 +59,7 @@ export default function RecipeInstructions() {
                     </div>
                 )
             })}
-            <span onClick={addElements} className="text-[10px] self-start">＋追加</span>
+            <span onClick={addElements} className="text-[13px] self-start cursor-pointer">＋追加</span>
         </div>
     );
 }

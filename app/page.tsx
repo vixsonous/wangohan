@@ -27,7 +27,7 @@ export default function Home() {
   ];
 
   return (
-    <main className="flex p-[20px] min-h-screen flex-col md:items-center overflow-hidden">
+    <main className="relative flex p-[20px] min-h-screen flex-col md:items-center overflow-hidden bg-[url('/LP/last.png')] pb-[50px] lg:pb-[200px] bg-contain bg-no-repeat bg-bottom">
       <div className=" flex md:w-full lg:w-[70vw] h-full justify-center items-center flex-col gap-[15px]">
         <div id="logo-banner" className="relative flex flex-col justify-center items-center">
           <Image src={'/icons/logo-new.png'} className="rounded-md h-[auto] relative left-[15px] w-[130px] relative" width={10000} height={10000}  alt="website banner" />
@@ -65,7 +65,9 @@ export default function Home() {
                 <a href="" className="flex w-[105px] gap-[10px] text-[13px] relative text-[#523636] font-bold flex-col justify-center items-center">
                   <Image src={'/LP/adult.png'} className="absolute rounded-md h-[120px] w-[auto] max-w-none" width={10000} height={10000}  alt="website banner" /><span className="relative top-[39px]">成犬用レシピ</span></a>
                 <a href="" className="flex w-[105px] gap-[10px] text-[13px] text-[#523636] font-bold flex-col justify-center items-center">
-                  <Image src={'/LP/senior.png'} className="rounded-md h-[70px] w-[120px] max-w-none" width={10000} height={10000}  alt="website banner" />シニア犬用レシピ</a>
+                  <Image src={'/LP/senior.png'} className="rounded-md h-[90px] w-[150px] max-w-none" width={10000} height={10000}  alt="website banner" />
+                  <span className="relative top-[-11px]">シニア犬用レシピ</span>
+                  </a>
               </div>
             </div>
 
@@ -163,11 +165,14 @@ export default function Home() {
                 <a href="" className="text-[8px] self-center flex">ご意見・お問い合わせ</a>
               </div>
             </div>
-            <Image src={'/LP/last.png'} className="rounded-md w-[100%] h-[auto] absolute top-[0px] inline max-w-none object-fill" width={10000} height={10000}  alt="website banner" />
+            {/* <Image src={'/LP/last.png'} className="rounded-md w-[100vw] h-[auto] absolute bottom-[-70px] left-[-20px] inline max-w-none object-fill" width={10000} height={10000}  alt="website banner" /> */}
+            <h1 className="w-[100%] flex justify-center relative top-[30px] text-[10px]">@Web5Dimensional</h1>
           </div>
-          <h1 className="w-[100%] flex justify-center relative top-[30px] text-[10px]">@Web5Dimensional</h1>
+          
         </div>
       </div>
+      
+      
     </main>
   );
 }

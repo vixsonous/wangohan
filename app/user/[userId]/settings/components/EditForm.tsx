@@ -44,7 +44,9 @@ export default function EditForm({pets} : Props) {
     return (
         <form action="" className="relative">
             <div className="user-image flex flex-col justify-center items-center mt-[30px]">
-                <Image src={'/resource/dog-and-cat.jpg'} className="rounded-[100px] w-[200px] h-[200px] relative" width={10000} height={10000}  alt="website banner" />
+                <div>
+                    <Image src={'/resource/dog-and-cat.jpg'} className="rounded-[100px] w-[200px] h-[200px] relative" width={10000} height={10000}  alt="website banner" />
+                </div>
                 <span className="text-[10px] mb-[1vh]">タップして画像を変更</span>
                 <div className="flex justify-center items-center relative left-[20px]">
                     <input onClick={() => setCurUsrnmIcn(faSave)} onChange={(e) => setUsrnm(e.currentTarget.value)} onBlur={() => alrtPopup()} value={usrnm} className="w-[50%] focus:outline-none focus:border-transparent focus:ring-0 text-[36px] bg-[transparent] text-center font-bold text-[#5b5351]" />

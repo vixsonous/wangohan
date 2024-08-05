@@ -1,9 +1,14 @@
-import { Metadata, ResolvingMetadata } from "next";
+import { GetServerSideProps, Metadata, ResolvingMetadata } from "next";
 import Image from "next/image"
 
 type Props = {
     params: {recipeId: String},
     searchParams: {[key: string]: string | string[] | undefined}
+}
+
+type Recipe = {
+    recipe_id: number,
+    recipe_name: string,
 }
 
 export async function generateMetadata({params} : Props, parent: ResolvingMetadata):Promise<Metadata> {
@@ -15,7 +20,7 @@ export async function generateMetadata({params} : Props, parent: ResolvingMetada
     }
 }
 
-export default function ShowRecipe() {
+export default function ShowRecipe({params, searchParams}:{params: {recipeId:string}, searchParams: { [key: string]:string | string[] | undefined}}) {
     const CardFontSize = '13px';
     const CardTagSize = '13px';
 
@@ -104,32 +109,40 @@ export default function ShowRecipe() {
                     </span>
                 </div>
                 <div className="flex justify-center items-center relative">
-                    <h1 className="absolute top-[7px] font-semibold text-[#523636]">材料</h1>
+                    <h1 className="absolute top-[10px] font-semibold text-[#523636]">材料</h1>
                     <Image src={'/icons/ribbon.png'} className="h-[auto] w-[200px] sm:w-[300px] max-w-none" width={10000} height={10000}  alt="website banner" />
                 </div>
                 <div className="recipe-ingredients flex justify-center items-center">
                     <ul className={`flex flex-wrap w-[80%] ${recipesSample.length > 5 ? 'flex-row' : 'flex-col'}`}>
                     {
                         recipesSample.map(el => {
-                            return <li className={`${recipesSample.length > 5 ? 'basis-1/2' : 'basis-1'} text-center`}>{el}</li>
+                            return <li key={new Date().getTime() * Math.random()} className={`${recipesSample.length > 5 ? 'basis-1/2' : 'basis-1'} text-center`}>{el}</li>
                         })
                     }
                     </ul>
                 </div>
                 <div className="recipe-instructions-title flex justify-center items-center relative">
-                    <h1 className="absolute top-[7px] font-semibold text-[#523636]">材料</h1>
+                    <h1 className="absolute top-[10px] font-semibold text-[#523636]">作り方</h1>
                     <Image src={'/icons/ribbon.png'} className="h-[auto] w-[200px] sm:w-[300px] max-w-none" width={10000} height={10000}  alt="website banner" />
                 </div>
                 <div className="recipe-instructions-content">
                     <ol className="list-decimal pl-[20px]">
                         {
                             recipeInstruction.map(el => {
-                               return <li>{el}</li> 
+                               return <li key={new Date().getTime() * Math.random()}>{el}</li> 
                             })
                         }
                     </ol>
                 </div>
+                <div className="relative w-full h-full text-[13px] flex justify-between items-center top-[30px]">
+                    <span>No. {params.recipeId}</span>
+                    <span className="flex items-center gap-[10px]">
+                        Recipe by 
+                        <Image src={'/LP/bday-dogs/puppy1.jpg'} className="h-[30px] w-[30px] rounded-[100px]" width={10000} height={10000}  alt="website banner" />
+                    </span>
+                </div>
                 <div className="w-full relative">
+                    
                     <h1 className={`text-[13px] tracking-tighter inline-block text-[#523636] relative pb-[10px] after:content-[''] z-[10] after:w-[105%] after:h-[20px] after:top-[5px] after:z-[-1] after:flex after:absolute after:bg-[#FFE9C9]`}>
                         レビュー
                         <svg className="w-4 h-4 ms-1 text-gray-300 dark:text-gray-500 inline"  aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="yellow" viewBox="0 0 22 20">
@@ -142,7 +155,7 @@ export default function ShowRecipe() {
                     {
                         reviewComments.map(comment => {
                             return (
-                                <div className="review-comment flex w-[100%] gap-[10px]">
+                                <div key={new Date().getTime() * Math.random()} className="review-comment flex w-[100%] gap-[10px]">
                                     <div className="avatar">
                                         <Image src={'/LP/bday-dogs/puppy1.jpg'} className="w-[40px] rounded-full object-cover overflow-hidden h-[40px] max-w-none" width={10000} height={10000} alt="website banner" />
                                     </div>

@@ -51,7 +51,7 @@ export default function RecipeIngredients() {
                                 if(el !== null) {
                                     inp1.current[idx] = el ;
                                 }
-                            }} className="w-[50%] border-[2px] rounded-[5px] border-grey-100 p-[5px] text-[10px] bg-[#fff8ef]" placeholder="例）にんじん" type="text" name={`recipe-ingredient-name-${idx}`} id={`recipe-ingredient-name-${idx}`} />
+                            }} className="w-[50%] border-[2px] rounded-[5px] border-grey-100 p-[7px] text-[13px] bg-[#fff8ef]" placeholder="例）にんじん" type="text" name={`recipe-ingredient-name-${idx}`} id={`recipe-ingredient-name-${idx}`} />
                             <input onBlur={(e:SyntheticEvent) => {
                                 e.preventDefault();
                                 const trgt = e.target as HTMLInputElement;
@@ -64,7 +64,7 @@ export default function RecipeIngredients() {
                                 if(el !== null) {
                                     inp2.current[idx] = el ;
                                 }
-                            }} className="w-[50%] border-[2px] rounded-[5px] border-grey-100 p-[5px] text-[10px] bg-[#fff8ef]" placeholder="例）1/2本" type="text" name={`recipe-ingredient-amt-${idx}`} id={`recipe-ingredient-amt-${idx}`} />
+                            }} className="w-[50%] border-[2px] rounded-[5px] border-grey-100 p-[7px] text-[13px] bg-[#fff8ef]" placeholder="例）1/2本" type="text" name={`recipe-ingredient-amt-${idx}`} id={`recipe-ingredient-amt-${idx}`} />
                             <button onClick={(e:SyntheticEvent) => {
                                 e.preventDefault();
                                 refs.current[Number(idx)].remove();
@@ -78,7 +78,7 @@ export default function RecipeIngredients() {
                     </div>
                 )
             })}
-            <span onClick={addElements} className="text-[10px] self-start">＋追加</span>
+            <span onClick={addElements} className="text-[13px] self-start cursor-pointer">＋追加</span>
         </div>
     );
 }

@@ -30,3 +30,10 @@
     scrollbar-width: 0px;
   }
 }
+
+input[type="radio"]:checked+label>span{ 
+  background-color: white;
+  color:#523636;
+  border: 2px solid #523636;
+  font-weight: bold;
+} 
