@@ -1,7 +1,10 @@
 'use client';
+import { Inter } from "next/font/google";
 import { redirect } from "next/navigation";
 import { useRouter } from "next/router";
 import { SyntheticEvent, useState } from "react";
+
+const inter = Inter({ subsets: ["latin"] });
 
 export default function LoginForm() {
 
@@ -38,7 +41,7 @@ export default function LoginForm() {
     }
 
     return (
-        <form action="" className="w-[100%] max-w-[100%] sm:max-w-[460px] flex flex-col gap-[10px] items-center">
+        <form action="" className={`w-[100%] max-w-[100%] sm:max-w-[460px] flex flex-col gap-[10px] items-center ${inter.className}`}>
             <input value={credentials.email} onChange={(e) => setCredentials(prevCred => ({...prevCred, email: e.target.value}))} className="w-[100%] text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]" type="email" name="email" placeholder="メールアドレスを入力" id="recipe-image" />
             <input value={credentials.password} onChange={(e) => setCredentials(prevCred => ({...prevCred, password: e.target.value}))} className={`w-[100%] text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]`} type="password" name="password" placeholder="パスワードを入力" id="recipe-image" />
             <span className="text-[.5em] sm:text-[.75em] text-[#7f7464] font-semibold">パスワードを忘れた場合</span>
