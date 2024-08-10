@@ -10,13 +10,16 @@ const inter = Inter({ subsets: ['latin'] })
 
 export default function SignUp() {
     return (
-        <div className={`flex flex-col px-[50px] py-[30px] md:p-[0px] gap-[10px] justify-center items-center ${inter.className}`}>
-            <h1 className="font-bold text-[20px]">新規登録</h1>
-            <div className="w-[100%] mt-[15px] gap-[15px] flex flex-col justify-center">
-                <button className={`flex justify-center items-center text-[10px] bg-[white] border-[2px] rounded-md border-[#ffcd92] py-[10px] font-bold`}>
-                    メールアドレスで新規登録
-                </button>
-                <button className={`flex justify-center items-center text-[10px] bg-[white] border-[2px] rounded-md border-[#ffcd92] py-[10px] font-bold`}>
+        <div className={`flex flex-col px-[50px] py-[30px] gap-[10px] justify-center items-center ${inter.className}`}>
+            <h1 className="font-bold text-[20px] sm:text-[24px]">新規登録</h1>
+            <h1 className="text-[8px] sm:text-[12px] mt-[20px] font-bold">メールアドレスで新規登録</h1>
+            <form action="" className="w-[100%] max-w-[100%] sm:max-w-[460px] flex flex-col gap-[10px] items-center">
+                <input className="w-[100%] text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]" type="email" name="recipe-image" placeholder="メールアドレスを入力" id="recipe-image" />
+                <input className={`w-[100%] text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]`} type="password" name="recipe-image" placeholder="パスワードを入力" id="recipe-image" />
+                <input className="w-[100%] bg-[#ffb762] text-white py-[10px] rounded-md text-[12px] sm:text-[16px]" type="submit" value="新規登録" />
+            </form>
+            <div className="w-[100%] max-w-[100%] sm:max-w-[460px] mt-[30px] gap-[10px] flex flex-col justify-center">
+                <button className={` flex justify-center items-center bg-[white] border-[2px] rounded-md border-[#ffcd92] text-[12px] sm:text-[16px] px-[10px] py-[10px] font-bold`}>
                     <svg width="15" height="15" viewBox="0 0 98 87" fill="none" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
                     <rect width="98" height="87" fill="url(#pattern0_50_454)"/>
                     <defs>
@@ -28,9 +31,9 @@ export default function SignUp() {
                     </svg>
                     Appleで続ける
                 </button>
-                <button className={`flex justify-center items-center gap-[5px] text-[10px] bg-[white] border-[2px] rounded-md border-[#ffcd92] py-[10px] font-bold`}>
+                <button className={`flex  justify-center items-center gap-[5px] bg-[white] border-[2px] rounded-md border-[#ffcd92] text-[12px] sm:text-[16px] px-[10px] py-[10px] font-bold`}>
                     <svg width="15" height="15" viewBox="0 0 67 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <g clip-path="url(#clip0_50_449)">
+                        <g clipPath="url(#clip0_50_449)">
                         <path d="M66.9643 32.2042C66.9643 29.6139 66.7364 27.7237 66.2431 25.7634H34.167V37.4548H52.9949C52.6155 40.3603 50.5656 44.7359 46.0104 47.6761L45.9465 48.0675L56.0884 55.3126L56.791 55.3773C63.2441 49.8815 66.9643 41.7954 66.9643 32.2042Z" fill="#4285F4"/>
                         <path d="M34.1673 63.0084C43.3914 63.0084 51.1351 60.2079 56.7913 55.3774L46.0106 47.6762C43.1258 49.5315 39.2538 50.8266 34.1673 50.8266C25.1329 50.8266 17.465 45.3311 14.7317 37.7351L14.331 37.7665L3.78537 45.2925L3.64746 45.646C9.26546 55.9373 20.8053 63.0084 34.1673 63.0084Z" fill="#34A853"/>
                         <path d="M14.7322 37.7353C14.011 35.775 13.5936 33.6746 13.5936 31.5044C13.5936 29.334 14.011 27.2338 14.6942 25.2736L14.6751 24.8561L3.99732 17.2092L3.64796 17.3625C1.33252 21.6331 0.00390625 26.4288 0.00390625 31.5044C0.00390625 36.5801 1.33252 41.3755 3.64796 45.6462L14.7322 37.7353Z" fill="#FBBC05"/>
@@ -45,8 +48,8 @@ export default function SignUp() {
                     Googleで続ける
                 </button>
                 <div className="flex justify-center gap-[2rem]">
-                    <span className="text-[10px] font-semibold text-[#828282]">利用規約</span>
-                    <span className="text-[10px] font-semibold text-[#828282]">プライバシーポリシー</span>
+                    <span className="text-[8px] sm:text-[12px] font-semibold text-[#828282]">利用規約</span>
+                    <span className="text-[8px] sm:text-[12px] font-semibold text-[#828282]">プライバシーポリシー</span>
                 </div>
             </div>
         </div>

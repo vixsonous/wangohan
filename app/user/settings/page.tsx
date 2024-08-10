@@ -1,5 +1,5 @@
 import Image from "next/image";
-import PetContainer from "../../components/PetContainer";
+import PetContainer from "../components/PetContainer";
 import EditForm from "./components/EditForm";
 
 interface DogData {

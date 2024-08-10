@@ -2,7 +2,7 @@
 import { Metadata, ResolvingMetadata } from "next";
 import Image from "next/image";
 import TabList from "./components/TabList";
-import PetContainer from "../components/PetContainer";
+import PetContainer from "./components/PetContainer";
 
 interface DogData {
     id: number,
