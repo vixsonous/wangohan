@@ -21,6 +21,8 @@ export interface UserTable {
   password:string;
   user_lvl: number;
   user_agreement: number;
+  user_codename: string;
+  user_image: string;
   updated_at: Date;
   created_at: Date;
 }
@@ -29,13 +31,11 @@ export interface UserDetailTable {
   user_detail_id: Generated<number>;
   user_first_name: string;
   user_last_name: string;
-  user_codename: string;
   user_gender: string;
   user_birthdate: string;
   user_address: string;
   user_id: number;
   user_occupation: string;
-  user_image: string;
   updated_at: Date;
   created_at: Date;
 }

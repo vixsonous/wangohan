@@ -1,3 +1,4 @@
+import { encrypt } from "@/action/lib";
 import { getUser } from "@/action/users";
 import { cookies, headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
@@ -19,11 +20,13 @@ export const POST = async ( req: Request) => {
 
         const response = NextResponse.redirect(new URL("/", req.url), {status: 302});
 
-        response.cookies.set('currentUser', JSON.stringify(user), {
+        const expires = new Date(Date.now() + 10 * 1000);
+        const session = await encrypt({user, expires});
+
+        response.cookies.set('session', session, {
             path: '/',
-            httpOnly: true,
-            sameSite: 'strict',
-            maxAge: 10
+            httpOnly: true, 
+            expires
         })
 
         return response;

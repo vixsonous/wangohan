@@ -1,4 +1,5 @@
 "use server";
+import { ERR_MSG } from "@/constants/constants";
 import { db } from "@/lib/database/db";
 
 export async function getUsers() {
@@ -12,23 +13,45 @@ export async function getUsers() {
 
 export async function getUser(email: string, password: string) {
 
-    if(!email || !password) throw new Error("Please input email or password!");
+    if(!email || !password) throw new Error(ERR_MSG['ERR2']);
 
     try {
 
         const user = await db.selectFrom("users_table as user")
-            .innerJoin('user_details_table as detail','detail.user_id', 'user.user_id' )
-            .select(['user.user_id','email','user_agreement','detail.user_first_name', 'detail.user_last_name',
-                'detail.user_address','detail.user_codename','detail.user_gender','detail.user_image','detail.user_birthdate','detail.user_occupation','detail.user_detail_id'])
+            .select(['user.user_id'])
             .where('email','=',email)
             .where('password','=', password)
-            .execute();
+            .executeTakeFirst();
         
-        if(user === undefined || user.length < 1) throw new Error("User not found!");
+        if(user === undefined) throw new Error(ERR_MSG['ERR1']); // User not found!
 
         return user;
     } catch(e) {
         let _e = (e as Error).message;
         throw _e;
     }
+}
+
+export async function getUserDetails(user_id: number) {
+  if(!user_id) throw new Error(ERR_MSG['ERR3']);
+
+  try {
+
+      const user = await db.selectFrom("users_table as user")
+          .select(['user.user_codename','user.user_image'])
+          .where('user.user_id','=',user_id)
+          .executeTakeFirst();
+      
+      const pets = await db.selectFrom("pets_table as pets")
+          .select(['pet_id','pet_name','pet_birthdate','pet_breed','pet_image'])
+          .where('pets.user_id','=',user_id)
+          .execute();
+      if(user === undefined) throw new Error(ERR_MSG['ERR4']);
+
+      const combinedRes = {...user, pets: pets}
+      return combinedRes;
+  } catch(e) {
+      let _e = (e as Error).message;
+      throw _e;
+  }
 }

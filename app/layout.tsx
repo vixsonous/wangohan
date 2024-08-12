@@ -10,6 +10,7 @@ import { GlobalValueContext } from "./components/global-context";
 import { getUsers } from "@/action/users";
 import { cookies } from "next/headers";
 import User from "./components/User";
+import { randomBytes } from "crypto";
 
 const inter = Inter({ subsets: ["latin"] });
 const myFont = localFont({src: "./mitimasu.ttf"});
@@ -31,10 +32,11 @@ export default async function RootLayout({
 }>) {
   
   const cookiesStore = cookies();
-  const user = cookiesStore.get('currentUser');
+  const user = cookiesStore.get('session');
 
   if(!user) {
     console.log("no exist");
+    console.log(randomBytes(64).toString('hex'));
   } else {
     console.log('exist');
   }

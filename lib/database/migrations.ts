@@ -11,6 +11,8 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn("email", "varchar(100)", (col) => col.notNull())
     .addColumn("password", "varchar(255)", (col) => col.notNull())
     .addColumn("user_lvl", "integer", (col) => col.notNull())
+    .addColumn("user_codename", "varchar(50)", (col) => col.notNull())
+    .addColumn("user_image", "varchar(100)", (col) => col.notNull())
     .addColumn("user_agreement", "integer", (col) => col.notNull())
     .addColumn("updated_at", "timestamp", (col) =>
       col.defaultTo(sql`now()`).notNull()
@@ -25,13 +27,11 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn("user_detail_id", "serial", (col) => col.primaryKey())
     .addColumn("user_first_name", "varchar(50)", (col) => col.notNull())
     .addColumn("user_last_name", "varchar(50)", (col) => col.notNull())
-    .addColumn("user_codename", "varchar(50)", (col) => col.notNull())
     .addColumn("user_gender", "varchar(2)", (col) => col.notNull())
     .addColumn("user_birthdate", "timestamp", (col) => col.notNull())
     .addColumn("user_address", "varchar(100)", (col) => col.notNull())
     .addColumn("user_occupation", "varchar(50)", (col) => col.notNull())
     .addColumn("user_id", "serial", (col) => col.references('users_table.user_id').onDelete('cascade').notNull())
-    .addColumn("user_image", "varchar(100)", (col) => col.notNull())
     .addColumn("updated_at", "timestamp", (col) =>
       col.defaultTo(sql`now()`).notNull()
     )
@@ -46,6 +46,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn("pet_name", "varchar(100)", (col) => col.notNull())
     .addColumn("pet_birthdate", "timestamp", (col) => col.notNull())
     .addColumn("pet_breed", "varchar(100)", (col) => col.notNull())
+    .addColumn("pet_image", "varchar(100)", (col) => col.notNull())
     .addColumn("user_id", "serial", (col) => col.references("users_table.user_id").onDelete('cascade').notNull())
     .addColumn("updated_at", "timestamp", (col) =>
       col.defaultTo(sql`now()`).notNull()

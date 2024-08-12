@@ -1,0 +1,22 @@
+
+export const ERR_MSG = {
+    'ERR1': 'ユーザーが見つかりません。', // User not found!
+    'ERR2': 'メールアドレスまたはパスワードを入力してください。', //Please input email or password!
+    'ERR3': 'ユーザーIDが未定義です。', // User id is undefined!
+    'ERR4': 'ユーザーの詳細が見つかりません。', // User details not found!
+}
+
+export const fontSize = {
+    'l0': '0.25em', // 1/4 16px
+    'l1': '0.5em', // 1/2 16px
+    'l2': '0.75em', // 3/4 16px
+    'l3': '1em', // 1 16px
+    'l4': '1.25em', // 1.25 16px
+    'l5': '1.5em', // 1.5 16px
+    'l6': '1.75em', // 1.75 16px
+    'l7': '2em', // 2 16px
+    'l8': '2.25em', // 2.25 16px
+    'l9': '2.5em', // 2.5 16px
+    'l10': '2.75em', // 2.75 16px
+    'l11': '3em', // 3 16px
+}

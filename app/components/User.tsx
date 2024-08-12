@@ -32,7 +32,7 @@ export default function User() {
         <div className="relative">
             <div ref={div} className={`rounded-md bg-[#FFFAF0] right-0`}>
                 <span className="text-[0.75em] text-[#6b4528] font-semibold flex gap-[1em] whitespace-nowrap">
-                    <Link href="/login">ログイン</Link> / <Link href="/signup">登録</Link>
+                    <Link href="/login">ログイン</Link>  <Link href="/signup">登録</Link>
                 </span>
             </div>
         </div>

@@ -3,14 +3,11 @@ import { Metadata, ResolvingMetadata } from "next";
 import Image from "next/image";
 import TabList from "./components/TabList";
 import PetContainer from "./components/PetContainer";
-
-interface DogData {
-    id: number,
-    thumbnail: string,
-    name: string,
-    birthdate: Date,
-    breed: string
-}
+import { getUser, getUserDetails } from "@/action/users";
+import { cookies } from "next/headers";
+import { decrypt } from "@/action/lib";
+import { redirect } from "next/navigation";
+import { DogData } from "@/constants/interface";
 
 type Props = {
     params: {userId: String},
@@ -26,44 +23,25 @@ export async function generateMetadata({params} : Props, parent: ResolvingMetada
     }
 }
 
-export default function User() {
-    
-    const pets : DogData[] = [
-        {
-            id: 1,
-            thumbnail: '/LP/bday-dogs/puppy1.jpg',
-            name: 'ポチ',
-            birthdate: new Date("2022/05/25"),
-            breed: '柴犬'
-        },
-        {
-            id: 2,
-            thumbnail: '/LP/bday-dogs/puppy2.jpg',
-            name: 'くるむ',
-            birthdate: new Date("2021/01/25"),
-            breed: 'まるぷー'
-        },
-        {
-            id: 3,
-            thumbnail: '/LP/bday-dogs/puppy3.jpg',
-            name: 'John',
-            birthdate: new Date("2019/08/25"),
-            breed: '柴犬'
-        },
-        {
-            id: 4,
-            thumbnail: '/LP/bday-dogs/puppy4.jpg',
-            name: 'Victor',
-            birthdate: new Date("2024/03/25"),
-            breed: 'まるぷー'
-        }
-    ];
+export default async function User() {
+
+    const docCookies = cookies();
+    const session = docCookies.get('session')?.value;
+
+    if(!session) redirect("/login");
+
+    const decryptedSession = await decrypt(session as string);
+    const userDetails = await getUserDetails(decryptedSession.user.user_id);
+
+    if(!userDetails) redirect("/");
+
+    const pets : DogData[] = userDetails.pets;
 
     return (
         <div className="relative pb-[100px]">
             <div className="user-image flex flex-col justify-center items-center mt-[30px]">
                 <Image src={'/resource/dog-and-cat.jpg'} className="rounded-[100px] w-[150px] h-[150px] relative" width={10000} height={10000}  alt="website banner" />
-                <h1 className="text-[36px] font-bold text-[#5b5351]">あみち</h1>
+                <h1 className="text-[36px] font-bold text-[#5b5351]">wanvictor</h1>
             </div>
             <div className="flex justify-center items-center relative mt-[10px] mb-[30px]">
                 <h1 className="absolute top-[10px] font-semibold text-[#523636]">うちのわん</h1>
