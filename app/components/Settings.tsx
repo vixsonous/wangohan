@@ -22,6 +22,17 @@ export default function Settings() {
         }
     }
 
+    const logout = async () => {
+        await fetch('/api/logout')
+                .then(res => {
+                    if(res.status === 200) {
+                        window.location.href = '/';
+                    }else if(res.status === 302) {
+                        window.location.href = res.url;
+                    }
+                });
+    }
+
     useEffect(() => {
         function outsideClick(e:MouseEvent) {
             if(settings.current && btn.current && !btn.current.contains(e.target as Node)  && !settings.current.contains(e.target as Node) && settings.current.style.width !== "0%") 
@@ -72,6 +83,11 @@ export default function Settings() {
                 <div className="w-full text-[.5em] sm:text-[.75em] flex justify-between items-center border-b-[1px] border-black border-solid">
                     <FontAwesomeIcon icon={faDog} style={{color: '#523636'}}  />
                     コラム
+                </div>
+
+                <div onClick={logout} className="w-full text-[.5em] sm:text-[.75em] flex justify-between items-center border-b-[1px] border-black border-solid">
+                    <FontAwesomeIcon icon={faDog} style={{color: '#523636'}}  />
+                    ログアウト
                 </div>
             </div>
         </div>

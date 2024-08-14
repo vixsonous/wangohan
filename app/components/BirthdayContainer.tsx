@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import BirthdayAvatar from "./BirthdayAvatar";
 import Image from "next/image";
+import Slider from "react-slick";
 
 interface BirthdayAvatars {
     bdayAvt: Array<String>
@@ -14,26 +15,26 @@ export default function BirthdayContainer({bdayAvt} : BirthdayAvatars) {
     const [textDis, setTextDis] = useState('');
     
 
-    useEffect(() => {
-        if(sliderContainer.current == null)
-            return;
+    // useEffect(() => {
+    //     if(sliderContainer.current == null)
+    //         return;
         
-        sliderContainer.current.style.transition = "all 1s linear";
-        let start:DOMHighResTimeStamp = 0;
+    //     sliderContainer.current.style.transition = "all 1s linear";
+    //     let start:DOMHighResTimeStamp = 0;
     
-        const sliderInt = setInterval(() => {
-            if(sliderContainer.current != null) {
-                sliderContainer.current.scrollTo({
-                    left: sliderContainer.current.scrollLeft + 1,
-                    behavior: 'smooth'
-                })
-            }
-        },35);
+    //     const sliderInt = setInterval(() => {
+    //         if(sliderContainer.current != null) {
+    //             sliderContainer.current.scrollTo({
+    //                 left: sliderContainer.current.scrollLeft + 1,
+    //                 behavior: 'smooth'
+    //             })
+    //         }
+    //     },35);
 
-        return () => {
-            clearInterval(sliderInt);
-        }
-      }, []);
+    //     return () => {
+    //         clearInterval(sliderInt);
+    //     }
+    //   }, []);
     
 
     return (
@@ -42,10 +43,12 @@ export default function BirthdayContainer({bdayAvt} : BirthdayAvatars) {
                 <h1 className="text-[23px] font-bold text-[#523636] relative after:content-[''] z-[1] after:w-[105%] after:left-[-7px] after:h-[40px] after:top-[5px] after:z-[-1] after:flex after:absolute after:bg-[#FFE9C9]">本日お誕生日のわんちゃん</h1>
                 <div className="absolute z-[-1] left-[0px] w-full top-[17px] border-[1px] border-solid border-[#523636]"/>
             </div>
-            <div ref={sliderContainer} className="bday-container flex w-full overflow-x-scroll gap-[20px]">
-                {
+            <div className="overflow-hidden w-full">
+            <Slider autoplay slidesToShow={5} infinite autoplaySpeed={2000} speed={2000}>
+            {
                 bdayAvt.map((el) => BirthdayAvatar({src: String(el)}))
-                }
+            }
+            </Slider>
             </div>
             <div className="relative top-[-40px]">
                 <Image src={'/LP/bdayvideo.gif'} unoptimized className="rounded-md w-[100%] h-[100%] inline max-w-none object-fill" width={10000} height={10000}  alt="website banner" />

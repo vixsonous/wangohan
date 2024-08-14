@@ -10,7 +10,7 @@ export default function RecipeElementV1 ({element}:Props) {
     const CardTagSize = '9px';
 
     return (
-    <div className="sm:w-[44vw] h-full flex flex-col gap-[5px]">
+    <div className="flex flex-col gap-[5px] ml-[5px]">
         <Image src={'/dashboard.png'} className="rounded-md w-[44vw] sm:h-[110px] md:h-[auto] object-cover relative max-w-none" width={10000} height={10000} alt="website banner" />
         <div className={`flex justify-between`}>
             <div className={`w-full flex gap-[5px] flex-wrap items-center `}>

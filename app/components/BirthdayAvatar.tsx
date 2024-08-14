@@ -7,7 +7,7 @@ interface BirthdayAvatarInterface {
 export default function BirthdayAvatar({src} : BirthdayAvatarInterface){
     const key = new Date().getTime() * Math.random();
     return (
-      <div key={key} className=" text-white flex flex-col items-center justify-center gap-[10px]">
+      <div key={key} className="flex flex-[0_0_100%] text-white flex flex-col items-center justify-center gap-[10px]">
         <div className="">
             <Image src={src.toString()} className="w-[50px] rounded-full object-cover overflow-hidden h-[50px] max-w-none" width={10000} height={10000} alt="website banner" />
         </div>
