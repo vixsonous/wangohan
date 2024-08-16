@@ -4,8 +4,12 @@ import { updateSession } from "./action/lib";
 export function middleware(request: NextRequest) {
     const currentUser = request.cookies.get('session')?.value;
 
+    const protectedRoutes = []
+
     if(!currentUser && (request.nextUrl.pathname.startsWith('/user')
-        || request.nextUrl.pathname.startsWith('/recipe/create'))) {
+        || request.nextUrl.pathname.startsWith('/recipe/create')
+        || request.nextUrl.pathname.startsWith('/signup/personal-info')
+    )) {
         return Response.redirect(new URL('/login', request.url));
     }
 

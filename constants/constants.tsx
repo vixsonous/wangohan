@@ -4,6 +4,9 @@ export const ERR_MSG = {
     'ERR2': 'メールアドレスまたはパスワードを入力してください。', //Please input email or password!
     'ERR3': 'ユーザーIDが未定義です。', // User id is undefined!
     'ERR4': 'ユーザーの詳細が見つかりません。', // User details not found!
+    'ERR5': '電子メールは空です。', // Email is empty!
+    'ERR6': 'ユーザーはすでに存在します', // User already exist!
+    'ERR7': 'メールアドレスとパスワードを入力してください。' // please input email and password
 }
 
 export const fontSize = {

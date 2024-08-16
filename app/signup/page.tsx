@@ -1,6 +1,7 @@
 import { Metadata } from "next"
 import Image from "next/image"
 import { Inter } from 'next/font/google'
+import SignUpForm from "./SignUpForm"
 
 export const metadata:Metadata = {
     title: "Sign Up"
@@ -13,11 +14,7 @@ export default function SignUp() {
         <div className={`flex flex-col px-[50px] py-[30px] gap-[10px] justify-center items-center ${inter.className}`}>
             <h1 className="font-bold text-[20px] sm:text-[24px]">新規登録</h1>
             <h1 className="text-[8px] sm:text-[12px] mt-[20px] font-bold">メールアドレスで新規登録</h1>
-            <form action="" className="w-[100%] max-w-[100%] sm:max-w-[460px] flex flex-col gap-[10px] items-center">
-                <input className="w-[100%] text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]" type="email" name="recipe-image" placeholder="メールアドレスを入力" id="recipe-image" />
-                <input className={`w-[100%] text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]`} type="password" name="recipe-image" placeholder="パスワードを入力" id="recipe-image" />
-                <input className="w-[100%] bg-[#ffb762] text-white py-[10px] rounded-md text-[12px] sm:text-[16px]" type="submit" value="新規登録" />
-            </form>
+            <SignUpForm />
             <div className="w-[100%] max-w-[100%] sm:max-w-[460px] mt-[30px] gap-[10px] flex flex-col justify-center">
                 <button className={` flex justify-center items-center bg-[white] border-[2px] rounded-md border-[#ffcd92] text-[12px] sm:text-[16px] px-[10px] py-[10px] font-bold`}>
                     <svg width="15" height="15" viewBox="0 0 98 87" fill="none" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">

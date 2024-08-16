@@ -55,3 +55,21 @@ export async function getUserDetails(user_id: number) {
       throw _e;
   }
 }
+
+export async function checkIfUserNotExist(email: string) {
+  if(!email) throw new Error(ERR_MSG['ERR5']);
+
+  try {
+    const user = await db.selectFrom("users_table as user")
+        .select(['user.user_id'])
+        .where('user.email','=', email)
+        .executeTakeFirst();
+
+    if(user) throw new Error(ERR_MSG['ERR6']);
+
+    return true;
+  } catch(e) {
+    let _e = (e as Error).message;
+    throw _e;
+  }
+}

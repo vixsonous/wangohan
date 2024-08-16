@@ -43,7 +43,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-[#FFE9C9]`}>
+      <body className={`${inter.className} bg-[#FFE9C9] h-full min-h-[100vh] flex flex-col`}>
         <div className="px-[20px] w-[100%] z-[999] fixed bg-[#FFFAF0] pt-[5px] flex justify-between items-center border-b-[1px] opacity-[0.9] shadow-md">
           <Link href="/"><Image className="w-[60px] h-[auto]" src={'/logo-final.png'} width={100} height={100} alt="website logo" /></Link>
           {
@@ -63,11 +63,12 @@ export default async function RootLayout({
             )
           }
         </div>
-        <div className={`pt-[65.68px] overflow-hidden ${myFont.className} `}>
-          
+        <div className={`pt-[65.68px] overflow-hidden ${myFont.className} grow`}>
           {children}
+        </div>
 
-          <div className="footer border-[1px] border-black overflow-hidden mt-[100px]" />
+        <div className="footer mt-[100px]">
+          <div className="border-[1px] border-black overflow-hidden " />
           <div className="relative bg-[url('/LP/last.png')]  bg-contain bg-no-repeat bg-bottom pb-[20vw]">
             <div className="flex items-center p-[20px]">
               <div className="flex flex-col justify-center self-center items-start gap-[5px] w-[50%]">
