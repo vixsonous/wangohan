@@ -82,12 +82,12 @@ export default async function RootLayout({
                 </div>
               </div>
               <div className="flex flex-wrap gap-[10px] justify-between items-center h-[100%] self-center w-[50%]">
-                <a href="" className="text-[8px] self-center flex">利用規約</a>
-                <a href="" className="text-[8px] self-center flex">免責事項</a>
-                <a href="" className="text-[8px] self-center flex">プライバシーポリシー</a>
-                <a href="" className="text-[8px] self-center flex">Myページ</a>
-                <a href="" className="text-[8px] self-center flex">HOME</a>
-                <a href="" className="text-[8px] self-center flex">ご意見・お問い合わせ</a>
+                <Link href="/inquiry/terms-of-service" className="text-[8px] self-center flex">利用規約</Link>
+                <Link href="/inquiry/disclaimer" className="text-[8px] self-center flex">免責事項</Link>
+                <Link href="/inquiry/privacy-policy" className="text-[8px] self-center flex">プライバシーポリシー</Link>
+                <Link href="/user" className="text-[8px] self-center flex">Myページ</Link>
+                <Link href="/" className="text-[8px] self-center flex">HOME</Link>
+                <Link href="/inquiry/send-inquiry" className="text-[8px] self-center flex">ご意見・お問い合わせ</Link>
               </div>
             </div>
             {/* <Image src={'/LP/last.png'} className="rounded-md w-[100vw] h-[auto] absolute bottom-[-70px] left-[-20px] inline max-w-none object-fill" width={10000} height={10000}  alt="website banner" /> */}

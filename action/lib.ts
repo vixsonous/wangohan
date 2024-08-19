@@ -1,3 +1,4 @@
+import { getExpireDate } from "@/constants/constants";
 import { jwtVerify, SignJWT } from "jose";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -8,7 +9,7 @@ export async function encrypt(payload: any) {
     return await new SignJWT(payload)
         .setProtectedHeader({alg: 'HS256'})
         .setIssuedAt()
-        .setExpirationTime('10 sec from now')
+        .setExpirationTime('10 min from now')
         .sign(key)
 }
 
@@ -25,7 +26,7 @@ export async function updateSession(req: NextRequest) {
 
     const parsed = await decrypt(session);
 
-    parsed.expires = new Date(Date.now() + 10 * 1000);
+    parsed.expires = getExpireDate();
 
     const res = NextResponse.next();
 

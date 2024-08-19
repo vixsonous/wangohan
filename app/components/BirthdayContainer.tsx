@@ -9,34 +9,6 @@ interface BirthdayAvatars {
 }
 export default function BirthdayContainer({bdayAvt} : BirthdayAvatars) {
 
-    const sliderContainer = useRef<HTMLDivElement>(null);
-    const [pos, setPos] = useState(0);
-
-    const [textDis, setTextDis] = useState('');
-    
-
-    // useEffect(() => {
-    //     if(sliderContainer.current == null)
-    //         return;
-        
-    //     sliderContainer.current.style.transition = "all 1s linear";
-    //     let start:DOMHighResTimeStamp = 0;
-    
-    //     const sliderInt = setInterval(() => {
-    //         if(sliderContainer.current != null) {
-    //             sliderContainer.current.scrollTo({
-    //                 left: sliderContainer.current.scrollLeft + 1,
-    //                 behavior: 'smooth'
-    //             })
-    //         }
-    //     },35);
-
-    //     return () => {
-    //         clearInterval(sliderInt);
-    //     }
-    //   }, []);
-    
-
     return (
         <div className="flex flex-col gap-[40px] justify-center items-center mt-[30px] relative">
             <div className="title">

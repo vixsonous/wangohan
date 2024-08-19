@@ -23,3 +23,8 @@ export const fontSize = {
     'l10': '2.75em', // 2.75 16px
     'l11': '3em', // 3 16px
 }
+
+export const getExpireDate = () => {
+    // 10 minutes (last number is minutes)
+    return new Date(Date.now() + 60 * 1000 * 10);
+}

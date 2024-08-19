@@ -14,9 +14,9 @@ export default function RecipeElementV1 ({element}:Props) {
         <Image src={'/dashboard.png'} className="rounded-md w-[44vw] sm:h-[110px] md:h-[auto] object-cover relative max-w-none" width={10000} height={10000} alt="website banner" />
         <div className={`flex justify-between`}>
             <div className={`w-full flex gap-[5px] flex-wrap items-center `}>
-                <span className={`bg-[#523636] self-center flex justify-center items-center text-white py-[2px] px-[7px] rounded-[5px] text-[${CardTagSize}]`}>Tags</span>
-                <span className={`bg-[#523636] self-center flex justify-center items-center text-white py-[2px] px-[7px] rounded-[5px] text-[${CardTagSize}]`}>Tags</span>
-                <span className={`bg-[#523636] self-center flex justify-center items-center text-white py-[2px] px-[7px] rounded-[5px] text-[${CardTagSize}]`}>Very long Tags</span>
+                <span className={`bg-[#523636] self-center flex justify-center items-center text-white py-[2px] px-[7px] rounded-[5px] text-[${CardTagSize}]`}>小型犬</span>
+                <span className={`bg-[#523636] self-center flex justify-center items-center text-white py-[2px] px-[7px] rounded-[5px] text-[${CardTagSize}]`}>成犬</span>
+                <span className={`bg-[#523636] self-center flex justify-center items-center text-white py-[2px] px-[7px] rounded-[5px] text-[${CardTagSize}]`}>誕生日</span>
             </div>
         </div>
         <h1 className={`text-[${CardFontSize}]`}>炊飯器で簡単！夏バテでも食べられるご飯</h1>

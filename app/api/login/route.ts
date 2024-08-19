@@ -1,5 +1,6 @@
 import { encrypt } from "@/action/lib";
 import { getUser } from "@/action/users";
+import { getExpireDate } from "@/constants/constants";
 import { cookies, headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -20,7 +21,8 @@ export const POST = async ( req: Request) => {
 
         const response = NextResponse.redirect(new URL("/", req.url), {status: 302});
 
-        const expires = new Date(Date.now() + 10 * 1000);
+                                                       // minutes
+        const expires = getExpireDate();
         const session = await encrypt({user, expires});
 
         response.cookies.set('session', session, {
