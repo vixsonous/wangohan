@@ -45,7 +45,7 @@ export default function SendInquiryForm() {
                     <h1 className="font-semibold text-[13px]">内容</h1>
                 </label>
                 <textarea className="w-[100%] rounded-md border-[2px] border-solid border-[#ffcd92] text-[13px] px-[10px] py-[5px] bg-[#fff8ef]" rows={5} name="recipe-title" id="recipe-title" />
-                <span className="text-[10px] text-[#7f7464] font-semibold relative top-[-10px]">パスワードを忘れた場合</span>
+                <span className="text-[10px] text-[#7f7464] font-semibold relative top-[-10px]">お問い合わせ内容の詳細を記入してください。</span>
             </div>
                         
             <input className="bg-[#ffb762] text-white rounded-md text-[13px] px-[30px] py-[5px]" type="submit" value="送信" />
