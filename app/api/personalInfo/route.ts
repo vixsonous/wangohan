@@ -15,7 +15,7 @@ export const POST = async ( req:NextRequest) => {
         const file = reqInput.get('file');
 
         if(file instanceof File) {
-            await deleteFilesinFolder(folderName);
+            // await deleteFilesinFolder(folderName);
             const url = await uploadFile(file, folderName);
             reqInput.append('fileUrl', url);
         } else {
@@ -27,7 +27,7 @@ export const POST = async ( req:NextRequest) => {
         const response = NextResponse.redirect(new URL("/", req.url), {status: 302});
         return response;
     } catch(e) {
-        
+
         let _e = (e as Error).message;
         throw _e;
     }
