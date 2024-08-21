@@ -26,10 +26,10 @@ export default async function User() {
     if(!session) redirect("/login");
 
     const decryptedSession = await decrypt(session as string);
-    const userDetails = await getUserDetails(decryptedSession.user.user_id).catch(() => redirect("/signup/personal-info"));
+    // const userDetails = await getUserDetails(decryptedSession.user.user_id).catch(() => redirect("/signup/personal-info"));
 
-    const image_url = userDetails.user_image === '' ? `/recipe-making/pic-background.png` : /*await getFile(userDetails.user_image)*/ '/recipe-making/pic-background.png';
-    const pets : DogData[] = userDetails.pets;
+    // const image_url = userDetails.user_image === '' ? `/recipe-making/pic-background.png` : /*await getFile(userDetails.user_image)*/ '/recipe-making/pic-background.png';
+    // const pets : DogData[] = userDetails.pets;
     
     return (
         <Suspense fallback={<IndexLoading />}>
