@@ -18,15 +18,6 @@ type Props = {
     searchParams: {[key: string]: string | string[] | undefined}
 }
 
-export async function generateMetadata({params} : Props, parent: ResolvingMetadata):Promise<Metadata> {
-    const {userId} = params;
-    const title = `User ${userId}`;
-
-    return {
-        title: title
-    }
-}
-
 export default async function User() {
 
     const docCookies = cookies();
