@@ -61,8 +61,6 @@ export default function PetEditForm({petData} : Props) {
         petData.breed = pet.breed;
         petData.birthdate = pet.birthdate;
         petData.thumbnail = pet.thumbnail;
-
-        console.log(pet);
     },[pet.name, pet.birthdate, pet.breed, pet.thumbnail]);
 
     useEffect(() => {

@@ -13,7 +13,6 @@ export default function User() {
     useEffect(() => {
         function outsideClick(e:MouseEvent) {
             if(userIcn.current && div.current && !div.current.contains(e.target as Node)  && !userIcn.current.contains(e.target as Node) && display) {
-                console.log("clicked outside");
                 setDisplay(false)
             } 
                 

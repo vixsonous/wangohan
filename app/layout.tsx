@@ -34,13 +34,6 @@ export default async function RootLayout({
   const cookiesStore = cookies();
   const user = cookiesStore.get('session');
 
-  if(!user) {
-    console.log("no exist");
-    console.log(randomBytes(64).toString('hex'));
-  } else {
-    console.log('exist');
-  }
-
   return (
     <html lang="en">
       <body className={`${inter.className} bg-[#FFE9C9] h-full min-h-[100vh] flex flex-col`}>

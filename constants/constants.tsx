@@ -6,7 +6,11 @@ export const ERR_MSG = {
     'ERR4': 'ユーザーの詳細が見つかりません。', // User details not found!
     'ERR5': '電子メールは空です。', // Email is empty!
     'ERR6': 'ユーザーはすでに存在します', // User already exist!
-    'ERR7': 'メールアドレスとパスワードを入力してください。' // please input email and password
+    'ERR7': 'メールアドレスとパスワードを入力してください。', // please input email and password
+    'ERR8': 'メールアドレスまたはパスワードが空です。', // email or password is empty
+    'ERR9': 'パスワードが間違っています。', // Password is incorrect
+    'ERR10': 'ログインしてください。', // Please log in
+    'ERR11': 'フォームデータが存在しません。', // form data does not exist
 }
 
 export const fontSize = {
@@ -27,4 +31,14 @@ export const fontSize = {
 export const getExpireDate = () => {
     // 10 minutes (last number is minutes)
     return new Date(Date.now() + 60 * 1000 * 10);
+}
+
+export const validateEmail = (email:string) => {
+    var re = /\S+@\S+\.\S+/;
+    return re.test(email);
+}
+
+export const withSpecialCharacters = (string: string) => {
+    const format = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+    return format.test(string);
 }

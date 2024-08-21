@@ -1,8 +1,10 @@
 'use client';
 
 import { fontSize } from "@/constants/constants";
+import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
-import { useState } from "react";
+import { SyntheticEvent, useState } from "react";
 
 export default function PersonalInfoForm() {
 
@@ -10,13 +12,110 @@ export default function PersonalInfoForm() {
         thumbnail: '/recipe-making/pic-background.png',
         lname: '',
         fname: '',
-        username: '',
+        codename: '',
         birthdate: '',
         gender: '',
         occupation: ''
     });
 
+    const [error, setError] = useState({
+        lname: '',
+        fname: '',
+        codename: '',
+        birthdate: '',
+        gender: '',
+        occupation: '',
+        generalError: 'asdads'
+    });
+
+    const [login, setLogin] = useState(false);
+
+    const [profilePic, setProfilePic] = useState<File | null>(null);
     const [imgKey, setImgKey] = useState(new Date().getTime() * Math.random());
+
+    const validateInputs = () => {
+        
+        let validation = true;
+
+        setError({
+            lname: '',
+            fname: '',
+            codename: '',
+            birthdate: '',
+            gender: '',
+            occupation: '',
+            generalError: ''
+        })
+
+        if(!personalInfo.lname) {
+            setError(prev => ({...prev, lname: 'Please input last name!'}));
+        }
+
+        if(!personalInfo.fname) {
+            setError(prev => ({...prev, fname: 'Please input first name!'}));
+        }
+
+        if(!personalInfo.codename) {
+            setError(prev => ({...prev, codename: 'Please input code name!'}));
+        }
+
+        if(!personalInfo.birthdate) {
+            setError(prev => ({...prev, birthdate: 'Please input birthdate!'}));
+        }
+
+        if(!personalInfo.gender) {
+            setError(prev => ({...prev, gender: 'Please input gender!'}));
+        }
+
+        if(!personalInfo.occupation) {
+            setError(prev => ({...prev, occupation: 'Please input occupation!'}));
+        }
+
+        if(error.lname || error.fname || error.codename || error.birthdate || error.gender || error.occupation) {
+            validation = false;
+        }
+
+        return validation;
+    }
+
+    const submitFunc = async (e: SyntheticEvent) => {
+        e.preventDefault();
+        
+        // if(!validateInputs()) return;
+
+        const formSubmit = new FormData();
+        formSubmit.append('lname', personalInfo.lname);
+        formSubmit.append('fname', personalInfo.fname);
+        formSubmit.append('codename', personalInfo.codename);
+        formSubmit.append('birthdate', personalInfo.birthdate);
+        formSubmit.append('gender', personalInfo.gender);
+        formSubmit.append('occupation', personalInfo.occupation);
+
+        setLogin(true);
+
+        if(profilePic) {
+            formSubmit.append('file', profilePic, profilePic?.name);
+        }
+        
+
+        await fetch('/api/personalInfo',{
+            method: 'POST',
+            body: formSubmit,
+        }).then( async res => {
+            setLogin(false);
+            if(res.status === 200) {
+                window.location.href = '/';
+            }else if(res.status === 302) {
+                window.location.href = res.url;
+            } else if(res.status === 500) {
+                let response = await res.json().then(res => res);
+                throw new Error(response.message);
+            }
+        })
+        .catch(err => setError(prev => ({...prev, generalError: (err as Error).message})))
+    }
+
+    
 
     return (
         <form action="" className="w-[100%] max-w-[100%] sm:max-w-[460px] flex flex-col gap-[10px] items-start pt-[10vw]">
@@ -32,43 +131,59 @@ export default function PersonalInfoForm() {
                                     const tempPath = URL.createObjectURL(e.target.files[0]);
                                     setPersonalInfo(prevState => ({...prevState, thumbnail:tempPath}));
                                     setImgKey(new Date().getTime() * Math.random());
+                                    setProfilePic(e.target.files[0]);
                                 }
                             }} className="w-[100%] hidden" type="file" name="recipe-image" id="recipe-image" />
                     </label>
                 </div>
                 <div className="flex-[0_0_100%] flex flex-wrap sm:flex-nowrap sm:flex-col gap-[1rem] w-[100%]">
                     <div className="w-[100%]">
-                        <label htmlFor="姓" className={`text-[${fontSize.l2}] font-semibold`}>姓</label>
+                        <label htmlFor="姓" className={`text-[${fontSize.l2}] font-semibold`}>姓 </label><span className="text-[.5em] sm:text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.lname}</span>
                         <input value={personalInfo.lname} onChange={(e) => setPersonalInfo(prevState => ({...prevState, lname: e.target.value}))} id="姓" className={`w-[100%] text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]`} type="text" name="recipe-image" placeholder="姓"  />
                     </div>
                     <div className="w-[100%]">
-                        <label htmlFor="名" className={`text-[${fontSize.l2}] font-semibold`}>名</label>
+                        <label htmlFor="名" className={`text-[${fontSize.l2}] font-semibold`}>名 </label><span className="text-[.5em] sm:text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.fname}</span>
                         <input value={personalInfo.fname} onChange={(e) => setPersonalInfo(prevState => ({...prevState, fname: e.target.value}))} id="codename" className={`w-[100%] text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]`} type="text" name="recipe-image" placeholder="名"  />
                     </div>
                 </div>
             </div>
 
             <div className="w-[100%]">
-                <label htmlFor="ユーザー名" className={`text-[${fontSize.l2}] font-semibold`}>ユーザー名</label>
-                <input value={personalInfo.username} onChange={(e) => setPersonalInfo(prevState => ({...prevState, username: e.target.value}))} id="ユーザー名" className={`w-[100%] text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]`} type="text" name="recipe-image" placeholder="パスワードを入力"  />
+                <label htmlFor="ユーザー名" className={`text-[${fontSize.l2}] font-semibold`}>ユーザー名 </label><span className="text-[.5em] sm:text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.codename}</span>
+                <input value={personalInfo.codename} onChange={(e) => setPersonalInfo(prevState => ({...prevState, codename: e.target.value}))} id="ユーザー名" className={`w-[100%] text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]`} type="text" name="codename" placeholder="パスワードを入力"  />
             </div>
             <div className="flex flex-wrap justify-between">
                 <div className="flex-[0_0_48%]">
-                    <label htmlFor="誕生日" className={`text-[${fontSize.l2}] font-semibold`}>誕生日</label>
-                    <input id="誕生日" className="w-[100%] text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]" type="date" name="recipe-image" placeholder="メールアドレスを入力" />
+                    <label htmlFor="誕生日" className={`text-[${fontSize.l2}] font-semibold`}>誕生日 </label><span className="text-[.5em] sm:text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.birthdate}</span>
+                    <input value={personalInfo.birthdate} onChange={(e) => setPersonalInfo(prev => ({...prev, birthdate: e.target.value}))} id="誕生日" className="w-[100%] text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]" type="date" name="recipe-image" placeholder="メールアドレスを入力" />
                 </div>
 
                 <div className="flex-[0_0_48%]">
-                    <label htmlFor="性別" className={`text-[${fontSize.l2}] font-semibold`}>性別</label>
-                    <input id="性別" className={`w-[100%] text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]`} type="text" name="recipe-image" placeholder="パスワードを入力"  />
+                    <label htmlFor="性別" className={`text-[${fontSize.l2}] font-semibold`}>性別 </label><span className="text-[.5em] sm:text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.gender}</span>
+                    <select value={personalInfo.gender} onChange={(e) => setPersonalInfo(prev => ({...prev, gender: e.target.value}))} className={`w-[100%] text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]`} name="性別" id="性別">
+                        <option disabled value="">性別を選択</option>
+                        <option value="男性">男性</option>
+                        <option value="女性">女性</option>
+                        <option value="どちらでもない">どちらでもない</option>
+                        <option value="答えない">答えない</option>
+                    </select>
                 </div>
             </div>
             <div className="w-[100%]">
-                <label htmlFor="職業" className={`text-[${fontSize.l2}] font-semibold`}>職業</label>
+                <label htmlFor="職業" className={`text-[${fontSize.l2}] font-semibold`}>職業 </label><span className="text-[.5em] sm:text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.occupation}</span>
                 <input id="職業" className={`w-[100%] text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]`} type="text" name="recipe-image" placeholder="パスワードを入力"  />
             </div>
             
-            <input className="w-[100%] bg-[#ffb762] text-white py-[10px] rounded-md text-[12px] sm:text-[16px]" type="submit" value="新規登録" />
+            <div className="w-full flex justify-center flex-col items-center gap-[10px]">
+                <button onClick={(e:SyntheticEvent) => submitFunc(e)} className="w-[100%] bg-[#ffb762] text-white py-[10px] rounded-md text-[12px] sm:text-[16px]" type="submit">
+                    {!login ? (
+                        '新規登録'
+                    ): (
+                        <FontAwesomeIcon icon={faCircleNotch} spin size="lg"/>
+                    )}
+                </button>
+                <span className="text-[.5em] sm:text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.generalError}</span>
+            </div>
         </form>
     )
 }

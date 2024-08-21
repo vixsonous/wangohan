@@ -1,4 +1,5 @@
 'use client';
+import { validateEmail, withSpecialCharacters } from "@/constants/constants";
 import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { SyntheticEvent, useState } from "react"
@@ -15,6 +16,27 @@ export default function SignUpForm() {
 
     const signUpFunc = (e: SyntheticEvent) => {
         e.preventDefault();
+
+        if(!validateEmail(signup.email)) {
+            setError("Email is invalid");
+            return;
+        }
+
+        if(!signup.password) {
+            setError("Please input password!");
+            return;
+        }
+
+        if(withSpecialCharacters(signup.password)) {
+            setError("No Special Characters allowed!");
+            return;
+        }
+
+        if(signup.password.length < 8) {
+            setError("Password must be at least 8 characters!");
+            return;
+        }
+
         setSignupState(true);
 
         fetch('/api/signup', {

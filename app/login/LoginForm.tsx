@@ -1,4 +1,5 @@
 'use client';
+import { withSpecialCharacters, validateEmail } from "@/constants/constants";
 import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Inter } from "next/font/google";
@@ -21,6 +22,27 @@ export default function LoginForm() {
 
     const loginFunc = async (e:SyntheticEvent) => {
         e.preventDefault();
+
+        if(!validateEmail(credentials.email)) {
+            setError("Email is invalid");
+            return;
+        }
+
+        if(!credentials.password) {
+            setError("Please input password!");
+            return;
+        }
+
+        if(withSpecialCharacters(credentials.password)) {
+            setError("No Special Characters allowed!");
+            return;
+        }
+
+        if(credentials.password.length < 8) {
+            setError("Password must be at least 8 characters!");
+            return;
+        }
+
         setLogin(true);
         const login = await fetch('/api/login',{
             method: 'POST',
