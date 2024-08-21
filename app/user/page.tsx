@@ -37,7 +37,7 @@ export default async function User() {
     const decryptedSession = await decrypt(session as string);
     const userDetails = await getUserDetails(decryptedSession.user.user_id).catch(() => redirect("/signup/personal-info"));
 
-    const image_url = userDetails.user_image === '' ? `/recipe-making/pic-background.png` : /*await getFile(userDetails.user_image)*/ '/recipe-making/pic-background.png';
+    const image_url = userDetails.user_image === '' ? `/recipe-making/pic-background.png` : await getFile(userDetails.user_image);
     const pets : DogData[] = userDetails.pets;
     
     return (
