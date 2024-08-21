@@ -16,9 +16,8 @@ export const POST = async ( req:NextRequest) => {
 
         if(file instanceof File) {
             // await deleteFilesinFolder(folderName);
-            // const url = await uploadFile(file, folderName);
-            // reqInput.append('fileUrl', url);
-            reqInput.append('fileUrl', '');
+            const url = await uploadFile(file, folderName);
+            reqInput.append('fileUrl', url);
 
         } else {
             reqInput.append('fileUrl', '');
