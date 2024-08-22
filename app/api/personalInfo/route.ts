@@ -25,7 +25,10 @@ export const POST = async ( req:NextRequest) => {
 
         await registerUserDetails(reqInput);
 
+        if(req.cookies.get('session')) req.cookies.delete('session');
+
         const response = NextResponse.redirect(new URL("/", req.url), {status: 302});
+        response.cookies.set('session', '', {expires: new Date(0)});
         return response;
     } catch(e) {
 

@@ -94,6 +94,7 @@ export async function registerUser(email: string, password: string) {
       .values({
         email: email,
         password: password,
+        google_id: '',
         user_lvl: 2,
         updated_at: new Date(Date.now()),
         created_at: new Date(Date.now())
@@ -132,6 +133,56 @@ export async function registerUserDetails(formData: FormData) {
         updated_at: new Date(Date.now()),
         created_at: new Date(Date.now())
       })
+      .executeTakeFirstOrThrow();
+
+      return resultUser;
+  } catch(e) {
+    let _e = (e as Error).message;
+    throw _e;
+  }
+}
+
+export async function findGoogleUser(google_id: string) {
+  try {
+    if(!google_id) throw new Error(ERR_MSG['ERR12']);
+
+    const user_id = await db.selectFrom("users_table as users")
+            .select(["users.user_id"])
+            .where("users.google_id","=", google_id)
+            .executeTakeFirst();
+    
+    return user_id ? user_id.user_id : -1;
+  } catch(e) {
+    let _e = (e as Error).message;
+    throw _e;
+  } 
+}
+
+interface GoogleUser {
+  id: string,
+  email: string,
+  verified_email: boolean,
+  name: string, // Code name
+  given_name: string, // fname
+  family_name: string, // lname
+  picture: string
+}
+
+export async function registerGoogleUser(email: string, google_id: string) {
+
+  try {
+    if(!email || !google_id) throw new Error(ERR_MSG['ERR8']);
+
+    const resultUser = await db.insertInto('users_table')
+      .values({
+        email: email,
+        password: '',
+        google_id: google_id,
+        user_lvl: 2,
+        updated_at: new Date(Date.now()),
+        created_at: new Date(Date.now())
+      })
+      .returning(['user_id'])
       .executeTakeFirstOrThrow();
 
       return resultUser;

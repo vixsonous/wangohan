@@ -50,6 +50,8 @@ export default function Home() {
           <div>
             <RecipeSlider title={'人気レシピ'} recipes={[1,2,3,4,5]} width={'175'}/>
           </div>
+          {/* Birthday Section */}
+          <BirthdayContainer bdayAvt={birthdays} />
           <div className="flex flex-col gap-[40px] justify-center items-center mt-[30px] relative">
             <div className="title">
               <h1 className="text-[26px] tracking-tighter font-bold text-[#523636] relative after:content-[''] z-[1] after:left-[-10px] after:w-[110%] after:h-[40px] after:top-[10px] after:z-[-1] after:flex after:absolute after:bg-[#FFE9C9]">レシピカテゴリ</h1>
@@ -134,8 +136,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Birthday Section */}
-          <BirthdayContainer bdayAvt={birthdays} />
           <div className="flex flex-col mx-[-20px] relative">
             <h1 className="flex justify-center w-[100%] items-center top-[70px] absolute text-[23px] font-bold text-[#523636]">コラムはこちら</h1>
             <div className="absolute flex justify-center w-[100%] top-[120px]">

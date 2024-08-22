@@ -3,10 +3,21 @@
 import { fontSize } from "@/constants/constants";
 import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { cookies } from "next/headers";
 import Image from "next/image";
-import { SyntheticEvent, useState } from "react";
+import { SyntheticEvent, useEffect, useState } from "react";
 
-export default function PersonalInfoForm() {
+type InfoType = {
+    fname: string,
+    lname: string,
+    user_image: string,
+    codename: string
+}
+
+interface Info {
+    info: InfoType
+}
+export default function PersonalInfoForm({info} : Info) {
 
     const [personalInfo, setPersonalInfo] = useState({
         thumbnail: '/recipe-making/pic-background.png',
@@ -25,7 +36,7 @@ export default function PersonalInfoForm() {
         birthdate: '',
         gender: '',
         occupation: '',
-        generalError: 'asdads'
+        generalError: ''
     });
 
     const [login, setLogin] = useState(false);
@@ -81,7 +92,7 @@ export default function PersonalInfoForm() {
     const submitFunc = async (e: SyntheticEvent) => {
         e.preventDefault();
         
-        // if(!validateInputs()) return;
+        if(!validateInputs()) return;
 
         const formSubmit = new FormData();
         formSubmit.append('lname', personalInfo.lname);
@@ -115,7 +126,12 @@ export default function PersonalInfoForm() {
         .catch(err => setError(prev => ({...prev, generalError: (err as Error).message})))
     }
 
-    
+    useEffect(() => {
+
+        if(info) {
+            setPersonalInfo(prev => ({...prev, fname: info.fname, lname: info.lname, thumbnail: info.user_image, codename: info.codename}));
+        }
+    }, [info]);
 
     return (
         <form action="" className="w-[100%] max-w-[100%] sm:max-w-[460px] flex flex-col gap-[10px] items-start pt-[10vw]">

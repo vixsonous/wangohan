@@ -16,6 +16,7 @@ export interface Database {
 
 export interface UserTable {
   user_id: Generated<number>;
+  google_id: string;
   email: string;
   password:string;
   user_lvl: number;

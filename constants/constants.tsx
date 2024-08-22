@@ -5,12 +5,14 @@ export const ERR_MSG = {
     'ERR3': 'ユーザーIDが未定義です。', // User id is undefined!
     'ERR4': 'ユーザーの詳細が見つかりません。', // User details not found!
     'ERR5': '電子メールは空です。', // Email is empty!
-    'ERR6': 'ユーザーはすでに存在します', // User already exist!
+    'ERR6': 'ユーザーはすでに存在します!ログインしてください。', // User already exist! Please log in
     'ERR7': 'メールアドレスとパスワードを入力してください。', // please input email and password
     'ERR8': 'メールアドレスまたはパスワードが空です。', // email or password is empty
     'ERR9': 'パスワードが間違っています。', // Password is incorrect
     'ERR10': 'ログインしてください。', // Please log in
     'ERR11': 'フォームデータが存在しません。', // form data does not exist
+    'ERR12': 'Google ID が未定義です。', // google id is not defined
+    'ERR13': 'Google ユーザーが見つかりません。 Googleに登録してください。', // Google User not found! Please sign up with google
 }
 
 export const fontSize = {

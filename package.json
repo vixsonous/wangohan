@@ -13,6 +13,7 @@
     "@fortawesome/fontawesome-svg-core": "^6.6.0",
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@fortawesome/react-fontawesome": "^0.2.2",
+    "@react-oauth/google": "^0.12.1",
     "@vercel/postgres": "^0.9.0",
     "@vercel/postgres-kysely": "^0.9.0",
     "bcrypt": "^5.1.1",

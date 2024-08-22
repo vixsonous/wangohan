@@ -5,7 +5,7 @@ import { SyntheticEvent, useContext, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHouse } from "@fortawesome/free-solid-svg-icons/faHouse";
 import { GlobalValueContext } from "./global-context";
-import { faBook, faDog, faLanguage, faList, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faBook, faDog, faLanguage, faList, faSignOut, faUser } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 
 export default function Settings() {
@@ -51,7 +51,13 @@ export default function Settings() {
         <>
         <Image ref={btn} onClick={openSettings} src={'/icons/bone.png'} className="self-center rounded-md h-[auto] w-[50px] relative" width={10000} height={10000}  alt="website banner" />
         <div ref={settings} style={{width: '0%'}} className="absolute overflow-x-hidden h-[100vh] top-[65.68px] bg-[#FFFAF0] transition-all ease-in-out w-[0%] right-0 transform-x-4">
+            
             <div className="p-[30px] flex flex-col w-full items-center justify-center text-[26px] gap-[20px]">
+                <Link onClick={openSettings} href="/recipe/create">
+                    <button className="w-[100%] bg-[#ffb762] text-white border-dashed border-[3px] border-[#6b4528] py-[5px] px-[10px] rounded-md text-[12px] sm:text-[16px]" type="submit">
+                        レシピを作成する
+                    </button>
+                </Link>
                 <Link onClick={openSettings} className="w-full" href="/">
                 <div className="w-full text-[.5em] sm:text-[.75em] flex justify-between items-center border-b-[1px] border-black border-solid">
                     <FontAwesomeIcon icon={faHouse} style={{color: '#523636'}}  />
@@ -86,7 +92,7 @@ export default function Settings() {
                 </div>
 
                 <div onClick={logout} className="w-full text-[.5em] sm:text-[.75em] flex justify-between items-center border-b-[1px] border-black border-solid">
-                    <FontAwesomeIcon icon={faDog} style={{color: '#523636'}}  />
+                    <FontAwesomeIcon icon={faSignOut} style={{color: '#523636'}}  />
                     ログアウト
                 </div>
             </div>
