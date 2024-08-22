@@ -10,6 +10,7 @@ import { DogData } from "@/constants/interface";
 import { getFile } from "@/action/file-lib";
 import React, { Suspense } from "react";
 import IndexLoading from "../loading";
+import Link from "next/link";
 
 const PetContainer = React.lazy(() => import("./components/PetContainer"));
 
@@ -58,8 +59,10 @@ export default async function User() {
                 </div>
                 <TabList />
                 <div className="fixed bottom-[20px] z-[9999] right-[10px]">
-                    <Image loading="lazy" src={'/Setting/settingpaw.png'} className="h-[auto] w-[120px]  max-w-none" width={10000} height={10000}  alt="website banner" />
-                    <span className="relative bottom-[33px] text-[13px] text-white right-[-45px]">設定</span>
+                    <Link href="/user/settings">
+                        <Image loading="lazy" src={'/Setting/settingpaw.png'} className="h-[auto] w-[120px]  max-w-none" width={10000} height={10000}  alt="website banner" />
+                        <span className="relative bottom-[33px] text-[13px] text-white right-[-45px]">設定</span>
+                    </Link>
                 </div>
             </div>
         </Suspense>
