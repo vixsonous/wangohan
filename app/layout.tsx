@@ -36,7 +36,7 @@ export default async function RootLayout({
   const user = cookiesStore.get('session');
 
   return (
-    <GoogleOAuthProvider clientId={process.env.GOOGLE_AUTH_CLIENT_ID || ''}>
+    <GoogleOAuthProvider clientId={String(process.env.GOOGLE_AUTH_CLIENT_ID)}>
       <html lang="en">
         <body className={`${inter.className} bg-[#FFE9C9] h-full min-h-[100vh] flex flex-col`}>
           <div className="px-[20px] w-[100%] z-[999] fixed bg-[#FFFAF0] pt-[5px] flex justify-between items-center border-b-[1px] opacity-[0.9] shadow-md">
