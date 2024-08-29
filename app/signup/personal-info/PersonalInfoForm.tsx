@@ -72,7 +72,7 @@ export default function PersonalInfoForm({info} : Info) {
                 setError({...err});
             }
 
-            if(withAlphabetical(personalInfo[key as keyof typeof personalInfo]) && (key !== 'birthdate' && key !== 'codename')) {
+            if(withAlphabetical(personalInfo[key as keyof typeof personalInfo]) && (key === 'fname' || key === 'lname')) {
                 let err = error;
                 err[key as keyof typeof error] = '英数字が含まれています';
                 setError({...err});
