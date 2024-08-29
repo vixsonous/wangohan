@@ -153,23 +153,23 @@ export default function PersonalInfoForm({info} : Info) {
                 <div className="flex-[0_0_100%] flex flex-wrap sm:flex-nowrap sm:flex-col gap-[1rem] w-[100%]">
                     <div className="w-[100%]">
                         <label htmlFor="姓" className={`text-[${fontSize.l2}] font-semibold`}>姓 </label><span className="text-[.5em] sm:text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.lname}</span>
-                        <input value={personalInfo.lname} onChange={(e) => setPersonalInfo(prevState => ({...prevState, lname: e.target.value}))} id="姓" className={`w-[100%] text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]`} type="text" name="recipe-image" placeholder="姓"  />
+                        <input value={personalInfo.lname} onChange={(e) => setPersonalInfo(prevState => ({...prevState, lname: e.target.value}))} id="姓" className={`w-[100%] text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]`} type="text" name="recipe-image" placeholder="姓を入力"  />
                     </div>
                     <div className="w-[100%]">
                         <label htmlFor="名" className={`text-[${fontSize.l2}] font-semibold`}>名 </label><span className="text-[.5em] sm:text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.fname}</span>
-                        <input value={personalInfo.fname} onChange={(e) => setPersonalInfo(prevState => ({...prevState, fname: e.target.value}))} id="codename" className={`w-[100%] text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]`} type="text" name="recipe-image" placeholder="名"  />
+                        <input value={personalInfo.fname} onChange={(e) => setPersonalInfo(prevState => ({...prevState, fname: e.target.value}))} id="codename" className={`w-[100%] text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]`} type="text" name="recipe-image" placeholder="名を入力"  />
                     </div>
                 </div>
             </div>
 
             <div className="w-[100%]">
                 <label htmlFor="ユーザー名" className={`text-[${fontSize.l2}] font-semibold`}>ユーザー名 </label><span className="text-[.5em] sm:text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.codename}</span>
-                <input value={personalInfo.codename} onChange={(e) => setPersonalInfo(prevState => ({...prevState, codename: e.target.value}))} id="ユーザー名" className={`w-[100%] text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]`} type="text" name="codename" placeholder="ユーザー名"  />
+                <input value={personalInfo.codename} onChange={(e) => setPersonalInfo(prevState => ({...prevState, codename: e.target.value}))} id="ユーザー名" className={`w-[100%] text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]`} type="text" name="codename" placeholder="ユーザー名を入力"  />
             </div>
             <div className="flex flex-wrap justify-between">
                 <div className="flex-[0_0_48%]">
                     <label htmlFor="誕生日" className={`text-[${fontSize.l2}] font-semibold`}>誕生日 </label><span className="text-[.5em] sm:text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.birthdate}</span>
-                    <input value={personalInfo.birthdate} onChange={(e) => setPersonalInfo(prev => ({...prev, birthdate: e.target.value}))} id="誕生日" className="w-[100%] text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]" type="date" name="recipe-image" placeholder="誕生日" />
+                    <input value={personalInfo.birthdate} onChange={(e) => setPersonalInfo(prev => ({...prev, birthdate: e.target.value}))} id="誕生日" className="w-[100%] text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]" type="date" name="recipe-image" placeholder="誕生日を入力" />
                 </div>
 
                 <div className="flex-[0_0_48%]">
@@ -185,11 +185,11 @@ export default function PersonalInfoForm({info} : Info) {
             </div>
             <div className="w-[100%]">
                 <label htmlFor="職業" className={`text-[${fontSize.l2}] font-semibold`}>職業 </label><span className="text-[.5em] sm:text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.occupation}</span>
-                <input value={personalInfo.occupation} onChange={(e) => setPersonalInfo(prev => ({...prev, occupation: e.target.value}))} id="職業" className={`w-[100%] text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]`} type="text" name="recipe-image" placeholder="職業"  />
+                <input value={personalInfo.occupation} onChange={(e) => setPersonalInfo(prev => ({...prev, occupation: e.target.value}))} id="職業" className={`w-[100%] text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]`} type="text" name="recipe-image" placeholder="職業を入力"  />
             </div>
             
             <div className="w-full flex justify-center flex-col items-center gap-[10px]">
-                <button onClick={(e:SyntheticEvent) => submitFunc(e)} className="w-[100%] bg-[#ffb762] text-white py-[10px] rounded-md text-[12px] sm:text-[16px]" type="submit">
+                <button disabled={login} onClick={(e:SyntheticEvent) => submitFunc(e)} className="w-[100%] bg-[#ffb762] text-white py-[10px] rounded-md text-[12px] sm:text-[16px]" type="submit">
                     {!login ? (
                         '新規登録'
                     ): (
