@@ -5,13 +5,14 @@ import Image from "next/image";
 import localFont from 'next/font/local';
 import Link from "next/link";
 import Settings from "./components/Settings";
-import { createContext, useContext } from "react";
+import { createContext, useContext, useEffect } from "react";
 import { GlobalValueContext } from "./components/global-context";
 import { getUsers } from "@/action/users";
 import { cookies } from "next/headers";
 import User from "./components/User";
 import { randomBytes } from "crypto";
 import {GoogleOAuthProvider } from '@react-oauth/google';
+import LayoutSettings from "./components/LayoutSettings";
 
 const inter = Inter({ subsets: ["latin"] });
 const myFont = localFont({src: "./mitimasu.ttf"});
@@ -31,32 +32,16 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  
-  const cookiesStore = cookies();
-  const user = cookiesStore.get('session');
 
+  const session = cookies().get('session');
+  const user = session ? true : false; 
   return (
     <GoogleOAuthProvider clientId={String(process.env.GOOGLE_AUTH_CLIENT_ID)}>
       <html lang="en">
         <body className={`${inter.className} bg-[#FFE9C9] h-full min-h-[100vh] flex flex-col`}>
           <div className="px-[20px] w-[100%] z-[999] fixed bg-[#FFFAF0] pt-[5px] flex justify-between items-center border-b-[1px] opacity-[0.9] shadow-md">
             <Link href="/"><Image className="w-[60px] h-[auto]" src={'/logo-final.png'} width={100} height={100} alt="website logo" /></Link>
-            {
-              user ? (
-                <div className={'menu flex gap-[1rem]'}>
-                  <div className="self-center">
-                    <Image src={'/icons/notification.png'} className="self-center rounded-md h-[auto] w-[40px] relative" width={10000} height={10000}  alt="website banner" />
-                  </div>
-                  <div className="self-center">
-                    <Settings />
-                  </div>
-                </div>
-              ):(
-                <div>
-                  <User />
-                </div>
-              )
-            }
+            <LayoutSettings isLoggedIn={user}/>
           </div>
           <div className={`pt-[65.68px] overflow-hidden ${myFont.className} grow`}>
             {children}

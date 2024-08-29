@@ -49,7 +49,7 @@ export default function SignUpForm() {
         }).then(async res => {
             setSignupState(false);
             if(res.status === 200) {
-                window.location.href = '/signup/personal-info';
+                window.location.href = '/signup/finish';
             }else if(res.status === 302) {
                 window.location.href = res.url;
             } else if(res.status === 500) {

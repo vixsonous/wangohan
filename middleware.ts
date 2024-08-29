@@ -9,6 +9,7 @@ export function middleware(request: NextRequest) {
     if(!currentUser && (request.nextUrl.pathname.startsWith('/user')
         || request.nextUrl.pathname.startsWith('/recipe/create')
         || request.nextUrl.pathname.startsWith('/signup/personal-info')
+        || request.nextUrl.pathname.startsWith('/signup/finish')
     )) {
         return Response.redirect(new URL('/login', request.url));
     }

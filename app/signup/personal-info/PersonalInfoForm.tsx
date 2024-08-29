@@ -115,7 +115,7 @@ export default function PersonalInfoForm({info} : Info) {
         }).then( async res => {
             setLogin(false);
             if(res.status === 200) {
-                window.location.href = '/';
+                window.location.href = '/signup/finish';
             }else if(res.status === 302) {
                 window.location.href = res.url;
             } else if(res.status === 500) {
@@ -187,7 +187,7 @@ export default function PersonalInfoForm({info} : Info) {
             </div>
             <div className="w-[100%]">
                 <label htmlFor="職業" className={`text-[${fontSize.l2}] font-semibold`}>職業 </label><span className="text-[.5em] sm:text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.occupation}</span>
-                <input id="職業" className={`w-[100%] text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]`} type="text" name="recipe-image" placeholder="パスワードを入力"  />
+                <input value={personalInfo.occupation} onChange={(e) => setPersonalInfo(prev => ({...prev, occupation: e.target.value}))} id="職業" className={`w-[100%] text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]`} type="text" name="recipe-image" placeholder="パスワードを入力"  />
             </div>
             
             <div className="w-full flex justify-center flex-col items-center gap-[10px]">
