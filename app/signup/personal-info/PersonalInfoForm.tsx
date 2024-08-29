@@ -59,11 +59,11 @@ export default function PersonalInfoForm({info} : Info) {
         })
 
         if(!personalInfo.lname) {
-            setError(prev => ({...prev, lname: 'Please input last name!'}));
+            setError(prev => ({...prev, lname: '苗字を記入してください'}));
         }
 
         if(!personalInfo.fname) {
-            setError(prev => ({...prev, fname: 'Please input first name!'}));
+            setError(prev => ({...prev, fname: '名前を記入してください'}));
         }
 
         if(!personalInfo.codename) {
@@ -71,15 +71,15 @@ export default function PersonalInfoForm({info} : Info) {
         }
 
         if(!personalInfo.birthdate) {
-            setError(prev => ({...prev, birthdate: 'Please input birthdate!'}));
+            setError(prev => ({...prev, birthdate: '誕生日を選択してください'}));
         }
 
         if(!personalInfo.gender) {
-            setError(prev => ({...prev, gender: 'Please input gender!'}));
+            setError(prev => ({...prev, gender: '性別を選択してください'}));
         }
 
         if(!personalInfo.occupation) {
-            setError(prev => ({...prev, occupation: 'Please input occupation!'}));
+            setError(prev => ({...prev, occupation: '職業を記入してください!'}));
         }
 
         if(error.lname || error.fname || error.codename || error.birthdate || error.gender || error.occupation) {
@@ -166,12 +166,12 @@ export default function PersonalInfoForm({info} : Info) {
 
             <div className="w-[100%]">
                 <label htmlFor="ユーザー名" className={`text-[${fontSize.l2}] font-semibold`}>ユーザー名 </label><span className="text-[.5em] sm:text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.codename}</span>
-                <input value={personalInfo.codename} onChange={(e) => setPersonalInfo(prevState => ({...prevState, codename: e.target.value}))} id="ユーザー名" className={`w-[100%] text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]`} type="text" name="codename" placeholder="パスワードを入力"  />
+                <input value={personalInfo.codename} onChange={(e) => setPersonalInfo(prevState => ({...prevState, codename: e.target.value}))} id="ユーザー名" className={`w-[100%] text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]`} type="text" name="codename" placeholder="ユーザー名"  />
             </div>
             <div className="flex flex-wrap justify-between">
                 <div className="flex-[0_0_48%]">
                     <label htmlFor="誕生日" className={`text-[${fontSize.l2}] font-semibold`}>誕生日 </label><span className="text-[.5em] sm:text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.birthdate}</span>
-                    <input value={personalInfo.birthdate} onChange={(e) => setPersonalInfo(prev => ({...prev, birthdate: e.target.value}))} id="誕生日" className="w-[100%] text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]" type="date" name="recipe-image" placeholder="メールアドレスを入力" />
+                    <input value={personalInfo.birthdate} onChange={(e) => setPersonalInfo(prev => ({...prev, birthdate: e.target.value}))} id="誕生日" className="w-[100%] text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]" type="date" name="recipe-image" placeholder="誕生日" />
                 </div>
 
                 <div className="flex-[0_0_48%]">
@@ -187,7 +187,7 @@ export default function PersonalInfoForm({info} : Info) {
             </div>
             <div className="w-[100%]">
                 <label htmlFor="職業" className={`text-[${fontSize.l2}] font-semibold`}>職業 </label><span className="text-[.5em] sm:text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.occupation}</span>
-                <input value={personalInfo.occupation} onChange={(e) => setPersonalInfo(prev => ({...prev, occupation: e.target.value}))} id="職業" className={`w-[100%] text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]`} type="text" name="recipe-image" placeholder="パスワードを入力"  />
+                <input value={personalInfo.occupation} onChange={(e) => setPersonalInfo(prev => ({...prev, occupation: e.target.value}))} id="職業" className={`w-[100%] text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]`} type="text" name="recipe-image" placeholder="職業"  />
             </div>
             
             <div className="w-full flex justify-center flex-col items-center gap-[10px]">
