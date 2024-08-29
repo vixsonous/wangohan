@@ -1,6 +1,6 @@
 'use client';
 
-import { fontSize } from "@/constants/constants";
+import { fontSize, withSpecialCharactersAndNumbers } from "@/constants/constants";
 import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { cookies } from "next/headers";
@@ -17,6 +17,16 @@ type InfoType = {
 interface Info {
     info: InfoType
 }
+
+const errorObj = {
+    lname: '苗字を記入してください',
+    fname: '名前を記入してください',
+    codename: 'ユーザーネームを記入してください',
+    birthdate: '誕生日を選択してください',
+    gender: '性別を選択してください',
+    occupation: '職業を記入してください'
+}
+
 export default function PersonalInfoForm({info} : Info) {
 
     const [personalInfo, setPersonalInfo] = useState({
@@ -48,39 +58,27 @@ export default function PersonalInfoForm({info} : Info) {
         
         let validation = true;
 
-        setError({
-            lname: '',
-            fname: '',
-            codename: '',
-            birthdate: '',
-            gender: '',
-            occupation: '',
-            generalError: ''
-        })
+        Object.keys(personalInfo).forEach((key, idx) => {
+            if(key === 'thumbnail') return;
 
-        if(!personalInfo.lname) {
-            setError(prev => ({...prev, lname: '苗字を記入してください'}));
-        }
+            if(personalInfo[key as keyof typeof personalInfo]) {
+                let err = error;
+                err[key as keyof typeof error] = '';
+                setError({...err});
+            }
+            
+            if(withSpecialCharactersAndNumbers(personalInfo[key as keyof typeof personalInfo]) && key !== 'birthdate') {
+                let err = error;
+                err[key as keyof typeof error] = '特殊文字や数字が含まれています';
+                setError({...err});
+            }
 
-        if(!personalInfo.fname) {
-            setError(prev => ({...prev, fname: '名前を記入してください'}));
-        }
-
-        if(!personalInfo.codename) {
-            setError(prev => ({...prev, codename: 'Please input code name!'}));
-        }
-
-        if(!personalInfo.birthdate) {
-            setError(prev => ({...prev, birthdate: '誕生日を選択してください'}));
-        }
-
-        if(!personalInfo.gender) {
-            setError(prev => ({...prev, gender: '性別を選択してください'}));
-        }
-
-        if(!personalInfo.occupation) {
-            setError(prev => ({...prev, occupation: '職業を記入してください!'}));
-        }
+            if(!personalInfo[key as keyof typeof personalInfo]) {
+                let err = error;
+                err[key as keyof typeof error] = errorObj[key as keyof typeof errorObj];
+                setError({...err});
+            }
+        });
 
         if(error.lname || error.fname || error.codename || error.birthdate || error.gender || error.occupation) {
             validation = false;

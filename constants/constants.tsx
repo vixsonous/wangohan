@@ -44,3 +44,8 @@ export const withSpecialCharacters = (string: string) => {
     const format = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
     return format.test(string);
 }
+
+export const withSpecialCharactersAndNumbers = (string: string) => {
+    const fo = /[!@#$%^&*()\-_=+{};:,<.>'"0-9\[\]\/~`?_-]/;
+    return fo.test(string);
+}
