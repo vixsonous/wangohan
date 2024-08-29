@@ -45,7 +45,7 @@ export default async function User() {
         <Suspense fallback={<IndexLoading />}>
             <div className="relative pb-[100px]">
                 <div className="user-image flex flex-col justify-center items-center mt-[30px]">
-                    <Image loading="lazy" src={image_url} className="rounded-[100px] w-[150px] h-[150px] relative" width={10000} height={10000}  alt="website banner" />
+                    <Image loading="lazy" src={image_url} className="rounded-[100px] w-[150px] h-[150px] object-cover relative" width={10000} height={10000}  alt="website banner" />
                     <h1 className="text-[36px] font-bold text-[#5b5351]">{userDetails.user_codename === '' ? `Wanuser` + decryptedSession.user.user_id : userDetails.user_codename}</h1>
                 </div>
                 <div className="flex justify-center items-center relative mt-[10px] mb-[30px]">
