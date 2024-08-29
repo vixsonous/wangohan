@@ -1,9 +1,8 @@
 'use client';
 
-import { fontSize, withSpecialCharactersAndNumbers } from "@/constants/constants";
+import { fontSize, withAlphabetical, withSpecialCharactersAndNumbers } from "@/constants/constants";
 import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { cookies } from "next/headers";
 import Image from "next/image";
 import { SyntheticEvent, useEffect, useState } from "react";
 
@@ -70,6 +69,12 @@ export default function PersonalInfoForm({info} : Info) {
             if(withSpecialCharactersAndNumbers(personalInfo[key as keyof typeof personalInfo]) && key !== 'birthdate') {
                 let err = error;
                 err[key as keyof typeof error] = '特殊文字や数字が含まれています';
+                setError({...err});
+            }
+
+            if(withAlphabetical(personalInfo[key as keyof typeof personalInfo]) && key !== 'birthdate') {
+                let err = error;
+                err[key as keyof typeof error] = '英数字が含まれています';
                 setError({...err});
             }
 

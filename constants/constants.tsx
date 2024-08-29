@@ -49,3 +49,8 @@ export const withSpecialCharactersAndNumbers = (string: string) => {
     const fo = /[!@#$%^&*()\-_=+{};:,<.>'"0-9\[\]\/~`?_-]/;
     return fo.test(string);
 }
+
+export const withAlphabetical = (string: string) => {
+    const fo = /[a-zA-Z]/;
+    return fo.test(string);
+}
