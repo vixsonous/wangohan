@@ -42,8 +42,6 @@ export default function PetEditForm({petData} : Props) {
         }
     }
 
-    
-
     const [icns, setIcns] = useState({
         petNameIcn: faEdit,
         petBdayIcn: faEdit,
@@ -69,7 +67,7 @@ export default function PetEditForm({petData} : Props) {
 
     return (
         <>
-            <div onClick={()=>setState('fixed')} className="flex flex-grow flex-shrink-0 basis-[30%] flex-wrap justify-center items-center gap-[10px]">
+            <div onClick={()=>setState('fixed')} className="flex flex-grow flex-shrink-0 basis-[30%] flex-wrap justify-start items-center gap-[10px]">
                 <div>
                     <Image src={petData.thumbnail} className="rounded-[50%] w-[60px] h-[60px] object-cover relative" width={10000} height={10000}  alt="website banner" />
                 </div>
@@ -85,7 +83,7 @@ export default function PetEditForm({petData} : Props) {
                         <h1>Pet Edit</h1>
                         <FontAwesomeIcon onClick={()=>setState('hidden')} icon={faClose} size="sm" className="ml-[20px] cursor-pointer text-[15px]"/>
                     </div>
-                    <div className="bg-white p-[50px] flex justify-center flex-wrap items-center gap-[20px]">
+                    <div className="bg-white p-[30px] flex justify-center flex-wrap items-center gap-[20px]">
                         <div>
                             <label htmlFor={`thumbnail-${pet.id}`}>
                                 <Image key={imgKey} src={pet.thumbnail} className="rounded-[50%] w-[80px] h-[80px] object-cover relative" width={10000} height={10000}  alt="website banner" />
@@ -100,16 +98,16 @@ export default function PetEditForm({petData} : Props) {
                         </div>
                         <div className="flex flex-col gap-[5px] text-[#5b5351]">
                             <div className="flex items-center justify-center relative">
-                                <input className="w-[50%] focus:outline-none text-[26px] bg-[transparent] text-center font-bold text-[#5b5351]" onClick={() => setIcns(icnState => ({...icnState, petNameIcn: faSave}))} onChange={(e) => setPet(petState => ({...petState, name: e.target.value}))} onBlur={() => alrtPopup()} value={pet.name} />
+                                <input className="w-[100%] focus:outline-none text-[26px] bg-[transparent] text-center font-bold text-[#5b5351]" onClick={() => setIcns(icnState => ({...icnState, petNameIcn: faSave}))} onChange={(e) => setPet(petState => ({...petState, name: e.target.value}))} onBlur={() => alrtPopup()} value={pet.name} />
                                 <FontAwesomeIcon icon={icns.petNameIcn} size="lg" className="ml-[20px]"/>
                             </div>
-                            <div className="flex items-center justify-center relative flex-wrap">
+                            <div className="w-full flex items-center justify-between relative flex-wrap">
                                 <span>{`(${_calculateAge(pet.birthdate)}才) `}</span>
-                                <input value={pet.birthdate.toISOString().split('T')[0]} type="date" className="focus:outline-none text-[15px] bg-[transparent] text-center font-bold text-[#5b5351]" onClick={() => setIcns(icnState => ({...icnState, petBdayIcn: faSave}))} onChange={(e) => {setPet(petState => ({...petState, birthdate: new Date(e.target.value)}));}} onBlur={() => alrtPopup()} />
+                                <input className="focus:outline-none text-[15px] bg-[transparent] text-center font-bold text-[#5b5351]" value={pet.birthdate.toISOString().split('T')[0]} type="date" onClick={() => setIcns(icnState => ({...icnState, petBdayIcn: faSave}))} onChange={(e) => {setPet(petState => ({...petState, birthdate: new Date(e.target.value)}));}} onBlur={() => alrtPopup()} />
                                 <FontAwesomeIcon icon={icns.petBdayIcn} size="lg" className="ml-[20px]"/>
                             </div>
                             <div className="flex items-center justify-center relative">
-                                <input value={pet.breed} className="w-[50%] focus:outline-none text-[15px] bg-[transparent] text-center font-bold text-[#5b5351]" onClick={() => setIcns(icnState => ({...icnState, petBreedIcn: faSave}))} onChange={(e) => setPet(petState => ({...petState, breed: e.target.value}))} onBlur={() => alrtPopup()} />
+                                <input value={pet.breed} className="w-[100%] focus:outline-none text-[15px] bg-[transparent] text-center font-bold text-[#5b5351]" onClick={() => setIcns(icnState => ({...icnState, petBreedIcn: faSave}))} onChange={(e) => setPet(petState => ({...petState, breed: e.target.value}))} onBlur={() => alrtPopup()} />
                                 <FontAwesomeIcon icon={icns.petBreedIcn} size="lg" className="ml-[20px]"/>
                             </div>
                         </div> 

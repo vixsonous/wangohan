@@ -43,7 +43,7 @@ export default function Settings() {
     ];
 
     return (
-        <div className="relative pb-[100px]">
+        <div className="relative pb-[100px] w-full flex justify-center">
             <EditForm pets={pets}/>
         </div>
     )

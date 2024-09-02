@@ -4,25 +4,21 @@ import "./globals.css";
 import Image from "next/image";
 import localFont from 'next/font/local';
 import Link from "next/link";
-import Settings from "./components/Settings";
-import { createContext, useContext, useEffect } from "react";
-import { GlobalValueContext } from "./components/global-context";
-import { getUsers } from "@/action/users";
 import { cookies } from "next/headers";
-import User from "./components/User";
-import { randomBytes } from "crypto";
 import {GoogleOAuthProvider } from '@react-oauth/google';
 import LayoutSettings from "./components/LayoutSettings";
-
+import { config } from "@fortawesome/fontawesome-svg-core";
+import '@fortawesome/fontawesome-svg-core/styles.css';
+config.autoAddCss = false;
 const inter = Inter({ subsets: ["latin"] });
 const myFont = localFont({src: "./mitimasu.ttf"});
 
 export const metadata:Metadata = {
   title: {
-    template: '%s | Wangohan',
-    default: "Wangohan"
+    template: '%s | わんごはん | 愛犬のための手作りごはんレシピサイト',
+    default: "わんごはん | 愛犬のための手作りごはんレシピサイト"
   },
-  keywords: ["Wangohan", "Dog food", "Pet food", "Pets", "Inu"],
+  keywords: ["愛犬のための手作りごはんレシピサイト","わんごはん","Wangohan", "Dog food", "Pet food", "Pets", "Inu"],
   creator: "Victor Chiong",
   description: "Web for WanWan"
 }
@@ -38,7 +34,7 @@ export default async function RootLayout({
   return (
     <GoogleOAuthProvider clientId={String(process.env.GOOGLE_AUTH_CLIENT_ID)}>
       <html lang="en">
-        <body className={`${inter.className} bg-[#FFE9C9] h-full min-h-[100vh] flex flex-col`}>
+        <body className={`${inter.className} bg-[#FFE9C9] h-full min-h-[100vh] flex flex-col text-[#523636]`}>
           <div className="px-[20px] w-[100%] z-[999] fixed bg-[#FFFAF0] pt-[5px] flex justify-between items-center border-b-[1px] opacity-[0.9] shadow-md">
             <Link href="/"><Image className="w-[60px] h-[auto]" src={'/logo-final.png'} width={100} height={100} alt="website logo" /></Link>
             <LayoutSettings isLoggedIn={user}/>

@@ -30,6 +30,10 @@ export const fontSize = {
     'l11': '3em', // 3 16px
 }
 
+export const textColor = {
+    'error':'#E53935'
+}
+
 export const getExpireDate = () => {
     // 10 minutes (last number is minutes)
     return new Date(Date.now() + 60 * 1000 * 10);
