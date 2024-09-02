@@ -21,15 +21,31 @@ export default function EditForm({pets} : Props) {
 
     const [usrnm, setUsrnm] = useState('あみち');
     const popup = useRef<HTMLDivElement>(null);
+    const [profilePic, setProfilePic] = useState({
+        thumbnail: '/icons/user.png',
+        picture: null,
+        imgKey: 0
+    } as {
+        thumbnail: string,
+        picture: File | null,
+        imgKey: number
+    })
 
     const [curUsrnmIcn, setCurUsrnmIcn] = useState(faEdit);
 
     return (
         <form action="" className="relative max-w-[768px]">
             <div className="user-image flex flex-col justify-center items-center mt-[30px]">
-                <div>
-                    <Image src={'/resource/dog-and-cat.jpg'} className="rounded-[100px] w-[200px] h-[200px] relative" width={10000} height={10000}  alt="website banner" />
-                </div>
+                <label htmlFor="profile-image">
+                    <Image src={profilePic.thumbnail} className="border-[1px] border-[#523636] rounded-[100px] w-[200px] h-[200px] relative object-cover" width={10000} height={10000}  alt="website banner" />
+                    <input onChange={(e) => {
+                        if(e.target.files && e.target.files[0]) {
+                            const tempPath = URL.createObjectURL(e.target.files[0]);
+                            const file = e.target.files[0];
+                            setProfilePic(prevState => ({...prevState, thumbnail:tempPath, imgKey: new Date().getTime() * Math.random(), picture: file}));
+                        }
+                    }} className="w-[100%] hidden" type="file" name="profile-image" id="profile-image" />
+                </label>
                 <span className="text-[10px] mb-[1vh]">タップして画像を変更</span>
                 <div className="flex justify-center items-center relative left-[20px] overflow-hidden">
                     <input onClick={() => setCurUsrnmIcn(faSave)} onChange={(e) => setUsrnm(e.currentTarget.value)} value={usrnm} className="w-[50%] focus:outline-none focus:border-transparent focus:ring-0 text-[36px] bg-[transparent] text-center font-bold text-[#5b5351]" />
