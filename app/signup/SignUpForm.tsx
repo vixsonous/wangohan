@@ -1,6 +1,6 @@
 'use client';
 import { validateEmail, withSpecialCharacters } from "@/constants/constants";
-import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
+import { faCircleNotch, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { TokenResponse, useGoogleLogin } from "@react-oauth/google";
 import { SyntheticEvent, useState } from "react"
@@ -14,6 +14,7 @@ export default function SignUpForm() {
 
     const [signupState, setSignupState] = useState(false);
     const [error, setError] = useState('');
+    const [showPass, setShowPass] = useState(false);
 
     const signUpFunc = (e: SyntheticEvent) => {
         e.preventDefault();
@@ -98,7 +99,10 @@ export default function SignUpForm() {
         <>
         <form action="" className="w-[100%] max-w-[100%] sm:max-w-[460px] flex flex-col gap-[10px] items-center">
             <input value={signup.email} onChange={(e) => setSignup(prevState => ({...prevState, email: e.target.value}))} className="w-[100%] text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]" type="email" name="email" placeholder="メールアドレスを入力" id="email" />
-            <input value={signup.password} onChange={(e) => setSignup(prevState => ({...prevState, password: e.target.value}))} className={`w-[100%] text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]`} type="password" name="password" placeholder="パスワードを入力" id="password" />
+            <div className="relative w-full">
+                <input type={showPass ? 'text' : "password"} value={signup.password} onChange={(e) => setSignup(prevState => ({...prevState, password: e.target.value}))} className={`w-[100%] text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]`} name="password" placeholder="パスワードを入力" id="password" />
+                <FontAwesomeIcon onClick={(e) => setShowPass(prev => !prev)} className="absolute cursor-pointer right-[12px] top-[12px]" icon={showPass ? faEye : faEyeSlash} size="lg" />
+            </div>
             <button onClick={(e:SyntheticEvent) => signUpFunc(e)} className="w-[100%] bg-[#ffb762] text-white py-[10px] rounded-md text-[12px] sm:text-[16px]" type="submit">
                 {!signupState ? (
                     '新規登録'
