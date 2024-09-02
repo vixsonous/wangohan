@@ -25,21 +25,61 @@ export default function CreateRecipeForm() {
     const CardFontSize = '13px';
     const CardTagSize = '10px';
 
+    const [imgKey, setImgKey] = useState(0);
+    const [file, setFile] = useState<File | null>(null);
     const [recipeInfo, setRecipeInfo] = useState({
         recipeTitle: '',
         recipeDescr: '',
-        recipeThumbnail: '',
+        recipeThumbnail: '/recipe-making/pic-background.png',
         age: '',
         size: '',
         event: '',
-        recipeImage: null,
+    });
+
+    const [error, setError] = useState({
+        title: '',
+        descr: '',
+        image: '',
+        instructions: '',
+        ingredients: '',
     });
 
     const [recipeIngredients, setRecipeIngredients] = useState<ingredient[]>([{name: '', amount: ''}]);
     const [recipeInstructions, setRecipeInstructions] = useState<instruction[]>([{text: ''}]);
 
+    const validationFunc = () => {
+        let valid = true;
+        setError(prev => ({
+            ...prev,
+            title: '',
+            descr: '',
+            image: '',
+            instructions: '',
+            ingredients: '',
+        }))
+
+        if(recipeInfo.recipeTitle === '') setError(prev => ({...prev, title: 'タイトルを入力してください'}));
+        if(recipeInfo.recipeDescr === '') setError(prev => ({...prev, descr: '内容を入力してください'}));
+        if(recipeInfo.recipeThumbnail === '/recipe-making/pic-background.png') setError(prev => ({...prev, image: '画像を挿入してください'}));
+        
+        if(recipeInstructions.length === 0 || recipeInstructions[0].text === '') setError(prev => ({...prev, instructions: '作り方を記入してください'}));
+
+        recipeIngredients.forEach((inst, idx) => {
+            if(inst.name !== '' && inst.amount === '') setError(prev => ({...prev, ingredients: Number(idx + 1) +'分量を記入してください'}));
+            if(inst.name === '' && inst.amount !== '') setError(prev => ({...prev, ingredients: Number(idx + 1) +'材料を記入してください'}));
+        });
+
+        if(recipeIngredients.length === 0 || recipeIngredients[0].amount === '') setError(prev => ({...prev, ingredients: '分量を記入してください'}));
+        if(recipeIngredients.length === 0 || recipeIngredients[0].name === '') setError(prev => ({...prev, ingredients: '材料を記入してください'}));
+
+        if(error.instructions !== '') valid = false;
+        return valid;
+    }
+
     const submitFunc = (e:SyntheticEvent) => {
         e.preventDefault();
+
+        if(!validationFunc()) return;
 
         const data2Send = {...recipeInfo, recipeIngredients: recipeIngredients, recipeInstructions: recipeInstructions};
 
@@ -49,16 +89,18 @@ export default function CreateRecipeForm() {
     return (
         <form action="" className="create-form flex flex-wrap gap-[30px] max-w-[768px]">
             <div className="flex-[0_0_100%]">
-                <label htmlFor="recipe-title" aria-required className="flex">
-                    <h1 className="font-semibold text-[20px]">レシピタイトル</h1>
-                    <span className={`text-[10px] self-center font-semibold ${ 25 - recipeInfo.recipeTitle.length < 0 ? `text-[${textColor.error}]` : ''}`}>（{25 - recipeInfo.recipeTitle.length}{25 - recipeInfo.recipeTitle.length >= 0 ? `文字以内` : `文字オーバーしています`}）</span>
+                <label htmlFor="recipe-title" aria-required className="flex items-center flex-wrap gap-[5px]">
+                    <h1 className="font-semibold text-[1.3em]">レシピタイトル</h1>
+                    <span className={`text-[.75em] self-center font-semibold ${ 25 - recipeInfo.recipeTitle.length < 0 ? `text-[${textColor.error}]` : ''}`}>（{25 - recipeInfo.recipeTitle.length}{25 - recipeInfo.recipeTitle.length >= 0 ? `文字以内` : `文字オーバーしています`}）</span>
+                    <span className="text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.title}</span>
                 </label>
                 <input value={recipeInfo.recipeTitle} onChange={(e) => setRecipeInfo(prev => ({...prev, recipeTitle: e.target.value}))} className="w-[100%] p-[7px] text-[13px] bg-[#fff8ef]" placeholder="例）炊飯器で簡単！夏バテでも食べられるご飯" type="text" name="recipe-title" id="recipe-title" />
             </div>
 
             <div className="flex-[0_0_100%]">
-                <label htmlFor="recipe-description" className="flex">
-                    <h1 className="font-semibold text-[20px]">レシピの説明</h1>
+                <label htmlFor="recipe-description" className="flex items-center flex-wrap gap-[5px]">
+                    <h1 className="font-semibold text-[1.3em]">レシピの説明</h1>
+                    <span className="text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.descr}</span>
                 </label>
                 <textarea className="w-[100%] p-[7px] text-[13px] bg-[#fff8ef]" placeholder="レシピに説明をしてください例）愛犬が夏バテでなかなかご飯を食べなかったので、お魚ベースの手作りごはんを作りました。たくさん食べてくれたので是非作ってみてください。" rows={5} name="recipe-description" id="recipe-description" />
             </div>
@@ -66,16 +108,25 @@ export default function CreateRecipeForm() {
             <div className="flex-[0_0_100%] mt-[15%]">
                 <label htmlFor="recipe-image" className="flex relative">
                     <Image src={'/recipe-making/3dogs.png'} className="top-[-23.2%] left-[10%] absolute h-[auto] w-[30%] max-w-none rounded-[25px]" width={10000} height={10000}  alt="website banner" />
-                    <Image src={'/recipe-making/pic-background.png'} className="h-[auto] w-[100%] max-w-none rounded-[25px]" width={10000} height={10000}  alt="website banner" />
+                    <Image src={recipeInfo.recipeThumbnail} className="h-[auto] w-[100%] max-w-none rounded-[25px]" width={10000} height={10000}  alt="website banner" />
                     <h1 className="absolute w-[100%] flex flex-col justify-center items-center h-[100%] text-[16px] sm:text-[26px] text-center">料理の画像をアップロード
                     <br/> （横長推奨）<br /> <span className="text-[36px]">+</span></h1>
-                    <input className="w-[100%] hidden" type="file" name="recipe-image" id="recipe-image" />
+                    <input onChange={(e) => {
+                        if(e.target.files && e.target.files[0]) {
+                            const tempPath = URL.createObjectURL(e.target.files[0]);
+                            setRecipeInfo(prevState => ({...prevState, recipeThumbnail:tempPath}));
+                            setImgKey(new Date().getTime() * Math.random());
+                            setFile(e.target.files[0]);
+                        }
+                    }} className="w-[100%] hidden" type="file" name="recipe-image" id="recipe-image" />
                 </label>
+                <span className="text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.image}</span>
             </div>
 
             <div className="flex-[0_0_100%] flex flex-col gap-[5px]">
-                <label htmlFor="recipe-ingredient-name-0" className="flex">
-                    <h1 className="font-semibold text-[20px]">材料・分量</h1>
+                <label htmlFor="recipe-ingredient-name-0" className="flex items-center gap-[5px]">
+                    <h1 className="font-semibold text-[1.3em]">材料・分量</h1>
+                    <span className="text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.ingredients}</span>
                 </label>
                 {recipeIngredients.map((el, idx) => {
                     return (
@@ -105,8 +156,9 @@ export default function CreateRecipeForm() {
                 <span onClick={(e: SyntheticEvent) => setRecipeIngredients(prev => [...recipeIngredients, {name: '', amount: ''} as ingredient])} className="text-[13px] self-start cursor-pointer">＋追加</span>
             </div>
             <div className="flex-[0_0_100%] flex flex-col gap-[5px]">
-                <label htmlFor="recipe-instruction-0" className="flex">
-                    <h1 className="font-semibold text-[20px]">作り方</h1>
+                <label htmlFor="recipe-instruction-0" className="flex items-center gap-[5px]">
+                    <h1 className="font-semibold text-[1.3em]">作り方</h1>
+                    <span className="text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.instructions}</span>
                 </label>
                 {recipeInstructions.map((el, idx) => {
                     return (
@@ -135,7 +187,7 @@ export default function CreateRecipeForm() {
             </div>
             <div className="flex-[0_0_100%]">
                 <label htmlFor="recipe-category" className="flex">
-                    <h1 className="font-semibold text-[20px]">カテゴリー</h1>
+                    <h1 className="font-semibold text-[1.3em]">カテゴリー</h1>
                 </label>
                 <div className="ml-[1px] flex flex-wrap" id="recipe-category">
                     <div className={` w-[45%] flex flex-col gap-[5px] flex-wrap `}>
