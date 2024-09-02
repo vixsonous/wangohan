@@ -111,8 +111,8 @@ export default function PetEditForm({petData} : Props) {
                             </div>
                             <div>
                                 <label htmlFor="">Pet Birthdate</label>
-                                <div className="w-full flex items-center justify-between relative flex-wrap w-[100%] px-[10px] py-[4px] border-[2px] rounded-md border-[#ffcd92]">
-                                    <input className="focus:outline-none text-[1em] bg-[transparent] text-left font-bold text-[#5b5351]" value={pet.birthdate.getTime() !== new Date(0).getTime() ? pet.birthdate.toISOString().split('T')[0] : ''} type="date" onClick={() => setIcns(icnState => ({...icnState, petBdayIcn: faSave}))} onChange={(e) => {setPet(petState => ({...petState, birthdate: new Date(e.target.value)}));}} onBlur={() => setIcns(icnState => ({...icnState, petBdayIcn: faEdit}))} />
+                                <div className="appearance-none w-full flex items-center justify-between relative flex-wrap w-[100%] px-[10px] py-[4px] border-[2px] rounded-md border-[#ffcd92]">
+                                    <input className="appearance-none focus:outline-none text-[1em] bg-[transparent] text-left font-bold text-[#5b5351]" value={pet.birthdate.getTime() !== new Date(0).getTime() ? pet.birthdate.toISOString().split('T')[0] : ''} type="date" onClick={() => setIcns(icnState => ({...icnState, petBdayIcn: faSave}))} onChange={(e) => {setPet(petState => ({...petState, birthdate: new Date(e.target.value)}));}} onBlur={() => setIcns(icnState => ({...icnState, petBdayIcn: faEdit}))} />
                                     <FontAwesomeIcon icon={icns.petBdayIcn} size="lg" className="absolute right-[5px]"/>
                                 </div>
                             </div>
