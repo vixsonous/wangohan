@@ -8,18 +8,6 @@ export const POST = async ( req:NextRequest) => {
     
     try {
         const reqInput = await req.formData();
-        const decryptedSession = await getDecryptedSession();
-        const folderName = `${padStartIds(decryptedSession.user.user_id)}/profile`;
-        const file = reqInput.get('file');
-
-        if(file instanceof File) {
-            // await deleteFilesinFolder(folderName);
-            const url = await uploadFile(file, folderName);
-            reqInput.append('fileUrl', url);
-
-        } else {
-            reqInput.append('fileUrl', '');
-        }
 
         await registerUserDetails(reqInput);
 

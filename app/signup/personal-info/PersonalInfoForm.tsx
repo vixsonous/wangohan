@@ -104,11 +104,25 @@ export default function PersonalInfoForm({info} : Info) {
         formSubmit.append('birthdate', personalInfo.birthdate);
         formSubmit.append('gender', personalInfo.gender);
         formSubmit.append('occupation', personalInfo.occupation);
+        formSubmit.set('fileUrl', '');
 
         setLogin(true);
+        const fileSubmit = new FormData();
 
         if(profilePic) {
-            formSubmit.append('file', profilePic, profilePic?.name);
+            fileSubmit.append('file', profilePic, profilePic?.name);
+
+            await fetch('/api/profile-pic', {
+                method: 'POST',
+                body: fileSubmit
+            }).then(async res => {
+                const body = await res.json();
+                if(res.status === 200) {
+                    formSubmit.set('fileUrl', body.body.fileUrl);
+                } else {
+                    throw new Error(body.message);
+                }
+            }).catch(err => setError(prev => ({...prev, generalError: (err as Error).message})));
         }
         
 
