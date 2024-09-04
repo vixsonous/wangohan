@@ -13,6 +13,12 @@ export const ERR_MSG = {
     'ERR11': 'フォームデータが存在しません。', // form data does not exist
     'ERR12': 'Google ID が未定義です。', // google id is not defined
     'ERR13': 'Google ユーザーが見つかりません。 Googleに登録してください。', // Google User not found! Please sign up with google
+    'ERR14': 'タイトルを入力してください', // Please input title
+    'ERR15': '内容を入力してください', //Please input description
+    'ERR16': '画像を挿入してください', //Please input picture
+    'ERR17': '作り方を記入してください',//Please input instruction
+    'ERR18': '分量を記入してください', //Please input ingredient amount
+    'ERR19': '材料を記入してください', //Please input ingredient material
 }
 
 export const fontSize = {

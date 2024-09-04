@@ -1,5 +1,6 @@
 import { getExpireDate } from "@/constants/constants";
 import { jwtVerify, SignJWT } from "jose";
+import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 const secretKey = process.env.ACCESS_TOKEN_SECRET;
@@ -38,4 +39,16 @@ export async function updateSession(req: NextRequest) {
     });
 
     return res;
+}
+
+export async function getDecryptedSession() {
+    const docCookies = cookies();
+    const session = docCookies.get('session')?.value;
+    const decryptedSession = await decrypt(session as string);
+
+    return decryptedSession;
+}
+
+export const padStartIds = (id: string) => {
+    return String(id).padStart(8, '0');
 }

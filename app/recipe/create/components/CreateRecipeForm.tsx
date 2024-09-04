@@ -1,32 +1,18 @@
 'use client';
 import { textColor } from "@/constants/constants";
+import { ingredients, instructions } from "@/constants/interface";
+import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import React, { SyntheticEvent, useState } from "react";
-
-interface ingredient {
-    name: string,
-    amount: string,
-};
-
-interface instruction {
-    text: string,
-};
-
-interface RecipeInfoInterface {
-    recipeTitle: string,
-    recipeDescr: string,
-    recipeThumbnail: string,
-    recipeImage: string,
-    recipeIngredients: Array<ingredient>,
-    recipeInstructions: Array<instruction>
-}
 
 export default function CreateRecipeForm() {
     const CardFontSize = '13px';
     const CardTagSize = '10px';
 
+    const [submit, setSubmit] = useState(false);
     const [imgKey, setImgKey] = useState(0);
-    const [file, setFile] = useState<File | null>(null);
+    const [files, setFiles] = useState<Array<File>>([]);
     const [recipeInfo, setRecipeInfo] = useState({
         recipeTitle: '',
         recipeDescr: '',
@@ -42,10 +28,11 @@ export default function CreateRecipeForm() {
         image: '',
         instructions: '',
         ingredients: '',
+        generalError: ''
     });
 
-    const [recipeIngredients, setRecipeIngredients] = useState<ingredient[]>([{name: '', amount: ''}]);
-    const [recipeInstructions, setRecipeInstructions] = useState<instruction[]>([{text: ''}]);
+    const [recipeIngredients, setRecipeIngredients] = useState<ingredients[]>([{name: '', amount: ''}]);
+    const [recipeInstructions, setRecipeInstructions] = useState<instructions[]>([{text: ''}]);
 
     const validationFunc = () => {
         let valid = true;
@@ -56,34 +43,102 @@ export default function CreateRecipeForm() {
             image: '',
             instructions: '',
             ingredients: '',
+            generalError: ''
         }))
 
-        if(recipeInfo.recipeTitle === '') setError(prev => ({...prev, title: 'タイトルを入力してください'}));
-        if(recipeInfo.recipeDescr === '') setError(prev => ({...prev, descr: '内容を入力してください'}));
-        if(recipeInfo.recipeThumbnail === '/recipe-making/pic-background.png') setError(prev => ({...prev, image: '画像を挿入してください'}));
+        if(recipeInfo.recipeTitle === '') {
+            setError(prev => ({...prev, title: 'タイトルを入力してください'}));
+            valid = false;
+        }
+        if(recipeInfo.recipeDescr === '') {
+            setError(prev => ({...prev, descr: '内容を入力してください'}));
+            valid = false;
+        }
+
+        if(recipeInfo.recipeThumbnail === '/recipe-making/pic-background.png') {
+            setError(prev => ({...prev, image: '画像を挿入してください'}));
+            valid = false;
+        }
         
-        if(recipeInstructions.length === 0 || recipeInstructions[0].text === '') setError(prev => ({...prev, instructions: '作り方を記入してください'}));
+        if(recipeInstructions.length === 0 || recipeInstructions[0].text === '') {
+            setError(prev => ({...prev, instructions: '作り方を記入してください'}));
+            valid = false;
+        }
 
         recipeIngredients.forEach((inst, idx) => {
-            if(inst.name !== '' && inst.amount === '') setError(prev => ({...prev, ingredients: Number(idx + 1) +'分量を記入してください'}));
-            if(inst.name === '' && inst.amount !== '') setError(prev => ({...prev, ingredients: Number(idx + 1) +'材料を記入してください'}));
+
+            if(inst.name !== '' && inst.amount === '') {
+                setError(prev => ({...prev, ingredients: Number(idx + 1) +'分量を記入してください'}));
+                valid = false;
+            }
+
+            if(inst.name === '' && inst.amount !== '') {
+                setError(prev => ({...prev, ingredients: Number(idx + 1) +'材料を記入してください'}));
+                valid = false;
+            }
         });
 
-        if(recipeIngredients.length === 0 || recipeIngredients[0].amount === '') setError(prev => ({...prev, ingredients: '分量を記入してください'}));
-        if(recipeIngredients.length === 0 || recipeIngredients[0].name === '') setError(prev => ({...prev, ingredients: '材料を記入してください'}));
+        if(recipeIngredients.length === 0 || recipeIngredients[0].amount === '') {
+            setError(prev => ({...prev, ingredients: '分量を記入してください'}));
+            valid = false;
+        }
 
-        if(error.instructions !== '') valid = false;
+        if(recipeIngredients.length === 0 || recipeIngredients[0].name === '') {
+            setError(prev => ({...prev, ingredients: '材料を記入してください'}));
+            valid = false;
+        }
+        
         return valid;
     }
 
-    const submitFunc = (e:SyntheticEvent) => {
+    const submitFunc = async (e:SyntheticEvent) => {
         e.preventDefault();
 
         if(!validationFunc()) return;
 
         const data2Send = {...recipeInfo, recipeIngredients: recipeIngredients, recipeInstructions: recipeInstructions};
+        setSubmit(true)
 
-        console.log(data2Send);
+        const recipe_id = await fetch('/api/create-recipe', {
+            method: 'POST',
+            body: JSON.stringify(data2Send),
+        }).then(async res => {
+            const body = await res.json()
+            if(res.status === 500) {
+                throw new Error(body.message);
+            } else if(res.status === 200) {
+                window.location.href = "/";
+            }
+
+            return body;
+        }).catch(err => {
+            setError(prev => ({...prev, generalError: (err as Error).message}));
+        });
+
+        setSubmit(false);
+
+        if(recipe_id === undefined) setError(prev => ({...prev, generalError: 'The recipe was not created! Please refresh'}));
+
+        const filesForm = new FormData();
+        files.forEach(file => {
+            filesForm.append('files[]', file);
+        });
+        filesForm.append('recipe_id', recipe_id.body);
+
+        const ret_files = await fetch('/api/upload-recipe-files', {
+            method: 'POST',
+            body: filesForm
+        }).then(async res => {
+            const body = await res.json();
+            if(res.status === 500) {
+                throw new Error(body.message);
+            } else if (res.status === 200) {
+
+            }
+        })
+
+        // To continue, file upload using recipe id
+        console.log(recipe_id);
     }
 
     return (
@@ -102,7 +157,7 @@ export default function CreateRecipeForm() {
                     <h1 className="font-semibold text-[1.3em]">レシピの説明</h1>
                     <span className="text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.descr}</span>
                 </label>
-                <textarea className="w-[100%] p-[7px] text-[13px] bg-[#fff8ef]" placeholder="レシピに説明をしてください例）愛犬が夏バテでなかなかご飯を食べなかったので、お魚ベースの手作りごはんを作りました。たくさん食べてくれたので是非作ってみてください。" rows={5} name="recipe-description" id="recipe-description" />
+                <textarea value={recipeInfo.recipeDescr} onChange={(e) => setRecipeInfo(prev => ({...prev, recipeDescr: e.target.value}))} className="w-[100%] p-[7px] text-[13px] bg-[#fff8ef]" placeholder="レシピに説明をしてください例）愛犬が夏バテでなかなかご飯を食べなかったので、お魚ベースの手作りごはんを作りました。たくさん食べてくれたので是非作ってみてください。" rows={5} name="recipe-description" id="recipe-description" />
             </div>
 
             <div className="flex-[0_0_100%] mt-[15%]">
@@ -116,7 +171,9 @@ export default function CreateRecipeForm() {
                             const tempPath = URL.createObjectURL(e.target.files[0]);
                             setRecipeInfo(prevState => ({...prevState, recipeThumbnail:tempPath}));
                             setImgKey(new Date().getTime() * Math.random());
-                            setFile(e.target.files[0]);
+                            const rFiles = [...files];
+                            rFiles[0] = e.target.files[0];
+                            setFiles([...rFiles]);
                         }
                     }} className="w-[100%] hidden" type="file" name="recipe-image" id="recipe-image" />
                 </label>
@@ -153,7 +210,7 @@ export default function CreateRecipeForm() {
                         </div>
                     )
                 })}
-                <span onClick={(e: SyntheticEvent) => setRecipeIngredients(prev => [...recipeIngredients, {name: '', amount: ''} as ingredient])} className="text-[13px] self-start cursor-pointer">＋追加</span>
+                <span onClick={(e: SyntheticEvent) => setRecipeIngredients(prev => [...recipeIngredients, {name: '', amount: ''} as ingredients])} className="text-[13px] self-start cursor-pointer">＋追加</span>
             </div>
             <div className="flex-[0_0_100%] flex flex-col gap-[5px]">
                 <label htmlFor="recipe-instruction-0" className="flex items-center gap-[5px]">
@@ -183,7 +240,7 @@ export default function CreateRecipeForm() {
                         </div>
                     )
                 })}
-                <span onClick={(e: SyntheticEvent) => setRecipeInstructions(prev => [...recipeInstructions, {text:''} as instruction])} className="text-[13px] cursor-pointer">＋追加</span>
+                <span onClick={(e: SyntheticEvent) => setRecipeInstructions(prev => [...recipeInstructions, {text:''} as instructions])} className="text-[13px] cursor-pointer">＋追加</span>
             </div>
             <div className="flex-[0_0_100%]">
                 <label htmlFor="recipe-category" className="flex">
@@ -244,10 +301,15 @@ export default function CreateRecipeForm() {
                     </div>
                 </div>
             </div>
-            <div className="w-full flex justify-center">
-                <button onClick={e => submitFunc(e)} className="bg-[#ffb762] text-white py-[10px] rounded-md text-[13px] px-[20px] font-bold self-center" type="submit">
-                    作成する
+            <div className="w-full flex justify-center flex-col text-center">
+                <button disabled={submit} onClick={e => submitFunc(e)} className="bg-[#ffb762] text-white py-[10px] rounded-md text-[13px] px-[20px] font-bold self-center" type="submit">   
+                    {!submit ? (
+                        '作成する'
+                    ): (
+                        <FontAwesomeIcon icon={faCircleNotch} spin size="lg"/>
+                    )}
                 </button>
+                <span className="text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.generalError}</span>
             </div>
         </form>
     )

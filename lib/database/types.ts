@@ -62,10 +62,15 @@ export interface AllergiesTable {
 export interface RecipesTable {
   recipe_id: Generated<number>;
   recipe_name: string;
-  recipe_event: string;
+  recipe_age_tag: string;
+  recipe_size_tag: string;
+  recipe_event_tag: string;
   recipe_category: string;
   total_likes: number;
   total_favourites: number;
+  user_id: number;
+  updated_at: Date;
+  created_at: Date;
 }
 
 export interface RecipeCommentsTable {
@@ -75,6 +80,8 @@ export interface RecipeCommentsTable {
   recipe_comment_rating: number;
   user_id: number;
   recipe_id: number;
+  updated_at: Date;
+  created_at: Date;
 }
 
 export interface RecipeImagesTable {
@@ -83,28 +90,39 @@ export interface RecipeImagesTable {
   recipe_image_subtext: string;
   recipe_image: string;
   recipe_id: number;
+  updated_at: Date;
+  created_at: Date;
 }
 
 export interface RecipeInstructionsTable {
   recipe_instructions_id: Generated<number>;
   recipe_instructions_text: string;
   recipe_id: number;
+  updated_at: Date;
+  created_at: Date;
 }
 
 export interface RecipeIngredientsTable {
   recipe_ingredients_id: Generated<number>;
-  recipe_ingredients_text: string;
+  recipe_ingredients_name: string;
+  recipe_ingredients_amount: string;
   recipe_id: number;
+  updated_at: Date;
+  created_at: Date;
 }
 
 export interface FavouritesTable {
   favourite_id: Generated<number>;
   user_id: number;
   recipe_id: number;
+  updated_at: Date;
+  created_at: Date;
 }
 
 export interface LikesTable {
   likes_id: Generated<number>;
   user_id: number;
   recipe_id: number;
+  updated_at: Date;
+  created_at: Date;
 }

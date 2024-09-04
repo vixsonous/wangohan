@@ -8,10 +8,6 @@ export const POST = async ( req: Request) => {
 
     try {
         const reqMessage = await req.json();
-        const cookieStore = cookies()
-        const token = cookieStore.get('token')
-
-        const referer = headers().get('referer');
         const {email, password} = reqMessage;
 
         const user = await getUser(email, password)
@@ -21,7 +17,6 @@ export const POST = async ( req: Request) => {
 
         const response = NextResponse.redirect(new URL("/", req.url), {status: 302});
 
-                                                       // minutes
         const expires = getExpireDate();
         const session = await encrypt({user, expires});
 
