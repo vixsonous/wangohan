@@ -68,7 +68,7 @@ export default function PetEditForm({petData} : Props) {
 
     return (
         <>
-            <div onClick={()=>setState('fixed')} className="flex flex-grow flex-shrink-0 basis-[30%] flex-wrap justify-start items-center gap-[10px]">
+            <div onClick={()=>setState('fixed')} className="cursor-pointer flex flex-grow flex-shrink-0 basis-[30%] flex-wrap justify-start items-center gap-[10px]">
                 <div>
                     <Image src={petData.thumbnail} className="rounded-[50%] w-[60px] h-[60px] object-cover relative" width={10000} height={10000}  alt="website banner" />
                 </div>

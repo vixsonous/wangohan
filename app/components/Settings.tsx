@@ -54,7 +54,7 @@ export default function Settings() {
             
             <div className="p-[30px] flex flex-col w-full items-center justify-center text-[26px] gap-[20px]">
                 <Link onClick={openSettings} href="/recipe/create">
-                    <button className="w-[100%] rounded-md text-[12px] sm:text-[16px] relative" type="submit">
+                    <button className="w-[100%] rounded-md text-[12px] sm:text-[16px] relative hover:scale-[1.075] transition-all duration-500" type="submit">
                         <span className="absolute z-[1] w-full top-[50%] left-0 font-bold">レシピを作成する</span>
                         <Image src={'/recipe-button.png'} className="self-center rounded-md h-[auto] w-full relative absolute top-0" width={10000} height={10000}  alt="website banner" />
                     </button>

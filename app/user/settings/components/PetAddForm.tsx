@@ -1,8 +1,10 @@
 'use client';
 
-import { faCircleNotch, faClose, faEdit, faPlus, faSave } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faCircleNotch, faClose, faEdit, faPlus, faSave } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { SyntheticEvent, useRef, useState } from "react";
 
 export default function PetAddForm() {
@@ -27,11 +29,12 @@ export default function PetAddForm() {
 
     return (
         <>
-        <div className="p-[20px] flex flex-wrap items-center">
+        <div className="p-[20px] flex flex-wrap justify-between items-center">
             <button onClick={(e:SyntheticEvent)=> {
                 e.preventDefault();
                 setState('fixed');
             }}><FontAwesomeIcon icon={faPlus}/> 家族を追加</button>
+            <Link href={"/user"}><FontAwesomeIcon icon={faArrowLeft}/> 戻る</Link>
         </div>
 
         {/* Add Pet Popup */}

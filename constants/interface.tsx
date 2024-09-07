@@ -25,3 +25,10 @@ export interface recipe {
     recipeInstructions: Array<instructions>
 }
 
+export interface userDetails {
+    pets: DogData[];
+    user_codename: string;
+    user_detail_id: number;
+    user_image: string;
+}
+

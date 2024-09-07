@@ -4,6 +4,7 @@ import { db } from "@/lib/database/db";
 import bcrypt from 'bcrypt';
 import { cookies } from "next/headers";
 import { decrypt } from "./lib";
+import { DogData } from "@/constants/interface";
 
 export async function getUsers() {
   try {
@@ -58,7 +59,7 @@ export async function getUserDetails(user_id: number) {
 
       if(user === undefined) throw new Error(ERR_MSG['ERR4']);
 
-      const combinedRes = {...user, pets: pets}
+      const combinedRes = {...user, pets: pets as DogData[]}
       return combinedRes;
   } catch(e) {
       let _e = (e as Error).message;

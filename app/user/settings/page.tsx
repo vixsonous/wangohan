@@ -1,6 +1,8 @@
-import Image from "next/image";
-import PetContainer from "../components/PetContainer";
+import { getDecryptedSession } from "@/action/lib";
 import EditForm from "./components/EditForm";
+import { getUserDetails } from "@/action/users";
+import { redirect } from "next/navigation";
+import { getFile } from "@/action/file-lib";
 
 interface DogData {
     id: number,
@@ -10,7 +12,10 @@ interface DogData {
     breed: string
 }
 
-export default function Settings() {
+export default async function Settings() {
+    const decryptedSession = await getDecryptedSession();
+    const userDetails = await getUserDetails(decryptedSession.user.user_id).catch(() => redirect("/signup/personal-info"));
+    userDetails.user_image = userDetails.user_image !== '' ? await getFile(userDetails.user_image) : '/recipe-making/pic-background.png'
     const pets : DogData[] = [
         {
             id: 1,
@@ -44,7 +49,7 @@ export default function Settings() {
 
     return (
         <div className="relative pb-[100px] w-full flex justify-center">
-            <EditForm pets={pets}/>
+            <EditForm userDetails={userDetails} pets={pets}/>
         </div>
     )
 }

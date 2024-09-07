@@ -83,7 +83,7 @@ export default function Home() {
                 <a href="" className="flex w-[105px] gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-center items-center">
                   <Image src={'/LP/middledog.png'} className="rounded-md h-[70px] w-[120px] max-w-none" width={10000} height={10000}  alt="website banner" /><span className="relative top-[-6px]">中型犬用レシピ</span></a>
                 <a href="" className="flex w-[105px] gap-[10px] flex-col relative text-[13px] text-[#523636] font-bold justify-center items-center">
-                  <Image src={'/LP/bigdog.png'} className="absolute left-[-15px] top-[-25px] rounded-md h-[100px] w-[auto] max-w-none" width={10000} height={10000}  alt="website banner" /><span className="relative top-[33px]">大型犬用レシピ</span></a>
+                  <Image src={'/LP/bigdog.png'} className="absolute left-[-15px] top-[-10px] rounded-md h-[80px] w-[auto] max-w-none" width={10000} height={10000}  alt="website banner" /><span className="relative top-[33px]">大型犬用レシピ</span></a>
               </div>
             </div>
           </div>

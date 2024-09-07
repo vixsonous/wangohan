@@ -37,3 +37,11 @@ input[type="radio"]:checked+label>span{
   border: 2px solid #523636;
   font-weight: bold;
 } 
+
+.required::after {
+  content: '*';
+  color: red;
+  position: absolute;
+  font-size: .5em;
+  margin-left: 5px;
+}

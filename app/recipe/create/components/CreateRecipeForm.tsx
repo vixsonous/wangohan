@@ -145,17 +145,17 @@ export default function CreateRecipeForm() {
         <form action="" className="create-form flex flex-wrap gap-[30px] max-w-[768px]">
             <div className="flex-[0_0_100%]">
                 <label htmlFor="recipe-title" aria-required className="flex items-center flex-wrap gap-[5px]">
-                    <h1 className="font-semibold text-[1.3em]">レシピタイトル</h1>
+                    <h1 className="font-semibold text-[1.3em] required">レシピタイトル</h1>
                     <span className={`text-[.75em] self-center font-semibold ${ 25 - recipeInfo.recipeTitle.length < 0 ? `text-[${textColor.error}]` : ''}`}>（{25 - recipeInfo.recipeTitle.length}{25 - recipeInfo.recipeTitle.length >= 0 ? `文字以内` : `文字オーバーしています`}）</span>
-                    <span className="text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.title}</span>
+                    <span className="ml-[5px] text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.title}</span>
                 </label>
                 <input value={recipeInfo.recipeTitle} onChange={(e) => setRecipeInfo(prev => ({...prev, recipeTitle: e.target.value}))} className="w-[100%] p-[7px] text-[13px] bg-[#fff8ef]" placeholder="例）炊飯器で簡単！夏バテでも食べられるご飯" type="text" name="recipe-title" id="recipe-title" />
             </div>
 
             <div className="flex-[0_0_100%]">
                 <label htmlFor="recipe-description" className="flex items-center flex-wrap gap-[5px]">
-                    <h1 className="font-semibold text-[1.3em]">レシピの説明</h1>
-                    <span className="text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.descr}</span>
+                    <h1 className="font-semibold text-[1.3em] required">レシピの説明</h1>
+                    <span className="ml-[5px] text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.descr}</span>
                 </label>
                 <textarea value={recipeInfo.recipeDescr} onChange={(e) => setRecipeInfo(prev => ({...prev, recipeDescr: e.target.value}))} className="w-[100%] p-[7px] text-[13px] bg-[#fff8ef]" placeholder="レシピに説明をしてください例）愛犬が夏バテでなかなかご飯を食べなかったので、お魚ベースの手作りごはんを作りました。たくさん食べてくれたので是非作ってみてください。" rows={5} name="recipe-description" id="recipe-description" />
             </div>
@@ -165,7 +165,7 @@ export default function CreateRecipeForm() {
                     <Image src={'/recipe-making/3dogs.png'} className="top-[-23.2%] left-[10%] absolute h-[auto] w-[30%] max-w-none rounded-[25px]" width={10000} height={10000}  alt="website banner" />
                     <Image src={recipeInfo.recipeThumbnail} className="h-[auto] w-[100%] max-w-none rounded-[25px]" width={10000} height={10000}  alt="website banner" />
                     <h1 className="absolute w-[100%] flex flex-col justify-center items-center h-[100%] text-[16px] sm:text-[26px] text-center">料理の画像をアップロード
-                    <br/> （横長推奨）<br /> <span className="text-[36px]">+</span></h1>
+                    <br/> （横長推奨）<br /> <span className="text-[36px] required">+</span></h1>
                     <input onChange={(e) => {
                         if(e.target.files && e.target.files[0]) {
                             const tempPath = URL.createObjectURL(e.target.files[0]);
@@ -177,13 +177,13 @@ export default function CreateRecipeForm() {
                         }
                     }} className="w-[100%] hidden" type="file" name="recipe-image" id="recipe-image" />
                 </label>
-                <span className="text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.image}</span>
+                <span className="ml-[5px] text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.image}</span>
             </div>
 
             <div className="flex-[0_0_100%] flex flex-col gap-[5px]">
                 <label htmlFor="recipe-ingredient-name-0" className="flex items-center gap-[5px]">
-                    <h1 className="font-semibold text-[1.3em]">材料・分量</h1>
-                    <span className="text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.ingredients}</span>
+                    <h1 className="font-semibold text-[1.3em] required">材料・分量</h1>
+                    <span className="ml-[5px] text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.ingredients}</span>
                 </label>
                 {recipeIngredients.map((el, idx) => {
                     return (
@@ -213,9 +213,9 @@ export default function CreateRecipeForm() {
                 <span onClick={(e: SyntheticEvent) => setRecipeIngredients(prev => [...recipeIngredients, {name: '', amount: ''} as ingredients])} className="text-[13px] self-start cursor-pointer">＋追加</span>
             </div>
             <div className="flex-[0_0_100%] flex flex-col gap-[5px]">
-                <label htmlFor="recipe-instruction-0" className="flex items-center gap-[5px]">
-                    <h1 className="font-semibold text-[1.3em]">作り方</h1>
-                    <span className="text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.instructions}</span>
+                <label htmlFor="recipe-instructions-0" className="flex items-center gap-[5px]">
+                    <h1 className="font-semibold text-[1.3em] required">作り方</h1>
+                    <span className="text-[.75em] ml-[5px] text-[#7f7464] font-semibold text-[#E53935]">{error.instructions}</span>
                 </label>
                 {recipeInstructions.map((el, idx) => {
                     return (
@@ -244,7 +244,7 @@ export default function CreateRecipeForm() {
             </div>
             <div className="flex-[0_0_100%]">
                 <label htmlFor="recipe-category" className="flex">
-                    <h1 className="font-semibold text-[1.3em]">カテゴリー</h1>
+                    <h1 className="font-semibold text-[1.3em]">カテゴリー<small className="text-[.5em]">(任意)</small></h1>
                 </label>
                 <div className="ml-[1px] flex flex-wrap" id="recipe-category">
                     <div className={` w-[45%] flex flex-col gap-[5px] flex-wrap `}>
@@ -256,7 +256,7 @@ export default function CreateRecipeForm() {
                                         <React.Fragment key={idx}>
                                         <input className="hidden" type="radio" checked={recipeInfo.age === el} onClick={(e) => setRecipeInfo(prev => ({...prev, age: (e.target as HTMLInputElement).value !== recipeInfo.age ? (e.target as HTMLInputElement).value : ''}))} onChange={(e) => setRecipeInfo(prev => ({...prev, age: e.target.value}))} name="age" value={el} id={el} />
                                         <label htmlFor={el}>
-                                            <span className={`bg-[#523636] self-center flex justify-center border-[2px] border-[transparent] items-center text-white py-[5px] px-[7px] rounded-[5px] text-[${CardTagSize}]`}>{el}</span>
+                                            <span className={`cursor-pointer bg-[#523636] self-center flex justify-center border-[2px] border-[transparent] items-center text-white py-[5px] px-[7px] rounded-[5px] text-[${CardTagSize}]`}>{el}</span>
                                         </label>
                                         </React.Fragment>
                                     )
@@ -273,7 +273,7 @@ export default function CreateRecipeForm() {
                                         <React.Fragment key={idx}>
                                         <input checked={recipeInfo.size === el} onClick={(e) => setRecipeInfo(prev => ({...prev, size: (e.target as HTMLInputElement).value !== recipeInfo.size ? (e.target as HTMLInputElement).value : ''}))} onChange={(e) => setRecipeInfo(prev => ({...prev, size: e.target.value}))} className="hidden" type="radio" name="size" id={el} value={el} />
                                         <label htmlFor={el}>
-                                            <span className={`bg-[#523636] self-center flex justify-center border-[2px] border-[transparent] items-center text-white py-[5px] px-[7px] rounded-[5px] text-[${CardTagSize}]`}>{el}</span>
+                                            <span className={`cursor-pointer bg-[#523636] self-center flex justify-center border-[2px] border-[transparent] items-center text-white py-[5px] px-[7px] rounded-[5px] text-[${CardTagSize}]`}>{el}</span>
                                         </label>
                                         </React.Fragment>
                                     )
@@ -291,7 +291,7 @@ export default function CreateRecipeForm() {
                                             <React.Fragment key={idx}>
                                                 <input checked={recipeInfo.event === el} onClick={(e) => setRecipeInfo(prev => ({...prev, event: (e.target as HTMLInputElement).value !== recipeInfo.event ? (e.target as HTMLInputElement).value : ''}))} onChange={(e) => setRecipeInfo(prev => ({...prev, event: e.target.value}))} className="hidden" type="radio" name="event" id={el} value={el} />
                                                 <label htmlFor={el}>
-                                                    <span className={`bg-[#523636] self-center flex justify-center border-[2px] border-[transparent] items-center text-white py-[5px] px-[7px] rounded-[5px] text-[${CardTagSize}]`}>{el}</span>
+                                                    <span className={`cursor-pointer bg-[#523636] self-center flex justify-center border-[2px] border-[transparent] items-center text-white py-[5px] px-[7px] rounded-[5px] text-[${CardTagSize}]`}>{el}</span>
                                                 </label>
                                             </React.Fragment>
                                         )
