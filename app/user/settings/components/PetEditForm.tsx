@@ -70,7 +70,7 @@ export default function PetEditForm({petData} : Props) {
         <>
             <div onClick={()=>setState('fixed')} className="cursor-pointer flex flex-grow flex-shrink-0 basis-[30%] flex-wrap justify-start items-center gap-[10px]">
                 <div>
-                    <Image src={petData.thumbnail} className="rounded-[50%] w-[60px] h-[60px] object-cover relative" width={10000} height={10000}  alt="website banner" />
+                    <img src={petData.thumbnail} className="rounded-[50%] w-[60px] h-[60px] object-cover relative" width={10000} height={10000}  alt="website banner" />
                 </div>
                 <div className="flex flex-col gap-[5px] text-[#5b5351]">
                     <p className="text-[16px] font-bold">{petData.name}</p>
@@ -87,7 +87,7 @@ export default function PetEditForm({petData} : Props) {
                     <div className="bg-[#FFFAF0] p-[30px] flex justify-center flex-wrap  items-center gap-[20px]">
                         <div>
                             <label htmlFor={`thumbnail-${petData.id}`} className="relative group">
-                                <Image key={imgKey} src={pet.thumbnail} className="
+                                <img key={imgKey} src={pet.thumbnail} className="
                                 rounded-[50%] w-[190px] h-[190px] object-cover relative" width={10000} height={10000}  alt="website banner" />
                                 <div className="absolute w-full h-full bg-black group-hover:opacity-[0.3] opacity-0 top-0 flex justify-center items-center rounded-[50%] transition-all duration-500">
                                     <span className="text-white font-bold">画像を追加</span>

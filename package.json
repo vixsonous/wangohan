@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "migrate": "bun run lib/database/migrations.ts"
+    "migrate": "bun run lib/database/migrations-082520241253.ts"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.6.0",
@@ -31,7 +31,8 @@
     "react-dom": "^18",
     "react-helmet-async": "^2.0.5",
     "react-slick": "^0.30.2",
-    "slick-carousel": "^1.8.1"
+    "slick-carousel": "^1.8.1",
+    "swiper": "^11.1.12"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",

@@ -17,6 +17,7 @@ export const postRecipe = async (recipe:recipe) => {
         const recipe_id = await db.insertInto("recipes_table")
             .values({
                 recipe_name: recipe.recipeTitle,
+                recipe_description: recipe.recipeDescr,
                 recipe_category: '',
                 recipe_event_tag: recipe.event,
                 recipe_age_tag: recipe.age,
@@ -81,5 +82,56 @@ export const postInstructions = async (recipeInstructions: Array<instructions>, 
     } catch(e) {
         let _e = (e as Error).message;
         return {message: _e, body: {}, status: 500};
+    }
+}
+
+export const getRecipeTitle = async (recipeId:number) => {
+    try {
+        const recipe_title = await db.selectFrom("recipes_table").select(["recipe_name"])
+            .where("recipe_id","=", recipeId)
+            .executeTakeFirst();
+
+        if(recipe_title === undefined) throw new Error("Recipe is not found!");
+
+        return {message: 'Success!',body: recipe_title, status: 200};
+    } catch(e) {
+        let _e = (e as Error).message;
+        return {message: _e, body: undefined, status: 500};
+    }
+}
+
+export const getRecipeData = async (recipeId:number) => {
+    try {
+        
+        
+
+        const recipe_data = await db.selectFrom("recipes_table").select(["recipe_name", "recipe_id", "recipe_age_tag", 
+            "recipe_event_tag","recipe_size_tag", "recipe_description","user_id"
+        ])
+            .where("recipe_id","=", recipeId)
+            .executeTakeFirst();
+
+        if(recipe_data === undefined) throw new Error("Recipe is not found!");
+
+        const user = await db.selectFrom("user_details_table as user_details")
+            .select(['user_details.user_codename','user_details.user_image', 'user_details.user_detail_id'])
+            .where('user_details.user_id','=',recipe_data?.user_id)
+            .executeTakeFirst();
+        const recipe_instructions = await db.selectFrom("recipe_instructions_table").select(["recipe_instructions_id", "recipe_instructions_text"])
+            .where("recipe_id", "=", recipeId).execute();
+            
+        const recipe_ingredients = await db.selectFrom("recipe_ingredients_table").select(["recipe_ingredient_id", "recipe_ingredients_name", "recipe_ingredients_amount"])
+            .where("recipe_id", "=", recipeId).execute();
+
+        const recipe_images = await db.selectFrom("recipe_images_table").select(["recipe_image_id", "recipe_image", "recipe_image_title", "recipe_image_subtext"])
+            .where("recipe_id", "=", recipeId).execute();
+
+        
+
+        
+        return {message: 'Success!',body: {...recipe_data, user: user, recipe_instructions: recipe_instructions, recipe_ingredients: recipe_ingredients, recipe_images: recipe_images}, status: 200};
+    } catch(e) {
+        let _e = (e as Error).message;
+        return {message: _e, body: undefined, status: 500};
     }
 }

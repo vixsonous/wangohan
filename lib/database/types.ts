@@ -62,6 +62,7 @@ export interface AllergiesTable {
 export interface RecipesTable {
   recipe_id: Generated<number>;
   recipe_name: string;
+  recipe_description: string;
   recipe_age_tag: string;
   recipe_size_tag: string;
   recipe_event_tag: string;
@@ -103,7 +104,7 @@ export interface RecipeInstructionsTable {
 }
 
 export interface RecipeIngredientsTable {
-  recipe_ingredients_id: Generated<number>;
+  recipe_ingredient_id: Generated<number>;
   recipe_ingredients_name: string;
   recipe_ingredients_amount: string;
   recipe_id: number;

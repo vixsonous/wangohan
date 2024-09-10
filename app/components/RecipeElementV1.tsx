@@ -13,7 +13,7 @@ export default function RecipeElementV1 ({element}:Props) {
     return (
     <Link href={`/recipe/show/1`}>
         <div className="flex flex-col gap-[5px] ml-[5px]">
-            <Image src={'/dashboard.png'} className="rounded-md w-[44vw] sm:h-[110px] md:h-[auto] object-cover relative max-w-none" width={10000} height={10000} alt="website banner" />
+            <img src={'/dashboard.png'} className="rounded-md w-[44vw] sm:h-[110px] md:h-[auto] object-cover relative max-w-none" width={10000} height={10000} alt="website banner" />
             <div className={`flex justify-between`}>
                 <div className={`w-full flex gap-[5px] flex-wrap items-center `}>
                     <span className={`bg-[#523636] self-center flex justify-center items-center text-white py-[2px] px-[7px] rounded-[5px] text-[${CardTagSize}]`}>小型犬</span>

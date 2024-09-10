@@ -10,9 +10,9 @@ export async function POST(req: NextRequest) {
         const recipe_id = reqMsg.get('recipe_id') as string;
         const decryptedSession = await getDecryptedSession();
         const folderName = `${padStartIds(decryptedSession.user.user_id)}/recipes/${padStartIds(recipe_id)}`;
-        const fileArr = reqMsg.get('files[]') as FormDataEntryValue[] | null;
+        const fileArr = reqMsg.getAll('files[]') as FormDataEntryValue[] | null;
         if(fileArr === null) throw new Error("No files!");
-
+        console.log(fileArr);
         if(fileArr != undefined) {
             let arr2Send = Array.isArray(fileArr) ? [...fileArr] : [fileArr];
             const newarr = arr2Send.filter(file => file instanceof File);

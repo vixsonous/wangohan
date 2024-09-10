@@ -47,7 +47,7 @@ export default function PetAddForm() {
                 <div className="bg-[#FFFAF0] p-[30px] flex justify-center flex-wrap items-center gap-[20px]">
                     <div>
                         <label htmlFor={`thumbnail-0`} className="relative group">
-                            <Image key={imgKey} src={pet.thumbnail} className="
+                            <img key={imgKey} src={pet.thumbnail} className="
                             rounded-[50%] w-[190px] h-[190px] object-cover relative" width={10000} height={10000}  alt="website banner" />
                             <div className="absolute w-full h-full bg-black group-hover:opacity-[0.3] opacity-0 top-0 flex justify-center items-center rounded-[50%] transition-all duration-500">
                                 <span className="text-white font-bold">画像を追加</span>

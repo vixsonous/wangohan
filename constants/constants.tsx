@@ -13,12 +13,19 @@ export const ERR_MSG = {
     'ERR11': 'フォームデータが存在しません。', // form data does not exist
     'ERR12': 'Google ID が未定義です。', // google id is not defined
     'ERR13': 'Google ユーザーが見つかりません。 Googleに登録してください。', // Google User not found! Please sign up with google
-    'ERR14': 'タイトルを入力してください', // Please input title
-    'ERR15': '内容を入力してください', //Please input description
-    'ERR16': '画像を挿入してください', //Please input picture
-    'ERR17': '作り方を記入してください',//Please input instruction
-    'ERR18': '分量を記入してください', //Please input ingredient amount
-    'ERR19': '材料を記入してください', //Please input ingredient material
+    'ERR14': 'タイトルを入力してください。', // Please input title
+    'ERR15': '内容を入力してください。', //Please input description
+    'ERR16': '画像を挿入してください。', //Please input picture
+    'ERR17': '作り方を記入してください。',//Please input instruction
+    'ERR18': '分量を記入してください。', //Please input ingredient amount
+    'ERR19': '材料を記入してください。', //Please input ingredient material
+    'ERR20' : 'パスワードを入力してください。', //Please input password
+    'ERR21' : '特殊文字は使用できません。', // Special Characters are not allowed
+    'ERR22' : 'パスワードは8文字以上である必要があります。', // Password must have at least 8 characters
+}
+
+export const SUCC_MSG = {
+    'SUCCESS1' : '完了しました', // Completed
 }
 
 export const fontSize = {
@@ -37,7 +44,8 @@ export const fontSize = {
 }
 
 export const textColor = {
-    'error':'#E53935'
+    'error':'#E53935',
+    'success': '#43A047'
 }
 
 export const getExpireDate = () => {

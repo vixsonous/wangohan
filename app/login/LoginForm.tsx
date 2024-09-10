@@ -1,6 +1,6 @@
 'use client';
-import { withSpecialCharacters, validateEmail } from "@/constants/constants";
-import { faCircleNotch, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { withSpecialCharacters, validateEmail, textColor, SUCC_MSG, ERR_MSG } from "@/constants/constants";
+import { faCheck, faCircleNotch, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { GoogleLogin, TokenResponse, useGoogleLogin } from "@react-oauth/google";
 import { Inter } from "next/font/google";
@@ -28,33 +28,38 @@ export default function LoginForm() {
     });
 
     const [error, setError] = useState('');
-    const [login, setLogin] = useState(false);
+    const [loginState, setLoginState] = useState(false);
+    const [loginSuccess, setLoginSuccessState] = useState({
+        regular: false,
+        google: false
+    })
     const [showPass, setShowPass] = useState(false);
+    const [openGoogleSignup, setOpenGoogleSignup] = useState(false);
 
     const loginFunc = async (e:SyntheticEvent) => {
         e.preventDefault();
 
         if(!validateEmail(credentials.email)) {
-            setError("Email is invalid");
+            setError(ERR_MSG.ERR5);
             return;
         }
 
         if(!credentials.password) {
-            setError("Please input password!");
+            setError(ERR_MSG.ERR20);
             return;
         }
 
         if(withSpecialCharacters(credentials.password)) {
-            setError("No Special Characters allowed!");
+            setError(ERR_MSG.ERR21);
             return;
         }
 
         if(credentials.password.length < 8) {
-            setError("Password must be at least 8 characters!");
+            setError(ERR_MSG.ERR22);
             return;
         }
 
-        setLogin(true);
+        setLoginState(true);
         const login = await fetch('/api/login',{
             method: 'POST',
             body: JSON.stringify(credentials),
@@ -62,11 +67,14 @@ export default function LoginForm() {
         })
         .then(async res => {
             
-            setLogin(false);
             if(res.status === 200) {
                 window.location.href = '/';
+                setLoginSuccessState(prev => ({...prev, regular: true}));
+                setError("");
             }else if(res.status === 302) {
                 window.location.href = res.url;
+                setLoginSuccessState(prev => ({...prev, regular: true}));
+                setError("");
             } else if(res.status === 500) {
                 let response = await res.json().then(res => res);
                 throw new Error(response.message);
@@ -74,12 +82,19 @@ export default function LoginForm() {
         })
         .catch(_e => {
             let message = (_e as Error).message;
+            setLoginState(false);
             setError(message);
         });
     }
 
     const googleLogin = useGoogleLogin({
-        onSuccess: tokenResponse => googleSubmit(tokenResponse)
+        onSuccess: tokenResponse => googleSubmit(tokenResponse),
+        onError: () => {
+            setError("Failed login!");
+        },
+        onNonOAuthError: () => {
+            setOpenGoogleSignup(false);
+        }
     });
 
     const googleSubmit = async (tokenResponse: Omit<TokenResponse, "error" | "error_description" | "error_uri">) => {
@@ -100,14 +115,21 @@ export default function LoginForm() {
             
             if(res.status === 200) {
                 window.location.href = '/';
+                setLoginSuccessState(prev => ({...prev, google: true}));
+                setError("");
             }else if(res.status === 302) {
                 window.location.href = res.url;
+                setLoginSuccessState(prev => ({...prev, google: true}));
+                setError("");
             } else {
                 let response = await res.json().then(res => res);
                 throw new Error(response.message);
             }
         })
-        .catch( err => setError((err as Error).message));
+        .catch( err => {
+            setOpenGoogleSignup(false);
+            setError((err as Error).message)
+        });
     }
 
     return (
@@ -119,11 +141,12 @@ export default function LoginForm() {
                 <FontAwesomeIcon onClick={(e) => setShowPass(prev => !prev)} className="absolute cursor-pointer right-[12px] top-[12px]" icon={showPass ? faEye : faEyeSlash} size="lg" />
             </div>
             <span className="text-[.5em] sm:text-[.75em] text-[#7f7464] font-semibold">パスワードを忘れた場合</span>
-            <button onClick={(e:SyntheticEvent) => loginFunc(e)} className="w-[100%] bg-[#ffb762] text-white py-[10px] rounded-md text-[12px] sm:text-[16px]" type="submit">
-                {!login ? (
+            <button disabled={openGoogleSignup || loginState} onClick={(e:SyntheticEvent) => loginFunc(e)} className={`w-[100%] bg-[${loginSuccess.regular ? '#FFD99A' : '#ffb762'}] border-[1px] border-[${loginState ? '#ffb762' : '#FFD99A'}] text-white py-[10px] rounded-md text-[12px] sm:text-[16px]`} type="submit">
+                {!loginState ? (
                     'ログイン'
                 ): (
-                    <FontAwesomeIcon icon={faCircleNotch} spin size="lg"/>
+                    loginSuccess.regular ? <><span style={{color: textColor.success}}>{SUCC_MSG.SUCCESS1} </span><FontAwesomeIcon icon={faCheck} style={{color: textColor.success}} size="lg"/></> 
+                    :<FontAwesomeIcon icon={faCircleNotch} spin size="lg"/>
                 )}
             </button>
             <span className="text-[.5em] sm:text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error}</span>
@@ -141,7 +164,10 @@ export default function LoginForm() {
                 </svg>
                 Appleで続ける
             </button>
-            <button onClick={() => googleLogin()} className={`text-[#6b4528] flex justify-center items-center gap-[5px] bg-[white] border-[2px] rounded-md border-[#ffcd92] text-[12px] sm:text-[16px] px-[10px] py-[10px] font-bold`}>
+            <button disabled={openGoogleSignup || loginState} onClick={() => {
+                setOpenGoogleSignup(true);
+                googleLogin();
+            }} className={`text-[#6b4528] flex justify-center items-center gap-[5px] bg-[white] border-[2px] rounded-md border-[#ffcd92] text-[12px] sm:text-[16px] px-[10px] py-[10px] font-bold`}>
                 <svg width="15" height="15" viewBox="0 0 67 64" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <g clipPath="url(#clip0_50_449)">
                     <path d="M66.9643 32.2042C66.9643 29.6139 66.7364 27.7237 66.2431 25.7634H34.167V37.4548H52.9949C52.6155 40.3603 50.5656 44.7359 46.0104 47.6761L45.9465 48.0675L56.0884 55.3126L56.791 55.3773C63.2441 49.8815 66.9643 41.7954 66.9643 32.2042Z" fill="#4285F4"/>
@@ -155,7 +181,12 @@ export default function LoginForm() {
                     </clipPath>
                     </defs>
                 </svg>
-                Googleで続ける
+                {!openGoogleSignup ? (
+                    'Googleで続ける'
+                ): (
+                    loginSuccess.google ? <><span style={{color: textColor.success}}>{SUCC_MSG.SUCCESS1} </span><FontAwesomeIcon icon={faCheck} style={{color: textColor.success}} size="lg"/></> 
+                    :<FontAwesomeIcon icon={faCircleNotch} spin size="lg"/>
+                )}
             </button>
             <h1 className="text-[8px] sm:text-[12px] font-bold text-right">新規登録（無料）は<Link className="text-[#007BFF]" href={'signup'}>こちら</Link></h1>
         </div>

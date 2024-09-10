@@ -1,5 +1,9 @@
-import { GetServerSideProps, Metadata, ResolvingMetadata } from "next";
+import { getFile } from "@/action/file-lib";
+import { getRecipeData, getRecipeTitle } from "@/action/recipe";
+import {  Metadata, ResolvingMetadata } from "next";
 import Image from "next/image"
+import { redirect } from "next/navigation";
+import ImageSwiper from "./ImageSwiper";
 
 type Props = {
     params: {recipeId: String},
@@ -13,37 +17,34 @@ type Recipe = {
 
 export async function generateMetadata({params} : Props, parent: ResolvingMetadata):Promise<Metadata> {
     const {recipeId} = params;
-    const title = `Recipe ${recipeId}`;
+    const recipeData = await getRecipeTitle(Number(recipeId));
+
+    let title = '';
+    if(recipeData.status === 200 && recipeData.body !== undefined) {
+        title = recipeData.body.recipe_name;
+    }
 
     return {
         title: title
     }
 }
 
-export default function ShowRecipe({params, searchParams}:{params: {recipeId:string}, searchParams: { [key: string]:string | string[] | undefined}}) {
+export default async function ShowRecipe({params, searchParams}:{params: {recipeId:string}, searchParams: { [key: string]:string | string[] | undefined}}) {
     const CardFontSize = '13px';
     const CardTagSize = '13px';
 
-    const recipesSample:Array<String> = [
-        "小麦粉 250g",
-        "にんじん 1",
-        "本 醤油 大さじ1 ",
-        "にんじん 1",
-        "本 醤油 大さじ1",
-        "小麦粉 250g",
-        "小麦粉 250g",
-        "にんじん 1",
-        "本 醤油 大さじ1 ",
-        "にんじん 1",
-        "本 醤油 大さじ1",
-        "小麦粉 250g",
-    ]
+    const {recipeId} = params;
 
-    const recipeInstruction:Array<String> = [
-        "にんじんをそのまま炊飯器に入れる",
-        "ほうれん草はヘタを切る",
-        " 炊飯器で早炊きモードで炊いて完成したらよく混ぜて完成。 カリカリに混ぜておげてみてください。"
-    ]
+    const ret = await getRecipeData(Number(recipeId));
+    const recipe_data = ret.body;
+    console.log(recipe_data);
+    if(recipe_data === undefined || recipe_data.user === undefined ) redirect("/"); 
+
+    const recipeIngredients = recipe_data.recipe_ingredients.map(ingr => `${ingr.recipe_ingredients_name} ${ingr.recipe_ingredients_amount}`);
+    const recipeInstructions = recipe_data.recipe_instructions.map(instr => `${instr.recipe_instructions_text}`);
+    const recipe_images = await Promise.all(recipe_data.recipe_images.map(async img => getFile(img.recipe_image)));
+
+    const user_image = recipe_data.user.user_image === '' ? '/LP/bday-dogs/puppy1.jpg' : await getFile(recipe_data.user.user_image);
 
     const StarReviews = () => {
         return (
@@ -76,14 +77,14 @@ export default function ShowRecipe({params, searchParams}:{params: {recipeId:str
     return (
         <section>
             <div className="recipe-image w-[100%]">
-                <Image src={'/dashboard.png'} className="h-[auto] rounded-[0px] w-[100%] max-w-none" width={10000} height={10000}  alt="website banner" />
+                <ImageSwiper recipe_images={recipe_images} />
             </div>
             <div className="content-container p-[20px] flex flex-col justify-center gap-[30px]">
                 <div className="tags-likes flex justify-between items-center">
                     <div className={`w-[60%] flex gap-[5px] flex-wrap items-center `}>
-                        <span className={`bg-[#523636] self-center flex justify-center items-center text-white py-[2px] px-[7px] rounded-[5px] text-[${CardTagSize}]`}>子犬</span>
-                        <span className={`bg-[#523636] self-center flex justify-center items-center text-white py-[2px] px-[7px] rounded-[5px] text-[${CardTagSize}]`}>中型犬</span>
-                        <span className={`bg-[#523636] self-center flex justify-center items-center text-white py-[2px] px-[7px] rounded-[5px] text-[${CardTagSize}]`}>中型犬子犬</span>
+                        {recipe_data.recipe_age_tag !== '' ? <span className={`bg-[#523636] self-center flex justify-center items-center text-white py-[2px] px-[7px] rounded-[5px] text-[${CardTagSize}]`}>{recipe_data.recipe_age_tag}</span> : null}
+                        {recipe_data.recipe_size_tag !== '' ? <span className={`bg-[#523636] self-center flex justify-center items-center text-white py-[2px] px-[7px] rounded-[5px] text-[${CardTagSize}]`}>{recipe_data.recipe_size_tag}</span> : null}
+                        {recipe_data.recipe_event_tag !== '' ? <span className={`bg-[#523636] self-center flex justify-center items-center text-white py-[2px] px-[7px] rounded-[5px] text-[${CardTagSize}]`}>{recipe_data.recipe_event_tag}</span> : null}
                     </div>
                     <div className="flex gap-[5px] items-center">
                         <svg fill="#00000" height="30px" width="30px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" 
@@ -101,44 +102,44 @@ export default function ShowRecipe({params, searchParams}:{params: {recipeId:str
                     </div>
                 </div>
                 <div className="recipe-title flex justify-center items-center self-center font-semibold">
-                    <h1>炊飯器で簡単! 夏バテでも食べられるご飯</h1>
+                    <h1>{recipe_data.recipe_name}</h1>
                 </div>
                 <div className="recipe-description flex justify-center items-center self-center">
                     <span className="leading-snug text-[13px]">
-                        愛犬が夏バテでなかなかご飯を食べなかったので、 お魚ベースの手作りご飯を作 りました。 たくさん食べてくれたので是非作ってみてください。 いつもありがと うございます。 今後ともよろしくお願いいたします。 (全部で文字)
+                        {recipe_data.recipe_description}
                     </span>
                 </div>
                 <div className="flex justify-center items-center relative">
                     <h1 className="absolute top-[10px] font-semibold text-[#523636]">材料</h1>
-                    <Image src={'/icons/ribbon.png'} className="h-[auto] w-[200px] sm:w-[300px] max-w-none" width={10000} height={10000}  alt="website banner" />
+                    <img src={'/icons/ribbon.png'} className="h-[auto] w-[200px] sm:w-[300px] max-w-none" width={10000} height={10000}  alt="website banner" />
                 </div>
                 <div className="recipe-ingredients flex justify-center items-center">
-                    <ul className={`flex flex-wrap w-[80%] ${recipesSample.length > 5 ? 'flex-row' : 'flex-col'}`}>
+                    <ul className={`flex flex-wrap w-[80%] ${recipeIngredients.length > 5 ? 'flex-row' : 'flex-col'}`}>
                     {
-                        recipesSample.map(el => {
-                            return <li key={new Date().getTime() * Math.random()} className={`${recipesSample.length > 5 ? 'basis-1/2' : 'basis-1'} text-center`}>{el}</li>
+                        recipeIngredients.map(el => {
+                            return <li key={new Date().getTime() * Math.random()} className={`${recipeIngredients.length > 5 ? 'basis-1/2' : 'basis-1'} text-center`}>{el}</li>
                         })
                     }
                     </ul>
                 </div>
                 <div className="recipe-instructions-title flex justify-center items-center relative">
                     <h1 className="absolute top-[10px] font-semibold text-[#523636]">作り方</h1>
-                    <Image src={'/icons/ribbon.png'} className="h-[auto] w-[200px] sm:w-[300px] max-w-none" width={10000} height={10000}  alt="website banner" />
+                    <img src={'/icons/ribbon.png'} className="h-[auto] w-[200px] sm:w-[300px] max-w-none" width={10000} height={10000}  alt="website banner" />
                 </div>
                 <div className="recipe-instructions-content">
                     <ol className="list-decimal pl-[20px]">
                         {
-                            recipeInstruction.map(el => {
+                            recipeInstructions.map(el => {
                                return <li key={new Date().getTime() * Math.random()}>{el}</li> 
                             })
                         }
                     </ol>
                 </div>
                 <div className="relative w-full h-full text-[13px] flex justify-between items-center top-[30px]">
-                    <span>No. {params.recipeId}</span>
+                    <span>No. {recipe_data.recipe_id}</span>
                     <span className="flex items-center gap-[10px]">
                         Recipe by 
-                        <Image src={'/LP/bday-dogs/puppy1.jpg'} className="h-[30px] w-[30px] rounded-[100px]" width={10000} height={10000}  alt="website banner" />
+                        <img src={user_image} className="h-[30px] w-[30px] rounded-[100px] object-cover" width={10000} height={10000}  alt="website banner" />
                     </span>
                 </div>
                 <div className="w-full relative">
@@ -157,7 +158,7 @@ export default function ShowRecipe({params, searchParams}:{params: {recipeId:str
                             return (
                                 <div key={new Date().getTime() * Math.random()} className="review-comment flex w-[100%] gap-[10px]">
                                     <div className="avatar">
-                                        <Image src={'/LP/bday-dogs/puppy1.jpg'} className="w-[40px] rounded-full object-cover overflow-hidden h-[40px] max-w-none" width={10000} height={10000} alt="website banner" />
+                                        <img src={'/LP/bday-dogs/puppy1.jpg'} className="w-[40px] rounded-full object-cover overflow-hidden h-[40px] max-w-none" width={10000} height={10000} alt="website banner" />
                                     </div>
                                     <div className="comment-container w-[100%] flex flex-col justify-center">
                                         <div className="upper-content flex justify-between items-center text-[10px] h-[40px]">

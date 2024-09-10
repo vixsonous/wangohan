@@ -1,18 +1,23 @@
 'use client';
-import { textColor } from "@/constants/constants";
+import { SUCC_MSG, textColor } from "@/constants/constants";
 import { ingredients, instructions } from "@/constants/interface";
-import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faCircleNotch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
-import React, { SyntheticEvent, useState } from "react";
+import React, { SyntheticEvent, useEffect, useState } from "react";
+import { Navigation, Thumbs, Virtual } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Swiper as SwiperType} from "swiper/types";
 
 export default function CreateRecipeForm() {
     const CardFontSize = '13px';
     const CardTagSize = '10px';
 
     const [submit, setSubmit] = useState(false);
+    const [submitSuccess, setSubmitSuccess] = useState(false);
     const [imgKey, setImgKey] = useState(0);
     const [files, setFiles] = useState<Array<File>>([]);
+    const [fileThumbnails, setFileThumbnails] = useState<Array<string>>([]);
     const [recipeInfo, setRecipeInfo] = useState({
         recipeTitle: '',
         recipeDescr: '',
@@ -21,6 +26,7 @@ export default function CreateRecipeForm() {
         size: '',
         event: '',
     });
+    const [thumbsSwiper,setThumbsSwiper] = useState<SwiperType>();
 
     const [error, setError] = useState({
         title: '',
@@ -55,7 +61,7 @@ export default function CreateRecipeForm() {
             valid = false;
         }
 
-        if(recipeInfo.recipeThumbnail === '/recipe-making/pic-background.png') {
+        if(files.length === 0) {
             setError(prev => ({...prev, image: '画像を挿入してください'}));
             valid = false;
         }
@@ -96,10 +102,10 @@ export default function CreateRecipeForm() {
 
         if(!validationFunc()) return;
 
-        const data2Send = {...recipeInfo, recipeIngredients: recipeIngredients, recipeInstructions: recipeInstructions};
+        const data2Send = {...recipeInfo, recipeIngredients: recipeIngredients, recipeInstructions: recipeInstructions, fileThumbnailsLength: fileThumbnails.length};
         setSubmit(true)
 
-        const recipe_id = await fetch('/api/create-recipe', {
+        const recipe_id = await fetch('/api/recipe', {
             method: 'POST',
             body: JSON.stringify(data2Send),
         }).then(async res => {
@@ -107,17 +113,18 @@ export default function CreateRecipeForm() {
             if(res.status === 500) {
                 throw new Error(body.message);
             } else if(res.status === 200) {
-                window.location.href = "/";
+                return body;
             }
-
-            return body;
+            
         }).catch(err => {
             setError(prev => ({...prev, generalError: (err as Error).message}));
+            setSubmit(false);
         });
 
-        setSubmit(false);
-
-        if(recipe_id === undefined) setError(prev => ({...prev, generalError: 'The recipe was not created! Please refresh'}));
+        if(recipe_id === undefined) {
+            setError(prev => ({...prev, generalError: 'The recipe was not created! Please refresh'}));
+            setSubmit(false);
+        }
 
         const filesForm = new FormData();
         files.forEach(file => {
@@ -125,7 +132,7 @@ export default function CreateRecipeForm() {
         });
         filesForm.append('recipe_id', recipe_id.body);
 
-        const ret_files = await fetch('/api/upload-recipe-files', {
+        await fetch('/api/upload-recipe-files', {
             method: 'POST',
             body: filesForm
         }).then(async res => {
@@ -133,13 +140,19 @@ export default function CreateRecipeForm() {
             if(res.status === 500) {
                 throw new Error(body.message);
             } else if (res.status === 200) {
-
+                // window.location.href = "/";
+                setSubmitSuccess(true);
             }
-        })
-
-        // To continue, file upload using recipe id
-        console.log(recipe_id);
+        }).catch(err => {
+            setError(prev => ({...prev, generalError: (err as Error).message}));
+            setSubmit(false);
+        });
     }
+
+    useEffect(() => {
+        console.log(files);
+        console.log(fileThumbnails);
+    },[files]);
 
     return (
         <form action="" className="create-form flex flex-wrap gap-[30px] max-w-[768px]">
@@ -160,23 +173,49 @@ export default function CreateRecipeForm() {
                 <textarea value={recipeInfo.recipeDescr} onChange={(e) => setRecipeInfo(prev => ({...prev, recipeDescr: e.target.value}))} className="w-[100%] p-[7px] text-[13px] bg-[#fff8ef]" placeholder="レシピに説明をしてください例）愛犬が夏バテでなかなかご飯を食べなかったので、お魚ベースの手作りごはんを作りました。たくさん食べてくれたので是非作ってみてください。" rows={5} name="recipe-description" id="recipe-description" />
             </div>
 
-            <div className="flex-[0_0_100%] mt-[15%]">
+            <div className="flex-[0_0_100%] mt-[15%] w-[100%]">
                 <label htmlFor="recipe-image" className="flex relative">
-                    <Image src={'/recipe-making/3dogs.png'} className="top-[-23.2%] left-[10%] absolute h-[auto] w-[30%] max-w-none rounded-[25px]" width={10000} height={10000}  alt="website banner" />
-                    <Image src={recipeInfo.recipeThumbnail} className="h-[auto] w-[100%] max-w-none rounded-[25px]" width={10000} height={10000}  alt="website banner" />
+                    <img src={'/recipe-making/3dogs.png'} className="top-[-23.2%] left-[10%] absolute h-[auto] w-[30%] max-w-none rounded-[25px]" width={10000} height={10000}  alt="website banner" />
+                    <img src={recipeInfo.recipeThumbnail} className="h-[auto] w-[100%] max-w-none rounded-[25px]" width={10000} height={10000}  alt="website banner" />
                     <h1 className="absolute w-[100%] flex flex-col justify-center items-center h-[100%] text-[16px] sm:text-[26px] text-center">料理の画像をアップロード
                     <br/> （横長推奨）<br /> <span className="text-[36px] required">+</span></h1>
                     <input onChange={(e) => {
                         if(e.target.files && e.target.files[0]) {
                             const tempPath = URL.createObjectURL(e.target.files[0]);
-                            setRecipeInfo(prevState => ({...prevState, recipeThumbnail:tempPath}));
-                            setImgKey(new Date().getTime() * Math.random());
+                            // setRecipeInfo(prevState => ({...prevState, recipeThumbnail:tempPath}));
+                            // setImgKey(new Date().getTime() * Math.random());
                             const rFiles = [...files];
-                            rFiles[0] = e.target.files[0];
+                            const fileTn = [...fileThumbnails];
+                            rFiles.push(e.target.files[0]);
+                            fileTn.push(tempPath);
                             setFiles([...rFiles]);
+                            setFileThumbnails([...fileTn]);
                         }
                     }} className="w-[100%] hidden" type="file" name="recipe-image" id="recipe-image" />
                 </label>
+                <div className='p-[5px] m-[0] h-[100px] w-[90vw] max-w-[768px]'>
+                    <Swiper
+                        onSwiper={(swiper: SwiperType) => setThumbsSwiper(swiper)}
+                        slidesPerView={fileThumbnails.length < 3 ? fileThumbnails.length : 3}
+                        modules={[ Virtual, Navigation, Thumbs]}
+                        spaceBetween={5}
+                        pagination={{
+                        type: 'fraction',
+                        }}
+                        className="h-[100px] w-[100%]"
+                        virtual
+                        >
+                        {
+                            fileThumbnails.map((img, idx) => {
+                                return (
+                                    <SwiperSlide key={img} virtualIndex={idx} className="relative w-[100%] h-[100%]">
+                                        <img src={img} className="object-cover w-[100%] h-[100%] relative rounded-[0px]" width={10000} height={10000}  alt="website banner" />
+                                    </SwiperSlide>
+                                )
+                            })
+                        }
+                    </Swiper>
+                </div>
                 <span className="ml-[5px] text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.image}</span>
             </div>
 
@@ -306,7 +345,8 @@ export default function CreateRecipeForm() {
                     {!submit ? (
                         '作成する'
                     ): (
-                        <FontAwesomeIcon icon={faCircleNotch} spin size="lg"/>
+                        submitSuccess ? <><span style={{color: textColor.success}}>{SUCC_MSG.SUCCESS1} </span><FontAwesomeIcon icon={faCheck} style={{color: textColor.success}} size="lg"/></> 
+                        :<FontAwesomeIcon icon={faCircleNotch} spin size="lg"/>
                     )}
                 </button>
                 <span className="text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.generalError}</span>

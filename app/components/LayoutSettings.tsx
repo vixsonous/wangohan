@@ -32,7 +32,7 @@ export default function LayoutSettings({isLoggedIn} : {isLoggedIn : boolean}) {
             user ? (
             <div className={'menu flex gap-[1rem]'}>
                 <div className="self-center">
-                <Image src={'/icons/notification.png'} className="self-center rounded-md h-[auto] w-[40px] relative" width={10000} height={10000}  alt="website banner" />
+                <img src={'/icons/notification.png'} className="self-center rounded-md h-[auto] w-[40px] relative" width={10000} height={10000}  alt="website banner" />
                 </div>
                 <div className="self-center">
                 <Settings />

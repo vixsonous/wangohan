@@ -1,6 +1,6 @@
 'use client';
-import { validateEmail, withSpecialCharacters } from "@/constants/constants";
-import { faCircleNotch, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { ERR_MSG, SUCC_MSG, textColor, validateEmail, withSpecialCharacters } from "@/constants/constants";
+import { faCheck, faCircleNotch, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { TokenResponse, useGoogleLogin } from "@react-oauth/google";
 import { SyntheticEvent, useState } from "react"
@@ -13,29 +13,34 @@ export default function SignUpForm() {
     });
 
     const [signupState, setSignupState] = useState(false);
+    const [signupSuccess, setSignupSuccessState] = useState({
+        regular: false,
+        google: false
+    })
     const [error, setError] = useState('');
     const [showPass, setShowPass] = useState(false);
+    const [openGoogleSignup, setOpenGoogleSignup] = useState(false);
 
     const signUpFunc = (e: SyntheticEvent) => {
         e.preventDefault();
 
         if(!validateEmail(signup.email)) {
-            setError("Email is invalid");
+            setError(ERR_MSG.ERR5);
             return;
         }
 
         if(!signup.password) {
-            setError("Please input password!");
+            setError(ERR_MSG.ERR20);
             return;
         }
 
         if(withSpecialCharacters(signup.password)) {
-            setError("No Special Characters allowed!");
+            setError(ERR_MSG.ERR21);
             return;
         }
 
         if(signup.password.length < 8) {
-            setError("Password must be at least 8 characters!");
+            setError(ERR_MSG.ERR22);
             return;
         }
 
@@ -48,22 +53,34 @@ export default function SignUpForm() {
                 'Content-type': 'multipart/form-data'
             }
         }).then(async res => {
-            setSignupState(false);
             if(res.status === 200) {
-                window.location.href = '/signup/finish';
+                // window.location.href = '/signup/personal-info';
+                setSignupSuccessState(prev => ({...prev, regular: true}));
+                setError("");
             }else if(res.status === 302) {
-                window.location.href = res.url;
+                // window.location.href = res.url;
+                setSignupSuccessState(prev => ({...prev, regular: true}));
+                setError("");
             } else if(res.status === 500) {
                 let response = await res.json().then(res => res);
                 throw new Error(response.message);
             }
         }).catch(async error => {
             setError((error as Error).message);
+            setSignupState(false);
         });
     }
 
     const googleSignup = useGoogleLogin({
-        onSuccess: tokenResponse => googleSubmit(tokenResponse)
+        onSuccess: tokenResponse => {
+            googleSubmit(tokenResponse);
+        },
+        onError: () => {
+            setError("Failed login!");
+        },
+        onNonOAuthError: () => {
+            setOpenGoogleSignup(false);
+        }
     });
 
     const googleSubmit = async (tokenResponse: Omit<TokenResponse, "error" | "error_description" | "error_uri">) => {
@@ -84,14 +101,21 @@ export default function SignUpForm() {
             
             if(res.status === 200) {
                 window.location.href = '/signup/personal-info';
+                setSignupSuccessState(prev => ({...prev, google: true}));
+                setError("");
             }else if(res.status === 302) {
                 window.location.href = res.url;
+                setSignupSuccessState(prev => ({...prev, google: true}));
+                setError("");
             } else {
                 let response = await res.json().then(res => res);
                 throw new Error(response.message);
             }
         })
-        .catch( err => setError((err as Error).message));
+        .catch( err => {
+            setOpenGoogleSignup(false);
+            setError((err as Error).message);
+        });
     }
 
     
@@ -103,11 +127,12 @@ export default function SignUpForm() {
                 <input type={showPass ? 'text' : "password"} value={signup.password} onChange={(e) => setSignup(prevState => ({...prevState, password: e.target.value}))} className={`w-[100%] text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]`} name="password" placeholder="パスワードを入力" id="password" />
                 <FontAwesomeIcon onClick={(e) => setShowPass(prev => !prev)} className="absolute cursor-pointer right-[12px] top-[12px]" icon={showPass ? faEye : faEyeSlash} size="lg" />
             </div>
-            <button onClick={(e:SyntheticEvent) => signUpFunc(e)} className="w-[100%] bg-[#ffb762] text-white py-[10px] rounded-md text-[12px] sm:text-[16px]" type="submit">
+            <button disabled={openGoogleSignup || signupState} onClick={(e:SyntheticEvent) => signUpFunc(e)} className={`w-[100%] bg-[${signupSuccess.regular ? '#FFD99A' : '#ffb762'}] border-[1px] border-[${signupState ? '#ffb762' : '#FFD99A'}] transition-all duration-500 text-white py-[10px] rounded-md text-[12px] sm:text-[16px]`} type="submit">
                 {!signupState ? (
                     '新規登録'
                 ): (
-                    <FontAwesomeIcon icon={faCircleNotch} spin size="lg"/>
+                    signupSuccess.regular ? <><span style={{color: textColor.success}}>{SUCC_MSG.SUCCESS1} </span><FontAwesomeIcon icon={faCheck} style={{color: textColor.success}} size="lg"/></> 
+                    :<FontAwesomeIcon icon={faCircleNotch} spin size="lg"/>
                 )}
             </button>
             <span className="text-[.5em] sm:text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error}</span>
@@ -125,7 +150,10 @@ export default function SignUpForm() {
                 </svg>
                 Appleで続ける
             </button>
-            <button onClick={() => googleSignup()} className={`text-[#6b4528] flex justify-center items-center gap-[5px] bg-[white] border-[2px] rounded-md border-[#ffcd92] text-[12px] sm:text-[16px] px-[10px] py-[10px] font-bold`}>
+            <button disabled={openGoogleSignup || signupState} onClick={() => {
+                setOpenGoogleSignup(true);
+                googleSignup()
+            }} className={`text-[#6b4528] flex justify-center items-center gap-[5px] bg-[white] border-[2px] rounded-md border-[#ffcd92] text-[12px] sm:text-[16px] px-[10px] py-[10px] font-bold`}>
                 <svg width="15" height="15" viewBox="0 0 67 64" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <g clipPath="url(#clip0_50_449)">
                     <path d="M66.9643 32.2042C66.9643 29.6139 66.7364 27.7237 66.2431 25.7634H34.167V37.4548H52.9949C52.6155 40.3603 50.5656 44.7359 46.0104 47.6761L45.9465 48.0675L56.0884 55.3126L56.791 55.3773C63.2441 49.8815 66.9643 41.7954 66.9643 32.2042Z" fill="#4285F4"/>
@@ -139,7 +167,12 @@ export default function SignUpForm() {
                     </clipPath>
                     </defs>
                 </svg>
-                Googleで続ける
+                {!openGoogleSignup ? (
+                    'Googleで続ける'
+                ): (
+                    signupSuccess.google ? <><span style={{color: textColor.success}}>{SUCC_MSG.SUCCESS1} </span><FontAwesomeIcon icon={faCheck} style={{color: textColor.success}} size="lg"/></> 
+                    :<FontAwesomeIcon icon={faCircleNotch} spin size="lg"/>
+                )}
             </button>
             <div className="flex justify-center gap-[2rem]">
                 <span className="text-[8px] sm:text-[12px] font-semibold text-[#828282]">利用規約</span>

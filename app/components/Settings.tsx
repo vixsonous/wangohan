@@ -1,7 +1,7 @@
 'use client';
 
 import Image from "next/image";
-import { SyntheticEvent, useContext, useEffect, useRef } from "react";
+import { SyntheticEvent, useContext, useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHouse } from "@fortawesome/free-solid-svg-icons/faHouse";
 import { GlobalValueContext } from "./global-context";
@@ -47,16 +47,20 @@ export default function Settings() {
             document.removeEventListener("click", outsideClick);
         };
     },[settings, btn]);
+
+    const [btnAnim, setBtnAnim] = useState(false);
     return (
         <>
-        <Image ref={btn} onClick={openSettings} src={'/icons/bone.png'} className="self-center rounded-md h-[auto] w-[50px] relative" width={10000} height={10000}  alt="website banner" />
+        <img ref={btn} onClick={openSettings} src={'/icons/bone.png'} className="self-center rounded-md h-[auto] w-[50px] relative" width={10000} height={10000}  alt="website banner" />
         <div ref={settings} style={{width: '0%'}} className="absolute overflow-x-hidden h-[100vh] top-[65.68px] bg-[#FFFAF0] transition-all ease-in-out w-[0%] right-0 transform-x-4">
             
             <div className="p-[30px] flex flex-col w-full items-center justify-center text-[26px] gap-[20px]">
-                <Link onClick={openSettings} href="/recipe/create">
-                    <button className="w-[100%] rounded-md text-[12px] sm:text-[16px] relative hover:scale-[1.075] transition-all duration-500" type="submit">
+                <Link onClick={() => {
+                    setBtnAnim(true);
+                }} href="/recipe/create">
+                    <button className={` w-[100%] rounded-md text-[12px] sm:text-[16px] relative active:scale-[1.075] md:hover:scale-[1.075] transition-all duration-500`} type="submit">
                         <span className="absolute z-[1] w-full top-[50%] left-0 font-bold">レシピを作成する</span>
-                        <Image src={'/recipe-button.png'} className="self-center rounded-md h-[auto] w-full relative absolute top-0" width={10000} height={10000}  alt="website banner" />
+                        <img src={'/recipe-button.png'} className="self-center rounded-md h-[auto] w-full relative absolute top-0" width={10000} height={10000}  alt="website banner" />
                     </button>
                 </Link>
                 <Link onClick={openSettings} className="w-full" href="/">

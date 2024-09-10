@@ -35,7 +35,6 @@ export const POST = async (req: NextRequest) => {
         }
         
     } catch(e) {
-        let _e = (e as Error).message;
-        throw _e;
+        return NextResponse.json({message: e},{status: 500});
     }
 }

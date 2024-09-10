@@ -1,7 +1,7 @@
 'use client';
 
-import { fontSize, withAlphabetical, withSpecialCharactersAndNumbers } from "@/constants/constants";
-import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
+import { fontSize, SUCC_MSG, textColor, withAlphabetical, withSpecialCharactersAndNumbers } from "@/constants/constants";
+import { faCheck, faCircleNotch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import { SyntheticEvent, useEffect, useState } from "react";
@@ -48,7 +48,8 @@ export default function PersonalInfoForm({info} : Info) {
         generalError: ''
     });
 
-    const [login, setLogin] = useState(false);
+    const [signup, setSignup] = useState(false);
+    const [signupSuccess, setSignupSuccess] = useState(false);
 
     const [profilePic, setProfilePic] = useState<File | null>(null);
     const [imgKey, setImgKey] = useState(new Date().getTime() * Math.random());
@@ -106,7 +107,7 @@ export default function PersonalInfoForm({info} : Info) {
         formSubmit.append('occupation', personalInfo.occupation);
         formSubmit.set('fileUrl', '');
 
-        setLogin(true);
+        setSignup(true);
         const fileSubmit = new FormData();
 
         if(profilePic) {
@@ -122,7 +123,10 @@ export default function PersonalInfoForm({info} : Info) {
                 } else {
                     throw new Error(body.message);
                 }
-            }).catch(err => setError(prev => ({...prev, generalError: (err as Error).message})));
+            }).catch(err => {
+                setSignup(false);
+                setError(prev => ({...prev, generalError: (err as Error).message}))
+            });
         }
         
 
@@ -130,23 +134,40 @@ export default function PersonalInfoForm({info} : Info) {
             method: 'POST',
             body: formSubmit,
         }).then( async res => {
-            setLogin(false);
             if(res.status === 200) {
+                setSignupSuccess(true);
                 window.location.href = '/signup/finish';
             }else if(res.status === 302) {
+                setSignupSuccess(true);
                 window.location.href = res.url;
             } else if(res.status === 500) {
                 let response = await res.json().then(res => res);
                 throw new Error(response.message);
             }
         })
-        .catch(err => setError(prev => ({...prev, generalError: (err as Error).message})))
+        .catch(err => {
+            setSignup(false);
+            setError(prev => ({...prev, generalError: (err as Error).message}))
+        })
     }
 
     useEffect(() => {
-
         if(info) {
             setPersonalInfo(prev => ({...prev, fname: info.fname, lname: info.lname, thumbnail: info.user_image, codename: info.codename}));
+        }
+
+        if(info && info.user_image !== '') {
+
+            const fetchImage = async (image: string) => {
+                await fetch(image).then(res => res.blob())
+                .then(blob => {
+                    const file = new File([blob], 'image.jpg', {type: 'image/jpeg'});
+                    setProfilePic(file);
+                })
+                .catch(err => setError(prev => ({...prev, generalError: (err as Error).message})));
+            }
+
+            fetchImage(info.user_image);
         }
     }, [info]);
 
@@ -155,9 +176,9 @@ export default function PersonalInfoForm({info} : Info) {
             <div className="flex flex-wrap w-[100%] justify-center gap-[1em]">
                 <div className="flex-[0_0_100%] sm:flex-[0_0_50%]">
                     <label htmlFor="recipe-image" className="flex relative justify-center">
-                        <Image src={'/recipe-making/3dogs.png'} className="top-[-20.2%] absolute h-[auto] w-[20%] sm:w-[40%] max-w-none rounded-[25px]" width={10000} height={10000}  alt="website banner" />
+                        <img src={'/recipe-making/3dogs.png'} className="top-[-20.2%] absolute h-[auto] w-[20%] sm:w-[40%] max-w-none rounded-[25px]" width={10000} height={10000}  alt="website banner" />
                         <div className="relative pt-[50%] w-[50%] sm:pt-[100%] sm:w-[100%]">
-                            <Image key={imgKey} src={personalInfo.thumbnail} className="h-[100%] w-[100%] top-0 right-0 object-cover absolute rounded-[200px]" width={10000} height={10000}  alt="website banner" />
+                            <img key={imgKey} src={personalInfo.thumbnail} className="h-[100%] w-[100%] top-0 right-0 object-cover absolute rounded-[200px]" width={10000} height={10000}  alt="website banner" />
                         </div>
                         <input onChange={(e) => {
                                 if(e.target.files && e.target.files[0]) {
@@ -208,11 +229,12 @@ export default function PersonalInfoForm({info} : Info) {
             </div>
             
             <div className="w-full flex justify-center flex-col items-center gap-[10px]">
-                <button disabled={login} onClick={(e:SyntheticEvent) => submitFunc(e)} className="w-[100%] bg-[#ffb762] text-white py-[10px] rounded-md text-[12px] sm:text-[16px]" type="submit">
-                    {!login ? (
-                        '新規登録'
+                <button disabled={signup} onClick={(e:SyntheticEvent) => submitFunc(e)} className={`w-[100%] bg-[${signup ? '#FFD99A' : '#ffb762'}] border-[1px] border-[${signup ? '#ffb762' : '#FFD99A'}] text-white py-[10px] rounded-md text-[12px] sm:text-[16px] transition-all duration-500`} type="submit">
+                    {!signup ? (
+                    '新規登録'
                     ): (
-                        <FontAwesomeIcon icon={faCircleNotch} spin size="lg"/>
+                        signupSuccess ? <><span style={{color: textColor.success}}>{SUCC_MSG.SUCCESS1} </span><FontAwesomeIcon icon={faCheck} style={{color: textColor.success}} size="lg"/></> 
+                        :<FontAwesomeIcon icon={faCircleNotch} spin size="lg"/>
                     )}
                 </button>
                 <span className="text-[.5em] sm:text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.generalError}</span>

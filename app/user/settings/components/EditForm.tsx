@@ -40,7 +40,7 @@ export default function EditForm({userDetails, pets} : Props) {
         <form action="" className="relative max-w-[768px]">
             <div className="user-image flex flex-col justify-center items-center mt-[30px]">
                 <label htmlFor="profile-image" className="relative group">
-                    <Image src={profilePic.thumbnail} className="border-[1px] border-[#523636] rounded-[100px] w-[200px] h-[200px] relative object-cover" width={10000} height={10000}  alt="website banner" />
+                    <img src={profilePic.thumbnail} className="border-[1px] border-[#523636] rounded-[100px] w-[200px] h-[200px] relative object-cover" width={10000} height={10000}  alt="website banner" />
                     <input onChange={(e) => {
                         if(e.target.files && e.target.files[0]) {
                             const tempPath = URL.createObjectURL(e.target.files[0]);
@@ -60,7 +60,7 @@ export default function EditForm({userDetails, pets} : Props) {
             </div>
             <div className="flex justify-center items-center relative mt-[40px] mb-[10px]">
                 <h1 className="absolute top-[10px] font-semibold text-[#523636]">うちのわん</h1>
-                <Image src={'/icons/ribbon.png'} className="h-[auto] w-[200px] sm:w-[300px] max-w-none" width={10000} height={10000}  alt="website banner" />
+                <img src={'/icons/ribbon.png'} className="h-[auto] w-[200px] sm:w-[300px] max-w-none" width={10000} height={10000}  alt="website banner" />
             </div>
             <div className="pet-list p-[20px] flex flex-wrap gap-[20px] items-center">
                 {

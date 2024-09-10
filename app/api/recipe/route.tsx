@@ -11,7 +11,7 @@ export const POST = async (req: NextRequest) => {
 
         if(body.recipeTitle === '') throw new Error(ERR_MSG['ERR14']);
         if(body.recipeDescr === '') throw new Error(ERR_MSG['ERR15']);
-        if(body.recipeThumbnail === '/recipe-making/pic-background.png') throw new Error(ERR_MSG['ERR16']);
+        if(Number(body.fileThumbnailsLength) === 0) throw new Error(ERR_MSG['ERR16']);
         
         if(body.recipeInstructions.length === 0 || body.recipeInstructions[0].text === '') throw new Error(ERR_MSG['ERR17']);
         if(body.recipeIngredients.length === 0 || body.recipeIngredients[0].amount === '') throw new Error(ERR_MSG['ERR18']);
@@ -30,6 +30,17 @@ export const POST = async (req: NextRequest) => {
         return NextResponse.json({message: 'Success', body: recipe_id}, {status: 200});
     } catch(e) {
 
+        let _e = (e as Error).message;
+        return NextResponse.json({message: _e, body: {}}, {status: 500});
+    }
+}
+
+export const GET = async (req: NextRequest) => {
+    try {
+        const params = req.nextUrl.searchParams;
+        console.log(params);
+        return NextResponse.json({message: 'Success', body: {}}, {status: 200});
+    } catch(e) {
         let _e = (e as Error).message;
         return NextResponse.json({message: _e, body: {}}, {status: 500});
     }

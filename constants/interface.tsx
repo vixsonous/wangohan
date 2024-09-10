@@ -18,6 +18,7 @@ export interface recipe {
     recipeTitle: string,
     recipeDescr: string,
     recipeThumbnail: string,
+    fileThumbnailsLength: string,
     age: string,
     size: string,
     event: string,

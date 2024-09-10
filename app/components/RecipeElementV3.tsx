@@ -11,7 +11,7 @@ export default function RecipeElementV3 ({element} : Props) {
 
     return (
         <div key={element} className=" h-[auto] relative ">
-            <Image src={'/dashboard.png'} className="w-[100%] h-[100%] object-cover" width={10000} height={10000} alt="website banner" />
+            <img src={'/dashboard.png'} className="w-[100%] h-[100%] object-cover" width={10000} height={10000} alt="website banner" />
         </div>
     )
 }

@@ -9,6 +9,12 @@ import {GoogleOAuthProvider } from '@react-oauth/google';
 import LayoutSettings from "./components/LayoutSettings";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import '@fortawesome/fontawesome-svg-core/styles.css';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/scrollbar';
+import 'swiper/css/thumbs';
+
 config.autoAddCss = false;
 const inter = Inter({ subsets: ["latin"] });
 const myFont = localFont({src: "./mitimasu.ttf"});
@@ -36,7 +42,7 @@ export default async function RootLayout({
       <html lang="en">
         <body className={`${inter.className} bg-[#FFE9C9] h-full min-h-[100vh] flex flex-col text-[#523636]`}>
           <div className="px-[20px] w-[100%] z-[999] fixed bg-[#FFFAF0] pt-[5px] flex justify-between items-center border-b-[1px] opacity-[0.9] shadow-md">
-            <Link href="/"><Image className="w-[60px] h-[auto]" src={'/logo-final.png'} width={100} height={100} alt="website logo" /></Link>
+            <Link href="/"><img className="w-[60px] h-[auto]" src={'/logo-final.png'} width={100} height={100} alt="website logo" /></Link>
             <LayoutSettings isLoggedIn={user}/>
           </div>
           <div className={`pt-[65.68px] overflow-hidden ${myFont.className} grow`}>
@@ -65,7 +71,7 @@ export default async function RootLayout({
                   <Link href="/inquiry/send-inquiry" className="text-[8px] self-center flex">ご意見・お問い合わせ</Link>
                 </div>
               </div>
-              {/* <Image src={'/LP/last.png'} className="rounded-md w-[100vw] h-[auto] absolute bottom-[-70px] left-[-20px] inline max-w-none object-fill" width={10000} height={10000}  alt="website banner" /> */}
+              {/* <img src={'/LP/last.png'} className="rounded-md w-[100vw] h-[auto] absolute bottom-[-70px] left-[-20px] inline max-w-none object-fill" width={10000} height={10000}  alt="website banner" /> */}
               <h1 className="w-[100%] flex justify-center relative top-[30px] text-[10px]">@Web5Dimensional</h1>
             </div>
           </div>
