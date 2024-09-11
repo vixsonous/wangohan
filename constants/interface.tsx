@@ -33,3 +33,19 @@ export interface userDetails {
     user_image: string;
 }
 
+export interface User {
+    user_id: number,
+    user_image: string,
+    user_codename: string
+}
+
+export interface Comment {
+    recipe_comment_id: number,
+    recipe_comment_rating: number,
+    recipe_comment_subtext: string,
+    recipe_comment_title: string,
+    user_id: number,
+    user: User,
+    created_at: Date
+}
+

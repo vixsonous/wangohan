@@ -1,7 +1,7 @@
 'use client';
 import { SUCC_MSG, textColor } from "@/constants/constants";
 import { ingredients, instructions } from "@/constants/interface";
-import { faCheck, faCircleNotch } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faCircleNotch, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import React, { SyntheticEvent, useEffect, useState } from "react";
@@ -149,11 +149,6 @@ export default function CreateRecipeForm() {
         });
     }
 
-    useEffect(() => {
-        console.log(files);
-        console.log(fileThumbnails);
-    },[files]);
-
     return (
         <form action="" className="create-form flex flex-wrap gap-[30px] max-w-[768px]">
             <div className="flex-[0_0_100%]">
@@ -193,7 +188,7 @@ export default function CreateRecipeForm() {
                         }
                     }} className="w-[100%] hidden" type="file" name="recipe-image" id="recipe-image" />
                 </label>
-                <div className='p-[5px] m-[0] h-[100px] w-[90vw] max-w-[768px]'>
+                <div className='p-[5px] m-[0] w-[90vw] max-w-[768px]'>
                     <Swiper
                         onSwiper={(swiper: SwiperType) => setThumbsSwiper(swiper)}
                         slidesPerView={fileThumbnails.length < 3 ? fileThumbnails.length : 3}
@@ -202,14 +197,20 @@ export default function CreateRecipeForm() {
                         pagination={{
                         type: 'fraction',
                         }}
-                        className="h-[100px] w-[100%]"
+                        className="h-[100%] w-[100%] rounded-md"
                         virtual
                         >
                         {
                             fileThumbnails.map((img, idx) => {
                                 return (
-                                    <SwiperSlide key={img} virtualIndex={idx} className="relative w-[100%] h-[100%]">
-                                        <img src={img} className="object-cover w-[100%] h-[100%] relative rounded-[0px]" width={10000} height={10000}  alt="website banner" />
+                                    <SwiperSlide key={img} virtualIndex={idx} className="relative w-[100%] h-[100%] relative overflow-visible">
+                                        <img src={img} className="object-cover w-[100%] h-[100px] relative rounded-[0px]" width={10000} height={10000}  alt="website banner" />
+                                        <FontAwesomeIcon onClick={() => {
+                                            const newFiles = [...files].filter( (f, i) => i !== idx);
+                                            const newThumbnails = [...fileThumbnails].filter( (f, i) => i !== idx);
+                                            setFileThumbnails([...newThumbnails]);
+                                            setFiles([...newFiles]);
+                                        }} icon={faTrash} size="sm" style={{color: textColor.error}} className="absolute p-[5px] bg-black opacity-[0.7] rounded-md bottom-[10px] right-[10px]"/>
                                     </SwiperSlide>
                                 )
                             })

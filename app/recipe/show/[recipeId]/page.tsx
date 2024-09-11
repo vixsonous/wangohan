@@ -1,18 +1,13 @@
 import { getFile } from "@/action/file-lib";
 import { getRecipeData, getRecipeTitle } from "@/action/recipe";
 import {  Metadata, ResolvingMetadata } from "next";
-import Image from "next/image"
 import { redirect } from "next/navigation";
 import ImageSwiper from "./ImageSwiper";
+import { Comment } from "@/constants/interface";
 
 type Props = {
     params: {recipeId: String},
     searchParams: {[key: string]: string | string[] | undefined}
-}
-
-type Recipe = {
-    recipe_id: number,
-    recipe_name: string,
 }
 
 export async function generateMetadata({params} : Props, parent: ResolvingMetadata):Promise<Metadata> {
@@ -37,7 +32,7 @@ export default async function ShowRecipe({params, searchParams}:{params: {recipe
 
     const ret = await getRecipeData(Number(recipeId));
     const recipe_data = ret.body;
-    console.log(recipe_data);
+
     if(recipe_data === undefined || recipe_data.user === undefined ) redirect("/"); 
 
     const recipeIngredients = recipe_data.recipe_ingredients.map(ingr => `${ingr.recipe_ingredients_name} ${ingr.recipe_ingredients_amount}`);
@@ -68,11 +63,7 @@ export default async function ShowRecipe({params, searchParams}:{params: {recipe
         )
     }
 
-    const reviewComments:Array<String> = [
-        "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Temporibus voluptate ex, eos et quam delectus beatae exercitationem odio. Optio eum libero nesciunt harum aut non exercitationem voluptas doloribus id architecto?",
-        "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Temporibus voluptate ex, eos et quam delectus beatae exercitationem odio. Optio eum libero nesciunt harum aut non exercitationem voluptas doloribus id architecto?",
-        "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Temporibus voluptate ex, eos et quam delectus beatae exercitationem odio. Optio eum libero nesciunt harum aut non exercitationem voluptas doloribus id architecto?",
-    ]
+    const reviewComments:Array<Comment> = recipe_data.recipe_comments
 
     return (
         <section>
@@ -154,24 +145,24 @@ export default async function ShowRecipe({params, searchParams}:{params: {recipe
                 </div>
                 <div className="reviews flex flex-col gap-[20px]">
                     {
-                        reviewComments.map(comment => {
+                        reviewComments.map((com, idx) => {
                             return (
-                                <div key={new Date().getTime() * Math.random()} className="review-comment flex w-[100%] gap-[10px]">
+                                <div key={idx} className="review-comment flex w-[100%] gap-[10px]">
                                     <div className="avatar">
-                                        <img src={'/LP/bday-dogs/puppy1.jpg'} className="w-[40px] rounded-full object-cover overflow-hidden h-[40px] max-w-none" width={10000} height={10000} alt="website banner" />
+                                        <img src={com.user.user_image} className="relative top-[5px] w-[30px] rounded-full object-cover overflow-hidden h-[30px] max-w-none" width={10000} height={10000} alt="website banner" />
                                     </div>
                                     <div className="comment-container w-[100%] flex flex-col justify-center">
                                         <div className="upper-content flex justify-between items-center text-[10px] h-[40px]">
                                             <div className="name-stars flex items-center justify-center self-center gap-[10px]">
-                                                Victor
+                                                {com.user.user_codename}
                                                 {StarReviews()}
                                             </div>
                                             <div className="date">
-                                                5/23/2024
+                                                {new Date(com.created_at).toDateString()}
                                             </div>
                                         </div>
-                                        <div className="lower-content text-[10px] bg-[#fef1dd] p-[10px]">
-                                            <span>{comment}</span>
+                                        <div className="lower-content rounded-md text-[10px] bg-[#fef1dd] p-[10px]">
+                                            <span>{com.recipe_comment_subtext}</span>
                                         </div>
                                     </div>
                                 </div>

@@ -3,6 +3,7 @@ import { ingredients, instructions, recipe } from "@/constants/interface";
 import { db } from "@/lib/database/db";
 import { cookies } from "next/headers";
 import { decrypt } from "./lib";
+import { getFile } from "./file-lib";
 
 
 export const postRecipe = async (recipe:recipe) => {
@@ -102,8 +103,6 @@ export const getRecipeTitle = async (recipeId:number) => {
 
 export const getRecipeData = async (recipeId:number) => {
     try {
-        
-        
 
         const recipe_data = await db.selectFrom("recipes_table").select(["recipe_name", "recipe_id", "recipe_age_tag", 
             "recipe_event_tag","recipe_size_tag", "recipe_description","user_id"
@@ -126,10 +125,19 @@ export const getRecipeData = async (recipeId:number) => {
         const recipe_images = await db.selectFrom("recipe_images_table").select(["recipe_image_id", "recipe_image", "recipe_image_title", "recipe_image_subtext"])
             .where("recipe_id", "=", recipeId).execute();
 
-        
+        const recipe_comments = await db.selectFrom("recipe_comments_table").select(["recipe_comment_id", "recipe_comment_rating", "recipe_comment_subtext", "recipe_comment_title", "user_id", "created_at"])
+            .where("recipe_id","=", recipeId).execute();
 
-        
-        return {message: 'Success!',body: {...recipe_data, user: user, recipe_instructions: recipe_instructions, recipe_ingredients: recipe_ingredients, recipe_images: recipe_images}, status: 200};
+        const with_user_comments = await Promise.all(recipe_comments.map( async com => {
+            return {...com, user: await db.selectFrom("user_details_table").select(["user_id","user_image","user_codename"]).where("user_id","=",com.user_id).executeTakeFirstOrThrow()}
+        }));
+
+        const updated_recipe_comments = await Promise.all(with_user_comments.map(async com => {
+            return {...com, user: {...com.user, user_image: com.user ? await getFile(com.user.user_image) : ''}}
+        }))
+
+        console.log(updated_recipe_comments);
+        return {message: 'asd!',body: {...recipe_data, user: user, recipe_instructions: recipe_instructions, recipe_ingredients: recipe_ingredients, recipe_images: recipe_images, recipe_comments: updated_recipe_comments}, status: 200};
     } catch(e) {
         let _e = (e as Error).message;
         return {message: _e, body: undefined, status: 500};
