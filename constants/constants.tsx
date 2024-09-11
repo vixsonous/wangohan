@@ -72,3 +72,17 @@ export const withAlphabetical = (string: string) => {
     const fo = /[a-zA-Z]/;
     return fo.test(string);
 }
+
+export const sm = (size:number) => size <= 640;
+export const md = (size:number) => size <= 768 && size > 640;
+export const lg = (size:number) => size <= 1024 && size > 768;
+export const xl = (size:number) => size <= 1280 && size > 1024;
+export const xl2 = (size:number) => size <= 1536 && size > 1280;
+
+export const defineScreenMode = () => {
+    return sm(window.innerWidth) ? 0 :
+    md(window.innerWidth) ? 1 :
+    lg(window.innerWidth) ? 2 :
+    xl(window.innerWidth) ? 3 :
+    xl2(window.innerWidth) ? 4 : -1
+}

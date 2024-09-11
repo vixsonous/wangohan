@@ -49,3 +49,16 @@ export interface Comment {
     created_at: Date
 }
 
+export interface DisplayRecipe {
+    recipe_image: string;
+    recipe_name: string;
+    recipe_id: number;
+    recipe_description: string;
+    recipe_age_tag: string;
+    recipe_size_tag: string;
+    recipe_event_tag: string;
+    total_likes: number;
+    user_id: number;
+    created_at: Date;
+}
+

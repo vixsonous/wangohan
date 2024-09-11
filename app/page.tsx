@@ -1,9 +1,9 @@
-import Image from "next/image";
 import RecipeSlider from "./components/RecipeSlider";
-import BirthdayAvatar from "./components/BirthdayAvatar";
 import BirthdayContainer from "./components/BirthdayContainer";
 import { Gloria_Hallelujah, Mochiy_Pop_P_One } from "next/font/google";
 import { Metadata } from "next";
+import { getWeeklyRecipes } from "@/action/recipe";
+import { DisplayRecipe } from "@/constants/interface";
 
 const gloria = Gloria_Hallelujah({
   weight: '400',
@@ -15,7 +15,7 @@ const mochi = Mochiy_Pop_P_One({
   subsets: ['latin']
 })
 
-export default function Home() {
+export default async function Home() {
   const birthdays = [
       '/LP/bday-dogs/puppy1.jpg',
       '/LP/bday-dogs/puppy2.jpg',
@@ -25,6 +25,9 @@ export default function Home() {
       '/LP/bday-dogs/puppy6.jpg',
       '/LP/bday-dogs/puppy7.jpg'
   ];
+
+  const weekly_result = await getWeeklyRecipes();
+  const weeklyRecipes = weekly_result.body as Array<DisplayRecipe>;
 
   return (
     <main className="relative flex p-[20px] min-h-screen flex-col md:items-center overflow-hidden pb-[50px] lg:pb-[200px]">
@@ -45,10 +48,10 @@ export default function Home() {
             <img src={'/dashboard.png'} className="rounded-md h-full w-full relative" width={10000} height={10000}  alt="website banner" />
           </div>
           <div>
-            <RecipeSlider title={'今週のレシピ'} recipes={[1,2,3,4,5]} width={'175'}/>
+            <RecipeSlider title={'今週のレシピ'} recipes={weeklyRecipes} width={'175'}/>
           </div>
           <div>
-            <RecipeSlider title={'人気レシピ'} recipes={[1,2,3,4,5]} width={'175'}/>
+            <RecipeSlider title={'人気レシピ'} recipes={weeklyRecipes} width={'175'}/>
           </div>
           {/* Birthday Section */}
           <BirthdayContainer bdayAvt={birthdays} />
