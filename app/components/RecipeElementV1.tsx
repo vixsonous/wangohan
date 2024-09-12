@@ -15,7 +15,10 @@ export default function RecipeElementV1 ({recipe}:Props) {
     return (
     <Link href={`/recipe/show/${recipe.recipe_id}`}>
         <div className="flex flex-col gap-[10px]">
-            <Image src={recipe.recipe_image} className="rounded-md w-[100%] h-[110px] max-h-[110px] object-cover relative max-w-none" width={1000} height={1000} alt="website banner" />
+            <picture className="w-[100%] h-[150px]">
+                <source srcSet={recipe.recipe_image} media="(max-height: 110px)" />
+                <img src={recipe.recipe_image} loading="lazy" className="will-change-transform object-cover rounded-md w-full h-full relative max-w-[100%] block" width={1000} height={1000} alt="website banner" />
+            </picture>
             <div className={`flex justify-between`}>
                 <div className={`w-full flex gap-[5px] flex-wrap items-center `}>
                     {recipe.recipe_size_tag !== '' ? <span className={`bg-[#523636] self-center flex justify-center items-center text-white py-[2px] px-[7px] rounded-[5px] text-[${CardTagSize}]`}>{recipe.recipe_size_tag}</span> : null}
@@ -23,7 +26,7 @@ export default function RecipeElementV1 ({recipe}:Props) {
                     {recipe.recipe_event_tag !== '' ? <span className={`bg-[#523636] self-center flex justify-center items-center text-white py-[2px] px-[7px] rounded-[5px] text-[${CardTagSize}]`}>{recipe.recipe_event_tag}</span> : null}
                 </div>
             </div>
-            <h1 className={`text-[${CardFontSize}]`}>{recipe.recipe_name}</h1>
+            <h1 className={`text-[${CardFontSize}] whitespace-nowrap text-ellipsis overflow-hidden`}>{recipe.recipe_name}</h1>
             <div className="flex justify-between">
                 <div className="flex items-center ml-[-4px]">
                     <svg className="w-4 h-4 text-yellow-300 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">

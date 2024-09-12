@@ -50,7 +50,7 @@ export default async function RootLayout({
           </div>
           <div className="footer mt-[100px]">
             <div className="border-[1px] border-black overflow-hidden " />
-            <div className="relative bg-[url('/LP/last.png')]  bg-contain bg-no-repeat bg-bottom pb-[20vw]">
+            {/* <div className="relative bg-[url('/LP/last.png')]  bg-contain bg-no-repeat bg-bottom pb-[20vw]">
               <div className="flex items-center p-[20px]">
                 <div className="flex flex-col justify-center self-center items-start gap-[5px] w-[50%]">
                   <div className="flex flex-col justify-center items-center">
@@ -71,9 +71,8 @@ export default async function RootLayout({
                   <Link href="/inquiry/send-inquiry" className="text-[8px] self-center flex">ご意見・お問い合わせ</Link>
                 </div>
               </div>
-              {/* <img src={'/LP/last.png'} className="rounded-md w-[100vw] h-[auto] absolute bottom-[-70px] left-[-20px] inline max-w-none object-fill" width={10000} height={10000}  alt="website banner" /> */}
               <h1 className="w-[100%] flex justify-center relative top-[30px] text-[10px]">@Web5Dimensional</h1>
-            </div>
+            </div> */}
           </div>
         </body>
       </html>

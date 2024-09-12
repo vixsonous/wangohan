@@ -149,6 +149,25 @@ export default function CreateRecipeForm() {
         });
     }
 
+    const compressImage = async ( file:File, { quality = 1, type = file.type}:{quality:number, type: string}) => {
+        const imageBitmap = await createImageBitmap(file);
+
+        const canvas = document.createElement("canvas");
+        canvas.width = imageBitmap.width;
+        canvas.height = imageBitmap.height;
+        
+        const ctx = canvas.getContext("2d");
+        
+        if(ctx) {
+            ctx.drawImage(imageBitmap, 0, 0);
+            const blob = await new Promise(resolve => canvas.toBlob(resolve, type, quality));
+
+            return {message: 'Successful compression!', file: new File([blob as BlobPart], file.name, {type: type}), status: 200};
+        } else {
+            return {message: 'Unsuccessful compression!', file: file, status: 500};
+        }
+    }
+
     return (
         <form action="" className="create-form flex flex-wrap gap-[30px] max-w-[768px]">
             <div className="flex-[0_0_100%]">
@@ -174,17 +193,26 @@ export default function CreateRecipeForm() {
                     <img src={recipeInfo.recipeThumbnail} className="h-[auto] w-[100%] max-w-none rounded-[25px]" width={10000} height={10000}  alt="website banner" />
                     <h1 className="absolute w-[100%] flex flex-col justify-center items-center h-[100%] text-[16px] sm:text-[26px] text-center">料理の画像をアップロード
                     <br/> （横長推奨）<br /> <span className="text-[36px] required">+</span></h1>
-                    <input onChange={(e) => {
+                    <input onChange={async (e) => {
                         if(e.target.files && e.target.files[0]) {
                             const tempPath = URL.createObjectURL(e.target.files[0]);
                             // setRecipeInfo(prevState => ({...prevState, recipeThumbnail:tempPath}));
                             // setImgKey(new Date().getTime() * Math.random());
                             const rFiles = [...files];
                             const fileTn = [...fileThumbnails];
-                            rFiles.push(e.target.files[0]);
-                            fileTn.push(tempPath);
-                            setFiles([...rFiles]);
-                            setFileThumbnails([...fileTn]);
+
+                            const beforeFile = e.target.files[0];
+                            const processedFile = await compressImage(beforeFile, {quality: .7, type: 'image/webp'})
+
+                            if (processedFile.status === 200) {
+                                rFiles.push(processedFile.file);
+                                fileTn.push(tempPath);
+                                setFiles([...rFiles]);
+                                setFileThumbnails([...fileTn]);
+                            } else {
+                                setError(prev => ({...prev, image: "Unsuccessful Compression!"}));
+                            }
+                            
                         }
                     }} className="w-[100%] hidden" type="file" name="recipe-image" id="recipe-image" />
                 </label>

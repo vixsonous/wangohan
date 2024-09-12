@@ -13,7 +13,6 @@ import { defineScreenMode, sm } from "@/constants/constants";
 interface RecipeSliderInterface {
     title: String,
     recipes: Array<DisplayRecipe>,
-    width: String
 }
 
 export default function RecipeSlider ({title, recipes}:RecipeSliderInterface) {

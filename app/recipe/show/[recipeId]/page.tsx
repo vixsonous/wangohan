@@ -10,6 +10,16 @@ type Props = {
     searchParams: {[key: string]: string | string[] | undefined}
 }
 
+// export const metadata:Metadata = {
+//     title: {
+//       template: '%s | わんごはん | 愛犬のための手作りごはんレシピサイト',
+//       default: "わんごはん | 愛犬のための手作りごはんレシピサイト"
+//     },
+//     keywords: ["愛犬のための手作りごはんレシピサイト","わんごはん","Wangohan", "Dog food", "Pet food", "Pets", "Inu"],
+//     creator: "Victor Chiong",
+//     description: "Web for WanWan"
+// }
+
 export async function generateMetadata({params} : Props, parent: ResolvingMetadata):Promise<Metadata> {
     const {recipeId} = params;
     const recipeData = await getRecipeTitle(Number(recipeId));
@@ -20,7 +30,10 @@ export async function generateMetadata({params} : Props, parent: ResolvingMetada
     }
 
     return {
-        title: title
+        title: title,
+        keywords: ["愛犬のための手作りごはんレシピサイト","わんごはん","Wangohan", "Dog food", "Pet food", "Pets", "Inu"],
+        creator: "Victor Chiong",
+        description: "Web for WanWan"
     }
 }
 
@@ -107,8 +120,8 @@ export default async function ShowRecipe({params, searchParams}:{params: {recipe
                 <div className="recipe-ingredients flex justify-center items-center">
                     <ul className={`flex flex-wrap w-[80%] ${recipeIngredients.length > 5 ? 'flex-row' : 'flex-col'}`}>
                     {
-                        recipeIngredients.map(el => {
-                            return <li key={new Date().getTime() * Math.random()} className={`${recipeIngredients.length > 5 ? 'basis-1/2' : 'basis-1'} text-center`}>{el}</li>
+                        recipeIngredients.map((el, idx) => {
+                            return <li key={idx} className={`${recipeIngredients.length > 5 ? 'basis-1/2' : 'basis-1'} text-center`}>{el}</li>
                         })
                     }
                     </ul>
@@ -120,8 +133,8 @@ export default async function ShowRecipe({params, searchParams}:{params: {recipe
                 <div className="recipe-instructions-content">
                     <ol className="list-decimal pl-[20px]">
                         {
-                            recipeInstructions.map(el => {
-                               return <li key={new Date().getTime() * Math.random()}>{el}</li> 
+                            recipeInstructions.map((el, idx) => {
+                               return <li key={idx}>{el}</li> 
                             })
                         }
                     </ol>
