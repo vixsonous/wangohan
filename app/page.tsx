@@ -64,13 +64,13 @@ export default async function Home() {
               <h1 className="text-[20px] text-[#523636] font-semibold">年齢別で探す</h1>
               <div className="flex justify-between sm:justify-center sm:gap-[20px] w-[100%]">
                 <a href="" className="flex w-[105px] gap-[10px] text-[13px] text-[#523636] font-bold flex-col justify-center items-center">
-                  <img src={'/LP/puppy.png'} className="absolute rounded-md h-[100px] w-[auto] max-w-none" width={10000} height={10000}  alt="website banner" />
+                  <img src={'/LP/puppy.png'} className="absolute rounded-md h-[100px] w-[auto] max-w-none" alt="website banner" />
                   <span className="relative top-[39px]">子犬用レシピ</span>
                 </a>
                 <a href="" className="flex w-[105px] gap-[10px] text-[13px] relative text-[#523636] font-bold flex-col justify-center items-center">
-                  <img src={'/LP/adult.png'} className="absolute rounded-md h-[120px] w-[auto] max-w-none" width={10000} height={10000}  alt="website banner" /><span className="relative top-[39px]">成犬用レシピ</span></a>
+                  <img src={'/LP/adult.png'} className="absolute rounded-md h-[120px] w-[auto] max-w-none"  alt="website banner" /><span className="relative top-[39px]">成犬用レシピ</span></a>
                 <a href="" className="flex w-[105px] gap-[10px] text-[13px] text-[#523636] font-bold flex-col justify-center items-center">
-                  <img src={'/LP/senior.png'} className="rounded-md h-[90px] w-[150px] max-w-none" width={10000} height={10000}  alt="website banner" />
+                  <img src={'/LP/senior.png'} className="rounded-md h-[90px] w-[150px] max-w-none"  alt="website banner" />
                   <span className="relative top-[-11px]">シニア犬用レシピ</span>
                   </a>
               </div>
