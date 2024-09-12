@@ -6,7 +6,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from 'react-slick';
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination } from "swiper/modules";
+import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import { DisplayRecipe } from "@/constants/interface";
 import { defineScreenMode, sm } from "@/constants/constants";
 
@@ -33,10 +33,14 @@ export default function RecipeSlider ({title, recipes}:RecipeSliderInterface) {
             <div className="absolute w-full top-[51px] border-[1px] border-solid border-[#523636]"/>
             { recipes.length > 0 ? <Swiper
                 className='w-full'
-                modules={[Navigation, Pagination]}
+                modules={[Navigation, Pagination, Autoplay]}
                 spaceBetween={10}
                 slidesPerView={scMode <= 1 ? 2 : 4}
-                
+                autoplay={{
+                    delay: 2500,
+                    disableOnInteraction: false,
+                }}
+                speed={1000}
             >
                 {recipes.map( (recipe, idx) => {
                     return (
