@@ -2,7 +2,7 @@ import RecipeSlider from "./components/RecipeSlider";
 import BirthdayContainer from "./components/BirthdayContainer";
 import { Gloria_Hallelujah, Mochiy_Pop_P_One } from "next/font/google";
 import { Metadata } from "next";
-import { getWeeklyRecipes } from "@/action/recipe";
+import { getPopularRecipes, getWeeklyRecipes } from "@/action/recipe";
 import { DisplayRecipe } from "@/constants/interface";
 
 const gloria = Gloria_Hallelujah({
@@ -27,7 +27,10 @@ export default async function Home() {
   ];
 
   const weekly_result = await getWeeklyRecipes();
+  const popular_result = await getPopularRecipes();
+
   const weeklyRecipes = weekly_result.body as Array<DisplayRecipe>;
+  const popularRecipes = popular_result.body as Array<DisplayRecipe>;
 
   return (
     <main className="relative flex p-[20px] min-h-screen flex-col md:items-center overflow-hidden pb-[50px] lg:pb-[200px]">
@@ -51,7 +54,7 @@ export default async function Home() {
             <RecipeSlider title={'今週のレシピ'} recipes={weeklyRecipes}/>
           </div>
           <div>
-            <RecipeSlider title={'人気レシピ'} recipes={weeklyRecipes}/>
+            <RecipeSlider title={'人気レシピ'} recipes={popularRecipes}/>
           </div>
           {/* Birthday Section */}
           <BirthdayContainer bdayAvt={birthdays} />

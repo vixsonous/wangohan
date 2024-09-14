@@ -1,5 +1,5 @@
 'use client';
-import { SUCC_MSG, textColor } from "@/constants/constants";
+import { defineScreenMode, imageFileTypes, SUCC_MSG, textColor } from "@/constants/constants";
 import { ingredients, instructions } from "@/constants/interface";
 import { faCheck, faCircleNotch, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -168,6 +168,16 @@ export default function CreateRecipeForm() {
         }
     }
 
+    const [scMode, setScMode] = useState<number>(0);
+    useEffect(() => {
+        if(typeof window === 'undefined') return;
+        setScMode(defineScreenMode());
+        window.addEventListener('resize', () => setScMode(defineScreenMode()));
+        return () => {
+            window.removeEventListener('resize', () => setScMode(defineScreenMode()));
+        };
+    },[]);
+
     return (
         <form action="" className="create-form flex flex-wrap gap-[30px] max-w-[768px]">
             <div className="flex-[0_0_100%]">
@@ -194,36 +204,48 @@ export default function CreateRecipeForm() {
                     <h1 className="absolute w-[100%] flex flex-col justify-center items-center h-[100%] text-[16px] sm:text-[26px] text-center">料理の画像をアップロード
                     <br/> （横長推奨）<br /> <span className="text-[36px] required">+</span></h1>
                     <input onChange={async (e) => {
-                        if(e.target.files && e.target.files[0]) {
-                            const tempPath = URL.createObjectURL(e.target.files[0]);
-                            // setRecipeInfo(prevState => ({...prevState, recipeThumbnail:tempPath}));
-                            // setImgKey(new Date().getTime() * Math.random());
-                            const rFiles = [...files];
-                            const fileTn = [...fileThumbnails];
+                        if(!e.target.files || !e.target.files[0]) return;
 
-                            const beforeFile = e.target.files[0];
-                            const processedFile = await compressImage(beforeFile, {quality: .7, type: 'image/webp'})
+                        if(!imageFileTypes.includes(e.target.files[0].type)) {
+                            setError(prev => ({...prev, image: "Only jpeg, png, and webp files are supported!"}));
+                            return;
+                        }
 
-                            if (processedFile.status === 200) {
-                                rFiles.push(processedFile.file);
-                                fileTn.push(tempPath);
-                                setFiles([...rFiles]);
-                                setFileThumbnails([...fileTn]);
-                            } else {
-                                setError(prev => ({...prev, image: "Unsuccessful Compression!"}));
-                            }
-                            
+                        if(e.target.files[0].size > 4000000) {
+                            setError(prev => ({...prev, image: "Maximum 4mb only!"}));
+                            return;
+                        }
+
+                        if(files.length >= 5) {
+                            setError(prev => ({...prev, image: "Maximum 5 images only!"}));
+                            return;
+                        }
+
+                        const tempPath = URL.createObjectURL(e.target.files[0]);
+                        const rFiles = [...files];
+                        const fileTn = [...fileThumbnails];
+
+                        const beforeFile = e.target.files[0];
+                        const processedFile = await compressImage(beforeFile, {quality: .5, type: 'image/webp'})
+
+                        if (processedFile.status === 200) {
+                            rFiles.push(processedFile.file);
+                            fileTn.push(tempPath);
+                            setFiles([...rFiles]);
+                            setFileThumbnails([...fileTn]);
+                        } else {
+                            setError(prev => ({...prev, image: "Unsuccessful Compression!"}));
                         }
                     }} className="w-[100%] hidden" type="file" name="recipe-image" id="recipe-image" />
                 </label>
                 <div className='p-[5px] m-[0] w-[90vw] max-w-[768px]'>
                     <Swiper
                         onSwiper={(swiper: SwiperType) => setThumbsSwiper(swiper)}
-                        slidesPerView={fileThumbnails.length < 3 ? fileThumbnails.length : 3}
+                        slidesPerView={scMode <= 1 ? fileThumbnails.length < 2 ? 1 : 2 : fileThumbnails.length <= 4 ? fileThumbnails.length : 4}
                         modules={[ Virtual, Navigation, Thumbs]}
                         spaceBetween={5}
                         pagination={{
-                        type: 'fraction',
+                            type: 'fraction',
                         }}
                         className="h-[100%] w-[100%] rounded-md"
                         virtual
@@ -231,21 +253,21 @@ export default function CreateRecipeForm() {
                         {
                             fileThumbnails.map((img, idx) => {
                                 return (
-                                    <SwiperSlide key={img} virtualIndex={idx} className="relative w-[100%] h-[100%] relative overflow-visible">
-                                        <img src={img} className="object-cover w-[100%] h-[100px] relative rounded-[0px]" width={10000} height={10000}  alt="website banner" />
+                                    <SwiperSlide key={img} virtualIndex={idx} className="relative pt-[20px] w-[100%] h-[100%] relative overflow-visible">
+                                        <img src={img} className="object-cover w-[100%] h-[130px] relative rounded-[0px]" width={10000} height={10000}  alt="website banner" />
                                         <FontAwesomeIcon onClick={() => {
                                             const newFiles = [...files].filter( (f, i) => i !== idx);
                                             const newThumbnails = [...fileThumbnails].filter( (f, i) => i !== idx);
                                             setFileThumbnails([...newThumbnails]);
                                             setFiles([...newFiles]);
-                                        }} icon={faTrash} size="sm" style={{color: textColor.error}} className="absolute p-[5px] bg-black opacity-[0.7] rounded-md bottom-[10px] right-[10px]"/>
+                                        }} icon={faTrash} size="sm" style={{color: '#523636'}} className="absolute p-[5px] bg-[#FFFAF0] opacity-[0.8] rounded-xl top-[10px] right-[0px]"/>
                                     </SwiperSlide>
                                 )
                             })
                         }
                     </Swiper>
                 </div>
-                <span className="ml-[5px] text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.image}</span>
+                <span className="ml-[5px] text-[.75em] font-semibold text-[#E53935]">{error.image}</span>
             </div>
 
             <div className="flex-[0_0_100%] flex flex-col gap-[5px]">
@@ -271,9 +293,9 @@ export default function CreateRecipeForm() {
                                     e.preventDefault();
                                     recipeIngredients.splice(idx, 1)
                                     setRecipeIngredients([...recipeIngredients])
-                                }}><svg fill="black" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="15" height="15" viewBox="0 0 24 24">
-                                <path d="M 10 2 L 9 3 L 3 3 L 3 5 L 21 5 L 21 3 L 15 3 L 14 2 L 10 2 z M 4.3652344 7 L 6.0683594 22 L 17.931641 22 L 19.634766 7 L 4.3652344 7 z"></path>
-                                </svg></button>
+                                }}>
+                                    <FontAwesomeIcon icon={faTrash} size="sm" style={{color: '#523636'}} className="opacity-[1] rounded-xl"/>
+                                </button>
                             </div>
                         </div>
                     )
@@ -301,9 +323,8 @@ export default function CreateRecipeForm() {
                                     e.preventDefault();
                                     recipeInstructions.splice(idx, 1)
                                     setRecipeInstructions([...recipeInstructions])
-                                }}><svg fill="black" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="15" height="15" viewBox="0 0 24 24">
-                                <path d="M 10 2 L 9 3 L 3 3 L 3 5 L 21 5 L 21 3 L 15 3 L 14 2 L 10 2 z M 4.3652344 7 L 6.0683594 22 L 17.931641 22 L 19.634766 7 L 4.3652344 7 z"></path>
-                                </svg></button>
+                                }}>
+                                <FontAwesomeIcon icon={faTrash} size="sm" style={{color: '#523636'}} className="opacity-[1] rounded-xl"/></button>
                             </div>
                         </div>
                     )

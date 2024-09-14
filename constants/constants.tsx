@@ -86,3 +86,5 @@ export const defineScreenMode = () => {
     xl(window.innerWidth) ? 3 :
     xl2(window.innerWidth) ? 4 : -1
 }
+
+export const imageFileTypes = ["image/jpeg","image/png", "image/webp"];

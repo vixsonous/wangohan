@@ -15,7 +15,7 @@ export default function RecipeElementV1 ({recipe}:Props) {
     return (
     <Link href={`/recipe/show/${recipe.recipe_id}`}>
         <div className="flex flex-col gap-[10px]">
-            <picture className="w-[100%] h-[150px]">
+            <picture className="w-[100%] h-[130px]">
                 <source srcSet={recipe.recipe_image} media="(max-height: 110px)" />
                 <img src={recipe.recipe_image} loading="lazy" className="will-change-transform object-cover rounded-md w-full h-full relative max-w-[100%] block" width={1000} height={1000} alt="website banner" />
             </picture>

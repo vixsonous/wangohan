@@ -1,10 +1,11 @@
 import { ERR_MSG } from "@/constants/constants";
-import { ingredients, instructions, recipe } from "@/constants/interface";
+import { DBRecipeData, ingredients, instructions, recipe } from "@/constants/interface";
 import { db } from "@/lib/database/db";
 import { cookies } from "next/headers";
 import { decrypt } from "./lib";
 import { getFile } from "./file-lib";
 
+const FRONT_PAGE_RECIPE_QUERY_LIMIT = 10;
 
 export const postRecipe = async (recipe:recipe) => {
     try {
@@ -144,23 +145,55 @@ export const getRecipeData = async (recipeId:number) => {
     }
 }
 
-export const getWeeklyRecipes = async () => {
+const processRecipes = async (recipes: Array<DBRecipeData>) => {
+    const with_image_recipes = await Promise.all( recipes.map(async recipe => {
+        return {...recipe, recipe_image: await db.selectFrom("recipe_images_table").select(["recipe_image_id", "recipe_image", "recipe_image_title", "recipe_image_subtext"])
+            .where("recipe_id", "=", recipe.recipe_id).executeTakeFirst()}
+    }));
+
+    const updated_recipes = await Promise.all(with_image_recipes.map( async recipe => {
+        return {...recipe, recipe_image: recipe.recipe_image ? await getFile(recipe.recipe_image.recipe_image) : '/recipe-making/pic-background.png'}
+    }));
+
+    return updated_recipes;
+}
+
+export const getWeeklyRecipes = async (page: number = 0) => {
     try {
 
+        const OFFSET = page * FRONT_PAGE_RECIPE_QUERY_LIMIT;
         const recipes = await db.selectFrom("recipes_table").select(["recipe_name", "recipe_id", "recipe_age_tag", 
             "recipe_event_tag","recipe_size_tag", "recipe_description","user_id", "created_at", "total_likes"
         ])
             .where("created_at", ">=", new Date(Date.now() - 7 * 24 * 60 * 60 * 1000))
+            .orderBy("created_at", "desc")
+            .limit(FRONT_PAGE_RECIPE_QUERY_LIMIT)
+            .offset(OFFSET)
             .execute();
 
-        const with_image_recipes = await Promise.all( recipes.map(async recipe => {
-            return {...recipe, recipe_image: await db.selectFrom("recipe_images_table").select(["recipe_image_id", "recipe_image", "recipe_image_title", "recipe_image_subtext"])
-                .where("recipe_id", "=", recipe.recipe_id).executeTakeFirst()}
-        }));
+        const updated_recipes = await processRecipes(recipes);
 
-        const updated_recipes = await Promise.all(with_image_recipes.map( async recipe => {
-            return {...recipe, recipe_image: recipe.recipe_image ? await getFile(recipe.recipe_image.recipe_image) : '/recipe-making/pic-background.png'}
-        }));
+        return {message: 'asd!',body: updated_recipes, status: 200};
+    } catch(e) {
+        let _e = (e as Error).message;
+        return {message: _e, body: undefined, status: 500};
+    }
+}
+
+export const getPopularRecipes = async (page: number = 0) => {
+
+    try {
+        const OFFSET = page * FRONT_PAGE_RECIPE_QUERY_LIMIT;
+        const recipes = await db.selectFrom("recipes_table").select(["recipe_name", "recipe_id", "recipe_age_tag", 
+            "recipe_event_tag","recipe_size_tag", "recipe_description","user_id", "created_at", "total_likes"
+        ])
+            // .where("created_at", ">=", new Date(Date.now() - 7 * 24 * 60 * 60 * 1000))
+            .orderBy("total_likes", "desc")
+            .limit(FRONT_PAGE_RECIPE_QUERY_LIMIT)
+            .offset(OFFSET)
+            .execute();
+
+        const updated_recipes = await processRecipes(recipes);
 
         return {message: 'asd!',body: updated_recipes, status: 200};
     } catch(e) {
