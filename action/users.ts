@@ -5,15 +5,7 @@ import bcrypt from 'bcrypt';
 import { cookies } from "next/headers";
 import { decrypt } from "./lib";
 import { DogData } from "@/constants/interface";
-
-export async function getUsers() {
-  try {
-    // return await db.selectFrom("users_table").selectAll().execute();
-    return "neagaga";
-  } catch (error) {
-    return "Error getting users";
-  }
-}
+import { redirect } from "next/navigation";
 
 export async function getUser(email: string, password: string) {
 
@@ -191,4 +183,17 @@ export async function registerGoogleUser(email: string, google_id: string) {
     let _e = (e as Error).message;
     throw _e;
   }
+}
+
+export async function retrieveDecryptedSession() {
+
+  const docCookies = cookies();
+  const session = docCookies.get('session')?.value;
+  if(!session) redirect("/login");
+
+  const decryptedSession = await decrypt(session as string);
+  const userDetails = await getUserDetails(decryptedSession.user.user_id).catch(() => redirect("/signup/personal-info"));
+
+  return {decryptedSession: decryptedSession, userDetails: userDetails};
+
 }

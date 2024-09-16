@@ -2,7 +2,7 @@
 import { Metadata, ResolvingMetadata } from "next";
 import Image from "next/image";
 import TabList from "./components/TabList";
-import { getUser, getUserDetails } from "@/action/users";
+import { getUser, getUserDetails, retrieveDecryptedSession } from "@/action/users";
 import { cookies } from "next/headers";
 import { decrypt } from "@/action/lib";
 import { redirect } from "next/navigation";
@@ -30,14 +30,7 @@ export async function generateMetadata({params} : Props, parent: ResolvingMetada
 
 export default async function User() {
 
-    const docCookies = cookies();
-    const session = docCookies.get('session')?.value;
-
-    if(!session) redirect("/login");
-
-    const decryptedSession = await decrypt(session as string);
-    const userDetails = await getUserDetails(decryptedSession.user.user_id).catch(() => redirect("/signup/personal-info"));
-
+    const {decryptedSession, userDetails} = await retrieveDecryptedSession();
     const image_url = userDetails.user_image === '' ? `/recipe-making/pic-background.png` : await getFile(userDetails.user_image);
     const pets : DogData[] = userDetails.pets;
     

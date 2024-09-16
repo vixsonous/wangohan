@@ -58,6 +58,7 @@ export interface DisplayRecipe {
     recipe_size_tag: string;
     recipe_event_tag: string;
     total_likes: number;
+    total_views: number;
     user_id: number;
     created_at: Date;
 }

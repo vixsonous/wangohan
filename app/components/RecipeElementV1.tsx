@@ -46,7 +46,7 @@ export default function RecipeElementV1 ({recipe}:Props) {
                     </svg>
                 </div>
                 <div className="flex gap-[5px] items-center">
-                    <span className={`text-[${CardFontSize}]`}>{recipe.total_likes} views</span>
+                    <span className={`text-[${CardFontSize}]`}>{recipe.total_views} views</span>
                 </div>
             </div>
         </div>

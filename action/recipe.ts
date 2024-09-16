@@ -1,9 +1,10 @@
-import { ERR_MSG } from "@/constants/constants";
+import { ERR_MSG, getExpireDate } from "@/constants/constants";
 import { DBRecipeData, ingredients, instructions, recipe } from "@/constants/interface";
 import { db } from "@/lib/database/db";
 import { cookies } from "next/headers";
-import { decrypt } from "./lib";
+import { decrypt, encrypt } from "./lib";
 import { getFile } from "./file-lib";
+import { NextResponse } from "next/server";
 
 const FRONT_PAGE_RECIPE_QUERY_LIMIT = 10;
 
@@ -26,6 +27,7 @@ export const postRecipe = async (recipe:recipe) => {
                 recipe_size_tag: recipe.size,
                 total_favourites: 0,
                 total_likes: 0,
+                total_views: 0,
                 user_id: user_id,
                 updated_at: new Date(),
                 created_at: new Date()
@@ -106,7 +108,7 @@ export const getRecipeData = async (recipeId:number) => {
     try {
 
         const recipe_data = await db.selectFrom("recipes_table").select(["recipe_name", "recipe_id", "recipe_age_tag", 
-            "recipe_event_tag","recipe_size_tag", "recipe_description","user_id"
+            "recipe_event_tag","recipe_size_tag", "recipe_description","user_id", "total_likes", "total_views"
         ])
             .where("recipe_id","=", recipeId)
             .executeTakeFirst();
@@ -115,7 +117,7 @@ export const getRecipeData = async (recipeId:number) => {
 
         const user = await db.selectFrom("user_details_table as user_details")
             .select(['user_details.user_codename','user_details.user_image', 'user_details.user_detail_id'])
-            .where('user_details.user_id','=',recipe_data?.user_id)
+            .where('user_details.user_id','=',recipe_data.user_id)
             .executeTakeFirst();
         const recipe_instructions = await db.selectFrom("recipe_instructions_table").select(["recipe_instructions_id", "recipe_instructions_text"])
             .where("recipe_id", "=", recipeId).execute();
@@ -137,7 +139,6 @@ export const getRecipeData = async (recipeId:number) => {
             return {...com, user: {...com.user, user_image: com.user ? await getFile(com.user.user_image) : ''}}
         }))
 
-        console.log(updated_recipe_comments);
         return {message: 'asd!',body: {...recipe_data, user: user, recipe_instructions: recipe_instructions, recipe_ingredients: recipe_ingredients, recipe_images: recipe_images, recipe_comments: updated_recipe_comments}, status: 200};
     } catch(e) {
         let _e = (e as Error).message;
@@ -163,7 +164,7 @@ export const getWeeklyRecipes = async (page: number = 0) => {
 
         const OFFSET = page * FRONT_PAGE_RECIPE_QUERY_LIMIT;
         const recipes = await db.selectFrom("recipes_table").select(["recipe_name", "recipe_id", "recipe_age_tag", 
-            "recipe_event_tag","recipe_size_tag", "recipe_description","user_id", "created_at", "total_likes"
+            "recipe_event_tag","recipe_size_tag", "recipe_description","user_id", "created_at", "total_likes", "total_views"
         ])
             .where("created_at", ">=", new Date(Date.now() - 7 * 24 * 60 * 60 * 1000))
             .orderBy("created_at", "desc")
@@ -185,7 +186,7 @@ export const getPopularRecipes = async (page: number = 0) => {
     try {
         const OFFSET = page * FRONT_PAGE_RECIPE_QUERY_LIMIT;
         const recipes = await db.selectFrom("recipes_table").select(["recipe_name", "recipe_id", "recipe_age_tag", 
-            "recipe_event_tag","recipe_size_tag", "recipe_description","user_id", "created_at", "total_likes"
+            "recipe_event_tag","recipe_size_tag", "recipe_description","user_id", "created_at", "total_likes", "total_views"
         ])
             // .where("created_at", ">=", new Date(Date.now() - 7 * 24 * 60 * 60 * 1000))
             .orderBy("total_likes", "desc")
@@ -195,7 +196,23 @@ export const getPopularRecipes = async (page: number = 0) => {
 
         const updated_recipes = await processRecipes(recipes);
 
-        return {message: 'asd!',body: updated_recipes, status: 200};
+        return {message: 'Success!',body: updated_recipes, status: 200};
+    } catch(e) {
+        let _e = (e as Error).message;
+        return {message: _e, body: undefined, status: 500};
+    }
+}
+
+export const updateRecipeViews = async (recipe_id: number) => {
+    try {
+        console.log("is updating!");
+        const recipes = await db.updateTable("recipes_table").set(eb => ({
+            total_views: eb("total_views","+",1)
+        })).where("recipe_id","=",recipe_id).execute();
+
+        
+
+        return {message: 'Success!',body: undefined, status: 200};
     } catch(e) {
         let _e = (e as Error).message;
         return {message: _e, body: undefined, status: 500};

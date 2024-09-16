@@ -3,6 +3,8 @@ import { useEffect, useRef, useState } from "react";
 import BirthdayAvatar from "./BirthdayAvatar";
 import Image from "next/image";
 import Slider from "react-slick";
+import { Swiper, SwiperClass, SwiperSlide } from "swiper/react";
+import { Autoplay } from "swiper/modules";
 
 interface BirthdayAvatars {
     bdayAvt: Array<String>
@@ -16,11 +18,26 @@ export default function BirthdayContainer({bdayAvt} : BirthdayAvatars) {
                 <div className="absolute z-[-1] left-[0px] w-full top-[17px] border-[1px] border-solid border-[#523636]"/>
             </div>
             <div className="overflow-hidden w-full">
-            <Slider autoplay slidesToShow={5} infinite autoplaySpeed={2000} speed={2000}>
+            <Swiper  
+                slidesPerView={5}
+                loop
+                modules={[Autoplay]}
+                autoplay={{
+                    delay: 1000,
+                    disableOnInteraction: false,
+                }}
+                speed={2000}
+            >
             {
-                bdayAvt.map((el) => BirthdayAvatar({src: String(el)}))
+                bdayAvt.map((el, idx) => {
+                    return (
+                        <SwiperSlide key={idx}>
+                            {BirthdayAvatar({src: String(el)})}
+                        </SwiperSlide>
+                    )
+                })
             }
-            </Slider>
+            </Swiper>
             </div>
             <div className="relative top-[-40px]">
                 <img src={'/LP/bdayvideo.gif'} className="rounded-md w-[100%] h-[100%] inline max-w-none object-fill" width={10000} height={10000}  alt="website banner" />

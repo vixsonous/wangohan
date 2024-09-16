@@ -69,6 +69,7 @@ export interface RecipesTable {
   recipe_category: string;
   total_likes: number;
   total_favourites: number;
+  total_views: number;
   user_id: number;
   updated_at: Date;
   created_at: Date;

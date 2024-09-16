@@ -1,9 +1,11 @@
 import { getFile } from "@/action/file-lib";
-import { getRecipeData, getRecipeTitle } from "@/action/recipe";
+import { getRecipeData, getRecipeTitle, updateRecipeViews } from "@/action/recipe";
 import {  Metadata, ResolvingMetadata } from "next";
 import { redirect } from "next/navigation";
 import ImageSwiper from "./ImageSwiper";
 import { Comment } from "@/constants/interface";
+import { cookies } from "next/headers";
+import ViewUpdateCountdown from "./ViewUpdateCountdown";
 
 type Props = {
     params: {recipeId: String},
@@ -80,6 +82,7 @@ export default async function ShowRecipe({params, searchParams}:{params: {recipe
 
     return (
         <section>
+            <ViewUpdateCountdown recipe_id={recipe_data.recipe_id}/>
             <div className="recipe-image w-[100%]">
                 <ImageSwiper recipe_images={recipe_images} />
             </div>

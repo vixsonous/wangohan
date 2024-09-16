@@ -7,7 +7,7 @@ import { Swiper as SwiperType } from 'swiper/types';
 
 export default function ImageSwiper({recipe_images}:{recipe_images:string[]}) {
 
-    const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
+    const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType>();
 
     return (
         <>
@@ -16,7 +16,7 @@ export default function ImageSwiper({recipe_images}:{recipe_images:string[]}) {
             modules={[Navigation, Pagination, Thumbs]}
             spaceBetween={50}
             slidesPerView={1}
-            thumbs={{ swiper: thumbsSwiper }}
+            thumbs={thumbsSwiper ? { swiper: thumbsSwiper } : {swiper : ""}}
             navigation
             pagination={{ clickable: true }}
             >
