@@ -1,6 +1,6 @@
 'use client';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { CSSProperties, useEffect, useState } from 'react';
 import { Navigation, Pagination, Scrollbar, A11y, Thumbs } from 'swiper/modules';
 import {Swiper, SwiperSlide} from 'swiper/react';
 import { Swiper as SwiperType } from 'swiper/types';
@@ -9,6 +9,14 @@ export default function ImageSwiper({recipe_images}:{recipe_images:string[]}) {
 
     const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType>();
 
+    useEffect(() => {
+        if (thumbsSwiper) {
+          setTimeout(() => {
+            setThumbsSwiper(thumbsSwiper);
+          }, 100); // Adjust the delay as needed
+        }
+    }, [thumbsSwiper]);
+
     return (
         <>
         <Swiper
@@ -16,9 +24,15 @@ export default function ImageSwiper({recipe_images}:{recipe_images:string[]}) {
             modules={[Navigation, Pagination, Thumbs]}
             spaceBetween={50}
             slidesPerView={1}
-            thumbs={thumbsSwiper ? { swiper: thumbsSwiper } : {swiper : ""}}
+            thumbs={{ swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null }}
             navigation
             pagination={{ clickable: true }}
+            style={{
+                "--swiper-pagination-color": "#FFE9C9",
+                "--swiper-navigation-color": "#FFE9C9",
+                "--swiper-pagination-bullet-inactive-color": "#999999",
+                "--swiper-pagination-bullet-inactive-opacity": "1",
+            } as CSSProperties} 
             >
             {
                 recipe_images.map((img, idx) => {

@@ -1,6 +1,6 @@
 'use client';
 import Image from "next/image";
-import { createElement, useEffect, useRef, useState } from "react";
+import { createElement, CSSProperties, useEffect, useRef, useState } from "react";
 import RecipeElementV1 from "./RecipeElementV1";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -40,6 +40,13 @@ export default function RecipeSlider ({title, recipes}:RecipeSliderInterface) {
                     delay: 2500,
                     disableOnInteraction: false,
                 }}
+                style={{
+                    "--swiper-pagination-color": "#FFBA08",
+                    "--swiper-pagination-bullet-inactive-color": "#999999",
+                    "--swiper-pagination-bullet-inactive-opacity": "1",
+                    "--swiper-pagination-bullet-size": "16px",
+                    "--swiper-pagination-bullet-horizontal-gap": "10px"
+                } as CSSProperties} 
                 speed={1000}
             >
                 {recipes.map( (recipe, idx) => {

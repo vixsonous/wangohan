@@ -6,6 +6,7 @@ import ImageSwiper from "./ImageSwiper";
 import { Comment } from "@/constants/interface";
 import { cookies } from "next/headers";
 import ViewUpdateCountdown from "./ViewUpdateCountdown";
+import { fontSize } from "@/constants/constants";
 
 type Props = {
     params: {recipeId: String},
@@ -79,15 +80,13 @@ export default async function ShowRecipe({params, searchParams}:{params: {recipe
     }
 
     const reviewComments:Array<Comment> = recipe_data.recipe_comments
-
+    
     return (
         <section>
             <ViewUpdateCountdown recipe_id={recipe_data.recipe_id}/>
             <div className="recipe-image w-[100%]">
                 <ImageSwiper recipe_images={recipe_images} />
-            </div>
-            <div className="content-container p-[20px] flex flex-col justify-center gap-[30px]">
-                <div className="tags-likes flex justify-between items-center">
+                <div className="tags-likes flex justify-between items-center px-[5px]">
                     <div className={`w-[60%] flex gap-[5px] flex-wrap items-center `}>
                         {recipe_data.recipe_age_tag !== '' ? <span className={`bg-[#523636] self-center flex justify-center items-center text-white py-[2px] px-[7px] rounded-[5px] text-[${CardTagSize}]`}>{recipe_data.recipe_age_tag}</span> : null}
                         {recipe_data.recipe_size_tag !== '' ? <span className={`bg-[#523636] self-center flex justify-center items-center text-white py-[2px] px-[7px] rounded-[5px] text-[${CardTagSize}]`}>{recipe_data.recipe_size_tag}</span> : null}
@@ -108,33 +107,33 @@ export default async function ShowRecipe({params, searchParams}:{params: {recipe
                         </svg>
                     </div>
                 </div>
-                <div className="recipe-title flex justify-center items-center self-center font-semibold">
-                    <h1>{recipe_data.recipe_name}</h1>
+            </div>
+            <div className="content-container p-[20px] flex flex-col justify-center gap-[30px]">
+                
+                <div className="recipe-title flex justify-start items-center self-start font-semibold">
+                    <h1 style={{fontSize: fontSize.l5}}>{recipe_data.recipe_name}</h1>
                 </div>
                 <div className="recipe-description flex justify-center items-center self-center">
                     <span className="leading-snug text-[13px]">
                         {recipe_data.recipe_description}
                     </span>
                 </div>
-                <div className="flex justify-center items-center relative">
-                    <h1 className="absolute top-[10px] font-semibold text-[#523636]">材料</h1>
-                    <img src={'/icons/ribbon.png'} className="h-[auto] w-[200px] sm:w-[300px] max-w-none" width={10000} height={10000}  alt="website banner" />
-                </div>
-                <div className="recipe-ingredients flex justify-center items-center">
-                    <ul className={`flex flex-wrap w-[80%] ${recipeIngredients.length > 5 ? 'flex-row' : 'flex-col'}`}>
+                <div className="recipe-ingredients flex flex-col justify-start items-start gap-[10px]">
+                    <h1 style={{fontSize: fontSize.l4}} className="font-semibold text-[#523636]">材料</h1>
+                    <ul className={`flex flex-wrap w-[100%] ${recipeIngredients.length > 5 ? 'flex-row' : 'flex-col'}`}>
                     {
                         recipeIngredients.map((el, idx) => {
-                            return <li key={idx} className={`${recipeIngredients.length > 5 ? 'basis-1/2' : 'basis-1'} text-center`}>{el}</li>
+                            return <>
+                            <li key={idx} className={`${recipeIngredients.length > 5 ? 'basis-1/2' : 'basis-1'} text-left`}>{el}</li>
+                            {/* <hr style={{border: 0, borderTop: '1px solid #523636'}}/> */}
+                            </>
                         })
                     }
                     </ul>
                 </div>
-                <div className="recipe-instructions-title flex justify-center items-center relative">
-                    <h1 className="absolute top-[10px] font-semibold text-[#523636]">作り方</h1>
-                    <img src={'/icons/ribbon.png'} className="h-[auto] w-[200px] sm:w-[300px] max-w-none" width={10000} height={10000}  alt="website banner" />
-                </div>
-                <div className="recipe-instructions-content">
-                    <ol className="list-decimal pl-[20px]">
+                <div className="recipe-instructions-content flex flex-col gap-[10px]">
+                    <h1 style={{fontSize: fontSize.l4}} className=" font-semibold text-[#523636]">作り方</h1>
+                    <ol className="list-decimal pl-[25px] flex flex-col gap-[10px]">
                         {
                             recipeInstructions.map((el, idx) => {
                                return <li key={idx}>{el}</li> 
