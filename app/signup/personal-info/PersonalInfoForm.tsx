@@ -229,7 +229,7 @@ export default function PersonalInfoForm({info} : Info) {
             </div>
             
             <div className="w-full flex justify-center flex-col items-center gap-[10px]">
-                <button disabled={signup} onClick={(e:SyntheticEvent) => submitFunc(e)} className={`w-[100%] bg-[${signup ? '#FFD99A' : '#ffb762'}] border-[1px] border-[${signup ? '#ffb762' : '#FFD99A'}] text-white py-[10px] rounded-md text-[12px] sm:text-[16px] transition-all duration-500`} type="submit">
+                <button disabled={signup} onClick={(e:SyntheticEvent) => submitFunc(e)} className={`w-[100%] bg-[#ffb762] border-[1px] border-[#FFD99A] text-white py-[10px] rounded-md text-[12px] sm:text-[16px] transition-all duration-500`} type="submit">
                     {!signup ? (
                     '新規登録'
                     ): (
