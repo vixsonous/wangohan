@@ -140,7 +140,7 @@ export default function CreateRecipeForm() {
             if(res.status === 500) {
                 throw new Error(body.message);
             } else if (res.status === 200) {
-                // window.location.href = "/";
+                window.location.href = "/";
                 setSubmitSuccess(true);
             }
         }).catch(err => {
