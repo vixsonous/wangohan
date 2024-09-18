@@ -63,36 +63,38 @@ export default async function Home() {
               <h1 className="text-[26px] tracking-tighter font-bold text-[#523636] relative after:content-[''] z-[1] after:left-[-10px] after:w-[110%] after:h-[40px] after:top-[10px] after:z-[-1] after:flex after:absolute after:bg-[#FFE9C9]">レシピカテゴリ</h1>
               <div className="absolute z-[-1] left-[0px] w-full top-[17px] border-[1px] border-solid border-[#523636]"/>
             </div>
-            <div className="first-row w-full flex mt-[-20px] gap-[10px] justify-center flex-col items-center  ">
+            <div className="first-row w-full flex mt-[-20px] gap-[20px] justify-center flex-col items-center  ">
               <h1 className="text-[20px] text-[#523636] font-semibold">年齢別で探す</h1>
               <div className="flex justify-between sm:justify-center sm:gap-[20px] w-[100%]">
-                <a href="" className="flex flex-[0_33%] gap-[10px] text-[13px] text-[#523636] font-bold flex-col justify-center items-center">
-                  <img src={'/LP/puppy.png'} className="absolute rounded-md h-[100px] w-[auto] max-w-none"  alt="website banner" />
-                  <span className="relative top-[39px]">子犬用レシピ</span>
+                <a href="" className="flex flex-[1_33%] gap-[10px] text-[13px] text-[#523636] font-bold flex-col justify-between items-center">
+                  <img src={'/LP/puppy.png'} className="relative rounded-md w-[70%]"  alt="website banner" />
+                  <span className="relative top-[0px]">子犬用レシピ</span>
                 </a>
-                <a href="" className="flex flex-[0_33%] gap-[10px] text-[13px] relative text-[#523636] font-bold flex-col justify-center items-center">
-                  <img src={'/LP/adult.png'} className="absolute rounded-md h-[120px] w-[auto] max-w-none" alt="website banner" /><span className="relative top-[39px]">成犬用レシピ</span></a>
-                <a href="" className="flex flex-[0_33%] gap-[10px] text-[13px] text-[#523636] font-bold flex-col justify-center items-center">
-                  <img src={'/LP/senior.png'} className="rounded-md h-[90px] w-[150px] max-w-none"  alt="website banner" />
-                  <span className="relative top-[-11px]">シニア犬用レシピ</span>
-                  </a>
+                <a href="" className="flex flex-[1_33%] gap-[10px] text-[13px] relative text-[#523636] font-bold flex-col justify-between items-center">
+                  <img src={'/LP/adult.png'} className="relative rounded-md w-[50%]" alt="website banner" />
+                  <span className="relative top-[0px]">成犬用レシピ</span>
+                </a>
+                <a href="" className="flex flex-[1_33%] relative gap-[10px] text-[13px] text-[#523636] font-bold flex-col justify-between items-center">
+                  <img src={'/LP/senior.png'} className="relative rounded-md w-[60%] bottom-[0px]"  alt="website banner" />
+                  <span className="relative top-[0px]">シニア犬用レシピ</span>
+                </a>
               </div>
             </div>
 
-            <div className="first-row gap-[10px] w-full flex justify-center flex-col items-center  ">
+            <div className="first-row gap-[20px] w-full flex justify-center flex-col items-center  ">
               <h1 className="text-[20px] text-[#523636] font-semibold">サイズ別で探す</h1>
               <div className="flex justify-between sm:justify-center sm:gap-[20px] w-[100%]">
-                <a href="" className="flex flex-[0_33%] gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-center items-center">
-                  <img src={'/LP/smalldog.png'} className="rounded-md h-[70px] w-[120px] max-w-none" width={10000} height={10000}  alt="website banner" />
-                  <span className="relative top-[-6px]">小型犬用レシピ</span>
+                <a href="" className="flex flex-[1_33%] gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-between items-center">
+                  <img src={'/LP/smalldog.png'} className="relative rounded-md w-[65%]" width={10000} height={10000}  alt="website banner" />
+                  <span className="relative top-[0px]">小型犬用レシピ</span>
                 </a>
-                <a href="" className="flex flex-[0_33%] gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-center items-center">
-                  <img src={'/LP/middledog.png'} className="rounded-md h-[70px] w-[120px] max-w-none" width={10000} height={10000}  alt="website banner" />
-                  <span className="relative top-[-6px]">中型犬用レシピ</span>
+                <a href="" className="flex flex-[1_33%] gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-between items-center">
+                  <img src={'/LP/middledog.png'} className="relative rounded-md w-[65%]" width={10000} height={10000}  alt="website banner" />
+                  <span className="relative top-[0px]">中型犬用レシピ</span>
                 </a>
-                <a href="" className="flex flex-[0_33%] gap-[10px] flex-col relative text-[13px] text-[#523636] font-bold justify-center items-center">
-                  <img src={'/LP/bigdog.png'} className="absolute top-[-10px] rounded-md h-[80px] w-[auto] max-w-none" width={10000} height={10000}  alt="website banner" />
-                  <span className="relative top-[33px]">大型犬用レシピ</span>
+                <a href="" className="flex flex-[1_33%] gap-[10px] flex-col relative text-[13px] text-[#523636] font-bold justify-between items-center">
+                  <img src={'/LP/bigdog.png'} className="relative top-[-10px] rounded-md w-[50%]" width={10000} height={10000}  alt="website banner" />
+                  <span className="relative top-[0px]">大型犬用レシピ</span>
                 </a>
               </div>
             </div>
