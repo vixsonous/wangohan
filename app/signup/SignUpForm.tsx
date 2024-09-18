@@ -54,11 +54,11 @@ export default function SignUpForm() {
             }
         }).then(async res => {
             if(res.status === 200) {
-                // window.location.href = '/signup/personal-info';
+                window.location.href = '/signup/personal-info';
                 setSignupSuccessState(prev => ({...prev, regular: true}));
                 setError("");
             }else if(res.status === 302) {
-                // window.location.href = res.url;
+                window.location.href = res.url;
                 setSignupSuccessState(prev => ({...prev, regular: true}));
                 setError("");
             } else if(res.status === 500) {
@@ -127,7 +127,7 @@ export default function SignUpForm() {
                 <input type={showPass ? 'text' : "password"} value={signup.password} onChange={(e) => setSignup(prevState => ({...prevState, password: e.target.value}))} className={`w-[100%] text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]`} name="password" placeholder="パスワードを入力" id="password" />
                 <FontAwesomeIcon onClick={(e) => setShowPass(prev => !prev)} className="absolute cursor-pointer right-[12px] top-[12px]" icon={showPass ? faEye : faEyeSlash} size="lg" />
             </div>
-            <button disabled={openGoogleSignup || signupState} onClick={(e:SyntheticEvent) => signUpFunc(e)} className={`w-[100%] bg-[${signupSuccess.regular ? '#FFD99A' : '#ffb762'}] border-[1px] border-[${signupState ? '#ffb762' : '#FFD99A'}] transition-all duration-500 text-white py-[10px] rounded-md text-[12px] sm:text-[16px]`} type="submit">
+            <button disabled={openGoogleSignup || signupState} onClick={(e:SyntheticEvent) => signUpFunc(e)} className={`w-[100%] bg-[#ffb762] transition-all duration-500 text-white py-[10px] rounded-md text-[12px] sm:text-[16px]`} type="submit">
                 {!signupState ? (
                     '新規登録'
                 ): (

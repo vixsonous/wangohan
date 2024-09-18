@@ -113,7 +113,7 @@ export default async function ShowRecipe({params, searchParams}:{params: {recipe
                 <div className="recipe-title flex justify-start items-center self-start font-semibold">
                     <h1 style={{fontSize: fontSize.l5}}>{recipe_data.recipe_name}</h1>
                 </div>
-                <div className="recipe-description flex justify-center items-center self-center">
+                <div className="recipe-description flex justify-start items-center self-center">
                     <span className="leading-snug text-[13px]">
                         {recipe_data.recipe_description}
                     </span>

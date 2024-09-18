@@ -206,9 +206,13 @@ export default function CreateRecipeForm() {
                     <input onChange={async (e) => {
                         if(!e.target.files || !e.target.files[0]) return;
 
-                        if(!imageFileTypes.includes(e.target.files[0].type)) {
+                        if(!imageFileTypes.includes(e.target.files[0].type) && e.target.files[0].type !== "") {
                             setError(prev => ({...prev, image: "Only jpeg, png, and webp files are supported!"}));
                             return;
+                        }
+
+                        if(e.target.files[0].type === "" && !imageFileTypes.includes(e.target.files[0].name.split(".")[1].toLowerCase())) {
+                            setError(prev => ({...prev, image: "Only jpeg, png, webp, heic, and heif files are supported!"}));
                         }
 
                         if(e.target.files[0].size > 4000000) {
@@ -226,7 +230,7 @@ export default function CreateRecipeForm() {
                         const fileTn = [...fileThumbnails];
 
                         const beforeFile = e.target.files[0];
-                        const processedFile = await compressImage(beforeFile, {quality: .5, type: 'image/webp'})
+                        const processedFile = await compressImage(beforeFile, {quality: .8, type: 'image/webp'})
 
                         if (processedFile.status === 200) {
                             rFiles.push(processedFile.file);
