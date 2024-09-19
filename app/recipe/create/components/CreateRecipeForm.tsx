@@ -1,6 +1,7 @@
 'use client';
 import { defineScreenMode, imageFileTypes, SUCC_MSG, textColor } from "@/constants/constants";
 import { ingredients, instructions } from "@/constants/interface";
+import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { faCheck, faCircleNotch, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
@@ -126,6 +127,8 @@ export default function CreateRecipeForm() {
             setSubmit(false);
         }
 
+        console.log(files[0]);
+
         const filesForm = new FormData();
         files.forEach(file => {
             filesForm.append('files[]', file);
@@ -179,7 +182,7 @@ export default function CreateRecipeForm() {
     },[]);
 
     return (
-        <form action="" className="create-form flex flex-wrap gap-[30px] max-w-[768px]">
+        <form action="" className="create-form flex flex-wrap gap-[30px] max-w-[768px] h-[100%]">
             <div className="flex-[0_0_100%]">
                 <label htmlFor="recipe-title" aria-required className="flex items-center flex-wrap gap-[5px]">
                     <h1 className="font-semibold text-[1.3em] required">レシピタイトル</h1>

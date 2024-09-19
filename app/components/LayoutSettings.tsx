@@ -11,19 +11,15 @@ export default function LayoutSettings({isLoggedIn} : {isLoggedIn : boolean}) {
     const [user, setUser] = useState(isLoggedIn);
 
     useEffect(() => {
-
         const fetchSession = async () => {
             const session = await fetch('/api/retrieve-session').then(res => res.json());
-            
             if(session.body === '') {
                 setUser(false);
             } else {
                 setUser(true);
             }
         }
-
         fetchSession();
-        
     },[pathname]);
 
     return (
@@ -32,16 +28,14 @@ export default function LayoutSettings({isLoggedIn} : {isLoggedIn : boolean}) {
             user ? (
             <div className={'menu flex gap-[1rem]'}>
                 <div className="self-center">
-                <img src={'/icons/notification.png'} className="self-center rounded-md h-[auto] w-[40px] relative" width={10000} height={10000}  alt="website banner" />
+                    <img src={'/icons/notification.png'} className="self-center rounded-md h-[auto] w-[35px] relative" width={10000} height={10000}  alt="website banner" />
                 </div>
-                <div className="self-center">
-                <Settings />
+                <div className="self-center flex">
+                    <Settings />
                 </div>
             </div>
             ):(
-            <div>
                 <User />
-            </div>
             )
         }
         </>

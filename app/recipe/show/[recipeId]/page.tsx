@@ -86,7 +86,7 @@ export default async function ShowRecipe({params, searchParams}:{params: {recipe
             <ViewUpdateCountdown recipe_id={recipe_data.recipe_id}/>
             <div className="recipe-image w-[100%]">
                 <ImageSwiper recipe_images={recipe_images} />
-                <div className="tags-likes flex justify-between items-center px-[5px]">
+                <div className={`tags-likes flex justify-between items-center px-[5px] py-[5px]`}>
                     <div className={`w-[60%] flex gap-[5px] flex-wrap items-center `}>
                         {recipe_data.recipe_age_tag !== '' ? <span className={`bg-[#523636] self-center flex justify-center items-center text-white py-[2px] px-[7px] rounded-[5px] text-[${CardTagSize}]`}>{recipe_data.recipe_age_tag}</span> : null}
                         {recipe_data.recipe_size_tag !== '' ? <span className={`bg-[#523636] self-center flex justify-center items-center text-white py-[2px] px-[7px] rounded-[5px] text-[${CardTagSize}]`}>{recipe_data.recipe_size_tag}</span> : null}
@@ -110,15 +110,15 @@ export default async function ShowRecipe({params, searchParams}:{params: {recipe
             </div>
             <div className="content-container p-[20px] flex flex-col justify-center gap-[30px]">
                 
-                <div className="recipe-title flex justify-start items-center self-start font-semibold">
+                <div className="recipe-title flex w-full justify-start items-center self-start font-semibold">
                     <h1 style={{fontSize: fontSize.l5}}>{recipe_data.recipe_name}</h1>
                 </div>
-                <div className="recipe-description flex justify-start items-center self-center">
+                <div className="recipe-description w-full flex justify-start items-center self-center">
                     <span className="leading-snug text-[13px]">
                         {recipe_data.recipe_description}
                     </span>
                 </div>
-                <div className="recipe-ingredients flex flex-col justify-start items-start gap-[10px]">
+                <div className="recipe-ingredients w-full flex flex-col justify-start items-start gap-[10px]">
                     <h1 style={{fontSize: fontSize.l4}} className="font-semibold text-[#523636]">材料</h1>
                     <ul className={`flex flex-wrap w-[100%] ${recipeIngredients.length > 5 ? 'flex-row' : 'flex-col'}`}>
                     {

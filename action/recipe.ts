@@ -12,8 +12,9 @@ export const postRecipe = async (recipe:recipe) => {
     try {
         const cookie = cookies();
         const session = cookie.get('session');
-        if(!session) throw new Error(ERR_MSG['ERR10']);
 
+        if(!session) throw new Error(ERR_MSG['ERR10']);
+        
         const decryptedCookies = await decrypt(session.value);
         const user_id = decryptedCookies.user.user_id;
 
@@ -209,8 +210,6 @@ export const updateRecipeViews = async (recipe_id: number) => {
         const recipes = await db.updateTable("recipes_table").set(eb => ({
             total_views: eb("total_views","+",1)
         })).where("recipe_id","=",recipe_id).execute();
-
-        
 
         return {message: 'Success!',body: undefined, status: 200};
     } catch(e) {

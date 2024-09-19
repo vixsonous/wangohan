@@ -155,12 +155,8 @@ export default async function Home() {
             </div>
             <img src={'/LP/column.png'} className="rounded-md w-[100%] h-[100%] inline max-w-none object-fill" width={10000} height={10000}  alt="website banner" />
           </div>
-          
-          
         </div>
       </div>
-      
-      
     </main>
   );
 }
