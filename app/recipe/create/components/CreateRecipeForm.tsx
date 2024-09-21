@@ -103,22 +103,10 @@ export default function CreateRecipeForm() {
 
         if(!validationFunc()) return;
 
-        const fb = await compressImage(files[0], {quality: .8, type: 'image/jpeg'});
-
         const data2Send = {...recipeInfo, 
             recipeIngredients: recipeIngredients, 
             recipeInstructions: recipeInstructions, 
-            fileThumbnailsLength: fileThumbnails.length,
-            beforeFile: {
-                filename: files[0].name,
-                filetype: files[0].type,
-                filesize: files[0].size
-            },
-            afterFile: {
-                filename: fb.file.name,
-                filetype: fb.file.type,
-                filesize: fb.file.size
-            }
+            fileThumbnailsLength: fileThumbnails.length
         };
         setSubmit(true)
 
@@ -255,9 +243,7 @@ export default function CreateRecipeForm() {
                         const fileTn = [...fileThumbnails];
 
                         const beforeFile = e.target.files[0];
-                        // const processedFile = await compressImage(beforeFile, {quality: .8, type: 'image/webp'})
-
-                        const processedFile = {message: "", file: beforeFile, status: 200};
+                        const processedFile = await compressImage(beforeFile, {quality: .8, type: 'image/jpeg'})
 
                         if (processedFile.status === 200) {
                             rFiles.push(processedFile.file);
