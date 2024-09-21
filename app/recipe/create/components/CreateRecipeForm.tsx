@@ -103,14 +103,21 @@ export default function CreateRecipeForm() {
 
         if(!validationFunc()) return;
 
+        const fb = await compressImage(files[0], {quality: .8, type: 'image/webp'});
+
         const data2Send = {...recipeInfo, 
             recipeIngredients: recipeIngredients, 
             recipeInstructions: recipeInstructions, 
             fileThumbnailsLength: fileThumbnails.length,
-            fileInfo: {
+            beforeFile: {
                 filename: files[0].name,
                 filetype: files[0].type,
                 filesize: files[0].size
+            },
+            afterFile: {
+                filename: fb.file.name,
+                filetype: fb.file.type,
+                filesize: fb.file.size
             }
         };
         setSubmit(true)
