@@ -16,6 +16,13 @@
   }
 }
 @layer utilities {
+  .min-h-screen {
+    min-height: 100vh;
+    min-height: 100dvh;
+    min-height: 100lvh;
+    min-height: 100svh;
+  }
+  
   .text-balance {
     text-wrap: balance;
   }

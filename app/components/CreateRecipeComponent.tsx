@@ -18,7 +18,7 @@ export default function CreateRecipeComponent() {
     }
 
     return (
-        <motion.div initial={"closed"} variants={variants} animate={show ? 'open' : 'closed'} exit={{opacity: 0, x: -500}} className="fixed h-[100dvh] bottom-0 overflow-scroll left-[0px] bg-[#FFE9C9] top-0 flex flex-col p-[20px] gap-[20px] z-[9999]">
+        <motion.div initial={"closed"} variants={variants} animate={show ? 'open' : 'closed'} exit={{opacity: 0, x: -500}} className="fixed min-h-screen bottom-0 overflow-scroll left-[0px] bg-[#FFE9C9] top-0 flex flex-col p-[20px] gap-[20px] z-[9999]">
             <div className="flex justify-end">
                 <button onClick={() => dispatch(hide())}>
                     <FontAwesomeIcon icon={faClose} size="lg"/>
@@ -31,6 +31,7 @@ export default function CreateRecipeComponent() {
             <motion.div className="create-form-container flex justify-center items-center">
                 <CreateRecipeForm />
             </motion.div>
+            <div className="pb-[10vh]"></div>
         </motion.div>
     )
 }
