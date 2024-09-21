@@ -103,7 +103,16 @@ export default function CreateRecipeForm() {
 
         if(!validationFunc()) return;
 
-        const data2Send = {...recipeInfo, recipeIngredients: recipeIngredients, recipeInstructions: recipeInstructions, fileThumbnailsLength: fileThumbnails.length};
+        const data2Send = {...recipeInfo, 
+            recipeIngredients: recipeIngredients, 
+            recipeInstructions: recipeInstructions, 
+            fileThumbnailsLength: fileThumbnails.length,
+            fileInfo: {
+                filename: files[0].name,
+                filetype: files[0].type,
+                filesize: files[0].size
+            }
+        };
         setSubmit(true)
 
         const recipe_id = await fetch('/api/recipe', {
