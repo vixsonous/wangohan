@@ -114,9 +114,9 @@ export default function CreateRecipeForm() {
                     x = d.file;
                 }
                 return {
-                    filename: x.name,
-                    filetype: x.type,
-                    filesize: x.size
+                    filename: f.name,
+                    filetype: f.type,
+                    filesize: f.size
                 }
             })
         };
