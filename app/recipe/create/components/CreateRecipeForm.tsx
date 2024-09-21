@@ -103,7 +103,7 @@ export default function CreateRecipeForm() {
 
         if(!validationFunc()) return;
 
-        const fb = await compressImage(files[0], {quality: .8, type: 'image/webp'});
+        const fb = await compressImage(files[0], {quality: .8, type: 'image/jpeg'});
 
         const data2Send = {...recipeInfo, 
             recipeIngredients: recipeIngredients, 
@@ -167,20 +167,26 @@ export default function CreateRecipeForm() {
     }
 
     const compressImage = async ( file:File, { quality = 1, type = file.type}:{quality:number, type: string}) => {
-        const imageBitmap = await createImageBitmap(file);
+        try {
+            const imageBitmap = await createImageBitmap(file);
 
-        const canvas = document.createElement("canvas");
-        canvas.width = imageBitmap.width;
-        canvas.height = imageBitmap.height;
-        
-        const ctx = canvas.getContext("2d");
-        
-        if(ctx) {
-            ctx.drawImage(imageBitmap, 0, 0);
-            const blob = await new Promise(resolve => canvas.toBlob(resolve, type, quality));
+            const canvas = document.createElement("canvas");
+            canvas.width = imageBitmap.width;
+            canvas.height = imageBitmap.height;
+            
+            const ctx = canvas.getContext("2d");
+            
+            if(ctx) {
+                ctx.drawImage(imageBitmap, 0, 0);
+                const blob = await new Promise(resolve => canvas.toBlob(resolve, type, quality));
 
-            return {message: 'Successful compression!', file: new File([blob as BlobPart], file.name, {type: type}), status: 200};
-        } else {
+                if(blob) {
+                    return {message: 'Successful compression!', file: new File([blob as BlobPart], file.name, {type: type}), status: 200};
+                } else {
+                    throw new Error("Blob creation failed!");
+                }
+            }
+        } catch(e) {
             return {message: 'Unsuccessful compression!', file: file, status: 500};
         }
     }
