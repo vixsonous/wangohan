@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
         const decryptedSession = await getDecryptedSession();
         const folderName = `${padStartIds(decryptedSession.user.user_id)}/recipes/${padStartIds(recipe_id)}`;
         const fileArr = reqMsg.getAll('files[]') as FormDataEntryValue[] | null;
-        console.log(fileArr);
+
         if(fileArr === null) throw new Error("No files!");
 
         if(fileArr != undefined) {

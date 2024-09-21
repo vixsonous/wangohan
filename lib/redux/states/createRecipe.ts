@@ -9,13 +9,13 @@ export const createRecipeSlice = createSlice({
         show: state => {
             state.value = true;
             const html = document.querySelector("html");
-            if(html) html.style.overflow = "hidden";
+            if(html) html.style.overflowY = "hidden";
             
         },
         hide: state => {
             state.value = false;
             const html = document.querySelector("html");
-            if(html) html.style.overflow = "scroll";
+            if(html) html.style.overflowY = "scroll";
         }
     }
 });

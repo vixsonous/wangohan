@@ -14,11 +14,11 @@ export default function CreateRecipeComponent() {
 
     const variants = {
         open: {opacity: 1, x: 0},
-        closed: {opacity: 0, x: -500}
+        closed: {opacity: 0, x: -800}
     }
 
     return (
-        <motion.div initial={"closed"} variants={variants} animate={show ? 'open' : 'closed'} exit={{opacity: 0, x: -500}} className="fixed min-h-modal bottom-0 overflow-scroll left-[0px] bg-[#FFE9C9] top-0 flex flex-col p-[20px] gap-[20px] z-[9999]">
+        <motion.div initial={"closed"} variants={variants} animate={show ? 'open' : 'closed'} exit={{opacity: 0, x: -500}} className="fixed min-h-modal bottom-0 overflow-y-scroll left-[0px] bg-[#FFE9C9] top-0 flex flex-col p-[20px] gap-[20px] z-[9999] border-b-[2px] border-b-[#00]">
             <div className="flex justify-end">
                 <button onClick={() => dispatch(hide())}>
                     <FontAwesomeIcon icon={faClose} size="lg"/>
