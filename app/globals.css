@@ -22,7 +22,14 @@
     min-height: 100lvh;
     min-height: 100svh;
   }
-  
+
+  .min-h-screen-modal {
+    min-height: 130vh;
+    min-height: 130dvh;
+    min-height: 130lvh;
+    min-height: 130svh;
+  }
+
   .text-balance {
     text-wrap: balance;
   }
