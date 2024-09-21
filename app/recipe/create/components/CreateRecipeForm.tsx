@@ -185,6 +185,8 @@ export default function CreateRecipeForm() {
                 } else {
                     throw new Error("Blob creation failed!");
                 }
+            } else {
+                throw new Error("Blob creation failed!");
             }
         } catch(e) {
             return {message: 'Unsuccessful compression!', file: file, status: 500};
