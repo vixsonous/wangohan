@@ -12,25 +12,25 @@ export default function CreateRecipeComponent() {
     const show = useAppSelector(state => state.createRecipe.value);
     const dispatch = useAppDispatch();
 
-    return (
-        <AnimatePresence>
-        {show && (
-            <motion.div initial={{opacity:0, x: -100}} animate={{opacity: 1, x: 0}} exit={{opacity: 0, x: -500}} className="fixed bottom-0 overflow-scroll left-[0px] bg-[#FFE9C9] top-0 flex flex-col p-[20px] gap-[20px] z-[9999]">
-                <div className="flex justify-end">
-                    <button onClick={() => dispatch(hide())}>
-                        <FontAwesomeIcon icon={faClose} size="lg"/>
-                    </button>
-                </div>
-                <motion.div className="flex justify-center items-center relative mt-[10px] mb-[30px]">
-                    <motion.h1 className="absolute top-[55px] font-semibold text-[#523636] text-[2em]">レシピを書く</motion.h1>
-                    <motion.img src={'/recipe-button.png'} className="h-[auto] w-[300px] max-w-none" width={10000} height={10000}  alt="ribbon" />
-                </motion.div>
+    const variants = {
+        open: {opacity: 1, x: 0},
+        closed: {opacity: 0, x: -500}
+    }
 
-                <motion.div className="create-form-container flex justify-center items-center">
-                    <CreateRecipeForm />
-                </motion.div>
+    return (
+        <motion.div initial={"closed"} variants={variants} animate={show ? 'open' : 'closed'} exit={{opacity: 0, x: -500}} className="fixed h-[100dvh] bottom-0 overflow-scroll left-[0px] bg-[#FFE9C9] top-0 flex flex-col p-[20px] gap-[20px] z-[9999]">
+            <div className="flex justify-end">
+                <button onClick={() => dispatch(hide())}>
+                    <FontAwesomeIcon icon={faClose} size="lg"/>
+                </button>
+            </div>
+            <motion.div className="flex justify-center items-center relative mt-[10px] mb-[30px]">
+                <motion.h1 className="absolute top-[55px] font-semibold text-[#523636] text-[2em]">レシピを書く</motion.h1>
+                <motion.img src={'/recipe-button.png'} className="h-[auto] w-[300px] max-w-none" width={10000} height={10000}  alt="ribbon" />
             </motion.div>
-        )}
-        </AnimatePresence>
+            <motion.div className="create-form-container flex justify-center items-center">
+                <CreateRecipeForm />
+            </motion.div>
+        </motion.div>
     )
 }

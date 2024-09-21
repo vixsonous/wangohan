@@ -84,7 +84,7 @@ export default async function ShowRecipe({params, searchParams}:{params: {recipe
     return (
         <section>
             <ViewUpdateCountdown recipe_id={recipe_data.recipe_id}/>
-            <div className="recipe-image w-[100%]">
+            <div className="w-[100%]">
                 <ImageSwiper recipe_images={recipe_images} />
                 <div className={`tags-likes flex justify-between items-center px-[5px] py-[5px]`}>
                     <div className={`w-[60%] flex gap-[5px] flex-wrap items-center `}>

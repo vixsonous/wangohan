@@ -135,9 +135,9 @@ export default function LoginForm() {
     return (
         <>
         <form action="" className={`w-[100%] max-w-[100%] sm:max-w-[460px] flex flex-col gap-[10px] items-center ${inter.className}`}>
-            <input value={credentials.email} onChange={(e) => setCredentials(prevCred => ({...prevCred, email: e.target.value}))} className="w-[100%] text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]" type="email" name="email" placeholder="メールアドレスを入力" id="recipe-image" />
+            <input value={credentials.email} onChange={(e) => setCredentials(prevCred => ({...prevCred, email: e.target.value}))} className="w-[100%] text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]" type="email" name="email" placeholder="メールアドレスを入力" id="email" />
             <div className="w-full relative">
-                <input type={showPass ? 'text' : "password"} value={credentials.password} onChange={(e) => setCredentials(prevCred => ({...prevCred, password: e.target.value}))} className={`w-[100%] text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]`} name="password" placeholder="パスワードを入力" id="recipe-image" />
+                <input type={showPass ? 'text' : "password"} value={credentials.password} onChange={(e) => setCredentials(prevCred => ({...prevCred, password: e.target.value}))} className={`w-[100%] text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]`} name="password" placeholder="パスワードを入力" id="password" />
                 <FontAwesomeIcon onClick={(e) => setShowPass(prev => !prev)} className="absolute cursor-pointer right-[12px] top-[12px]" icon={showPass ? faEye : faEyeSlash} size="lg" />
             </div>
             <span className="text-[.5em] sm:text-[.75em] text-[#7f7464] font-semibold">パスワードを忘れた場合</span>
