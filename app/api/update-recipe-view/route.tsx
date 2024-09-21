@@ -28,7 +28,7 @@ export async function PATCH (req: NextRequest) {
             
             decrypted.user = user;
             decrypted.expires = getExpireDate();
-            const res = NextResponse.redirect(new URL("/", req.url),{status: 302});
+            const res = NextResponse.json({message: 'Updated', body: {}}, {status: 200});
 
             res.cookies.set({
                 name: 'session',
