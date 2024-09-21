@@ -21,10 +21,10 @@ export async function PATCH (req: NextRequest) {
             if(!user.viewed_recipes) {
                 user.viewed_recipes = new Array<number>();
                 user.viewed_recipes.push(recipe_id);
-                updateRecipeViews(recipe_id);
+                await updateRecipeViews(recipe_id);
             } else if(!user.viewed_recipes.includes(recipe_id)){
                 user.viewed_recipes.push(recipe_id);
-                updateRecipeViews(recipe_id);
+                await updateRecipeViews(recipe_id);
             }
             
             decrypted.user = user;
