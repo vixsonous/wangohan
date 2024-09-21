@@ -3,7 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 export const createRecipeSlice = createSlice({
     name: 'createRecipeShow',
     initialState: {
-        value: false
+        value: false,
+        uploading: false,
     },
     reducers: {
         show: state => {
@@ -16,7 +17,7 @@ export const createRecipeSlice = createSlice({
             state.value = false;
             const html = document.querySelector("html");
             if(html) html.style.overflowY = "scroll";
-        }
+        },
     }
 });
 
