@@ -107,18 +107,11 @@ export default function CreateRecipeForm() {
             recipeIngredients: recipeIngredients, 
             recipeInstructions: recipeInstructions, 
             fileThumbnailsLength: fileThumbnails.length,
-            fileInfo: files.map(async (f, idx) => {
-                let x = f;
-                if(idx % 2 === 0) {
-                    const d = await compressImage(f, {quality: .8,type: 'image/webp'});
-                    x = d.file;
-                }
-                return {
-                    filename: f.name,
-                    filetype: f.type,
-                    filesize: f.size
-                }
-            })
+            fileInfo: {
+                filename: files[0].name,
+                filetype: files[0].type,
+                filesize: files[0].size
+            }
         };
         setSubmit(true)
 
