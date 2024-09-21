@@ -16,6 +16,7 @@ export async function PATCH (req: NextRequest) {
         if(session) {
             const decrypted = await decrypt(session);
             const user = decrypted.user;
+            console.log(user);
 
             if(!user.viewed_recipes) {
                 user.viewed_recipes = new Array<number>();
