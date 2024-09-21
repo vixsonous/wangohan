@@ -107,11 +107,18 @@ export default function CreateRecipeForm() {
             recipeIngredients: recipeIngredients, 
             recipeInstructions: recipeInstructions, 
             fileThumbnailsLength: fileThumbnails.length,
-            fileInfo: {
-                filename: files[0].name,
-                filetype: files[0].type,
-                filesize: files[0].size
-            }
+            fileInfo: files.map(async (f, idx) => {
+                let x = f;
+                if(idx % 2 === 0) {
+                    const d = await compressImage(f, {quality: .8,type: 'image/webp'});
+                    x = d.file;
+                }
+                return {
+                    filename: x.name,
+                    filetype: x.type,
+                    filesize: x.size
+                }
+            })
         };
         setSubmit(true)
 
@@ -135,8 +142,6 @@ export default function CreateRecipeForm() {
             setError(prev => ({...prev, generalError: 'The recipe was not created! Please refresh'}));
             setSubmit(false);
         }
-
-        console.log(files[0]);
 
         const filesForm = new FormData();
         files.forEach(file => {
@@ -242,7 +247,9 @@ export default function CreateRecipeForm() {
                         const fileTn = [...fileThumbnails];
 
                         const beforeFile = e.target.files[0];
-                        const processedFile = await compressImage(beforeFile, {quality: .8, type: 'image/webp'})
+                        // const processedFile = await compressImage(beforeFile, {quality: .8, type: 'image/webp'})
+
+                        const processedFile = {message: "", file: beforeFile, status: 200};
 
                         if (processedFile.status === 200) {
                             rFiles.push(processedFile.file);
