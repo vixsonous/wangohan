@@ -27,7 +27,7 @@ export const recipeSlice = createSlice({
             state.commentState.isSubmittingComment = true;
         },
         addComment: (state, action) => {
-            state.commentState.comments.push(action.payload);
+            state.commentState.comments.unshift(action.payload);
             state.commentState.isSubmittingComment = false;
         },
         setComments: (state, action) => {

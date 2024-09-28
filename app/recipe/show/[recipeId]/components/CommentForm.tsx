@@ -4,16 +4,16 @@ import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { SyntheticEvent, useState } from "react";
 import StarReviews from "./StarReviews";
 import { fontSize } from "@/constants/constants";
-import { addComment, submitComment } from "@/lib/redux/states/recipeSlice";
+import { addComment } from "@/lib/redux/states/recipeSlice";
 import { Comment } from "@/constants/interface";
 import ErrorSpan from "@/app/components/TextComponents/ErrorSpan";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import LoadingCircle from "@/app/components/IconComponents/LoadingCircle";
 import UpArrow from "@/app/components/IconComponents/UpArrow";
 
 export default function CommentForm({recipe_id, isLoggedIn} : {recipe_id: number, isLoggedIn: boolean}) {
 
     const {user} = useAppSelector(state => state.user);
+    const {comments} = useAppSelector(state => state.recipeSlice.commentState);
     const dispatch = useAppDispatch();
     const [state, setState] = useState({
         comment: '',

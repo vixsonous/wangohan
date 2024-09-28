@@ -12,8 +12,14 @@ import Link from "next/link";
 
 export default function CommentSection({reviewComments, recipe_id}: {reviewComments: Array<Comment>, recipe_id: number}) {
 
+    const {comments} = useAppSelector(state => state.recipeSlice.commentState);
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        dispatch(setComments(reviewComments));
+    },[]);
+
     const [state,setState] = useState({
-        comments: reviewComments,
         curPage: 0,
         isRetrieving: false,
     });
@@ -34,16 +40,16 @@ export default function CommentSection({reviewComments, recipe_id}: {reviewComme
         }).catch( err => console.error((err as Error).message));
 
         const arrF = recipes.body;
-        const arrS = state.comments;
+        const arrS = comments;
 
         const combinedArr = arrS.concat(arrF);
-        setState(prev => ({...prev, isRetrieving: false, comments: combinedArr}));
+        dispatch(setComments(combinedArr));
     }
 
     return (
         <div className="reviews flex flex-col gap-[20px]">
             {
-                state.comments.map((com, idx) => {
+                comments.map((com, idx) => {
                     return (
                         <div key={idx} className="review-comment flex w-[100%] gap-[10px]">
                             <div className="avatar">
