@@ -22,11 +22,11 @@ export default function ImageSwiper({recipe_images, recipe_id, owner_id}:{recipe
         }
     }, [thumbsSwiper]);
 
-    const {user_id, isLoggedIn} = useAppSelector(state => state.user);
+    const {user, isLoggedIn} = useAppSelector(state => state.user);
     
     return (
         <div className='relative'>
-            {isLoggedIn && owner_id === user_id && <RecipeOptions recipe_id={recipe_id} />}
+            {isLoggedIn && owner_id === user.user_id && <RecipeOptions recipe_id={recipe_id} />}
             <Swiper
                 className='w-full h-[30vh]'
                 modules={[Navigation, Pagination, Thumbs]}
