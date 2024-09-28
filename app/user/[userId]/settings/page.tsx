@@ -14,6 +14,7 @@ interface DogData {
 
 export default async function Settings() {
     const decryptedSession = await getDecryptedSession();
+    if(!decryptedSession) return;
     const userDetails = await getUserDetails(decryptedSession.user.user_id).catch(() => redirect("/signup/personal-info"));
     userDetails.user_image = userDetails.user_image !== '' ? await getFile(userDetails.user_image) : '/recipe-making/pic-background.png'
     const pets : DogData[] = [
