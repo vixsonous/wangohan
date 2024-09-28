@@ -47,29 +47,24 @@ export const getUserProfilePic = async (user_id: number) => {
     }
 }
 
-export const uploadRecipeFiles = async (files: Array<File>, recipe_id: number, folder:string) => {
+export const uploadRecipeFiles = async (file: File, recipe_id: number, folder:string) => {
     try {
         const docCookies = cookies();
         const session = docCookies.get('session');
 
         if(!session) throw new Error(ERR_MSG['ERR10']);
 
-        for(let i = 0; i < files.length; i++) {
-            if(files[i] instanceof File) {
-                const uploadedRecipe = await uploadFile(files[i], folder);
-                
-                await db.insertInto("recipe_images_table")
-                    .values({ 
-                        recipe_id: recipe_id,
-                        recipe_image: uploadedRecipe,
-                        recipe_image_subtext: '',
-                        recipe_image_title: '',
-                        updated_at: new Date(),
-                        created_at: new Date() 
-                    })
-                    .execute()
-            }
-        }
+        const uploadedRecipe = await uploadFile(file, folder);
+        await db.insertInto("recipe_images_table")
+            .values({ 
+                recipe_id: recipe_id,
+                recipe_image: uploadedRecipe,
+                recipe_image_subtext: '',
+                recipe_image_title: '',
+                updated_at: new Date(),
+                created_at: new Date() 
+            })
+            .execute()
 
         return true;
     } catch(e) {

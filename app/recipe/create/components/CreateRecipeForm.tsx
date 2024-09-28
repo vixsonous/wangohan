@@ -136,26 +136,27 @@ export default function CreateRecipeForm() {
             setSubmit(false);
         }
 
-        const filesForm = new FormData();
-        files.forEach(file => {
-            filesForm.append('files[]', file);
-        });
-        filesForm.append('recipe_id', recipe_id.body);
+        
+        files.forEach( async (file, idx) => {
+            const filesForm = new FormData();
+            filesForm.append('file', file);
+            filesForm.append('recipe_id', recipe_id.body);
 
-        await fetch('/api/upload-recipe-files', {
-            method: 'POST',
-            body: filesForm
-        }).then(async res => {
-            const body = await res.json();
-            if(res.status === 500) {
-                throw new Error(body.message);
-            } else if (res.status === 200) {
-                setRecipeInfo(structuredClone(initRecipeState));
-                setSubmitSuccess(true);
-            }
-        }).catch(err => {
-            setError(prev => ({...prev, generalError: (err as Error).message}));
-            setSubmit(false);
+            await fetch('/api/upload-recipe-files', {
+                method: 'POST',
+                body: filesForm
+            }).then(async res => {
+                const body = await res.json();
+                if(res.status === 500) {
+                    throw new Error(body.message);
+                } else if (res.status === 200 && files.length === idx) {
+                    setRecipeInfo(structuredClone(initRecipeState));
+                    setSubmitSuccess(true);
+                }
+            }).catch(err => {
+                setError(prev => ({...prev, generalError: (err as Error).message}));
+                setSubmit(false);
+            });
         });
     }
 
