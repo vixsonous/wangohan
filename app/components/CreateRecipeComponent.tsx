@@ -6,10 +6,10 @@ import {motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import CreateRecipeForm from "../recipe/create/components/CreateRecipeForm";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
-import { hide } from "@/lib/redux/states/createRecipe";
+import { hide } from "@/lib/redux/states/recipeSlice";
 
 export default function CreateRecipeComponent() {
-    const show = useAppSelector(state => state.createRecipe.value);
+    const show = useAppSelector(state => state.recipeSlice.show);
     const dispatch = useAppDispatch();
 
     const variants = {

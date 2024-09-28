@@ -17,6 +17,10 @@ import 'swiper/css/thumbs';
 import { getSessionCookie } from "@/constants/functions";
 import StoreProvider from "./StoreProvide";
 import CreateRecipeComponent from "./components/CreateRecipeComponent";
+import UserSetter from "./components/UserSetter";
+import { getDecryptedSession } from "@/action/lib";
+import { getUserDetails } from "@/action/users";
+import { getFile } from "@/action/file-lib";
 
 config.autoAddCss = false;
 const inter = Inter({ subsets: ["latin"] });
@@ -38,18 +42,38 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
 
-  const session = await getSessionCookie();
-  const user = session ? true : false;
+  const decryptedSession = await getDecryptedSession();
+  
+  const user = {
+    user_id: 0,
+    user_image: '',
+    user_codename: ''
+  };
+
+  if(decryptedSession) {
+    const user_details = await getUserDetails(decryptedSession.user.user_id);
+    user.user_id= user_details.user_id,
+    user.user_image= user_details.user_image !== '' ? await getFile(user_details.user_image) : '/icons/user.png',
+    user.user_codename= user_details.user_codename
+    
+  }
+
+  const isLoggedIn = decryptedSession ? true : false;
+
   return (
     <StoreProvider count={0}>
+      {
+        decryptedSession ? <UserSetter user={user} /> : null
+      }
       <GoogleOAuthProvider clientId={String(process.env.GOOGLE_AUTH_CLIENT_ID)}>
         <html lang="en">
           <body className={`${inter.className} bg-[#FFE9C9] h-full min-h-[100vh] flex flex-col text-[#523636]`}>
             <div className="fixed px-[20px] w-[100%] z-[999] pt-[5px] flex justify-between items-center border-b-[1px]  shadow-md">
               <Link href="/"><img className="w-[60px] h-[auto]" src={'/logo-final.png'} width={100} height={100} alt="website logo" /></Link>
-              <LayoutSettings isLoggedIn={user}/>
+              <LayoutSettings isLoggedIn={isLoggedIn}/>
               <div className="absolute top-0 left-0 w-[100%] h-[100%] bg-[#FFFAF0] opacity-[0.9] z-[-1]"></div>
             </div>
+            
             <CreateRecipeComponent />
             <div className={`pt-[65.68px] overflow-hidden ${myFont.className} grow`}>
               {children}

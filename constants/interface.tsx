@@ -44,9 +44,10 @@ export interface Comment {
     recipe_comment_rating: number,
     recipe_comment_subtext: string,
     recipe_comment_title: string,
+    recipe_id: number,
     user_id: number,
     user: User,
-    created_at: Date
+    created_at: string
 }
 
 export interface DisplayRecipe {
@@ -71,6 +72,7 @@ export interface DBRecipeData {
     recipe_size_tag: string;
     recipe_event_tag: string;
     total_likes: number;
+    total_views: number;
     user_id: number;
     created_at: Date;
 }

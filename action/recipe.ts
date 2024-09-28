@@ -2,9 +2,10 @@ import { ERR_MSG, getExpireDate } from "@/constants/constants";
 import { DBRecipeData, ingredients, instructions, recipe } from "@/constants/interface";
 import { db } from "@/lib/database/db";
 import { cookies } from "next/headers";
-import { decrypt, encrypt } from "./lib";
-import { getFile } from "./file-lib";
+import { decrypt, encrypt, getDecryptedSession, padStartIds } from "./lib";
+import { deleteFilesinFolder, getFile } from "./file-lib";
 import { NextResponse } from "next/server";
+import { getComments } from "./comments";
 
 const FRONT_PAGE_RECIPE_QUERY_LIMIT = 10;
 
@@ -117,7 +118,7 @@ export const getRecipeData = async (recipeId:number) => {
         if(recipe_data === undefined) throw new Error("Recipe is not found!");
 
         const user = await db.selectFrom("user_details_table as user_details")
-            .select(['user_details.user_codename','user_details.user_image', 'user_details.user_detail_id'])
+            .select(['user_details.user_codename','user_details.user_image', 'user_details.user_detail_id','user_id'])
             .where('user_details.user_id','=',recipe_data.user_id)
             .executeTakeFirst();
         const recipe_instructions = await db.selectFrom("recipe_instructions_table").select(["recipe_instructions_id", "recipe_instructions_text"])
@@ -129,25 +130,24 @@ export const getRecipeData = async (recipeId:number) => {
         const recipe_images = await db.selectFrom("recipe_images_table").select(["recipe_image_id", "recipe_image", "recipe_image_title", "recipe_image_subtext"])
             .where("recipe_id", "=", recipeId).execute();
 
-        const recipe_comments = await db.selectFrom("recipe_comments_table").select(["recipe_comment_id", "recipe_comment_rating", "recipe_comment_subtext", "recipe_comment_title", "user_id", "created_at"])
-            .where("recipe_id","=", recipeId).execute();
+        const recipe_comments = await getComments(0, recipeId);
 
-        const with_user_comments = await Promise.all(recipe_comments.map( async com => {
-            return {...com, user: await db.selectFrom("user_details_table").select(["user_id","user_image","user_codename"]).where("user_id","=",com.user_id).executeTakeFirstOrThrow()}
-        }));
+        const recipe_rating_data = await db.selectFrom("recipe_comments_table").select(
+            ({fn, val, ref}) => [
+                fn.count<number>("recipe_comment_id").filterWhere("recipe_id","=", recipeId).as("totalRating"),
+                fn.avg<number>("recipe_comment_rating").as("avgRating"),
+            ]
+        ).executeTakeFirstOrThrow();
 
-        const updated_recipe_comments = await Promise.all(with_user_comments.map(async com => {
-            return {...com, user: {...com.user, user_image: com.user ? await getFile(com.user.user_image) : ''}}
-        }))
-
-        return {message: 'asd!',body: {...recipe_data, user: user, recipe_instructions: recipe_instructions, recipe_ingredients: recipe_ingredients, recipe_images: recipe_images, recipe_comments: updated_recipe_comments}, status: 200};
+        return {message: 'asd!',body: {...recipe_data, user: user, recipe_instructions: recipe_instructions, recipe_ingredients: recipe_ingredients, recipe_images: recipe_images, recipe_comments: recipe_comments, recipe_rating_data: recipe_rating_data}, status: 200};
     } catch(e) {
         let _e = (e as Error).message;
+        console.log(_e);
         return {message: _e, body: undefined, status: 500};
     }
 }
 
-const processRecipes = async (recipes: Array<DBRecipeData>) => {
+export const processRecipes = async (recipes: Array<DBRecipeData>) => {
     const with_image_recipes = await Promise.all( recipes.map(async recipe => {
         return {...recipe, recipe_image: await db.selectFrom("recipe_images_table").select(["recipe_image_id", "recipe_image", "recipe_image_title", "recipe_image_subtext"])
             .where("recipe_id", "=", recipe.recipe_id).executeTakeFirst()}
@@ -190,7 +190,7 @@ export const getPopularRecipes = async (page: number = 0) => {
             "recipe_event_tag","recipe_size_tag", "recipe_description","user_id", "created_at", "total_likes", "total_views"
         ])
             // .where("created_at", ">=", new Date(Date.now() - 7 * 24 * 60 * 60 * 1000))
-            .orderBy("total_likes", "desc")
+            .orderBy("total_views", "desc")
             .limit(FRONT_PAGE_RECIPE_QUERY_LIMIT)
             .offset(OFFSET)
             .execute();
@@ -215,5 +215,44 @@ export const updateRecipeViews = async (recipe_id: number) => {
     } catch(e) {
         let _e = (e as Error).message;
         return {message: _e, body: undefined, status: 500};
+    }
+}
+
+export const deleteRecipe = async (recipe_id: number) => {
+    try {
+
+        const decryptedSession = await getDecryptedSession();
+        const user_id = decryptedSession.user.user_id;
+        
+        if(!decryptedSession) throw new Error("Unauthorized delete!");
+
+        const deletedIngredients = await db.deleteFrom("recipe_ingredients_table")
+            .where("recipe_id", "=", recipe_id)
+            .execute();
+        
+        const deletedInstructions = await db.deleteFrom("recipe_instructions_table")
+            .where("recipe_id", "=", recipe_id)
+            .execute();
+        
+        const deleteImages = await db.deleteFrom("recipe_images_table")
+            .where("recipe_id","=",recipe_id)
+            .execute();
+
+        const deleteComments = await db.deleteFrom("recipe_comments_table")
+            .where("recipe_id", "=", recipe_id)
+            .execute();
+
+        const deleteRecipe = await db.deleteFrom("recipes_table")
+            .where("recipe_id","=",recipe_id)
+            .execute();
+
+        const directory = `${padStartIds(user_id)}/recipes/${padStartIds(String(recipe_id))}`;
+
+        await deleteFilesinFolder(directory);
+
+        return {message: "Successfully deleted!", body: undefined, status: 200};
+
+    } catch(e) {
+        return {message: (e as Error).message, body: undefined, status: 500};
     }
 }

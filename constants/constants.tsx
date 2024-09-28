@@ -22,6 +22,11 @@ export const ERR_MSG = {
     'ERR20' : 'パスワードを入力してください。', //Please input password
     'ERR21' : '特殊文字は使用できません。', // Special Characters are not allowed
     'ERR22' : 'パスワードは8文字以上である必要があります。', // Password must have at least 8 characters
+    'ERR23' : 'レシピを評価してください！', // Please rate the recipe!
+    'ERR24' : 'コメントを入力してください！', // Please input a comment!
+    'ERR25': 'レシピIDを入力してください。', // Please input recipe id 
+    'ERR26': 'ページ番号を入力してください。', // Please input page number 
+    
 }
 
 export const SUCC_MSG = {
@@ -42,6 +47,8 @@ export const fontSize = {
     'l10': '2.75em', // 2.75 16px
     'l11': '3em', // 3 16px
 }
+
+export const lgScreen = '768px';
 
 export const textColor = {
     'error':'#E53935',

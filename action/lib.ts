@@ -42,11 +42,16 @@ export async function updateSession(req: NextRequest) {
 }
 
 export async function getDecryptedSession() {
-    const docCookies = cookies();
-    const session = docCookies.get('session')?.value;
-    const decryptedSession = await decrypt(session as string);
+    try {
+        const docCookies = cookies();
+        const session = docCookies.get('session')?.value;
+        if(!session) throw new Error();
+        const decryptedSession = await decrypt(session as string);
 
-    return decryptedSession;
+        return decryptedSession;
+    } catch(e) {
+        return undefined;
+    }
 }
 
 export const padStartIds = (id: string) => {

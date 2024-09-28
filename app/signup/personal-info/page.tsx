@@ -1,6 +1,5 @@
 import { Inter } from "next/font/google"
-import Image from "next/image"
-import PersonalInfoForm from "./PersonalInfoForm"
+import PersonalInfoForm from "./components/PersonalInfoForm"
 import { cookies } from "next/headers";
 
 const inter = Inter({ subsets: ['latin'] })

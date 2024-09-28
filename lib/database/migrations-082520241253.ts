@@ -93,7 +93,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn("recipe_comment_id", "serial", (col) => col.primaryKey())
     .addColumn("recipe_comment_title", "varchar(100)", (col) => col.notNull())
     .addColumn("recipe_comment_subtext", "varchar(100)", (col) => col.notNull())
-    .addColumn("recipe_comment_rating", "varchar(100)", (col) => col.notNull())
+    .addColumn("recipe_comment_rating", "integer", (col) => col.notNull())
     .addColumn("user_id", "serial", (col) => col.references("users_table.user_id").onDelete('cascade').notNull())
     .addColumn("recipe_id", "serial", (col) => col.references("recipes_table.recipe_id").onDelete('cascade').notNull())
     .addColumn("updated_at", "timestamp", (col) =>

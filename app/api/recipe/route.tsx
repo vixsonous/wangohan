@@ -1,4 +1,4 @@
-import { postIngredients, postInstructions, postRecipe } from "@/action/recipe";
+import { deleteRecipe, postIngredients, postInstructions, postRecipe } from "@/action/recipe";
 import { ERR_MSG } from "@/constants/constants";
 import { recipe } from "@/constants/interface";
 import { NextRequest, NextResponse } from "next/server";
@@ -43,5 +43,17 @@ export const GET = async (req: NextRequest) => {
     } catch(e) {
         let _e = (e as Error).message;
         return NextResponse.json({message: _e, body: {}}, {status: 500});
+    }
+}
+
+export const DELETE = async (req: NextRequest) => {
+    try {
+        const reqBody = await req.json();
+
+        const retSts = await deleteRecipe(reqBody.recipe_id);
+        
+        return NextResponse.json(retSts);
+    } catch(e) {
+        return NextResponse.json({message: (e as Error).message, body: {}}, {status: 500});
     }
 }

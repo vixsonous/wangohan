@@ -1,12 +1,14 @@
 import {configureStore} from "@reduxjs/toolkit";
 import { counterSlice } from "./states/counterSlice";
-import { createRecipeSlice } from "./states/createRecipe";
+import { recipeSlice } from "./states/recipeSlice";
+import {userSlice} from "./states/userSlice";
 
 export const makeStore = () => {
     return configureStore({
         reducer: {
             counter: counterSlice.reducer,
-            createRecipe: createRecipeSlice.reducer
+            recipeSlice: recipeSlice.reducer,
+            user: userSlice.reducer
         }
     })
 }

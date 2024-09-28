@@ -2,11 +2,18 @@ import { getFile } from "@/action/file-lib";
 import { getRecipeData, getRecipeTitle, updateRecipeViews } from "@/action/recipe";
 import {  Metadata, ResolvingMetadata } from "next";
 import { redirect } from "next/navigation";
-import ImageSwiper from "./ImageSwiper";
+import ImageSwiper from "./components/ImageSwiper";
 import { Comment } from "@/constants/interface";
 import { cookies } from "next/headers";
-import ViewUpdateCountdown from "./ViewUpdateCountdown";
-import { fontSize } from "@/constants/constants";
+import ViewUpdateCountdown from "./components/ViewUpdateCountdown";
+import { fontSize, lgScreen } from "@/constants/constants";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
+import UserSetter from "@/app/components/UserSetter";
+import { getDecryptedSession } from "@/action/lib";
+import StarReviews from "./components/StarReviews";
+import CommentForm from "./components/CommentForm";
+import CommentSection from "./components/CommentSection";
 
 type Props = {
     params: {recipeId: String},
@@ -41,8 +48,8 @@ export async function generateMetadata({params} : Props, parent: ResolvingMetada
 }
 
 export default async function ShowRecipe({params, searchParams}:{params: {recipeId:string}, searchParams: { [key: string]:string | string[] | undefined}}) {
-    const CardFontSize = '13px';
     const CardTagSize = '13px';
+    const MAXWSIZE = lgScreen;
 
     const {recipeId} = params;
 
@@ -57,35 +64,16 @@ export default async function ShowRecipe({params, searchParams}:{params: {recipe
 
     const user_image = recipe_data.user.user_image === '' ? '/LP/bday-dogs/puppy1.jpg' : await getFile(recipe_data.user.user_image);
 
-    const StarReviews = () => {
-        return (
-            <div className="flex items-center">
-                <svg className="w-[10px] h-[10px] text-yellow-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" strokeWidth="0.5" stroke="grey"/>
-                </svg>
-                <svg className="w-[10px] h-[10px] text-yellow-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" strokeWidth="0.5" stroke="grey"/>
-                </svg>
-                <svg className="w-[10px] h-[10px] text-yellow-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" strokeWidth="0.5" stroke="grey"/>
-                </svg>
-                <svg className="w-[10px] h-[10px] text-yellow-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" strokeWidth="0.5" stroke="grey"/>
-                </svg>
-                <svg className="w-[10px] h-[10px] text-gray-300 dark:text-gray-500"  aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" strokeWidth="0.5" stroke="grey"/>
-                </svg>
-            </div>
-        )
-    }
+    const reviewComments:Array<Comment> = recipe_data.recipe_comments;
 
-    const reviewComments:Array<Comment> = recipe_data.recipe_comments
+    const decryptedSession = await getDecryptedSession();
+    const isLoggedIn = decryptedSession ? true : false;
     
     return (
-        <section>
+        <section className="flex justify-center flex-col items-center">
             <ViewUpdateCountdown recipe_id={recipe_data.recipe_id}/>
-            <div className="w-[100%]">
-                <ImageSwiper recipe_images={recipe_images} />
+            <div style={{maxWidth: MAXWSIZE}} className="w-full relative">
+                <ImageSwiper recipe_images={recipe_images} recipe_id={recipe_data.recipe_id} owner_id={recipe_data.user_id}/>
                 <div className={`tags-likes flex justify-between items-center px-[5px] py-[5px]`}>
                     <div className={`w-[60%] flex gap-[5px] flex-wrap items-center `}>
                         {recipe_data.recipe_age_tag !== '' ? <span className={`bg-[#523636] self-center flex justify-center items-center text-white py-[2px] px-[7px] rounded-[5px] text-[${CardTagSize}]`}>{recipe_data.recipe_age_tag}</span> : null}
@@ -108,8 +96,7 @@ export default async function ShowRecipe({params, searchParams}:{params: {recipe
                     </div>
                 </div>
             </div>
-            <div className="content-container p-[20px] flex flex-col justify-center gap-[30px]">
-                
+            <div style={{maxWidth: MAXWSIZE}} className="w-full content-container p-[20px] flex flex-col justify-center gap-[30px]">
                 <div className="recipe-title flex w-full justify-start items-center self-start font-semibold">
                     <h1 style={{fontSize: fontSize.l5}}>{recipe_data.recipe_name}</h1>
                 </div>
@@ -125,7 +112,6 @@ export default async function ShowRecipe({params, searchParams}:{params: {recipe
                         recipeIngredients.map((el, idx) => {
                             return <>
                             <li key={idx} className={`${recipeIngredients.length > 5 ? 'basis-1/2' : 'basis-1'} text-left`}>{el}</li>
-                            {/* <hr style={{border: 0, borderTop: '1px solid #523636'}}/> */}
                             </>
                         })
                     }
@@ -154,55 +140,12 @@ export default async function ShowRecipe({params, searchParams}:{params: {recipe
                         レビュー
                         <svg className="w-4 h-4 ms-1 text-gray-300 dark:text-gray-500 inline"  aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="yellow" viewBox="0 0 22 20">
                             <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" strokeWidth="0.5" stroke="grey"/>
-                        </svg> <span className="text-[10px]">4.5 (20)</span>
+                        </svg> <span className="text-[10px]">{Number(recipe_data.recipe_rating_data.avgRating).toFixed(1)} ({recipe_data.recipe_rating_data.totalRating})</span>
                     </h1>
                     <div className="absolute w-full top-[13px] border-[1px] border-solid border-[#523636]"/>
                 </div>
-                <div className="reviews flex flex-col gap-[20px]">
-                    {
-                        reviewComments.map((com, idx) => {
-                            return (
-                                <div key={idx} className="review-comment flex w-[100%] gap-[10px]">
-                                    <div className="avatar">
-                                        <img src={com.user.user_image} className="relative top-[5px] w-[30px] rounded-full object-cover overflow-hidden h-[30px] max-w-none" width={10000} height={10000} alt="website banner" />
-                                    </div>
-                                    <div className="comment-container w-[100%] flex flex-col justify-center">
-                                        <div className="upper-content flex justify-between items-center text-[10px] h-[40px]">
-                                            <div className="name-stars flex items-center justify-center self-center gap-[10px]">
-                                                {com.user.user_codename}
-                                                {StarReviews()}
-                                            </div>
-                                            <div className="date">
-                                                {new Date(com.created_at).toDateString()}
-                                            </div>
-                                        </div>
-                                        <div className="lower-content rounded-md text-[10px] bg-[#fef1dd] p-[10px]">
-                                            <span>{com.recipe_comment_subtext}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            )
-                        })
-                    }
-                    <span className="text-[10px] ml-[50px]">全てのレビューを見る</span>
-                    <div>
-                        <form className="relative flex items-center justify-center" action="">
-                            <textarea placeholder="このレシピのレビューを投稿する" className="text-[10px] rounded-[50px] px-[15px] py-[10px] w-[80%]" name="" id="" rows={1}></textarea>
-                            <button className="absolute bg-[#7e594e] px-[20px] py-[7px] rounded-[50px] right-[40px]" type="submit">
-                                <svg fill="#ffffff" className="" height="10px" width="10px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" 
-                                        viewBox="0 0 384.923 384.923" xmlSpace="preserve">
-                                    <g>
-                                        <path id="Arrow_Upward" d="M321.337,122.567L201.046,3.479c-4.776-4.728-12.391-4.547-17.179,0l-120.291,119.1
-                                            c-4.74,4.704-4.74,12.319,0,17.011c4.752,4.704,12.439,4.704,17.191,0l99.551-98.552v331.856c0,6.641,5.438,12.03,12.151,12.03
-                                            s12.151-5.39,12.151-12.03V41.025l99.551,98.552c4.74,4.704,12.439,4.704,17.179,0C326.089,134.886,326.089,127.27,321.337,122.567
-                                            z"/>
-                                    </g>
-                                </svg>
-                            </button>
-                        </form>
-                    </div>
-                </div>
-
+                <CommentSection reviewComments={reviewComments} recipe_id={recipe_data.recipe_id}/>
+                <CommentForm isLoggedIn={isLoggedIn} recipe_id={recipe_data.recipe_id}/>
             </div>
         </section>
     )

@@ -6,6 +6,9 @@ import { cookies } from "next/headers";
 import { decrypt } from "./lib";
 import { DogData } from "@/constants/interface";
 import { redirect } from "next/navigation";
+import { processRecipes } from "./recipe";
+
+const FRONT_PAGE_RECIPE_QUERY_LIMIT = 10;
 
 export async function getUser(email: string, password: string) {
 
@@ -40,7 +43,7 @@ export async function getUserDetails(user_id: number) {
   try {
 
       const user = await db.selectFrom("user_details_table as user_details")
-          .select(['user_details.user_codename','user_details.user_image', 'user_details.user_detail_id'])
+          .select(['user_details.user_codename','user_details.user_image', 'user_details.user_detail_id','user_details.user_id'])
           .where('user_details.user_id','=',user_id)
           .executeTakeFirst();
       
@@ -196,4 +199,24 @@ export async function retrieveDecryptedSession() {
 
   return {decryptedSession: decryptedSession, userDetails: userDetails};
 
+}
+
+export async function retrieveUserRecipes(user_id: number, page: number) {
+  try {
+    const OFFSET = (page - 1) * FRONT_PAGE_RECIPE_QUERY_LIMIT;
+    const recipes = await db.selectFrom("recipes_table").select(["recipe_name", "recipe_id", "recipe_age_tag", 
+        "recipe_event_tag","recipe_size_tag", "recipe_description","user_id", "created_at", "total_likes", "total_views"
+    ])
+        .where("user_id","=",user_id)
+        .orderBy("created_at", "desc")
+        .limit(FRONT_PAGE_RECIPE_QUERY_LIMIT)
+        .offset(OFFSET)
+        .execute();
+    const updated_recipes = await processRecipes(recipes);
+
+    return {message: 'asd!',body: updated_recipes, status: 200};
+  } catch(e) {
+      let _e = (e as Error).message;
+      return {message: _e, body: undefined, status: 500};
+  }
 }

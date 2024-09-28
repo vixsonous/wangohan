@@ -10,12 +10,11 @@ import Link from "next/link";
 import CreateRecipeForm from "../recipe/create/components/CreateRecipeForm";
 import { useAppDispatch, useAppSelector, useAppStore } from "@/lib/redux/hooks";
 import { increment, initializeCount } from "@/lib/redux/states/counterSlice";
-import { show } from "@/lib/redux/states/createRecipe";
+import { show } from "@/lib/redux/states/recipeSlice";
 
 export default function Settings() {
     const settings = useRef<HTMLDivElement>(null);
     const btn = useRef<HTMLButtonElement>(null);
-    const create = useRef<HTMLDivElement>(null);
     const [showSettings, setShowSettings] = useState(false);
 
     const openSettings = () => {
@@ -52,6 +51,7 @@ export default function Settings() {
         initialized.current = true;
     }
     const dispatch = useAppDispatch();
+    const user = useAppSelector(state => state.user.user)
 
     return (
         <>
@@ -82,7 +82,7 @@ export default function Settings() {
                         </div>
                         </Link>
         
-                        <Link onClick={openSettings} className="w-full" href="/user">
+                        <Link onClick={openSettings} className="w-full" href={`/user/${user.user_id}`}>
                         <div className="w-full text-[.5em] sm:text-[.75em] flex justify-between items-center border-b-[1px] border-black border-solid">
                             <FontAwesomeIcon icon={faUser} style={{color: '#523636'}}  />
                             マイページ
