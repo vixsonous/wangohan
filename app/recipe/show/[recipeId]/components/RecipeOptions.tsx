@@ -16,14 +16,14 @@ export default function RecipeOptions({recipe_id} : {recipe_id: number}) {
     });
 
     const deleteRecipe = async () => {
-        // await fetch('/api/recipe', {
-        //     method: 'DELETE',
-        //     body: JSON.stringify({recipe_id: recipe_id})
-        // }).then(res => {
+        await fetch('/api/recipe', {
+            method: 'DELETE',
+            body: JSON.stringify({recipe_id: recipe_id})
+        }).then(res => {
 
-        // }).catch( err => {
+        }).catch( err => {
 
-        // });
+        });
     }
 
     return (

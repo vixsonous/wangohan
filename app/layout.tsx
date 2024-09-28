@@ -53,7 +53,7 @@ export default async function RootLayout({
   if(decryptedSession) {
     const user_details = await getUserDetails(decryptedSession.user.user_id);
     user.user_id= user_details.user_id,
-    user.user_image= user_details.user_image !== '' ? await getFile(user_details.user_image) : '/icons/user.png',
+    user.user_image= user_details.user_image !== '' ? user_details.user_image : '/icons/user.png',
     user.user_codename= user_details.user_codename
     
   }

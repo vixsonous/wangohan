@@ -10,7 +10,7 @@ import LoadingCircle from "@/app/components/IconComponents/LoadingCircle";
 import { textColor } from "@/constants/constants";
 import Link from "next/link";
 
-export default function CommentSection({reviewComments, recipe_id}: {reviewComments: Array<Comment>, recipe_id: number}) {
+export default function CommentSection({reviewComments, recipe_id, total_comments}: {reviewComments: Array<Comment>, recipe_id: number, total_comments:number}) {
 
     const {comments} = useAppSelector(state => state.recipeSlice.commentState);
     const dispatch = useAppDispatch();
@@ -22,6 +22,7 @@ export default function CommentSection({reviewComments, recipe_id}: {reviewComme
     const [state,setState] = useState({
         curPage: 0,
         isRetrieving: false,
+        isFinished: false,
     });
 
     const retrieveComments = async () => {
@@ -44,6 +45,7 @@ export default function CommentSection({reviewComments, recipe_id}: {reviewComme
 
         const combinedArr = arrS.concat(arrF);
         dispatch(setComments(combinedArr));
+        setState(prev => ({...prev, isRetrieving: false, isFinished: true}));
     }
 
     return (
@@ -75,10 +77,14 @@ export default function CommentSection({reviewComments, recipe_id}: {reviewComme
                     )
                 })
             }
-            <button onClick={() => retrieveComments()} className="text-[10px] ml-[50px] flex gap-[10px] items-center">
-                全てのレビューを見る
-                { state.isRetrieving && <LoadingCircle />}
-            </button>
+            {
+                total_comments > 10 && !state.isFinished && (
+                    <button onClick={() => retrieveComments()} className="text-[10px] ml-[50px] flex gap-[10px] items-center">
+                        全てのレビューを見る
+                        { state.isRetrieving && <LoadingCircle />}
+                    </button>
+                )
+            }
         </div>
     )
 }

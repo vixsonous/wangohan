@@ -11,8 +11,9 @@ export async function uploadFile(file: File, folder: string) {
         );
         
         const res = await uploadBytes(storageRef, file);
+        const downloadUrl = await getFile(res.metadata.fullPath);
 
-        return res.metadata.fullPath;
+        return downloadUrl;
         
     } catch(e) {
         let _e = (e as Error).message;

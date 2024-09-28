@@ -60,9 +60,9 @@ export default async function ShowRecipe({params, searchParams}:{params: {recipe
 
     const recipeIngredients = recipe_data.recipe_ingredients.map(ingr => `${ingr.recipe_ingredients_name} ${ingr.recipe_ingredients_amount}`);
     const recipeInstructions = recipe_data.recipe_instructions.map(instr => `${instr.recipe_instructions_text}`);
-    const recipe_images = await Promise.all(recipe_data.recipe_images.map(async img => getFile(img.recipe_image)));
+    const recipe_images = recipe_data.recipe_images.map( img => img.recipe_image)
 
-    const user_image = recipe_data.user.user_image === '' ? '/LP/bday-dogs/puppy1.jpg' : await getFile(recipe_data.user.user_image);
+    const user_image = recipe_data.user.user_image === '' ? '/LP/bday-dogs/puppy1.jpg' : recipe_data.user.user_image;
 
     const reviewComments:Array<Comment> = recipe_data.recipe_comments;
 
@@ -144,7 +144,7 @@ export default async function ShowRecipe({params, searchParams}:{params: {recipe
                     </h1>
                     <div className="absolute w-full top-[13px] border-[1px] border-solid border-[#523636]"/>
                 </div>
-                <CommentSection reviewComments={reviewComments} recipe_id={recipe_data.recipe_id}/>
+                <CommentSection reviewComments={reviewComments} recipe_id={recipe_data.recipe_id} total_comments={recipe_data.recipe_rating_data.totalRating}/>
                 <CommentForm isLoggedIn={isLoggedIn} recipe_id={recipe_data.recipe_id}/>
             </div>
         </section>

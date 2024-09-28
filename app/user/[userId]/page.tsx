@@ -31,7 +31,7 @@ export async function generateMetadata({params} : Props, parent: ResolvingMetada
 export default async function User() {
 
     const {decryptedSession, userDetails} = await retrieveDecryptedSession();
-    const image_url = userDetails.user_image === '' ? `/recipe-making/pic-background.png` : await getFile(userDetails.user_image);
+    const image_url = userDetails.user_image === '' ? `/recipe-making/pic-background.png` : userDetails.user_image;
     const pets : DogData[] = userDetails.pets;
 
     const recipes = await retrieveUserRecipes(userDetails.user_id, 1);

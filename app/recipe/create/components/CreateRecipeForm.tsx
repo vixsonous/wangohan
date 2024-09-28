@@ -2,6 +2,7 @@
 import { defineScreenMode, imageFileTypes, SUCC_MSG, textColor } from "@/constants/constants";
 import { ingredients, instructions } from "@/constants/interface";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
+import { hide } from "@/lib/redux/states/recipeSlice";
 import { faCheck, faCircleNotch, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
@@ -10,23 +11,25 @@ import { Navigation, Thumbs, Virtual } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Swiper as SwiperType} from "swiper/types";
 
+const initRecipeState = {
+    recipeTitle: '',
+    recipeDescr: '',
+    recipeThumbnail: '/recipe-making/pic-background.png',
+    age: '',
+    size: '',
+    event: '',
+}
+
 export default function CreateRecipeForm() {
     const CardFontSize = '13px';
     const CardTagSize = '10px';
+    const dispatch = useAppDispatch();
 
     const [submit, setSubmit] = useState(false);
     const [submitSuccess, setSubmitSuccess] = useState(false);
-    const [imgKey, setImgKey] = useState(0);
     const [files, setFiles] = useState<Array<File>>([]);
     const [fileThumbnails, setFileThumbnails] = useState<Array<string>>([]);
-    const [recipeInfo, setRecipeInfo] = useState({
-        recipeTitle: '',
-        recipeDescr: '',
-        recipeThumbnail: '/recipe-making/pic-background.png',
-        age: '',
-        size: '',
-        event: '',
-    });
+    const [recipeInfo, setRecipeInfo] = useState(structuredClone(initRecipeState));
     const [thumbsSwiper,setThumbsSwiper] = useState<SwiperType>();
 
     const [error, setError] = useState({
@@ -108,7 +111,8 @@ export default function CreateRecipeForm() {
             recipeInstructions: recipeInstructions, 
             fileThumbnailsLength: fileThumbnails.length
         };
-        setSubmit(true)
+        setSubmit(true);
+        dispatch(hide());
 
         const recipe_id = await fetch('/api/recipe', {
             method: 'POST',
@@ -118,6 +122,7 @@ export default function CreateRecipeForm() {
             if(res.status === 500) {
                 throw new Error(body.message);
             } else if(res.status === 200) {
+                
                 return body;
             }
             
@@ -145,7 +150,7 @@ export default function CreateRecipeForm() {
             if(res.status === 500) {
                 throw new Error(body.message);
             } else if (res.status === 200) {
-                window.location.href = "/";
+                setRecipeInfo(structuredClone(initRecipeState));
                 setSubmitSuccess(true);
             }
         }).catch(err => {

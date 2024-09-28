@@ -2,7 +2,7 @@ import { cookies } from "next/headers"
 import { decrypt, getDecryptedSession } from "./lib";
 import { ERR_MSG } from "@/constants/constants";
 import { db } from "@/lib/database/db";
-import { deleteFilesinFolder, uploadFile } from "./file-lib";
+import { deleteFilesinFolder, getFile, uploadFile } from "./file-lib";
 
 export const updateProfilePic = async (file: File, folder: string) => {
     
@@ -57,6 +57,7 @@ export const uploadRecipeFiles = async (files: Array<File>, recipe_id: number, f
         for(let i = 0; i < files.length; i++) {
             if(files[i] instanceof File) {
                 const uploadedRecipe = await uploadFile(files[i], folder);
+                
                 await db.insertInto("recipe_images_table")
                     .values({ 
                         recipe_id: recipe_id,

@@ -1,4 +1,4 @@
-import { getComments, uploadComment } from "@/action/comments";
+import { getAllComments, getComments, uploadComment } from "@/action/comments";
 import { ERR_MSG } from "@/constants/constants";
 import { Comment } from "@/constants/interface";
 import { NextRequest, NextResponse } from "next/server";
@@ -33,10 +33,13 @@ export const GET = async (req:NextRequest) => {
         const recipeId = search.get('recipeId');
         const pageNo = search.get('pageNo');
 
+        
+
         if(!pageNo) throw new Error(ERR_MSG.ERR25);
         if(!recipeId) throw new Error(ERR_MSG.ERR26);
 
-        const recipe_comments = await getComments(Number(pageNo), Number(recipeId));
+        // const recipe_comments = await getComments(Number(pageNo), Number(recipeId));
+        const recipe_comments = await getAllComments(Number(recipeId));
 
         return NextResponse.json({message: 'Success!', body: recipe_comments}, {status: 200});
     } catch(e) {

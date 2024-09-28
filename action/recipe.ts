@@ -153,9 +153,9 @@ export const processRecipes = async (recipes: Array<DBRecipeData>) => {
             .where("recipe_id", "=", recipe.recipe_id).executeTakeFirst()}
     }));
 
-    const updated_recipes = await Promise.all(with_image_recipes.map( async recipe => {
-        return {...recipe, recipe_image: recipe.recipe_image ? await getFile(recipe.recipe_image.recipe_image) : '/recipe-making/pic-background.png'}
-    }));
+    const updated_recipes = with_image_recipes.map( recipe => {
+        return {...recipe, recipe_image: recipe.recipe_image ? recipe.recipe_image.recipe_image : '/recipe-making/pic-background.png'}
+    });
 
     return updated_recipes;
 }
