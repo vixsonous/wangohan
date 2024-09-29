@@ -39,8 +39,9 @@ export default function BirthdayContainer({bdayAvt} : BirthdayAvatars) {
             }
             </Swiper>
             </div>
-            <div className="relative top-[-40px]">
-                <img src={'/LP/bdayvideo.gif'} className="rounded-md w-[100%] h-[100%] inline max-w-none object-fill" width={10000} height={10000}  alt="website banner" />
+            <div className="relative">
+                {/* <img src={'/LP/bdayvideo.gif'} className="rounded-md w-[100%] h-[100%] inline max-w-none object-fill" width={10000} height={10000}  alt="website banner" /> */}
+                <video src="/LP/birthdayanimation.mp4" muted autoPlay controls={false} loop></video>
             </div>
         </div>
     )

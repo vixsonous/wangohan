@@ -32,12 +32,12 @@ export default function RecipeOptions({recipe_id} : {recipe_id: number}) {
             <motion.div key={1} initial={"closed"} animate={state.displayMenu ? "open" : "closed"} exit={"closed"} variants={menuVariants} className={`absolute top-[30px] right-[20px]`}>
                 <div className="flex flex-col relative z-[2] p-[15px] gap-[5px]">
                     <button className="flex gap-[5px] items-center justify-center z-[2]">
-                        <FontAwesomeIcon icon={faEdit} className="self-center"/>
+                        <FontAwesomeIcon icon={faEdit} color={"#FFFAF0"} className="self-center"/>
                         <h1 style={{fontSize: fontSize.l2}} className="whitespace-nowrap text-[#FFFAF0]">編集する</h1>
                     </button>
                     <hr />
                     <button onClick={deleteRecipe} className="flex gap-[5px] items-center justify-center z-[2]">
-                        <FontAwesomeIcon icon={faTrash} color={textColor.error} className="self-center"/>
+                        <FontAwesomeIcon icon={faTrash} color={"#FFFAF0"} className="self-center"/>
                         <h1 style={{fontSize: fontSize.l2}} className="whitespace-nowrap text-[#FFFAF0]">削除する</h1>
                     </button>
                     <div className="absolute w-full h-full bg-black opacity-[0.5] top-0 left-0 rounded-md z-[1]"></div>

@@ -11,6 +11,7 @@ import CreateRecipeForm from "../recipe/create/components/CreateRecipeForm";
 import { useAppDispatch, useAppSelector, useAppStore } from "@/lib/redux/hooks";
 import { increment, initializeCount } from "@/lib/redux/states/counterSlice";
 import { show } from "@/lib/redux/states/recipeSlice";
+import { showError } from "@/lib/redux/states/messageSlice";
 
 export default function Settings() {
     const settings = useRef<HTMLDivElement>(null);
@@ -55,7 +56,7 @@ export default function Settings() {
 
     return (
         <>
-        <button ref={btn} onClick={() => setShowSettings(true)}>
+        <button ref={btn} onClick={() => {setShowSettings(true); dispatch(showError("Message"))}}>
             <img src={'/icons/bone.png'} className="self-center rounded-md h-[auto] w-[40px] relative" width={10000} height={10000}  alt="website banner" />
         </button>
         <AnimatePresence>
