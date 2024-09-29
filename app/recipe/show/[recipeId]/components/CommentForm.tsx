@@ -27,6 +27,7 @@ export default function CommentForm({recipe_id, isLoggedIn} : {recipe_id: number
         const rating = (document.querySelector("input[name='rating']") as HTMLInputElement);
         
         setState(prev => ({...prev, submitting: true}));
+        console.log("rating " + rating.value);
         const res = await fetch('/api/comments', {
             method: 'POST',
             body: JSON.stringify({
@@ -46,7 +47,10 @@ export default function CommentForm({recipe_id, isLoggedIn} : {recipe_id: number
 
         if(res) {
             const updated_comment = {...res.body, user: user}
+            console.log(updated_comment);
             dispatch(addComment(updated_comment as Comment));
+
+            console.log( comments );
         }
         
     }
@@ -61,7 +65,7 @@ export default function CommentForm({recipe_id, isLoggedIn} : {recipe_id: number
                 </div>
                 <div className="w-[100%] flex items-center">
                     <textarea value={state.comment} onChange={(e:React.ChangeEvent<HTMLTextAreaElement>) => setState(prev => ({...prev, comment: e.target.value}))} placeholder="このレシピのレビューを投稿する" className="text-[10px] rounded-[50px] px-[15px] py-[10px] w-full" name="comment" rows={1}></textarea>
-                    <button onClick={submitCommentFunc} className="absolute bg-[#7e594e] w-[50px] text-white rounded-[50px] right-[1%] top-[33px]" type="submit">
+                    <button disabled={state.submitting} onClick={submitCommentFunc} className="absolute bg-[#7e594e] w-[50px] text-white rounded-[50px] right-[1%] top-[33px]" type="submit">
                         {
                             state.submitting ? (
                                 <LoadingCircle color="#FFFAF0" />

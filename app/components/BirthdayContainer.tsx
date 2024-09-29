@@ -11,6 +11,11 @@ interface BirthdayAvatars {
 }
 export default function BirthdayContainer({bdayAvt} : BirthdayAvatars) {
 
+    const vidRef = useRef<HTMLVideoElement>(null);
+
+    useEffect(() => {
+        if(vidRef.current) vidRef.current.play();
+    },[]);
     return (
         <div className="flex flex-col gap-[40px] justify-center items-center mt-[30px] relative">
             <div className="title">
@@ -41,7 +46,7 @@ export default function BirthdayContainer({bdayAvt} : BirthdayAvatars) {
             </div>
             <div className="relative">
                 {/* <img src={'/LP/bdayvideo.gif'} className="rounded-md w-[100%] h-[100%] inline max-w-none object-fill" width={10000} height={10000}  alt="website banner" /> */}
-                <video src="/LP/birthdayanimation.mp4" muted autoPlay controls={false} loop></video>
+                <video ref={vidRef} src="/LP/birthdayanimation.mp4" muted controls={false} loop></video>
             </div>
         </div>
     )

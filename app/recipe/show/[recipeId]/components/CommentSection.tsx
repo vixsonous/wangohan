@@ -69,7 +69,7 @@ export default function CommentSection({reviewComments, recipe_id, total_comment
                                         {com.created_at}
                                     </div>
                                 </div>
-                                <div className="lower-content rounded-md text-[10px] bg-[#fef1dd] p-[10px]">
+                                <div className="lower-content whitespace-pre-wrap rounded-md text-[10px] bg-[#fef1dd] p-[10px]">
                                     <span>{com.recipe_comment_subtext}</span>
                                 </div>
                             </div>
