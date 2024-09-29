@@ -46,7 +46,7 @@ export default function BirthdayContainer({bdayAvt} : BirthdayAvatars) {
             </div>
             <div className="relative">
                 {/* <img src={'/LP/bdayvideo.gif'} className="rounded-md w-[100%] h-[100%] inline max-w-none object-fill" width={10000} height={10000}  alt="website banner" /> */}
-                <video ref={vidRef} src="/LP/birthdayanimation.mp4" muted controls={false} loop></video>
+                <video ref={vidRef} src="/LP/birthdayanimation.mp4" autoPlay playsInline muted controls={false} loop></video>
             </div>
         </div>
     )
