@@ -5,16 +5,16 @@ import Modal from "./Modal";
 import { useAppSelector } from "@/lib/redux/hooks";
 import { textColor } from "@/constants/constants";
 
-export default function ErrorModal() {
+export default function SuccessModal() {
 
-    const {show, message} = useAppSelector(state => state.message.error);
+    const {show, message} = useAppSelector(state => state.message.success);
     return (
         <AnimatePresence>
-            {show && (
+            {!show && (
                 <Modal>
                     <div className="relative p-[10px]">
-                        <span className="z-[5]">{message}</span>
-                        <div style={{background: textColor.warning}} className="opacity-[1] w-full h-full absolute top-0 left-0 z-[-1] rounded-md"></div>
+                        <span className="z-[5]">Success</span>
+                        <div style={{background: textColor.success}} className="opacity-[1] rounded-md w-full h-full absolute top-0 left-0 z-[-1]"></div>
                     </div>
                 </Modal>
             )}

@@ -17,7 +17,7 @@ export const uploadComment = async (comment: Comment) => {
         .returningAll()
         .executeTakeFirstOrThrow();
 
-        return {message: 'Success!', body: uploadedComment, status: 200};
+        return {message: '完了', body: uploadedComment, status: 200};
     } catch(e) {
 
         return {message: (e as Error).message, body: {}, status: 500};

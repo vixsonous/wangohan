@@ -2,7 +2,7 @@
 
 import { Comment } from "@/constants/interface"
 import CommentForm from "./CommentForm"
-import StarReviews from "./StarReviews"
+import StarReviews from "../../../../components/ElementComponents/StarReviews"
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { setComments } from "@/lib/redux/states/recipeSlice";

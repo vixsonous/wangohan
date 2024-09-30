@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
         if(file instanceof File) {
             const url = await uploadFile(file, folderName);
             reqInput.append('fileUrl', url);
-            return NextResponse.json({message: 'Success!', body: {fileUrl: url}}, {status: 200});
+            return NextResponse.json({message: '完了', body: {fileUrl: url}}, {status: 200});
 
         } else {
             reqInput.append('fileUrl', '');

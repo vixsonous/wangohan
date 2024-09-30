@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
             if(status !== true) throw new Error("Error uploading files!");
         }
 
-        return NextResponse.json({message: 'Success!', body: {}}, {status: 200});
+        return NextResponse.json({message: '完了', body: {}}, {status: 200});
     } catch(e) {
         let _e = (e as Error).message;
         return NextResponse.json({message: _e, body: {}}, {status: 500});

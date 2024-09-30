@@ -61,6 +61,10 @@ export interface DisplayRecipe {
     total_likes: number;
     total_views: number;
     user_id: number;
+    recipe_rating_data: {
+        totalRating: number;
+        avgRating: number;
+    } | undefined;
     created_at: Date;
 }
 

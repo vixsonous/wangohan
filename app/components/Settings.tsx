@@ -56,7 +56,7 @@ export default function Settings() {
 
     return (
         <>
-        <button ref={btn} onClick={() => {setShowSettings(true); dispatch(showError("Message"))}}>
+        <button ref={btn} onClick={() => {setShowSettings(true);}}>
             <img src={'/icons/bone.png'} className="self-center rounded-md h-[auto] w-[40px] relative" width={10000} height={10000}  alt="website banner" />
         </button>
         <AnimatePresence>

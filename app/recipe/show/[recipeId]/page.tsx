@@ -11,7 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
 import UserSetter from "@/app/components/UserSetter";
 import { getDecryptedSession } from "@/action/lib";
-import StarReviews from "./components/StarReviews";
+import StarReviews from "../../../components/ElementComponents/StarReviews";
 import CommentForm from "./components/CommentForm";
 import CommentSection from "./components/CommentSection";
 

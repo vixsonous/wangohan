@@ -24,6 +24,7 @@ import { getFile } from "@/action/file-lib";
 import Modal from "./components/ElementComponents/Modal";
 import { textColor } from "@/constants/constants";
 import ErrorModal from "./components/ElementComponents/ErrorModal";
+import SuccessModal from "./components/ElementComponents/SuccessModal";
 
 config.autoAddCss = false;
 const inter = Inter({ subsets: ["latin"] });
@@ -71,12 +72,8 @@ export default async function RootLayout({
       <GoogleOAuthProvider clientId={String(process.env.GOOGLE_AUTH_CLIENT_ID)}>
         <html lang="en">
           <body className={`${inter.className} bg-[#FFE9C9] h-full min-h-[100vh] flex flex-col text-[#523636]`}>
-            <ErrorModal>
-              <div className="relative p-[10px]">
-                <span className="z-[5]">Error</span>
-                <div style={{background: textColor.error}} className="opacity-[0.5] w-full h-full absolute top-0 left-0 z-[-1]"></div>
-              </div>
-            </ErrorModal>
+            <ErrorModal />
+            <SuccessModal />
             <div className="fixed px-[20px] w-[100%] z-[999] pt-[5px] flex justify-between items-center border-b-[1px]  shadow-md">
               <Link href="/"><img className="w-[60px] h-[auto]" src={'/logo-final.png'} width={100} height={100} alt="website logo" /></Link>
               <LayoutSettings isLoggedIn={isLoggedIn}/>

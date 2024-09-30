@@ -1,11 +1,11 @@
 'use client';
-import { defineScreenMode, imageFileTypes, SUCC_MSG, textColor } from "@/constants/constants";
+import { defineScreenMode, imageFileTypes, POPUPTIME, SUCC_MSG, textColor } from "@/constants/constants";
 import { ingredients, instructions } from "@/constants/interface";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
+import { showError, hideError, showSuccess, hideSuccess } from "@/lib/redux/states/messageSlice";
 import { hide } from "@/lib/redux/states/recipeSlice";
 import { faCheck, faCircleNotch, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Image from "next/image";
 import React, { SyntheticEvent, useEffect, useState } from "react";
 import { Navigation, Thumbs, Virtual } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -127,14 +127,16 @@ export default function CreateRecipeForm() {
             }
             
         }).catch(err => {
-            setError(prev => ({...prev, generalError: (err as Error).message}));
+            const msg = (err as Error).message;
+            setError(prev => ({...prev, generalError: msg}));
             setSubmit(false);
+            dispatch(showError(msg));
+            setTimeout(() => {
+                dispatch(hideError());
+            }, POPUPTIME);
         });
 
-        if(recipe_id === undefined) {
-            setError(prev => ({...prev, generalError: 'The recipe was not created! Please refresh'}));
-            setSubmit(false);
-        }
+        if(recipe_id === undefined) return;
 
         
         files.forEach( async (file, idx) => {
@@ -147,14 +149,24 @@ export default function CreateRecipeForm() {
                 body: filesForm
             }).then(async res => {
                 const body = await res.json();
+                console.log(idx);
                 if(res.status === 500) {
                     throw new Error(body.message);
-                } else if (res.status === 200 && files.length === idx) {
+                } else if (res.status === 200 && files.length === (idx + 1) ) {
                     setRecipeInfo(structuredClone(initRecipeState));
+                    dispatch(showSuccess(body.message));
+                    setTimeout(() => {
+                        dispatch(hideSuccess());
+                    }, POPUPTIME);
                     setSubmitSuccess(true);
                 }
             }).catch(err => {
-                setError(prev => ({...prev, generalError: (err as Error).message}));
+                const msg = (err as Error).message;
+                setError(prev => ({...prev, generalError: msg}));
+                dispatch(showError(msg));
+                setTimeout(() => {
+                    dispatch(hideError());
+                }, POPUPTIME);
                 setSubmit(false);
             });
         });

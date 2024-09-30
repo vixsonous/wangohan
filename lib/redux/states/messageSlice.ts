@@ -28,5 +28,5 @@ export const messageSlice = createSlice({
     }
 });
 
-export const { showError } = messageSlice.actions;
+export const { showError, hideError, showSuccess, hideSuccess } = messageSlice.actions;
 export default messageSlice.reducer;

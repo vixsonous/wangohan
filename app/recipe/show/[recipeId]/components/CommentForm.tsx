@@ -2,7 +2,7 @@
 
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { SyntheticEvent, useState } from "react";
-import StarReviews from "./StarReviews";
+import StarReviews from "../../../../components/ElementComponents/StarReviews";
 import { fontSize } from "@/constants/constants";
 import { addComment } from "@/lib/redux/states/recipeSlice";
 import { Comment } from "@/constants/interface";

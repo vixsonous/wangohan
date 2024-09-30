@@ -26,6 +26,7 @@ export const ERR_MSG = {
     'ERR24' : 'コメントを入力してください！', // Please input a comment!
     'ERR25': 'レシピIDを入力してください。', // Please input recipe id 
     'ERR26': 'ページ番号を入力してください。', // Please input page number 
+    'ERR27': '評価データの取得に失敗しました。',// Failed to retrieve rating data!
     
 }
 
@@ -52,7 +53,8 @@ export const lgScreen = '768px';
 
 export const textColor = {
     'error':'#E53935',
-    'success': '#43A047'
+    'success': '#8dc225',
+    'warning': '#fecb37'
 }
 
 export const getExpireDate = () => {
@@ -95,3 +97,5 @@ export const defineScreenMode = () => {
 }
 
 export const imageFileTypes = ["image/jpeg","image/png", "image/webp", "heic","heif"];
+
+export const POPUPTIME = 5000;

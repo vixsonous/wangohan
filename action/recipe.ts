@@ -37,7 +37,7 @@ export const postRecipe = async (recipe:recipe) => {
             .returning(['recipe_id'])
             .executeTakeFirstOrThrow();
 
-        return {message: 'Success!',body: recipe_id, status: 200};
+        return {message: '完了',body: recipe_id, status: 200};
     } catch(e) {
         let _e = (e as Error).message;
         return {message: _e, body: {}, status: 500};
@@ -61,7 +61,7 @@ export const postIngredients = async (recipeIngredients: Array<ingredients>, rec
             .values([...arr])
             .executeTakeFirstOrThrow();
 
-        return {message: 'Success!',body: {}, status: 200};
+        return {message: '完了',body: {}, status: 200};
     } catch(e) {
         let _e = (e as Error).message;
         return {message: _e, body: {}, status: 500};
@@ -84,7 +84,7 @@ export const postInstructions = async (recipeInstructions: Array<instructions>, 
             .values(arr)
             .executeTakeFirstOrThrow();
 
-        return {message: 'Success!',body: {}, status: 200};
+        return {message: '完了',body: {}, status: 200};
     } catch(e) {
         let _e = (e as Error).message;
         return {message: _e, body: {}, status: 500};
@@ -99,10 +99,25 @@ export const getRecipeTitle = async (recipeId:number) => {
 
         if(recipe_title === undefined) throw new Error("Recipe is not found!");
 
-        return {message: 'Success!',body: recipe_title, status: 200};
+        return {message: '完了',body: recipe_title, status: 200};
     } catch(e) {
         let _e = (e as Error).message;
         return {message: _e, body: undefined, status: 500};
+    }
+}
+
+const getRecipeRatingData = async (recipeId: number) => {
+    try {
+        const recipe_rating_data = await db.selectFrom("recipe_comments_table").select(
+            ({fn, val, ref}) => [
+                fn.count<number>("recipe_comment_id").filterWhere("recipe_id","=", recipeId).as("totalRating"),
+                fn.avg<number>("recipe_comment_rating").filterWhere("recipe_id","=", recipeId).as("avgRating"),
+            ]
+        ).executeTakeFirstOrThrow();
+
+        return recipe_rating_data;
+    } catch(e) {
+        return undefined;
     }
 }
 
@@ -132,25 +147,24 @@ export const getRecipeData = async (recipeId:number) => {
 
         const recipe_comments = await getComments(0, recipeId);
 
-        const recipe_rating_data = await db.selectFrom("recipe_comments_table").select(
-            ({fn, val, ref}) => [
-                fn.count<number>("recipe_comment_id").filterWhere("recipe_id","=", recipeId).as("totalRating"),
-                fn.avg<number>("recipe_comment_rating").as("avgRating"),
-            ]
-        ).executeTakeFirstOrThrow();
+        const recipe_rating_data = await getRecipeRatingData(recipeId);
+
+        if(!recipe_rating_data) throw new Error(ERR_MSG.ERR27);
 
         return {message: 'asd!',body: {...recipe_data, user: user, recipe_instructions: recipe_instructions, recipe_ingredients: recipe_ingredients, recipe_images: recipe_images, recipe_comments: recipe_comments, recipe_rating_data: recipe_rating_data}, status: 200};
     } catch(e) {
         let _e = (e as Error).message;
-        console.log(_e);
         return {message: _e, body: undefined, status: 500};
     }
 }
 
 export const processRecipes = async (recipes: Array<DBRecipeData>) => {
     const with_image_recipes = await Promise.all( recipes.map(async recipe => {
-        return {...recipe, recipe_image: await db.selectFrom("recipe_images_table").select(["recipe_image_id", "recipe_image", "recipe_image_title", "recipe_image_subtext"])
-            .where("recipe_id", "=", recipe.recipe_id).executeTakeFirst()}
+        return {...recipe, 
+            recipe_image: await db.selectFrom("recipe_images_table").select(["recipe_image_id", "recipe_image", "recipe_image_title", "recipe_image_subtext"])
+            .where("recipe_id", "=", recipe.recipe_id).executeTakeFirst(),
+            recipe_rating_data: await getRecipeRatingData(recipe.recipe_id)
+        }
     }));
 
     const updated_recipes = with_image_recipes.map( recipe => {
@@ -197,7 +211,7 @@ export const getPopularRecipes = async (page: number = 0) => {
 
         const updated_recipes = await processRecipes(recipes);
 
-        return {message: 'Success!',body: updated_recipes, status: 200};
+        return {message: '完了',body: updated_recipes, status: 200};
     } catch(e) {
         let _e = (e as Error).message;
         return {message: _e, body: undefined, status: 500};
@@ -211,7 +225,7 @@ export const updateRecipeViews = async (recipe_id: number) => {
             total_views: eb("total_views","+",1)
         })).where("recipe_id","=",recipe_id).execute();
 
-        return {message: 'Success!',body: undefined, status: 200};
+        return {message: '完了',body: undefined, status: 200};
     } catch(e) {
         let _e = (e as Error).message;
         return {message: _e, body: undefined, status: 500};
