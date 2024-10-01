@@ -149,7 +149,6 @@ export default function CreateRecipeForm() {
                 body: filesForm
             }).then(async res => {
                 const body = await res.json();
-                console.log(idx);
                 if(res.status === 500) {
                     throw new Error(body.message);
                 } else if (res.status === 200 && files.length === (idx + 1) ) {

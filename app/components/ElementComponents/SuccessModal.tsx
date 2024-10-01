@@ -10,7 +10,7 @@ export default function SuccessModal() {
     const {show, message} = useAppSelector(state => state.message.success);
     return (
         <AnimatePresence>
-            {!show && (
+            {show && (
                 <Modal>
                     <div className="relative p-[10px]">
                         <span className="z-[5]">Success</span>
