@@ -22,6 +22,7 @@ export default function RecipeElementV1 ({recipe}:Props) {
             </picture>
             <div className={`flex justify-between`}>
                 <div className={`w-full flex gap-[5px] flex-wrap items-center `}>
+                    {recipe.recipe_size_tag === '' && recipe.recipe_age_tag === '' && recipe.recipe_event_tag === '' && (<span className={`bg-[#523636] opacity-[0] self-center flex justify-center items-center text-white py-[2px] px-[7px] rounded-[5px] text-[${CardTagSize}]`}>Null</span>)}
                     {recipe.recipe_size_tag !== '' ? <span className={`bg-[#523636] self-center flex justify-center items-center text-white py-[2px] px-[7px] rounded-[5px] text-[${CardTagSize}]`}>{recipe.recipe_size_tag}</span> : null}
                     {recipe.recipe_age_tag !== '' ? <span className={`bg-[#523636] self-center flex justify-center items-center text-white py-[2px] px-[7px] rounded-[5px] text-[${CardTagSize}]`}>{recipe.recipe_age_tag}</span> : null}
                     {recipe.recipe_event_tag !== '' ? <span className={`bg-[#523636] self-center flex justify-center items-center text-white py-[2px] px-[7px] rounded-[5px] text-[${CardTagSize}]`}>{recipe.recipe_event_tag}</span> : null}
