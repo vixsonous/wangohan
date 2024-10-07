@@ -65,14 +65,16 @@ export const updatePet = async (petName: string, petBday: Date, petBreed: string
         }
 
         const petData = await db.transaction().execute( async trx => {
-            await trx.updateTable("pets_table").set({
+            const pet = await trx.updateTable("pets_table").set({
                 pet_name: petName,
                 pet_breed: petBreed,
                 pet_birthdate: petBday
             })
             .where('pet_id','=',petId)
             .returningAll()
-            .execute();
+            .executeTakeFirstOrThrow();
+
+            return pet;
         });
 
         console.log('Transaction is successful!');

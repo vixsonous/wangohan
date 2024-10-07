@@ -20,7 +20,8 @@ type Props = {
 
 export async function generateMetadata({params} : Props, parent: ResolvingMetadata):Promise<Metadata> {
     const {userId} = params;
-    const title = `User ${userId}`;
+    const {userDetails} = await retrieveDecryptedSession();
+    const title = `${userDetails.user_codename}`;
 
     return {
         title: title

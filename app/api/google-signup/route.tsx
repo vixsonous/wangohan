@@ -10,7 +10,7 @@ export async function POST( req: NextRequest) {
         const reqJson = await req.json();
         const user_id = await findGoogleUser(reqJson.id);
 
-        if(user_id !== -1) throw new Error(ERR_MSG["ERR6"]);
+        if(user_id !== -1) throw new Error(ERR_MSG.ERR6);
 
         const user = await registerGoogleUser(reqJson.email, reqJson.id);
 

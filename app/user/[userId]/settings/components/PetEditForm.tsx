@@ -1,9 +1,12 @@
 'use client';
 
 import ErrorSpan from "@/app/components/TextComponents/ErrorSpan";
-import { ERR_MSG } from "@/constants/constants";
+import { ERR_MSG, POPUPTIME } from "@/constants/constants";
 import { compressImage } from "@/constants/functions";
 import { DogData } from "@/constants/interface";
+import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
+import { hideError, hideSuccess, showError, showSuccess } from "@/lib/redux/states/messageSlice";
+import { setPets } from "@/lib/redux/states/petSlice";
 import { faCircleNotch, faClose, faEdit, faSave } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { AnimatePresence, motion } from "framer-motion";
@@ -19,6 +22,9 @@ export default function PetEditForm({petData} : Props) {
         var ageDate = new Date(ageDifMs); // miliseconds from epoch
         return Math.abs(ageDate.getUTCFullYear() - 1970);
     }
+
+    const dispatch = useAppDispatch();
+    const {pets} = useAppSelector(state => state.pet);
 
     const [state, setState] = useState({
         modalDisp: false,
@@ -107,10 +113,30 @@ export default function PetEditForm({petData} : Props) {
             if(res.status === 500) {
                 throw new Error(body.message);
             } else if(res.status === 200) {
-                setState(prev => ({...prev, submitState: false, error: ''}));
+                const temp = [...pets];
+
+                for(let i = 0; i < temp.length; i++) {
+                    if(temp[i].pet_id === body.body.pet_id) {
+                        temp[i] = body.body;
+                    }
+                }
+
+                dispatch(setPets(temp));
+
+                dispatch(showSuccess(body.message));
+                setTimeout(() => {
+                    dispatch(hideSuccess());
+                },POPUPTIME);
+                setState(prev => ({...prev, submitState: false, error: '', modalDisp: false}));
             }
         })
         .catch( err => {
+
+            dispatch(showError((err as Error).message));
+            setTimeout(() => {
+                dispatch(hideError());
+            },POPUPTIME);
+            
             setState(prev => ({...prev, submitState: false, error: (err as Error).message}));
         });
 
