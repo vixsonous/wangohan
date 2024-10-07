@@ -1,10 +1,10 @@
 import { cookies } from "next/headers"
-import { decrypt, getDecryptedSession } from "./lib";
+import { decrypt, getDecryptedSession, padStartIds } from "./lib";
 import { ERR_MSG } from "@/constants/constants";
 import { db } from "@/lib/database/db";
 import { deleteFilesinFolder, getFile, uploadFile } from "./file-lib";
 
-export const updateProfilePic = async (file: File, folder: string) => {
+export const updateProfilePic = async (file: File) => {
     
     try {
         const docCookies = cookies();
@@ -14,6 +14,8 @@ export const updateProfilePic = async (file: File, folder: string) => {
 
         const decryptedCookies = await decrypt(session.value);
         const user_id = decryptedCookies.user.user_id;
+
+        const folder = `${padStartIds(user_id)}/profile/`;
 
         await deleteFilesinFolder(folder);
         const uploadedProfilePicUrl = await uploadFile(file, folder);
@@ -25,6 +27,7 @@ export const updateProfilePic = async (file: File, folder: string) => {
 
     } catch(e) {
         let _e = (e as Error).message;
+        console.log(_e);
         throw _e;
     }
     

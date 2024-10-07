@@ -1,62 +1,120 @@
 'use client';
-import { faCircleNotch, faClose, faEdit, faPlus, faSave } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon, FontAwesomeIconProps } from "@fortawesome/react-fontawesome";
-import Image from "next/image";
-import { RefObject, SyntheticEvent, useEffect, useRef, useState } from "react";
+import { faCheck, faCircleNotch, faClose, faEdit, faPlus, faSave } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {  ChangeEvent, MouseEventHandler, SyntheticEvent, useEffect, useState } from "react";
 import PetEditForm from "./PetEditForm";
 import PetAddForm from "./PetAddForm";
-import { userDetails } from "@/constants/interface";
-
-interface DogData {
-    id: number,
-    thumbnail: string,
-    name: string,
-    birthdate: Date,
-    breed: string
-}
+import { DogData, userDetails } from "@/constants/interface";
+import { compressImage } from "@/constants/functions";
+import { POPUPTIME, SUCC_MSG, textColor } from "@/constants/constants";
+import ErrorSpan from "@/app/components/TextComponents/ErrorSpan";
+import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
+import { hideSuccess, showSuccess } from "@/lib/redux/states/messageSlice";
+import { setPets } from "@/lib/redux/states/petSlice";
 
 interface Props {
     userDetails: userDetails,
     pets: Array<DogData>
 }
 export default function EditForm({userDetails, pets} : Props) {
+    const dispatch = useAppDispatch();
+    const petState = useAppSelector(state => state.pet.pets);
+    const isSet = useAppSelector(state => state.pet.isSet);
 
-    const [usrnm, setUsrnm] = useState(userDetails.user_codename);
-    const popup = useRef<HTMLDivElement>(null);
+    const [state, setState] = useState({
+        usrnm: userDetails.user_codename,
+        dispUsrnm: userDetails.user_codename,
+        curUsrnmIcn: faEdit,
+        profilePic: {
+            thumbnail: userDetails.user_image !== '' ? userDetails.user_image: '/icons/user.png',
+            picture: null,
+        } as {
+            thumbnail: string,
+            picture: File | null,
+        },
+        submitState: false,
+        successState: false,
+        errMsg: ''
 
-    const [profilePic, setProfilePic] = useState({
-        thumbnail: userDetails.user_image !== '' ? userDetails.user_image: '/icons/user.png',
-        picture: null,
-        imgKey: 0
-    } as {
-        thumbnail: string,
-        picture: File | null,
-        imgKey: number
-    })
+    });
 
-    const [curUsrnmIcn, setCurUsrnmIcn] = useState(faEdit);
+    const nameOnBlurEvent = () => {
+        setState(prev => ({...prev, curUsrnmIcn: faEdit}));
+        if(state.dispUsrnm === "") setState(prev => ({...prev, dispUsrnm: state.usrnm}))
+        if(state.dispUsrnm !== "") setState(prev => ({...prev, usrnm: state.dispUsrnm}))
+    }
+    const nameOnClickEvent = () => setState(prev => ({...prev, curUsrnmIcn: faSave}))
+    const nameOnChangeEvent = (e: React.ChangeEvent<HTMLInputElement>) => setState(prev => ({...prev, dispUsrnm: e.target.value}));
+
+    const profPicOnChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        if(e.target.files && e.target.files[0]) {
+            const tempPath = URL.createObjectURL(e.target.files[0]);
+            const file = e.target.files[0];
+            const afterFile = await compressImage(file,{quality: .5, type: 'image/jpeg'});
+            setState(prev => ({...prev, profilePic: {
+                thumbnail:tempPath, 
+                picture: afterFile.file.size > file.size ? file : afterFile.file
+            }}))
+        }
+    }
+
+    const submitBtnOnClick = (e:React.MouseEvent<HTMLButtonElement>) => submitFunc(e);
+    const submitFunc = async (e:React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        const updtForm = new FormData();
+
+        updtForm.append('codenm', state.usrnm);
+        if(state.profilePic.picture) updtForm.append('profPic', state.profilePic.picture);
+        
+        setState(prev => ({...prev, submitState: true}));
+
+        await fetch('/api/update-profile', {
+            method: 'PATCH',
+            body: updtForm
+        }).then(async res => {
+            const body = await res.json();
+            setState(prev => ({...prev, successState: true, submitState: false, errMsg: ''}));
+            if(res.status === 500) {
+                throw new Error(body.message);
+            } else if(res.status === 200) {
+                dispatch(showSuccess(body.message));
+                setTimeout(() => {
+                    dispatch(hideSuccess());
+                }, POPUPTIME);
+            }
+        }).catch(err => {
+            setState(prev => ({...prev, errMsg: (err as Error).message, submitState: false}));
+        });
+    }
+
+    useEffect(() => {
+        if(!isSet) {
+            dispatch(setPets(pets));
+        }
+    },[]);
 
     return (
         <form action="" className="relative max-w-[768px]">
             <div className="user-image flex flex-col justify-center items-center mt-[30px]">
                 <label htmlFor="profile-image" className="relative group">
-                    <img src={profilePic.thumbnail} className="border-[1px] border-[#523636] rounded-[100px] w-[200px] h-[200px] relative object-cover" width={10000} height={10000}  alt="website banner" />
-                    <input onChange={(e) => {
-                        if(e.target.files && e.target.files[0]) {
-                            const tempPath = URL.createObjectURL(e.target.files[0]);
-                            const file = e.target.files[0];
-                            setProfilePic(prevState => ({...prevState, thumbnail:tempPath, imgKey: new Date().getTime() * Math.random(), picture: file}));
-                        }
-                    }} className="w-[100%] hidden" type="file" name="profile-image" id="profile-image" />
+                    <img src={state.profilePic.thumbnail} className="border-[1px] border-[#523636] rounded-[100px] w-[200px] h-[200px] relative object-cover" width={10000} height={10000}  alt="website banner" />
+                    <input onChange={profPicOnChange} className="w-[100%] hidden" type="file" name="profile-image" id="profile-image" />
                     <div className="absolute w-full h-full bg-black group-hover:opacity-[0.3] opacity-0 top-0 flex justify-center items-center rounded-[50%] transition-all duration-500">
                         <span className="text-white font-bold">画像を追加</span>
                     </div>
                 </label>
                 <span className="text-[10px] mb-[1vh]">タップして画像を変更</span>
-                <div className="flex justify-center items-center relative left-[20px] overflow-hidden w-[80%]">
-                    <input onClick={() => setCurUsrnmIcn(faSave)} onChange={(e) => setUsrnm(e.currentTarget.value)} value={usrnm} className=" focus:outline-none focus:border-transparent focus:ring-0 text-[36px] bg-[transparent] text-center font-bold text-[#5b5351]" />
-                    <FontAwesomeIcon icon={curUsrnmIcn} size="lg" className="ml-[20px] text-[20px]"/>
-                </div>
+                <label className="flex justify-center group items-center relative overflow-hidden p-[20px]">
+                    <input 
+                        onClick={nameOnClickEvent} 
+                        onChange={nameOnChangeEvent}
+                        onBlur={nameOnBlurEvent}
+                        value={state.dispUsrnm} 
+                        name="codename"
+                        className="text-[36px] w-[100%] bg-[transparent] text-center pl-[10px] pr-[40px] font-bold text-[#5b5351]" 
+                    />
+                    <FontAwesomeIcon icon={state.curUsrnmIcn} size="lg" className="absolute right-[30px] text-[20px]"/>
+                </label>
             </div>
             <div className="flex justify-center items-center relative mt-[40px] mb-[10px]">
                 <h1 className="absolute top-[10px] font-semibold text-[#523636]">うちのわん</h1>
@@ -64,12 +122,33 @@ export default function EditForm({userDetails, pets} : Props) {
             </div>
             <div className="pet-list p-[20px] flex flex-wrap gap-[20px] items-center">
                 {
-                    pets.map((pet, idx) => <PetEditForm key={idx} petData={pet} />)
+                    !isSet && (
+                        <span>Loading...</span>
+                    )
+                }
+                {
+                    isSet && (
+                        petState.map((pet, idx) => <PetEditForm key={idx} petData={pet} />)
+                    )
                 }
             </div>
             <PetAddForm />
-            <div ref={popup} className="hidden top-0 w-[100%] flex justify-center opacity-[0.7]">
-                <span className="p-4 font-bold mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400">保存しました</span>
+            <div className="w-full flex self-center justify-center items-center flex-col">
+                <button 
+                    disabled={state.submitState} 
+                    onClick={submitBtnOnClick} //
+                    className={`bg-[#ffb762] w-[150px] border-[1px] border-[${state.submitState ? '#ffb762' : '#FFD99A'}] text-white py-[10px] rounded-md text-[12px] self-center sm:text-[16px]`} 
+                    type="submit"
+                >
+                    {!state.submitState ? (
+                        <><FontAwesomeIcon icon={faSave}/> 保存する</>
+                    ): (
+                        <FontAwesomeIcon icon={faCircleNotch} spin size="lg"/>
+                    )}
+                </button>
+                <ErrorSpan>
+                    {state.errMsg}
+                </ErrorSpan>
             </div>
         </form>
     )

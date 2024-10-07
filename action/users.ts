@@ -54,7 +54,8 @@ export async function getUserDetails(user_id: number) {
 
       if(user === undefined) throw new Error(ERR_MSG['ERR4']);
 
-      const combinedRes = {...user, pets: pets as DogData[]}
+      const updated_pets = pets.map( pet => ({...pet, pet_birthdate: pet.pet_birthdate.toISOString()}));
+      const combinedRes = {...user, pets: updated_pets as DogData[]}
       return combinedRes;
   } catch(e) {
       let _e = (e as Error).message;
@@ -201,6 +202,16 @@ export async function retrieveDecryptedSession() {
 
 }
 
+export async function getUserId() {
+  const docCookies = cookies();
+  const session = docCookies.get('session')?.value;
+  if(!session) redirect("/login");
+
+  const decryptedSession = await decrypt(session as string);
+  
+  return decryptedSession.user.user_id;
+}
+
 export async function retrieveUserRecipes(user_id: number, page: number) {
   try {
     const OFFSET = (page - 1) * FRONT_PAGE_RECIPE_QUERY_LIMIT;
@@ -211,6 +222,23 @@ export async function retrieveUserRecipes(user_id: number, page: number) {
         .orderBy("created_at", "desc")
         .limit(FRONT_PAGE_RECIPE_QUERY_LIMIT)
         .offset(OFFSET)
+        .execute();
+    const updated_recipes = await processRecipes(recipes);
+
+    return {message: 'asd!',body: updated_recipes, status: 200};
+  } catch(e) {
+      let _e = (e as Error).message;
+      return {message: _e, body: undefined, status: 500};
+  }
+}
+
+export async function updateUserInfo(codenm: string, profPic: File, user_id: number) {
+  try {
+    const recipes = await db.selectFrom("recipes_table").select(["recipe_name", "recipe_id", "recipe_age_tag", 
+        "recipe_event_tag","recipe_size_tag", "recipe_description","user_id", "created_at", "total_likes", "total_views"
+    ])
+        .where("user_id","=",user_id)
+        .orderBy("created_at", "desc")
         .execute();
     const updated_recipes = await processRecipes(recipes);
 

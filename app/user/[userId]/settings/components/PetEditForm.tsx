@@ -1,144 +1,190 @@
 'use client';
 
+import { compressImage } from "@/constants/functions";
+import { DogData } from "@/constants/interface";
 import { faCircleNotch, faClose, faEdit, faSave } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Image from "next/image";
-import { SyntheticEvent, useEffect, useRef, useState } from "react";
-
-interface DogData {
-    id: number,
-    thumbnail: string,
-    name: string,
-    birthdate: Date,
-    breed: string
-}
+import { AnimatePresence, motion } from "framer-motion";
+import { useState } from "react";
 
 interface Props {
     petData: DogData
 }
 export default function PetEditForm({petData} : Props) {
 
-    function _calculateAge(birthDate : Date) { // birthday is a date
+    function calculateAge(birthDate : Date) { // birthday is a date
         var ageDifMs = Date.now() - birthDate.getTime();
         var ageDate = new Date(ageDifMs); // miliseconds from epoch
         return Math.abs(ageDate.getUTCFullYear() - 1970);
     }
 
-    const popup = useRef<HTMLDivElement>(null);
-    const alrtPopup = () => {
-        if(popup.current) {
-            
-            setIcns({petNameIcn: faEdit, petBdayIcn: faEdit, petBreedIcn: faEdit})
-            popup.current.classList.add("fixed");
-            popup.current.classList.remove("hidden");
+    const [state, setState] = useState({
+        modalDisp: false,
+        pet: {
+            petName: petData.pet_name,
+            petBreed: petData.pet_breed,
+            petBday: petData.pet_birthdate,
+            pet_image: petData.pet_image,
+            pet_id: petData.pet_id,
+            file: null as File | null
+        },
+        icns: {
+            petNameIcn: faEdit,
+            petBdayIcn: faEdit,
+            petBreedIcn: faEdit,
+        },
+        submitState: false,
+    });
 
-            setTimeout(() => {
-                if(popup.current){
-                    popup.current.classList.remove("fixed");
-                    popup.current.classList.add("hidden");
-                }
-                
-            }, 3000);
+    const showEditModal = () => setState(prev => ({...prev, modalDisp: true}));
+    const hideEditModal = () => setState(prev => ({...prev, modalDisp: false}));
+
+    const petPicOnChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        if(e.target.files && e.target.files[0]) {
+            const tempPath = URL.createObjectURL(e.target.files[0]);
+            setState(prev => ({...prev, pet: {...prev.pet, pet_image: tempPath}}));
+
+            const beforeFile = e.target.files[0];
+            const afterFile = await compressImage(beforeFile, {quality: 0.5, type: 'image/jpeg'});
+
+            if(beforeFile.size > 4000000) {
+                setState(prev => ({...prev, error: 'Picture size is greater than 4MB (Max)!'}));
+                return;
+            }
+            
+            setState(prev => ({...prev, pet: { ...prev.pet, pet_image: tempPath, file: beforeFile.size > afterFile.file.size ? afterFile.file : beforeFile}}))
         }
     }
 
-    const [icns, setIcns] = useState({
-        petNameIcn: faEdit,
-        petBdayIcn: faEdit,
-        petBreedIcn: faEdit,
-    });
+    const petInputOnClick = (e: React.MouseEvent<HTMLInputElement>) => {
+        const name = `${e.currentTarget.name}Icn`;
+        setState(prev => ({...prev, icns: {...prev.icns, [name]: faSave}}));
+    }
 
-    const [pet, setPet] = useState(petData);
-    const [savePet, setSavePet] = useState(false);
-    const [imgKey, setImgKey] = useState(new Date().getTime() * Math.random());
+    const petInputOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const name = e.currentTarget.name;
+        setState(prev => ({
+            ...prev, 
+            pet: {
+                ...prev.pet, 
+                [name] : name === 'petBday' ? new Date(e.target.value === "" ? 0 : e.target.value) : e.target.value
+            }
+        }));
 
-    const [state, setState] = useState('hidden');
-    const modalRef = useRef<HTMLDivElement>(null);
+        if(name === 'petBday') setState(prev => ({...prev, icns: {...prev.icns,[`${name}Icn`]: faEdit }}));
+    }
 
-    useEffect(() => {
-        petData.name = pet.name;
-        petData.breed = pet.breed;
-        petData.birthdate = pet.birthdate;
-        petData.thumbnail = pet.thumbnail;
-    },[pet.name, pet.birthdate, pet.breed, pet.thumbnail]);
+    const petInputOnBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+        const name = `${e.currentTarget.name}Icn`;
+        setState(prev => ({...prev, icns: {...prev.icns, [name]: faEdit}}));
+    }
 
-    useEffect(() => {
-        setImgKey(new Date().getTime() * Math.random());
-    },[pet.thumbnail]);
+    const submitFunc = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        setState(prev => ({...prev, modalDisp: false}));
+    }
 
     return (
         <>
-            <div onClick={()=>setState('fixed')} className="cursor-pointer flex flex-grow flex-shrink-0 basis-[30%] flex-wrap justify-start items-center gap-[10px]">
+            <div onClick={showEditModal} className="cursor-pointer flex flex-grow flex-shrink-0 basis-[30%] flex-wrap justify-start items-center gap-[10px]">
                 <div>
-                    <img src={petData.thumbnail} className="rounded-[50%] w-[60px] h-[60px] object-cover relative" width={10000} height={10000}  alt="website banner" />
+                    <img src={petData.pet_image} className="rounded-[50%] w-[60px] h-[60px] object-cover relative" width={10000} height={10000}  alt="website banner" />
                 </div>
                 <div className="flex flex-col gap-[5px] text-[#5b5351]">
-                    <p className="text-[16px] font-bold">{petData.name}</p>
-                    <p className="text-[10px] flex gap-[5px] flex-wrap"><span>{petData.birthdate.toISOString().split('T')[0]}</span><span>{`(${_calculateAge(petData.birthdate)}才) `}</span></p>
-                    <p className="text-[10px]">{petData.breed}</p>
+                    <p className="text-[16px] font-bold">{petData.pet_name}</p>
+                    <p className="text-[10px] flex gap-[5px] flex-wrap"><span>{petData.pet_birthdate.split('T')[0]}</span><span>{`(${calculateAge(new Date(petData.pet_birthdate))}才) `}</span></p>
+                    <p className="text-[10px]">{petData.pet_breed}</p>
                 </div> 
             </div>
-            <div className={`bg-[rgba(0,0,0,0.2)] ${state} z-[1000] p-[20px] flex justify-center items-center w-full h-full top-0 left-0`}>
-                <div ref={modalRef} className="border-[2px] border-solid border-[#ffcd92]  rounded-md">
-                    <div className="bg-[#FFE9C9] text-[#523636] flex justify-between items-center font-bold w-full py-[10px] px-[20px]">
-                        <h1>Edit Pet</h1>
-                        <FontAwesomeIcon onClick={()=>setState('hidden')} icon={faClose} size="sm" className="ml-[20px] cursor-pointer text-[15px]"/>
-                    </div>
-                    <div className="bg-[#FFFAF0] p-[30px] flex justify-center flex-wrap  items-center gap-[20px]">
-                        <div>
-                            <label htmlFor={`thumbnail-${petData.id}`} className="relative group">
-                                <img key={imgKey} src={pet.thumbnail} className="
-                                rounded-[50%] w-[190px] h-[190px] object-cover relative" width={10000} height={10000}  alt="website banner" />
-                                <div className="absolute w-full h-full bg-black group-hover:opacity-[0.3] opacity-0 top-0 flex justify-center items-center rounded-[50%] transition-all duration-500">
-                                    <span className="text-white font-bold">画像を追加</span>
+            <AnimatePresence>
+            {
+                state.modalDisp && (
+                    <motion.div 
+                        initial={{opacity: 0}}
+                        animate={{opacity: 1}}
+                        exit={{opacity: 0}}
+                        className={`bg-[rgba(0,0,0,0.2)] fixed z-[1000] p-[20px] flex justify-center items-center w-full h-full top-0 left-0`}>
+                        <motion.div 
+                            initial={{opacity: 0, y: -100}}
+                            animate={{opacity: 1, y: 0}}
+                            exit={{opacity: 0, y: -100}}
+                            className="border-[2px] border-solid border-[#ffcd92]  rounded-md">
+                            <div className="bg-[#FFE9C9] text-[#523636] flex justify-between items-center font-bold w-full py-[10px] px-[20px]">
+                                <h1>Edit Pet</h1>
+                                <FontAwesomeIcon onClick={hideEditModal} icon={faClose} size="sm" className="ml-[20px] cursor-pointer text-[15px]"/>
+                            </div>
+                            <div className="bg-[#FFFAF0] p-[30px] flex justify-center flex-wrap  items-center gap-[20px]">
+                                <div>
+                                    <label htmlFor={`thumbnail-${petData.pet_id}`} className="relative group">
+                                        <img src={state.pet.pet_image} className="
+                                        rounded-[50%] w-[190px] h-[190px] object-cover relative" width={10000} height={10000}  alt="website banner" />
+                                        <div className="absolute w-full h-full bg-black group-hover:opacity-[0.3] opacity-0 top-0 flex justify-center items-center rounded-[50%] transition-all duration-500">
+                                            <span className="text-white font-bold">画像を追加</span>
+                                        </div>
+                                    </label>
+                                    <input onChange={petPicOnChange} className="hidden" type="file" name="" id={`thumbnail-${petData.pet_id}`} />
                                 </div>
-                            </label>
-                            <input onChange={(e) => {
-                                if(e.target.files && e.target.files[0]) {
-                                    const tempPath = URL.createObjectURL(e.target.files[0]);
-                                    setPet(petState => ({...petState, thumbnail:tempPath}));
-                                    setImgKey(new Date().getTime() * Math.random());
-                                }
-                            }} className="hidden" type="file" name="" id={`thumbnail-${petData.id}`} />
-                        </div>
-                        <div className="flex flex-col gap-[5px] text-[#5b5351]">
-                            <div>
-                                <label htmlFor="pet-name">Pet Name</label>
-                                <div className="flex items-center justify-center relative w-[100%] px-[10px] py-[5px] border-[2px] rounded-md border-[#ffcd92]">
-                                    <input id="pet-name" className="w-[100%] focus:outline-none text-[1em] bg-[transparent] text-left font-bold text-[#5b5351]" onClick={() => setIcns(icnState => ({...icnState, petNameIcn: faSave}))} onChange={(e) => setPet(petState => ({...petState, name: e.target.value}))} onBlur={() => () => setIcns(icnState => ({...icnState, petNameIcn: faEdit}))} value={pet.name} />
-                                    <FontAwesomeIcon icon={icns.petNameIcn} size="lg" className="absolute right-[5px]"/>
+                                <div className="flex flex-col gap-[5px] text-[#5b5351]">
+                                    <div>
+                                        <span>Pet Name</span>
+                                        <label htmlFor="petName" className="flex items-center justify-center relative w-[100%] px-[10px] py-[5px] border-[2px] rounded-md border-[#ffcd92]">
+                                            <input 
+                                                id="pet-name" 
+                                                className="w-[100%] focus:outline-none text-[1em] bg-[transparent] text-left font-bold text-[#5b5351]" 
+                                                onClick={petInputOnClick} 
+                                                onChange={petInputOnChange} 
+                                                onBlur={petInputOnBlur} 
+                                                value={state.pet.petName} 
+                                                name="petName"
+                                            />
+                                            <FontAwesomeIcon icon={state.icns.petNameIcn} size="lg" className="absolute right-[5px]"/>
+                                        </label>
+                                    </div>
+                                    <div>
+                                        <span>Pet Birthdate</span>
+                                        <div className="appearance-none w-full flex items-center justify-between relative flex-wrap w-[100%] px-[10px] py-[4px] border-[2px] rounded-md border-[#ffcd92]">
+                                            <input 
+                                                className="appearance-none focus:outline-none text-[1em] bg-[transparent] text-left font-bold text-[#5b5351]" 
+                                                value={new Date(state.pet.petBday).getTime() !== new Date(0).getTime() ? state.pet.petBday.split('T')[0] : ''} 
+                                                type="date" 
+                                                onClick={petInputOnClick} 
+                                                onChange={petInputOnChange} 
+                                                onBlur={petInputOnBlur} 
+                                                name="petBday"
+                                            />
+                                            <FontAwesomeIcon icon={state.icns.petBdayIcn} size="lg" className="absolute right-[5px]"/>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <span>Pet Breed</span>
+                                        <div className="flex items-center justify-center relative w-[100%] px-[10px] py-[5px] border-[2px] rounded-md border-[#ffcd92]">
+                                            <input 
+                                                value={state.pet.petBreed} 
+                                                className="w-[100%] focus:outline-none text-[1em] bg-[transparent] text-left font-bold text-[#5b5351]" 
+                                                onClick={petInputOnClick} 
+                                                onChange={petInputOnChange} 
+                                                onBlur={petInputOnBlur} 
+                                                name="petBreed"
+                                            />
+                                            <FontAwesomeIcon icon={state.icns.petBreedIcn} size="lg" className="absolute right-[5px]"/>
+                                        </div>
+                                    </div>
+                                </div> 
+                                <div className="w-full flex justify-center">
+                                    <button type="submit" className="w-[100%] max-w-[190px] bg-[#ffb762] text-white py-[10px] rounded-md text-[12px] sm:text-[16px]" onClick={submitFunc}>
+                                        {!state.submitState ? (
+                                            <><FontAwesomeIcon icon={faSave}/> 保存する</>
+                                        ): (
+                                            <FontAwesomeIcon icon={faCircleNotch} spin size="lg"/>
+                                        )}
+                                    </button>
                                 </div>
                             </div>
-                            <div>
-                                <label htmlFor="">Pet Birthdate</label>
-                                <div className="appearance-none w-full flex items-center justify-between relative flex-wrap w-[100%] px-[10px] py-[4px] border-[2px] rounded-md border-[#ffcd92]">
-                                    <input className="appearance-none focus:outline-none text-[1em] bg-[transparent] text-left font-bold text-[#5b5351]" value={pet.birthdate.getTime() !== new Date(0).getTime() ? pet.birthdate.toISOString().split('T')[0] : ''} type="date" onClick={() => setIcns(icnState => ({...icnState, petBdayIcn: faSave}))} onChange={(e) => {setPet(petState => ({...petState, birthdate: new Date(e.target.value)}));}} onBlur={() => setIcns(icnState => ({...icnState, petBdayIcn: faEdit}))} />
-                                    <FontAwesomeIcon icon={icns.petBdayIcn} size="lg" className="absolute right-[5px]"/>
-                                </div>
-                            </div>
-                            <div>
-                                <label htmlFor="">Pet Breed</label>
-                                <div className="flex items-center justify-center relative w-[100%] px-[10px] py-[5px] border-[2px] rounded-md border-[#ffcd92]">
-                                    <input value={pet.breed} className="w-[100%] focus:outline-none text-[1em] bg-[transparent] text-left font-bold text-[#5b5351]" onClick={() => setIcns(icnState => ({...icnState, petBreedIcn: faSave}))} onChange={(e) => setPet(petState => ({...petState, breed: e.target.value}))} onBlur={() => () => setIcns(icnState => ({...icnState, petBreedIcn: faEdit}))} />
-                                    <FontAwesomeIcon icon={icns.petBreedIcn} size="lg" className="absolute right-[5px]"/>
-                                </div>
-                            </div>
-                        </div> 
-                        <div className="w-full flex justify-center">
-                            <button type="submit" className="w-[100%] max-w-[190px] bg-[#ffb762] text-white py-[10px] rounded-md text-[12px] sm:text-[16px]" onClick={(e:SyntheticEvent)=> {
-                                e.preventDefault();
-                                setState('fixed');
-                            }}>
-                                {!savePet ? (
-                                    <><FontAwesomeIcon icon={faSave}/> 保存する</>
-                                ): (
-                                    <FontAwesomeIcon icon={faCircleNotch} spin size="lg"/>
-                                )}
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                        </motion.div>
+                    </motion.div>
+                )
+            }
+            </AnimatePresence>
         </>
     )
 }

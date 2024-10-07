@@ -11,8 +11,7 @@ import { getFile } from "@/action/file-lib";
 import React, { Suspense } from "react";
 import IndexLoading from "@/app/loading";
 import Link from "next/link";
-
-const PetContainer = React.lazy(() => import("./components/PetContainer"));
+import PetList from "./components/PetList";
 
 type Props = {
     params: {userId: String},
@@ -50,14 +49,10 @@ export default async function User() {
                         <h1 className="absolute top-[10px] font-semibold text-[#523636]">うちのわん</h1>
                         <img loading="lazy" src={'/icons/ribbon.png'} className="h-[auto] w-[200px] sm:w-[300px] max-w-none" width={10000} height={10000}  alt="website banner" />
                     </div>
-                    <div className="pet-list p-[20px] flex flex-wrap gap-[20px] items-center">
-                        {
-                            pets.map(pet => <PetContainer key={new Date().getTime() * Math.random()} petData={pet} />)
-                        }
-                    </div>
+                    <PetList pets={pets}/>
                     <TabList recipes_data={recipes_data}/>
                     <div className="fixed bottom-[20px] z-[9999] right-[10px]">
-                        <Link href="/user/settings">
+                        <Link href={`/user/${userDetails.user_id}/settings`}>
                             <img loading="lazy" src={'/Setting/settingpaw.png'} className="h-[auto] w-[120px]  max-w-none" width={10000} height={10000}  alt="website banner" />
                             <span className="relative bottom-[33px] text-[13px] text-white right-[-45px]">設定</span>
                         </Link>

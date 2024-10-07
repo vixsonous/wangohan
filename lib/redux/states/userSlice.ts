@@ -16,11 +16,6 @@ export const userSlice = createSlice({
             state.user = action.payload;
             state.isLoggedIn = true;
         },
-        test: state => {
-            setTimeout(() => {
-                alert(state.user);
-            });
-        }
     }
 });
 

@@ -3,6 +3,7 @@ import { counterSlice } from "./states/counterSlice";
 import { recipeSlice } from "./states/recipeSlice";
 import {userSlice} from "./states/userSlice";
 import {messageSlice} from "./states/messageSlice";
+import {petSlice} from "./states/petSlice";
 
 export const makeStore = () => {
     return configureStore({
@@ -10,7 +11,8 @@ export const makeStore = () => {
             counter: counterSlice.reducer,
             recipeSlice: recipeSlice.reducer,
             user: userSlice.reducer,
-            message: messageSlice.reducer
+            message: messageSlice.reducer,
+            pet: petSlice.reducer
         }
     })
 }

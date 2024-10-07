@@ -1,5 +1,5 @@
 import { getAllComments, getComments, uploadComment } from "@/action/comments";
-import { ERR_MSG } from "@/constants/constants";
+import { ERR_MSG, SUCC_MSG } from "@/constants/constants";
 import { Comment } from "@/constants/interface";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -41,7 +41,7 @@ export const GET = async (req:NextRequest) => {
         // const recipe_comments = await getComments(Number(pageNo), Number(recipeId));
         const recipe_comments = await getAllComments(Number(recipeId));
 
-        return NextResponse.json({message: 'Success!', body: recipe_comments}, {status: 200});
+        return NextResponse.json({message: SUCC_MSG.SUCCESS1, body: recipe_comments}, {status: 200});
     } catch(e) {
         return NextResponse.json({message: (e as Error).message, body: {}}, {status: 500});
     }

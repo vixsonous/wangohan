@@ -1,5 +1,5 @@
 import { deleteRecipe, postIngredients, postInstructions, postRecipe } from "@/action/recipe";
-import { ERR_MSG } from "@/constants/constants";
+import { ERR_MSG, SUCC_MSG } from "@/constants/constants";
 import { recipe } from "@/constants/interface";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -27,7 +27,7 @@ export const POST = async (req: NextRequest) => {
         await postIngredients(body.recipeIngredients, recipe_id);
         await postInstructions(body.recipeInstructions, recipe_id);
 
-        return NextResponse.json({message: 'Success', body: recipe_id}, {status: 200});
+        return NextResponse.json({message: SUCC_MSG.SUCCESS1, body: recipe_id}, {status: 200});
     } catch(e) {
 
         let _e = (e as Error).message;
@@ -39,7 +39,7 @@ export const GET = async (req: NextRequest) => {
     try {
         const params = req.nextUrl.searchParams;
         console.log(params);
-        return NextResponse.json({message: 'Success', body: {}}, {status: 200});
+        return NextResponse.json({message: SUCC_MSG.SUCCESS1, body: {}}, {status: 200});
     } catch(e) {
         let _e = (e as Error).message;
         return NextResponse.json({message: _e, body: {}}, {status: 500});

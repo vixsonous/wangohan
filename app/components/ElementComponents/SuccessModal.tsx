@@ -13,7 +13,7 @@ export default function SuccessModal() {
             {show && (
                 <Modal>
                     <div className="relative p-[10px]">
-                        <span className="z-[5]">Success</span>
+                        <span className="z-[5]">{message}</span>
                         <div style={{background: textColor.success}} className="opacity-[1] rounded-md w-full h-full absolute top-0 left-0 z-[-1]"></div>
                     </div>
                 </Modal>

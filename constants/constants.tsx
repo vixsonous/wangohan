@@ -27,6 +27,11 @@ export const ERR_MSG = {
     'ERR25': 'レシピIDを入力してください。', // Please input recipe id 
     'ERR26': 'ページ番号を入力してください。', // Please input page number 
     'ERR27': '評価データの取得に失敗しました。',// Failed to retrieve rating data!
+    'ERR28': '名前を入力してください', // Please input pet name!
+    'ERR29': '犬種を入力してください', // Please input pet breed!
+    'ERR30': '誕生日を入力してください', // Please input pet birthdate
+    'ERR31': '画像を選択してください', // Please input pet picture
+    'ERR32': '登録に失敗しました。もう一度やり直してください。', //Registration failed.Please try again.
     
 }
 

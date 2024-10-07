@@ -1,5 +1,6 @@
 'use client';
 import { defineScreenMode, imageFileTypes, POPUPTIME, SUCC_MSG, textColor } from "@/constants/constants";
+import { compressImage } from "@/constants/functions";
 import { ingredients, instructions } from "@/constants/interface";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { showError, hideError, showSuccess, hideSuccess } from "@/lib/redux/states/messageSlice";
@@ -171,33 +172,6 @@ export default function CreateRecipeForm() {
         });
     }
 
-    const compressImage = async ( file:File, { quality = 1, type = file.type}:{quality:number, type: string}) => {
-        try {
-            const imageBitmap = await createImageBitmap(file);
-
-            const canvas = document.createElement("canvas");
-            canvas.width = imageBitmap.width;
-            canvas.height = imageBitmap.height;
-            
-            const ctx = canvas.getContext("2d");
-            
-            if(ctx) {
-                ctx.drawImage(imageBitmap, 0, 0);
-                const blob = await new Promise(resolve => canvas.toBlob(resolve, type, quality));
-
-                if(blob) {
-                    return {message: 'Successful compression!', file: new File([blob as BlobPart], file.name, {type: type}), status: 200};
-                } else {
-                    throw new Error("Blob creation failed!");
-                }
-            } else {
-                throw new Error("Blob creation failed!");
-            }
-        } catch(e) {
-            return {message: 'Unsuccessful compression!', file: file, status: 500};
-        }
-    }
-
     const [scMode, setScMode] = useState<number>(0);
     useEffect(() => {
         if(typeof window === 'undefined') return;
@@ -245,11 +219,6 @@ export default function CreateRecipeForm() {
                             setError(prev => ({...prev, image: "Only jpeg, png, webp, heic, and heif files are supported!"}));
                         }
 
-                        if(e.target.files[0].size > 4000000) {
-                            setError(prev => ({...prev, image: "Maximum 4mb only!"}));
-                            return;
-                        }
-
                         if(files.length >= 5) {
                             setError(prev => ({...prev, image: "Maximum 5 images only!"}));
                             return;
@@ -260,10 +229,20 @@ export default function CreateRecipeForm() {
                         const fileTn = [...fileThumbnails];
 
                         const beforeFile = e.target.files[0];
-                        const processedFile = await compressImage(beforeFile, {quality: .8, type: 'image/jpeg'})
+                        const processedFile = await compressImage(beforeFile, {quality: .5, type: 'image/jpeg'});
+
+                        if(processedFile.file.size > 4000000) {
+                            setError(prev => ({...prev, image: "Compressed image is greater than 4mb! Click here for explanation"}));
+                            return;
+                        }
+
+                        if(e.target.files[0].size > 4000000) {
+                            setError(prev => ({...prev, image: "Maximum 4mb only!"}));
+                            return;
+                        }
 
                         if (processedFile.status === 200) {
-                            rFiles.push(processedFile.file);
+                            rFiles.push(processedFile.file.size > beforeFile.size ? beforeFile : processedFile.file);
                             fileTn.push(tempPath);
                             setFiles([...rFiles]);
                             setFileThumbnails([...fileTn]);
