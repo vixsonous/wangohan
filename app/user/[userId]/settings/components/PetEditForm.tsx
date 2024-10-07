@@ -1,5 +1,7 @@
 'use client';
 
+import ErrorSpan from "@/app/components/TextComponents/ErrorSpan";
+import { ERR_MSG } from "@/constants/constants";
 import { compressImage } from "@/constants/functions";
 import { DogData } from "@/constants/interface";
 import { faCircleNotch, faClose, faEdit, faSave } from "@fortawesome/free-solid-svg-icons";
@@ -23,7 +25,7 @@ export default function PetEditForm({petData} : Props) {
         pet: {
             petName: petData.pet_name,
             petBreed: petData.pet_breed,
-            petBday: petData.pet_birthdate,
+            petBday: new Date(petData.pet_birthdate) as Date | null,
             pet_image: petData.pet_image,
             pet_id: petData.pet_id,
             file: null as File | null
@@ -34,6 +36,7 @@ export default function PetEditForm({petData} : Props) {
             petBreedIcn: faEdit,
         },
         submitState: false,
+        error: ''
     });
 
     const showEditModal = () => setState(prev => ({...prev, modalDisp: true}));
@@ -79,9 +82,59 @@ export default function PetEditForm({petData} : Props) {
         setState(prev => ({...prev, icns: {...prev.icns, [name]: faEdit}}));
     }
 
-    const submitFunc = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const submitFunc = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        setState(prev => ({...prev, modalDisp: false}));
+
+        if(!validation()) return;
+
+        const form = new FormData();
+
+        if(state.pet.file) form.append('petPic', state.pet.file);
+        if(state.pet.petBday) form.append('petBday', state.pet.petBday.toISOString());
+
+        form.append('petName', state.pet.petName);
+        form.append('petBreed', state.pet.petBreed);
+        form.append('petId', String(state.pet.pet_id));
+
+        setState(prev => ({...prev, submitState: true}));
+
+        await fetch('/api/post-pet', {
+            method: 'PATCH',
+            body: form
+        })
+        .then(async res => {
+            const body = await res.json();
+            if(res.status === 500) {
+                throw new Error(body.message);
+            } else if(res.status === 200) {
+                setState(prev => ({...prev, submitState: false, error: ''}));
+            }
+        })
+        .catch( err => {
+            setState(prev => ({...prev, submitState: false, error: (err as Error).message}));
+        });
+
+        
+    }
+
+    const validation = () => {
+        if(state.pet.petName === "") {
+            setState(prev => ({...prev, error: ERR_MSG.ERR28}));
+            return false;
+        }
+
+        if(state.pet.petBreed === "") {
+            setState(prev => ({...prev, error: ERR_MSG.ERR29}));
+            return false;
+        }
+
+        if(!state.pet.petBday || state.pet.petBday.valueOf() === 0) {
+            setState(prev => ({...prev, error: ERR_MSG.ERR30}));
+            return false;
+        }
+
+        setState(prev => ({...prev, error: ''}));
+        return true;
     }
 
     return (
@@ -145,7 +198,10 @@ export default function PetEditForm({petData} : Props) {
                                         <div className="appearance-none w-full flex items-center justify-between relative flex-wrap w-[100%] px-[10px] py-[4px] border-[2px] rounded-md border-[#ffcd92]">
                                             <input 
                                                 className="appearance-none focus:outline-none text-[1em] bg-[transparent] text-left font-bold text-[#5b5351]" 
-                                                value={new Date(state.pet.petBday).getTime() !== new Date(0).getTime() ? state.pet.petBday.split('T')[0] : ''} 
+                                                value={state.pet.petBday && state.pet.petBday.valueOf() !== 0 ? 
+                                                    state.pet.petBday.toISOString().split('T')[0] 
+                                                    : ''
+                                                }  
                                                 type="date" 
                                                 onClick={petInputOnClick} 
                                                 onChange={petInputOnChange} 
@@ -170,7 +226,7 @@ export default function PetEditForm({petData} : Props) {
                                         </div>
                                     </div>
                                 </div> 
-                                <div className="w-full flex justify-center">
+                                <div className="w-full flex justify-center flex-col items-center gap-[5px]">
                                     <button type="submit" className="w-[100%] max-w-[190px] bg-[#ffb762] text-white py-[10px] rounded-md text-[12px] sm:text-[16px]" onClick={submitFunc}>
                                         {!state.submitState ? (
                                             <><FontAwesomeIcon icon={faSave}/> 保存する</>
@@ -178,6 +234,9 @@ export default function PetEditForm({petData} : Props) {
                                             <FontAwesomeIcon icon={faCircleNotch} spin size="lg"/>
                                         )}
                                     </button>
+                                    <ErrorSpan>
+                                        {state.error}
+                                    </ErrorSpan>
                                 </div>
                             </div>
                         </motion.div>

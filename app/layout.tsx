@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Image from "next/image";
 import localFont from 'next/font/local';
 import Link from "next/link";
-import { cookies } from "next/headers";
 import {GoogleOAuthProvider } from '@react-oauth/google';
 import LayoutSettings from "./components/LayoutSettings";
 import { config } from "@fortawesome/fontawesome-svg-core";
@@ -14,15 +12,11 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import 'swiper/css/thumbs';
-import { getSessionCookie } from "@/constants/functions";
 import StoreProvider from "./StoreProvide";
 import CreateRecipeComponent from "./components/CreateRecipeComponent";
 import UserSetter from "./components/UserSetter";
 import { getDecryptedSession } from "@/action/lib";
 import { getUserDetails } from "@/action/users";
-import { getFile } from "@/action/file-lib";
-import Modal from "./components/ElementComponents/Modal";
-import { textColor } from "@/constants/constants";
 import ErrorModal from "./components/ElementComponents/ErrorModal";
 import SuccessModal from "./components/ElementComponents/SuccessModal";
 

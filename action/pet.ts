@@ -58,8 +58,10 @@ export const updatePet = async (petName: string, petBday: Date, petBreed: string
             const update_petPic = await uploadFile(petPic, folder);
 
             await db.updateTable("pets_table").set({
-                pet_image: update_petPic
-            }).execute();
+                pet_image: update_petPic,
+            })
+            .where('pet_id','=',petId)
+            .execute();
         }
 
         const petData = await db.transaction().execute( async trx => {
@@ -68,6 +70,7 @@ export const updatePet = async (petName: string, petBday: Date, petBreed: string
                 pet_breed: petBreed,
                 pet_birthdate: petBday
             })
+            .where('pet_id','=',petId)
             .returningAll()
             .execute();
         });
