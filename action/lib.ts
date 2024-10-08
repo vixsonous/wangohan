@@ -55,18 +55,3 @@ export async function getDecryptedSession() {
         return undefined;
     }
 }
-
-export const padStartIds = (id: string) => {
-    return String(id).padStart(8, '0');
-}
-
-export const getNextId = async (tableName: string, columnName: string) => {
-
-    const result = await db.selectFrom(sql`pg_get_serial_sequence(${tableName}, ${columnName})`.as('seq'))
-        .select(sql`nextval(seq)`.as('next_id'))
-        .executeTakeFirst();
-
-    const nextId = result?.next_id;
-
-    return nextId;
-}

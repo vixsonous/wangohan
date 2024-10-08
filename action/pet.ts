@@ -1,11 +1,11 @@
 import { db } from "@/lib/database/db"
 import { getUser, getUserId } from "./users"
-import { padStartIds } from "./lib";
+import { padStartIds } from "./common";
 import { deleteFilesinFolder, uploadFile } from "./file-lib";
 import { DogData } from "@/constants/interface";
 import { ERR_MSG } from "@/constants/constants";
 
-export const postPet = async (petName: string, petBday: Date, petBreed: string) => {
+export const postPet = async (petName: string, petBday: Date, petBreed: string, uploadedPetPic: string) => {
 
     try {
         
@@ -15,7 +15,7 @@ export const postPet = async (petName: string, petBday: Date, petBreed: string) 
                 pet_birthdate: petBday,
                 pet_name: petName,
                 pet_breed: petBreed,
-                pet_image: '',
+                pet_image: uploadedPetPic,
                 user_id: user_id,
                 created_at: new Date(),
                 updated_at: new Date()
@@ -78,6 +78,17 @@ export const uploadPetPic = async (petPic: File | null, petId: number) => {
         const folder = `${padStartIds(user_id)}/pets/${petId}`;
         const uploadedPetPic = await uploadFile(petPic, folder);
 
+        return uploadedPetPic;
+        
+    } catch(e) {
+        
+        throw new Error((e as Error).message);
+    }
+}
+
+export const updatePetPic = async (uploadedPetPic: string, petId: number) => {
+    try {
+        
         const updated_pet = await db.transaction().execute( async trx => {
 
             const pet = await trx.updateTable("pets_table").set({
@@ -91,9 +102,7 @@ export const uploadPetPic = async (petPic: File | null, petId: number) => {
         });
 
         return updated_pet;
-        
     } catch(e) {
-        
-        throw new Error((e as Error).message);
+
     }
 }

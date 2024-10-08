@@ -4,7 +4,7 @@ import ErrorSpan from "@/app/components/TextComponents/ErrorSpan";
 import { ERR_MSG, POPUPTIME } from "@/constants/constants";
 import { compressImage } from "@/constants/functions";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
-import { hideSuccess, showSuccess } from "@/lib/redux/states/messageSlice";
+import { hideError, hideSuccess, showError, showSuccess } from "@/lib/redux/states/messageSlice";
 import { addPet } from "@/lib/redux/states/petSlice";
 import { faArrowLeft, faCircleNotch, faClose, faEdit, faPlus, faSave } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -106,13 +106,45 @@ export default function PetAddForm() {
         setState(prev => ({...prev, submitState: true}));
 
         const form = new FormData();
+        const picForm = new FormData();
 
-        if(state.pet.petBday && state.pet.file){
+        if(state.pet.petBday){
             form.append('petName',state.pet.petName);
             form.append('petBday',state.pet.petBday.toISOString());
             form.append('petBreed',state.pet.petBreed);
-            form.append('petPic', state.pet.file);
         }
+
+        if(state.pet.file) {
+            picForm.append('petPic', state.pet.file);
+        }
+
+        const uploadedPetPic = await fetch('/api/pet-pic', {
+            method: "POST",
+            body: picForm
+        }).then( async res => {
+            const body = await res.json();
+
+            if(res.status === 500) {
+                throw new Error(body.message);
+            } else if (res.status === 200) {
+                return body.body.uploadedPetPic;
+            }
+        })
+        .catch( err => {
+
+            dispatch(showError((err as Error).message));
+            setTimeout(() => {
+                dispatch(hideError());
+            },POPUPTIME);
+
+            setState(prev => ({...prev, submitState: false, error: (err as Error).message}));
+
+            return false;
+        });
+
+        if(!uploadedPetPic) return;
+
+        form.append('uploadedPetPic', uploadedPetPic);
         
         await fetch('/api/post-pet', {
             method: 'POST',
@@ -131,6 +163,12 @@ export default function PetAddForm() {
                 setState(prev => ({...prev, submitState: false, modalDisp: false}));
             }
         }).catch( err => {
+
+            dispatch(showError((err as Error).message));
+            setTimeout(() => {
+                dispatch(hideError());
+            },POPUPTIME);
+            
             setState(prev => ({...prev, submitState: false, error: (err as Error).message}));
         })
             

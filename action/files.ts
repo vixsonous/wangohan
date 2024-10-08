@@ -1,8 +1,9 @@
 import { cookies } from "next/headers"
-import { decrypt, getDecryptedSession, padStartIds } from "./lib";
+import { decrypt } from "./lib";
+import { padStartIds } from "./common";
 import { ERR_MSG } from "@/constants/constants";
 import { db } from "@/lib/database/db";
-import { deleteFilesinFolder, getFile, uploadFile } from "./file-lib";
+import { deleteFilesinFolder, uploadFile } from "./file-lib";
 
 export const updateProfilePic = async (file: File) => {
     
