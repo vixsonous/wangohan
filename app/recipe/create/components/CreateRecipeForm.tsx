@@ -159,6 +159,8 @@ export default function CreateRecipeForm() {
                         dispatch(hideSuccess());
                     }, POPUPTIME);
                     setSubmitSuccess(true);
+
+                    if(window.location.pathname !== "/") window.location.href = '/';
                 }
             }).catch(err => {
                 const msg = (err as Error).message;
