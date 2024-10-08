@@ -95,7 +95,6 @@ export default function PetEditForm({petData} : Props) {
 
         const form = new FormData();
 
-        if(state.pet.file) form.append('petPic', state.pet.file);
         if(state.pet.petBday) form.append('petBday', state.pet.petBday.toISOString());
 
         form.append('petName', state.pet.petName);
@@ -103,6 +102,37 @@ export default function PetEditForm({petData} : Props) {
         form.append('petId', String(state.pet.pet_id));
 
         setState(prev => ({...prev, submitState: true}));
+
+        if(state.pet.file) {
+            const picForm = new FormData();
+            picForm.append('petPic', state.pet.file);
+            picForm.append('petId', String(state.pet.pet_id));
+
+            const res = await fetch('/api/pet-pic', {
+                method: 'PATCH',
+                body: picForm
+            })
+            .then( async res => {
+                const body = await res.json();
+
+                if(res.status === 500) {
+                    throw new Error(body.message);
+                } else if (res.status === 200) {
+                    return true;
+                }
+            })
+            .catch( err => {
+                dispatch(showError((err as Error).message));
+                setTimeout(() => {
+                    dispatch(hideError());
+                },POPUPTIME);
+                
+                setState(prev => ({...prev, submitState: false, error: (err as Error).message}));
+                return false;
+            });
+
+            if(!res) return;
+        }
 
         await fetch('/api/post-pet', {
             method: 'PATCH',
@@ -138,6 +168,7 @@ export default function PetEditForm({petData} : Props) {
             },POPUPTIME);
             
             setState(prev => ({...prev, submitState: false, error: (err as Error).message}));
+            return false;
         });
 
         
