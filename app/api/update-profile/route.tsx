@@ -1,5 +1,5 @@
 import { updateProfilePic } from "@/action/files";
-import { decrypt, padStartIds } from "@/action/lib";
+import { decrypt } from "@/action/lib";
 import { ERR_MSG, SUCC_MSG } from "@/constants/constants";
 import { db } from "@/lib/database/db";
 import { cookies } from "next/headers";
