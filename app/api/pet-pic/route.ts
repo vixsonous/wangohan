@@ -18,7 +18,7 @@ export const POST = async (req: NextRequest) => {
         if(!petId) throw new Error(ERR_MSG.ERR32);
         if(!petPic) throw new Error(ERR_MSG.ERR31);
 
-        const id = Number(petId.maxId) + 1;
+        const id = Number(petId);
         
         const uploadedPetPic = await uploadPetPic(petPic, Number(id));
 

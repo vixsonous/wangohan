@@ -113,20 +113,26 @@ export default function PersonalInfoForm({info} : Info) {
         if(profilePic) {
             fileSubmit.append('file', profilePic, profilePic?.name);
 
-            await fetch('/api/profile-pic', {
+            const res = await fetch('/api/profile-pic', {
                 method: 'POST',
                 body: fileSubmit
             }).then(async res => {
                 const body = await res.json();
                 if(res.status === 200) {
                     formSubmit.set('fileUrl', body.body.fileUrl);
+
+                    return true;
                 } else {
                     throw new Error(body.message);
                 }
             }).catch(err => {
                 setSignup(false);
-                setError(prev => ({...prev, generalError: (err as Error).message}))
+                setError(prev => ({...prev, generalError: (err as Error).message}));
+
+                return false;
             });
+
+            if(!res) return;
         }
         
 

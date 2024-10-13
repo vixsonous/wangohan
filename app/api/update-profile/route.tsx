@@ -19,12 +19,12 @@ export const PATCH = async (req: NextRequest) => {
         if(!session) throw new Error(ERR_MSG['ERR10']);
 
         if(profPic) {
-            await updateProfilePic(profPic)
-                .then(async res => {
-
-                }).catch(err => {
+            const prof = await updateProfilePic(profPic)
+                .then( res => res).catch(err => {
                     throw new Error( (err as Error).message);
                 });
+
+            if(!prof) throw new Error("There was an error retrieving the ID!");
         }
 
         const decryptedCookies = await decrypt(session.value);

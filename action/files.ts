@@ -21,10 +21,13 @@ export const updateProfilePic = async (file: File) => {
         await deleteFilesinFolder(folder);
         const uploadedProfilePicUrl = await uploadFile(file, folder);
 
-        await db.updateTable("user_details_table")
+        const res = await db.updateTable("user_details_table")
         .set({ user_image: uploadedProfilePicUrl })
         .where("user_details_table.user_id", "=", user_id)
+        .returning(["user_image"])
         .executeTakeFirst()
+
+        return res?.user_image;
 
     } catch(e) {
         let _e = (e as Error).message;

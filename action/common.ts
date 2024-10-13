@@ -10,7 +10,9 @@ export const getNextId = async (tableName: TableExpression<Database, never>, col
 
     const nextId = result;
 
-    return nextId;
+    if(!nextId) throw new Error("Error retrieving the last ID!");
+
+    return nextId.maxId + 1;
 }
 
 export const padStartIds = (id: string) => {

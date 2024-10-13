@@ -7,6 +7,7 @@ import { showError, hideError, showSuccess, hideSuccess } from "@/lib/redux/stat
 import { hide } from "@/lib/redux/states/recipeSlice";
 import { faCheck, faCircleNotch, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useRouter } from "next/navigation";
 import React, { SyntheticEvent, useEffect, useState } from "react";
 import { Navigation, Thumbs, Virtual } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -25,6 +26,7 @@ export default function CreateRecipeForm() {
     const CardFontSize = '13px';
     const CardTagSize = '10px';
     const dispatch = useAppDispatch();
+    const router = useRouter();
 
     const [submit, setSubmit] = useState(false);
     const [submitSuccess, setSubmitSuccess] = useState(false);
@@ -123,7 +125,6 @@ export default function CreateRecipeForm() {
             if(res.status === 500) {
                 throw new Error(body.message);
             } else if(res.status === 200) {
-                
                 return body;
             }
             
@@ -160,7 +161,7 @@ export default function CreateRecipeForm() {
                     }, POPUPTIME);
                     setSubmitSuccess(true);
 
-                    if(window.location.pathname !== "/") window.location.href = '/';
+                    if(window.location.pathname !== "/") router.push("/");
                 }
             }).catch(err => {
                 const msg = (err as Error).message;
