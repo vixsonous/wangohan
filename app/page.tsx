@@ -5,6 +5,7 @@ import { Metadata } from "next";
 import { getPopularRecipes, getWeeklyRecipes } from "@/action/recipe";
 import { DisplayRecipe } from "@/constants/interface";
 import MainSearchForm from "./components/MainSearchForm";
+import Link from "next/link";
 
 const gloria = Gloria_Hallelujah({
   weight: '400',
@@ -32,6 +33,19 @@ export default async function Home() {
 
   const weeklyRecipes = weekly_result.body as Array<DisplayRecipe>;
   const popularRecipes = popular_result.body as Array<DisplayRecipe>;
+
+  const events = [
+    {text: 'お誕生日', img: '/LP/event/birthday.png', url: '/recipe/search/お誕生日'},
+    {text: 'おうち記念日', img: '/LP/event/ouchianniversary.png', url: '/recipe/search/おうち記念日'},
+    {text: 'お正月', img: '/LP/event/newyears.png', url: '/recipe/search/お正月'},
+    {text: '節分', img: '/LP/event/setsubun.png', url: '/recipe/search/節分'},
+    {text: 'ひな祭り', img: '/LP/event/hinamatsuri.png', url: '/recipe/search/ひな祭り'},
+    {text: 'こどもの日', img: '/LP/event/kodomonohi.png', url: '/recipe/search/こどもの日'},
+    {text: '七夕', img: '/LP/event/tanabata.png', url: '/recipe/search/七夕'},
+    {text: 'ハロウィン', img: '/LP/event/halloween.png', url: '/recipe/search/ハロウィン'},
+    {text: 'クリスマス', img: '/LP/event/christmas.png', url: '/recipe/search/クリスマス'},
+    {text: 'おやつ', img: '/LP/event/snack.png', url: '/recipe/search/おやつ'},
+  ]
 
   return (
     <main className="relative flex p-[20px] min-h-screen flex-col md:items-center overflow-hidden pb-[50px] lg:pb-[200px]">
@@ -64,36 +78,36 @@ export default async function Home() {
             <div className="first-row w-full flex mt-[-20px] gap-[20px] justify-center flex-col items-center  ">
               <h1 className="text-[20px] text-[#523636] font-semibold">年齢別で探す</h1>
               <div className="flex justify-between sm:justify-center sm:gap-[20px] w-[100%]">
-                <a href="" className="flex flex-[1_33%] gap-[10px] text-[13px] text-[#523636] font-bold flex-col justify-between items-center">
+                <Link href="/recipe/search/子犬" className="flex flex-[1_33%] gap-[10px] text-[13px] text-[#523636] font-bold flex-col justify-between items-center">
                   <img src={'/LP/puppy.png'} className="relative rounded-md w-[70%]"  alt="website banner" />
                   <span className="relative top-[0px]">子犬用レシピ</span>
-                </a>
-                <a href="" className="flex flex-[1_33%] gap-[10px] text-[13px] relative text-[#523636] font-bold flex-col justify-between items-center">
+                </Link>
+                <Link href="/recipe/search/成犬" className="flex flex-[1_33%] gap-[10px] text-[13px] relative text-[#523636] font-bold flex-col justify-between items-center">
                   <img src={'/LP/adult.png'} className="relative rounded-md w-[50%]" alt="website banner" />
                   <span className="relative top-[0px]">成犬用レシピ</span>
-                </a>
-                <a href="" className="flex flex-[1_33%] relative gap-[10px] text-[13px] text-[#523636] font-bold flex-col justify-between items-center">
+                </Link>
+                <Link href="/recipe/search/シニア犬" className="flex flex-[1_33%] relative gap-[10px] text-[13px] text-[#523636] font-bold flex-col justify-between items-center">
                   <img src={'/LP/senior.png'} className="relative rounded-md w-[60%] bottom-[0px]"  alt="website banner" />
                   <span className="relative top-[0px]">シニア犬用レシピ</span>
-                </a>
+                </Link>
               </div>
             </div>
 
             <div className="first-row gap-[20px] w-full flex justify-center flex-col items-center  ">
               <h1 className="text-[20px] text-[#523636] font-semibold">サイズ別で探す</h1>
               <div className="flex justify-between sm:justify-center sm:gap-[20px] w-[100%]">
-                <a href="" className="flex flex-[1_33%] gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-between items-center">
+                <Link href="/recipe/search/小型犬" className="flex flex-[1_33%] gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-between items-center">
                   <img src={'/LP/smalldog.png'} className="relative rounded-md w-[65%]" width={10000} height={10000}  alt="website banner" />
                   <span className="relative top-[0px]">小型犬用レシピ</span>
-                </a>
-                <a href="" className="flex flex-[1_33%] gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-between items-center">
+                </Link>
+                <Link href="/recipe/search/中型犬" className="flex flex-[1_33%] gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-between items-center">
                   <img src={'/LP/middledog.png'} className="relative rounded-md w-[65%]" width={10000} height={10000}  alt="website banner" />
                   <span className="relative top-[0px]">中型犬用レシピ</span>
-                </a>
-                <a href="" className="flex flex-[1_33%] gap-[10px] flex-col relative text-[13px] text-[#523636] font-bold justify-between items-center">
+                </Link>
+                <Link href="/recipe/search/大型犬" className="flex flex-[1_33%] gap-[10px] flex-col relative text-[13px] text-[#523636] font-bold justify-between items-center">
                   <img src={'/LP/bigdog.png'} className="relative top-[-10px] rounded-md w-[50%]" width={10000} height={10000}  alt="website banner" />
                   <span className="relative top-[0px]">大型犬用レシピ</span>
-                </a>
+                </Link>
               </div>
             </div>
           </div>
@@ -103,46 +117,16 @@ export default async function Home() {
               <div className="absolute z-[-1] left-[0px] w-full top-[17px] border-[1px] border-solid border-[#523636]"/>
             </div>
             <div className="flex flex-wrap gap-y-[30px] justify-center">
-              <div className="w-[29vw] text-white flex justify-center">
-                <a href="" className="flex gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-center items-center">
-                  <img src={'/LP/event/birthday.png'} className="rounded-md h-[auto] w-[100%] max-w-none" width={10000} height={10000}  alt="website banner" />お誕生日</a>
-              </div>
-              <div className="w-[29vw] text-white flex justify-center">
-                <a href="" className="flex gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-center items-center">
-                  <img src={'/LP/event/ouchianniversary.png'} className="rounded-md h-[auto] w-[100%] max-w-none" width={10000} height={10000}  alt="website banner" />おうち記念日</a>
-              </div>
-              <div className="w-[29vw] text-white flex justify-center">
-                <a href="" className="flex gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-center items-center">
-                  <img src={'/LP/event/newyears.png'} className="rounded-md h-[auto] w-[100%] max-w-none" width={10000} height={10000}  alt="website banner" />お正月</a>
-              </div>
-              <div className="w-[29vw] text-white flex justify-center">
-                <a href="" className="flex gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-center items-center">
-                  <img src={'/LP/event/setsubun.png'} className="rounded-md h-[auto] w-[100%] max-w-none" width={10000} height={10000}  alt="website banner" />節分</a>
-              </div>
-              <div className="w-[29vw] text-white flex justify-center">
-                <a href="" className="flex gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-center items-center">
-                  <img src={'/LP/event/hinamatsuri.png'} className="rounded-md h-[auto] w-[100%] max-w-none" width={10000} height={10000}  alt="website banner" />ひな祭り</a>
-              </div>
-              <div className="w-[29vw] text-white flex justify-center">
-                <a href="" className="flex gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-center items-center">
-                  <img src={'/LP/event/kodomonohi.png'} className="rounded-md h-[auto] w-[100%] max-w-none" width={10000} height={10000}  alt="website banner" />こどもの日</a>
-              </div>
-              <div className="w-[29vw] text-white flex justify-center">
-                <a href="" className="flex gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-center items-center">
-                  <img src={'/LP/event/tanabata.png'} className="rounded-md h-[auto] w-[100%] max-w-none" width={10000} height={10000}  alt="website banner" />七夕</a>
-              </div>
-              <div className="w-[29vw] text-white flex justify-center">
-                <a href="" className="flex gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-center items-center">
-                  <img src={'/LP/event/halloween.png'} className="rounded-md h-[auto] w-[100%] max-w-none" width={10000} height={10000}  alt="website banner" />ハロウィン</a>
-              </div>
-              <div className="w-[29vw] text-white flex justify-center">
-                <a href="" className="flex gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-center items-center">
-                  <img src={'/LP/event/christmas.png'} className="rounded-md h-[auto] w-[100%] max-w-none" width={10000} height={10000}  alt="website banner" />クリスマス</a>
-              </div>
-              <div className="w-[29vw] text-white flex justify-center">
-                <a href="" className="flex gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-center items-center">
-                  <img src={'/LP/event/snack.png'} className="rounded-md h-[auto] w-[100%] max-w-none" width={10000} height={10000}  alt="website banner" />おやつ</a>
-              </div>
+              {
+                events.map( (ev, idx) => {
+                  return (
+                    <div className="w-[29vw] text-white flex justify-center">
+                      <Link href={ev.url} className="flex gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-center items-center">
+                        <img src={ev.img} className="rounded-md h-[auto] w-[100%] max-w-none" width={10000} height={10000}  alt="website banner" />{ev.text}</Link>
+                    </div>
+                  )
+                })
+              }
             </div>
           </div>
 
