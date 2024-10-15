@@ -116,6 +116,7 @@ export default function CreateRecipeForm() {
         };
         setSubmit(true);
         dispatch(hide());
+        if(window.location.pathname !== "/") router.push("/");
 
         const recipe_id = await fetch('/api/recipe', {
             method: 'POST',
@@ -160,8 +161,6 @@ export default function CreateRecipeForm() {
                         dispatch(hideSuccess());
                     }, POPUPTIME);
                     setSubmitSuccess(true);
-
-                    if(window.location.pathname !== "/") router.push("/");
                 }
             }).catch(err => {
                 const msg = (err as Error).message;
