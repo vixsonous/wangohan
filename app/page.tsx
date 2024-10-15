@@ -4,6 +4,7 @@ import { Gloria_Hallelujah, Mochiy_Pop_P_One } from "next/font/google";
 import { Metadata } from "next";
 import { getPopularRecipes, getWeeklyRecipes } from "@/action/recipe";
 import { DisplayRecipe } from "@/constants/interface";
+import MainSearchForm from "./components/MainSearchForm";
 
 const gloria = Gloria_Hallelujah({
   weight: '400',
@@ -42,10 +43,7 @@ export default async function Home() {
         </div>
         <div className="w-[100%] h-[100%] relative flex flex-col gap-[10px]">
           <div className="search-form relative flex justify-end">
-            <form className="flex gap-[10px] w-[100%] flex justify-end" action="">
-              <input className="py-[5px] px-[5px] w-[50%] h-[25px] rounded-[3px] text-[9px]" placeholder="キーワードで検索" type="text" />
-              <input className="px-[10px] w-[50px] h-[25px] rounded-[3px] bg-black text-white text-[9px]" type="submit" value="検索" />
-            </form>
+            <MainSearchForm />
           </div>
           <div className="w-full h-full relative">
             <img src={'/dashboard.png'} className="rounded-md h-full w-full relative" width={10000} height={10000}  alt="website banner" />

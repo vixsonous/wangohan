@@ -9,6 +9,7 @@ import { NextResponse } from "next/server";
 import { getComments } from "./comments";
 
 const FRONT_PAGE_RECIPE_QUERY_LIMIT = 10;
+const SEARCH_PAGE_RECIPE_QUERY_LIMIT = 50;
 
 export const postRecipe = async (recipe:recipe) => {
     try {
@@ -269,5 +270,24 @@ export const deleteRecipe = async (recipe_id: number) => {
 
     } catch(e) {
         return {message: (e as Error).message, body: undefined, status: 500};
+    }
+}
+
+export const searchRecipes = async (searchString: string) => {
+    try {
+        const recipes = await db.selectFrom("recipes_table").select(["recipe_name", "recipe_id", "recipe_age_tag", 
+            "recipe_event_tag","recipe_size_tag", "recipe_description","user_id", "created_at", "total_likes", "total_views"
+        ])
+            .orderBy("created_at", "desc")
+            .where("recipe_name", "ilike", `%${searchString}%`)
+            .limit(SEARCH_PAGE_RECIPE_QUERY_LIMIT)
+            .execute();
+
+        const updated_recipes = await processRecipes(recipes);
+
+        return {message: '完了',body: updated_recipes, status: 200};
+    } catch(e) {
+        let _e = (e as Error).message;
+        return {message: _e, body: undefined, status: 500};
     }
 }
