@@ -279,7 +279,28 @@ export const searchRecipes = async (searchString: string) => {
             "recipe_event_tag","recipe_size_tag", "recipe_description","user_id", "created_at", "total_likes", "total_views"
         ])
             .orderBy("created_at", "desc")
-            .where("recipe_name", "ilike", `%${searchString}%`)
+            .where( ({eb, exists, not}) => eb.or([
+                eb("recipe_name", "ilike", `%${searchString}%`),
+                eb("recipe_description", "ilike", `%${searchString}%`),
+                eb("recipe_age_tag", "ilike", `%${searchString}%`),
+                eb("recipe_size_tag", "ilike", `%${searchString}%`),
+                eb("recipe_event_tag", "ilike", `%${searchString}%`),
+                exists(
+                    eb.selectFrom("recipe_ingredients_table")
+                    .where("recipe_ingredients_table.recipe_id", "=", eb.ref("recipes_table.recipe_id"))
+                    .where( eb => eb.or([
+                        eb("recipe_ingredients_table.recipe_ingredients_name", "ilike", `%${searchString}%`),
+                        eb("recipe_ingredients_table.recipe_ingredients_amount", "ilike", `%${searchString}%`)
+                    ]))
+                ),
+                exists(
+                    eb.selectFrom("recipe_instructions_table")
+                    .where("recipe_instructions_table.recipe_id", "=", eb.ref("recipes_table.recipe_id"))
+                    .where( eb => eb.or([
+                        eb("recipe_instructions_table.recipe_instructions_text", "ilike", `%${searchString}%`),
+                    ]))
+                )
+            ]))
             .limit(SEARCH_PAGE_RECIPE_QUERY_LIMIT)
             .execute();
 
