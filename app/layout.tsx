@@ -19,6 +19,7 @@ import { getDecryptedSession } from "@/action/lib";
 import { getUserDetails } from "@/action/users";
 import ErrorModal from "./components/ElementComponents/ErrorModal";
 import SuccessModal from "./components/ElementComponents/SuccessModal";
+import LoadingModal from "./components/ElementComponents/LoadingModal";
 
 config.autoAddCss = false;
 const inter = Inter({ subsets: ["latin"] });
@@ -68,8 +69,10 @@ export default async function RootLayout({
           <body className={`${inter.className} bg-[#FFE9C9] h-full min-h-[100vh] flex flex-col text-[#523636]`}>
             <ErrorModal />
             <SuccessModal />
+            
             <div className="fixed px-[20px] w-[100%] z-[999] pt-[5px] flex justify-between items-center border-b-[1px]  shadow-md">
               <Link href="/"><img className="w-[60px] h-[auto]" src={'/logo-final.png'} width={100} height={100} alt="website logo" /></Link>
+              <LoadingModal />
               <LayoutSettings isLoggedIn={isLoggedIn}/>
               <div className="absolute top-0 left-0 w-[100%] h-[100%] bg-[#FFFAF0] opacity-[0.9] z-[-1]"></div>
             </div>

@@ -14,6 +14,7 @@ import { getDecryptedSession } from "@/action/lib";
 import StarReviews from "../../../components/ElementComponents/StarReviews";
 import CommentForm from "./components/CommentForm";
 import CommentSection from "./components/CommentSection";
+import LoadingPopup from "@/app/components/LoadingPopup";
 
 type Props = {
     params: {recipeId: String},
@@ -71,6 +72,7 @@ export default async function ShowRecipe({params, searchParams}:{params: {recipe
     
     return (
         <section className="flex justify-center flex-col items-center">
+            <LoadingPopup />
             <ViewUpdateCountdown recipe_id={recipe_data.recipe_id}/>
             <div style={{maxWidth: MAXWSIZE}} className="w-full relative">
                 <ImageSwiper recipe_images={recipe_images} recipe_id={recipe_data.recipe_id} owner_id={recipe_data.user_id}/>
