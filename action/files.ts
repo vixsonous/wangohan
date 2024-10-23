@@ -3,7 +3,7 @@ import { decrypt } from "./lib";
 import { padStartIds } from "./common";
 import { ERR_MSG } from "@/constants/constants";
 import { db } from "@/lib/database/db";
-import { deleteFilesinFolder, uploadFile } from "./file-lib";
+import { deleteFile, deleteFilesinFolder, uploadFile } from "./file-lib";
 
 export const updateProfilePic = async (file: File) => {
     
@@ -74,6 +74,28 @@ export const uploadRecipeFiles = async (file: File, recipe_id: number, folder:st
             .execute()
 
         return true;
+    } catch(e) {
+        let _e = (e as Error).message;
+        throw _e;
+    }
+}
+
+export const deleteRecipeFiles = async (img_ids: Array<number>) => {
+    try {
+        const urls = await db.selectFrom("recipe_images_table")
+            .select("recipe_image")
+            .where("recipe_image_id", "in", img_ids)
+            .execute();
+
+        for(let i = 0; i < urls.length; i++) {
+            await deleteFile(urls[i].recipe_image);
+        }
+
+        if(img_ids.length > 0) {
+            await db.deleteFrom("recipe_images_table")
+                .where("recipe_image_id", "in", img_ids)
+                .execute();
+        }
     } catch(e) {
         let _e = (e as Error).message;
         throw _e;

@@ -1,4 +1,4 @@
-import { ERR_MSG, getExpireDate } from "@/constants/constants";
+import { ERR_MSG, getExpireDate, SUCC_MSG } from "@/constants/constants";
 import { DBRecipeData, ingredients, instructions, recipe } from "@/constants/interface";
 import { db } from "@/lib/database/db";
 import { cookies } from "next/headers";
@@ -46,6 +46,34 @@ export const postRecipe = async (recipe:recipe) => {
     }
 }
 
+export const updateRecipe = async (recipe:recipe, recipe_id: number) => {
+    try {
+        const cookie = cookies();
+        const session = cookie.get('session');
+
+        if(!session) throw new Error(ERR_MSG['ERR10']);
+
+        const recipe_data = await db.updateTable("recipes_table")
+            .set({
+                recipe_name: recipe.recipeTitle,
+                recipe_description: recipe.recipeDescr,
+                recipe_category: '',
+                recipe_event_tag: recipe.event,
+                recipe_age_tag: recipe.age,
+                recipe_size_tag: recipe.size,
+                updated_at: new Date(),
+            })
+            .where("recipe_id", "=", recipe_id)
+            .returningAll()
+            .executeTakeFirstOrThrow();
+
+        return {message: '完了',body: recipe_data, status: 200};
+    } catch(e) {
+        let _e = (e as Error).message;
+        return {message: _e, body: {}, status: 500};
+    }
+}
+
 export const postIngredients = async (recipeIngredients: Array<ingredients>, recipe_id: number) => {
     try {
         const filteredIngredients = recipeIngredients.filter(el => el.amount !== '' && el.name !== '');
@@ -64,6 +92,41 @@ export const postIngredients = async (recipeIngredients: Array<ingredients>, rec
             .executeTakeFirstOrThrow();
 
         return {message: '完了',body: {}, status: 200};
+    } catch(e) {
+        let _e = (e as Error).message;
+        return {message: _e, body: {}, status: 500};
+    }
+}
+
+export const updateIngredients = async (recipeIngredients: Array<ingredients>) => {
+    try {
+        
+        for(let i = 0; i < recipeIngredients.length; i++) {
+            await db.updateTable("recipe_ingredients_table").set({
+                "recipe_ingredients_amount": recipeIngredients[i].amount,
+                "recipe_ingredients_name": recipeIngredients[i].name
+            }).where("recipe_ingredient_id", "=", recipeIngredients[i].id)
+            .execute();
+        }
+
+        return {message: SUCC_MSG.SUCCESS1,body: {}, status: 200};
+    } catch(e) {
+        let _e = (e as Error).message;
+        return {message: _e, body: {}, status: 500};
+    }
+}
+
+export const updateInstructions = async (recipeInstructions: Array<instructions>) => {
+    try {
+        
+        for(let i = 0; i < recipeInstructions.length; i++) {
+            await db.updateTable("recipe_instructions_table").set({
+                "recipe_instructions_text": recipeInstructions[i].text,
+            }).where("recipe_instructions_id", "=", recipeInstructions[i].id)
+            .execute();
+        }
+
+        return {message: SUCC_MSG.SUCCESS1,body: {}, status: 200};
     } catch(e) {
         let _e = (e as Error).message;
         return {message: _e, body: {}, status: 500};
@@ -310,5 +373,26 @@ export const searchRecipes = async (searchString: string) => {
     } catch(e) {
         let _e = (e as Error).message;
         return {message: _e, body: undefined, status: 500};
+    }
+}
+
+// This is for deleting ingredients, instructions, and 
+export const deleteRecipeInfo = async (ingr_ids: Array<number>, instr_ids: Array<number>) => {
+    try {
+        if(ingr_ids.length > 0) {
+            await db.deleteFrom("recipe_ingredients_table")
+                .where("recipe_ingredient_id", "in", ingr_ids)
+                .execute();
+        }
+        
+        if(instr_ids.length > 0) {
+            await db.deleteFrom("recipe_instructions_table")
+                .where("recipe_instructions_id", "in", instr_ids)
+                .execute();
+        }
+
+        return {message: '完了',body: undefined, status: 200};
+    } catch(e) {
+        return {message: (e as Error).message, body: undefined, status: 500};
     }
 }

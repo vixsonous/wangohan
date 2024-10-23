@@ -44,8 +44,8 @@ export default function CreateRecipeForm() {
         generalError: ''
     });
 
-    const [recipeIngredients, setRecipeIngredients] = useState<ingredients[]>([{name: '', amount: ''}]);
-    const [recipeInstructions, setRecipeInstructions] = useState<instructions[]>([{text: ''}]);
+    const [recipeIngredients, setRecipeIngredients] = useState<ingredients[]>([{id: 0, name: '', amount: ''}]);
+    const [recipeInstructions, setRecipeInstructions] = useState<instructions[]>([{id: 0,text: ''}]);
 
     const validationFunc = () => {
         let valid = true;

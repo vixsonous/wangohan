@@ -55,3 +55,17 @@ export async function deleteFilesinFolder(path: string) {
         throw _e;
     }
 }
+
+export const deleteFile = async (downloadUrl: string) => {
+    try {
+        const fileRef = ref(
+            storage,
+            downloadUrl
+        );
+
+        await deleteObject(fileRef).catch(err => { throw new Error((err as Error).message) });
+        
+    } catch(e) {
+
+    }
+}

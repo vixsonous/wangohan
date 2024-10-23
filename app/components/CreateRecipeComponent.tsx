@@ -4,7 +4,7 @@ import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
-import CreateRecipeForm from "../recipe/create/components/CreateRecipeForm";
+import CreateRecipeForm from "./CreateRecipeForm";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { hide } from "@/lib/redux/states/recipeSlice";
 

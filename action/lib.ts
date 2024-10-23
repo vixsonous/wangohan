@@ -55,3 +55,17 @@ export async function getDecryptedSession() {
         return undefined;
     }
 }
+
+export function logStart(action: string) {
+    const start = performance.now();
+    console.info("Action: " +action + " logging Start " + start);
+
+    return start;
+}
+
+export function logEnd(start: number) {
+    const end = performance.now();
+    console.info("Logging End " + end);
+    console.info(`Action took ${end - start} ms`);
+    console.info("\n");
+}

@@ -5,6 +5,7 @@ import { faEdit, faEllipsisV, faTrash } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import {motion} from 'framer-motion';
+import Link from "next/link";
 
 export default function RecipeOptions({recipe_id} : {recipe_id: number}) {
     const menuVariants = {
@@ -33,7 +34,9 @@ export default function RecipeOptions({recipe_id} : {recipe_id: number}) {
                 <div className="flex flex-col relative z-[2] p-[15px] gap-[5px]">
                     <button className="flex gap-[5px] items-center justify-center z-[2]">
                         <FontAwesomeIcon icon={faEdit} color={"#FFFAF0"} className="self-center"/>
-                        <h1 style={{fontSize: fontSize.l2}} className="whitespace-nowrap text-[#FFFAF0]">編集する</h1>
+                        <Link href={`/recipe/edit/${recipe_id}`}>
+                            <h1 style={{fontSize: fontSize.l2}} className="whitespace-nowrap text-[#FFFAF0]">編集する</h1>
+                        </Link>
                     </button>
                     <hr />
                     <button onClick={deleteRecipe} className="flex gap-[5px] items-center justify-center z-[2]">

@@ -7,7 +7,7 @@ import { faHouse } from "@fortawesome/free-solid-svg-icons/faHouse";
 import {motion, AnimatePresence} from "framer-motion";
 import { faArrowAltCircleRight, faArrowRight, faBook, faClose, faDog, faLanguage, faList, faSignOut, faUser } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
-import CreateRecipeForm from "../recipe/create/components/CreateRecipeForm";
+import CreateRecipeForm from "../recipe/edit/[recipeId]/components/EditRecipeForm";
 import { useAppDispatch, useAppSelector, useAppStore } from "@/lib/redux/hooks";
 import { increment, initializeCount } from "@/lib/redux/states/counterSlice";
 import { show } from "@/lib/redux/states/recipeSlice";
