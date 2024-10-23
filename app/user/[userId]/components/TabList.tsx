@@ -9,7 +9,7 @@ import { useEffect, useRef, useState } from "react";
 
 const GAP = 2;
 
-export default function TabList({recipes_data}:{recipes_data: DisplayRecipe[]}) {
+export default function TabList({owned_recipes, liked_recipes}:{owned_recipes: DisplayRecipe[], liked_recipes: DisplayRecipe[]}) {
     const [state, setState] = useState({
         active: true,
         imageLoaded: false,
@@ -81,24 +81,32 @@ export default function TabList({recipes_data}:{recipes_data: DisplayRecipe[]}) 
                 <button onClick={() => setState(prev => ({...prev, active: false}))} className={`${!state.active ? 'bg-[#5b5351] text-white' : 'bg-[#FFFAF0] text-[#5b5351]'} py-[10px] px-[5px] text-[10px] font-bold rounded-tr`}>したレシピ</button>
             </div>
             <div ref={imgContainer} className={`${!state.active ? 'hidden' : ''} recipe-list__container w-[calc(100vw-40px)] max-w-[768px] grid grid-cols-3 masonry p-[2px] gap-[${GAP}px] bg-[#FFFAF0] items-center relative`}>
-                {recipes_data.map( (recipe, idx) => <div key={idx} className="relative w-full pb-[100%] top-[0]" ref={ref => {imgRefs.current[idx] = ref}}>
+                {owned_recipes.map( (recipe, idx) => <div key={idx} className="relative w-full pb-[100%] top-[0]" ref={ref => {imgRefs.current[idx] = ref}}>
                     <Link href={`/recipe/show/` + recipe.recipe_id}>
                         <RecipeElementV3  key={idx} recipe={recipe}/>
                     </Link>
                 </div>)}
             </div>
             <div ref={imgContainer} className={`${state.active ? 'hidden' : ''} recipe-list__container w-[calc(100vw-40px)] max-w-[768px] grid grid-cols-3 masonry p-[2px] gap-[${GAP}px] bg-[#FFFAF0] items-center relative`}>
-                {recipes_data.map( (recipe, idx) => <div key={idx} className="relative w-full pb-[100%] top-[0]" ref={ref => {imgRefs.current[idx] = ref}}>
+                {liked_recipes.map( (recipe, idx) => <div key={idx} className="relative w-full pb-[100%] top-[0]" ref={ref => {imgRefs.current[idx] = ref}}>
                     <Link href={`/recipe/show/` + recipe.recipe_id}>
                         <RecipeElementV3  key={idx} recipe={recipe}/>
                     </Link>
                 </div>)}
             </div>
             {
-                recipes_data.length > 9 && (
-                    <div className="w-[100%] flex justify-center">
-                        <button className="text-[10px] font-bold p-[10px]">全てのレシピを見る</button>
-                    </div>
+                state.active ? (
+                    owned_recipes.length > 9 && (
+                        <div className="w-[100%] flex justify-center">
+                            <button className="text-[10px] font-bold p-[10px]">全てのレシピを見る</button>
+                        </div>
+                    )
+                ) : (
+                    liked_recipes.length > 9 && (
+                        <div className="w-[100%] flex justify-center">
+                            <button className="text-[10px] font-bold p-[10px]">全てのレシピを見る</button>
+                        </div>
+                    )
                 )
             }
         </div>

@@ -216,7 +216,7 @@ export const getRecipeData = async (recipeId:number) => {
 
         if(!recipe_rating_data) throw new Error(ERR_MSG.ERR27);
 
-        return {message: 'asd!',body: {...recipe_data, user: user, recipe_instructions: recipe_instructions, recipe_ingredients: recipe_ingredients, recipe_images: recipe_images, recipe_comments: recipe_comments, recipe_rating_data: recipe_rating_data}, status: 200};
+        return {message: SUCC_MSG.SUCCESS1,body: {...recipe_data, user: user, recipe_instructions: recipe_instructions, recipe_ingredients: recipe_ingredients, recipe_images: recipe_images, recipe_comments: recipe_comments, recipe_rating_data: recipe_rating_data}, status: 200};
     } catch(e) {
         let _e = (e as Error).message;
         return {message: _e, body: undefined, status: 500};
@@ -392,6 +392,51 @@ export const deleteRecipeInfo = async (ingr_ids: Array<number>, instr_ids: Array
         }
 
         return {message: '完了',body: undefined, status: 200};
+    } catch(e) {
+        return {message: (e as Error).message, body: undefined, status: 500};
+    }
+}
+
+export const isLikedExist = async (recipe_id: number, user_id: number) => {
+    try {
+        const liked = await db.selectFrom("likes_table")
+            .select("is_liked")
+            .where("user_id", "=", user_id)
+            .where("recipe_id", "=", recipe_id)
+            .executeTakeFirst();
+
+        return {message: '完了',body: liked ? {isLikedExist: true, liked: liked.is_liked} : {isLikedExist: false, liked: false}, status: 200};
+    } catch(e) {
+        return {message: (e as Error).message, body: {isLikedExist: false, liked: false}, status: 500};
+    }
+}
+
+export const postLike = async (recipe_id: number, user_id: number) => {
+    try {
+        const liked = await db.insertInto("likes_table").values({
+            is_liked: true,
+            recipe_id: recipe_id,
+            user_id: user_id,
+            created_at: new Date(),
+            updated_at: new Date()
+        }).executeTakeFirstOrThrow();
+
+        return {message: '完了',body: true, status: 200};
+    } catch(e) {
+        return {message: (e as Error).message, body: undefined, status: 500};
+    }
+}
+
+export const updateLike = async (recipe_id: number, user_id: number, liked: boolean) => {
+    try {
+        const res = await db.updateTable("likes_table").set({
+            is_liked: liked,
+            updated_at: new Date()
+        }).where("recipe_id", "=", recipe_id)
+        .where("user_id", "=", user_id)
+        .execute()
+
+        return {message: '完了',body: liked, status: 200};
     } catch(e) {
         return {message: (e as Error).message, body: undefined, status: 500};
     }

@@ -2,9 +2,9 @@
 import { Metadata, ResolvingMetadata } from "next";
 import Image from "next/image";
 import TabList from "./components/TabList";
-import { getUser, getUserDetails, retrieveDecryptedSession, retrieveUserRecipes } from "@/action/users";
+import { getUser, getUserDetails, retrieveDecryptedSession, retrieveLikedRecipes, retrieveUserRecipes } from "@/action/users";
 import { cookies } from "next/headers";
-import { decrypt } from "@/action/lib";
+import { decrypt, logEnd, logStart } from "@/action/lib";
 import { redirect } from "next/navigation";
 import { DogData } from "@/constants/interface";
 import { getFile } from "@/action/file-lib";
@@ -34,8 +34,16 @@ export default async function User() {
     const image_url = userDetails.user_image === '' ? `/recipe-making/pic-background.png` : userDetails.user_image;
     const pets : DogData[] = userDetails.pets;
 
+    const st = logStart("Retrieving Owned Recipes");
     const recipes = await retrieveUserRecipes(userDetails.user_id, 1);
+    logEnd(st);
+
+    const st1 = logStart("Retrieving Liked Recipes");
+    const liked_recipes = await retrieveLikedRecipes(userDetails.user_id, 1);
+    logEnd(st1);
+
     const recipes_data = recipes.body || [];
+    const liked_recipes_data = liked_recipes.body || [];
     
     return (
         <Suspense fallback={<IndexLoading />}>
@@ -51,7 +59,7 @@ export default async function User() {
                         <img loading="lazy" src={'/icons/ribbon.png'} className="h-[auto] w-[200px] sm:w-[300px] max-w-none" width={10000} height={10000}  alt="website banner" />
                     </div>
                     <PetList pets={pets}/>
-                    <TabList recipes_data={recipes_data}/>
+                    <TabList owned_recipes={recipes_data} liked_recipes={liked_recipes_data}/>
                     <div className="fixed bottom-[20px] z-[9999] right-[10px]">
                         <Link href={`/user/${userDetails.user_id}/settings`}>
                             <img loading="lazy" src={'/Setting/settingpaw.png'} className="h-[auto] w-[120px]  max-w-none" width={10000} height={10000}  alt="website banner" />

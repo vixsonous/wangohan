@@ -232,6 +232,33 @@ export async function retrieveUserRecipes(user_id: number, page: number) {
   }
 }
 
+export async function retrieveLikedRecipes(user_id: number, page: number) {
+  try {
+    const OFFSET = (page - 1) * FRONT_PAGE_RECIPE_QUERY_LIMIT;
+    const likedRecipes = await db.selectFrom("likes_table")
+      .select("recipe_id")
+      .where("user_id","=",user_id)
+      .execute();
+
+    const likedRecipesIds = likedRecipes.map( rec => rec.recipe_id);
+
+    const recipes = await db.selectFrom("recipes_table").select(["recipe_name", "recipe_id", "recipe_age_tag", 
+        "recipe_event_tag","recipe_size_tag", "recipe_description","user_id", "created_at", "total_likes", "total_views"
+    ])
+        .where("recipe_id","in",likedRecipesIds)
+        .orderBy("created_at", "desc")
+        .limit(FRONT_PAGE_RECIPE_QUERY_LIMIT)
+        .offset(OFFSET)
+        .execute();
+    const updated_recipes = await processRecipes(recipes);
+
+    return {message: 'asd!',body: updated_recipes, status: 200};
+  } catch(e) {
+      let _e = (e as Error).message;
+      return {message: _e, body: undefined, status: 500};
+  }
+}
+
 export async function updateUserInfo(codenm: string, profPic: File, user_id: number) {
   try {
     const recipes = await db.selectFrom("recipes_table").select(["recipe_name", "recipe_id", "recipe_age_tag", 

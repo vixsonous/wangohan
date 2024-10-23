@@ -122,9 +122,10 @@ export interface FavouritesTable {
 }
 
 export interface LikesTable {
-  likes_id: Generated<number>;
+  like_id: Generated<number>;
   user_id: number;
   recipe_id: number;
+  is_liked: boolean;
   updated_at: Date;
   created_at: Date;
 }

@@ -10,7 +10,20 @@ import { Swiper as SwiperType } from 'swiper/types';
 import RecipeOptions from './RecipeOptions';
 import { useAppSelector } from '@/lib/redux/hooks';
 
-export default function ImageSwiper({recipe_images, recipe_id, owner_id}:{recipe_images:string[], recipe_id: number, owner_id: number}) {
+export default function ImageSwiper({
+    recipe_images, 
+    recipe_id, 
+    owner_id, 
+    loginSts
+}:{
+    recipe_images:string[], 
+    recipe_id: number, 
+    owner_id: number, 
+    loginSts: {
+        isLoggedIn: boolean, 
+        user_id: number
+    }
+}) {
 
     const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType>();
 
@@ -21,12 +34,10 @@ export default function ImageSwiper({recipe_images, recipe_id, owner_id}:{recipe
           }, 100); // Adjust the delay as needed
         }
     }, [thumbsSwiper]);
-
-    const {user, isLoggedIn} = useAppSelector(state => state.user);
     
     return (
         <div className='relative'>
-            {isLoggedIn && owner_id === user.user_id && <RecipeOptions recipe_id={recipe_id} />}
+            {loginSts.isLoggedIn && owner_id === loginSts.user_id && <RecipeOptions recipe_id={recipe_id} />}
             <Swiper
                 className='w-full h-[30vh]'
                 modules={[Navigation, Pagination, Thumbs]}
@@ -68,7 +79,7 @@ export default function ImageSwiper({recipe_images, recipe_id, owner_id}:{recipe
                             recipe_images.map((img, idx) => {
                                 return (
                                     <SwiperSlide key={idx} className="relative">
-                                        <img src={img} className="object-cover relative h-[100%] rounded-[0px] w-[100%] max-w-none" width={10000} height={10000}  alt="website banner" />
+                                        <img loading='lazy' src={img} className="object-cover relative h-[100%] rounded-[0px] w-[100%] max-w-none" width={10000} height={10000}  alt="website banner" />
                                     </SwiperSlide>
                                 )
                             })
