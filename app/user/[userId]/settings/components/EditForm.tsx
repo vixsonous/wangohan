@@ -5,12 +5,12 @@ import {  ChangeEvent, MouseEventHandler, SyntheticEvent, useEffect, useState } 
 import PetEditForm from "./PetEditForm";
 import PetAddForm from "./PetAddForm";
 import { DogData, userDetails } from "@/constants/interface";
-import { compressImage } from "@/constants/functions";
 import { POPUPTIME, SUCC_MSG, textColor } from "@/constants/constants";
 import ErrorSpan from "@/app/components/TextComponents/ErrorSpan";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { hideSuccess, showSuccess } from "@/lib/redux/states/messageSlice";
 import { setPets } from "@/lib/redux/states/petSlice";
+import OptImage from "@/app/components/ElementComponents/Image";
 
 interface Props {
     userDetails: userDetails,
@@ -26,7 +26,7 @@ export default function EditForm({userDetails, pets} : Props) {
         dispUsrnm: userDetails.user_codename,
         curUsrnmIcn: faEdit,
         profilePic: {
-            thumbnail: userDetails.user_image !== '' ? userDetails.user_image: '/icons/user.png',
+            thumbnail: userDetails.user_image !== '' ? userDetails.user_image: '/icons/user.webp',
             picture: null,
         } as {
             thumbnail: string,
@@ -50,10 +50,9 @@ export default function EditForm({userDetails, pets} : Props) {
         if(e.target.files && e.target.files[0]) {
             const tempPath = URL.createObjectURL(e.target.files[0]);
             const file = e.target.files[0];
-            const afterFile = await compressImage(file,{quality: .5, type: 'image/jpeg'});
             setState(prev => ({...prev, profilePic: {
                 thumbnail:tempPath, 
-                picture: afterFile.file.size > file.size ? file : afterFile.file
+                picture: file
             }}))
         }
     }
@@ -97,7 +96,7 @@ export default function EditForm({userDetails, pets} : Props) {
         <form action="" className="relative max-w-[768px]">
             <div className="user-image flex flex-col justify-center items-center mt-[30px]">
                 <label htmlFor="profile-image" className="relative group">
-                    <img src={state.profilePic.thumbnail} className="border-[1px] border-[#523636] rounded-[100px] w-[200px] h-[200px] relative object-cover" width={10000} height={10000}  alt="website banner" />
+                    <OptImage src={state.profilePic.thumbnail} width={100} height={100} className="border-[1px] border-[#523636] rounded-[100px] w-[200px] h-[200px] relative object-cover" alt={state.dispUsrnm}/>
                     <input onChange={profPicOnChange} className="w-[100%] hidden" type="file" name="profile-image" id="profile-image" />
                     <div className="absolute w-full h-full bg-black group-hover:opacity-[0.3] opacity-0 top-0 flex justify-center items-center rounded-[50%] transition-all duration-500">
                         <span className="text-white font-bold">画像を追加</span>
@@ -118,7 +117,7 @@ export default function EditForm({userDetails, pets} : Props) {
             </div>
             <div className="flex justify-center items-center relative mt-[40px] mb-[10px]">
                 <h1 className="absolute top-[10px] font-semibold text-[#523636]">うちのわん</h1>
-                <img src={'/icons/ribbon.png'} className="h-[auto] w-[200px] sm:w-[300px] max-w-none" width={10000} height={10000}  alt="website banner" />
+                <img src={'/icons/ribbon.webp'} className="h-[auto] w-[200px] sm:w-[300px] max-w-none" width={10000} height={10000}  alt="website banner" />
             </div>
             <div className="pet-list p-[20px] flex flex-wrap gap-[20px] items-center">
                 {

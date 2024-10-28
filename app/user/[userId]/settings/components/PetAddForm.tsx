@@ -2,7 +2,6 @@
 
 import ErrorSpan from "@/app/components/TextComponents/ErrorSpan";
 import { ERR_MSG, POPUPTIME } from "@/constants/constants";
-import { compressImage } from "@/constants/functions";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { hideError, hideSuccess, showError, showSuccess } from "@/lib/redux/states/messageSlice";
 import { addPet } from "@/lib/redux/states/petSlice";
@@ -19,7 +18,7 @@ export default function PetAddForm() {
     const [state, setState] = useState({
         modalDisp: false,
         pet: {
-            thumbnail: '/icons/default-pet.jpg',
+            thumbnail: '/icons/default-pet.webp',
             file: null,
             petName: '',
             petBday: null,
@@ -47,14 +46,13 @@ export default function PetAddForm() {
             const tempPath = URL.createObjectURL(e.currentTarget.files[0]);
 
             const beforeFile = e.currentTarget.files[0];
-            const afterFile = await compressImage(beforeFile, {quality: 0.5, type: 'image/jpeg'});
 
             if(beforeFile.size > 4000000) {
                 setState(prev => ({...prev, error: 'Picture size is greater than 4MB (Max)!'}));
                 return;
             }
             
-            setState(prev => ({...prev, pet: { ...prev.pet, thumbnail: tempPath, file: beforeFile.size > afterFile.file.size ? afterFile.file : beforeFile}}))
+            setState(prev => ({...prev, pet: { ...prev.pet, thumbnail: tempPath, file: beforeFile}}))
         }
     }
 

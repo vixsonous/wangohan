@@ -19,13 +19,13 @@ const mochi = Mochiy_Pop_P_One({
 
 export default async function Home() {
   const birthdays = [
-      '/LP/bday-dogs/puppy1.jpg',
-      '/LP/bday-dogs/puppy2.jpg',
-      '/LP/bday-dogs/puppy3.jpg',
-      '/LP/bday-dogs/puppy4.jpg',
-      '/LP/bday-dogs/puppy5.jpg',
-      '/LP/bday-dogs/puppy6.jpg',
-      '/LP/bday-dogs/puppy7.jpg'
+      '/LP/bday-dogs/puppy1.webp',
+      '/LP/bday-dogs/puppy2.webp',
+      '/LP/bday-dogs/puppy3.webp',
+      '/LP/bday-dogs/puppy4.webp',
+      '/LP/bday-dogs/puppy5.webp',
+      '/LP/bday-dogs/puppy6.webp',
+      '/LP/bday-dogs/puppy7.webp'
   ];
 
   const weekly_result = await getWeeklyRecipes();
@@ -35,23 +35,23 @@ export default async function Home() {
   const popularRecipes = popular_result.body as Array<DisplayRecipe>;
 
   const events = [
-    {text: 'お誕生日', img: '/LP/event/birthday.png', url: '/recipe/search/お誕生日'},
-    {text: 'おうち記念日', img: '/LP/event/ouchianniversary.png', url: '/recipe/search/おうち記念日'},
-    {text: 'お正月', img: '/LP/event/newyears.png', url: '/recipe/search/お正月'},
-    {text: '節分', img: '/LP/event/setsubun.png', url: '/recipe/search/節分'},
-    {text: 'ひな祭り', img: '/LP/event/hinamatsuri.png', url: '/recipe/search/ひな祭り'},
-    {text: 'こどもの日', img: '/LP/event/kodomonohi.png', url: '/recipe/search/こどもの日'},
-    {text: '七夕', img: '/LP/event/tanabata.png', url: '/recipe/search/七夕'},
-    {text: 'ハロウィン', img: '/LP/event/halloween.png', url: '/recipe/search/ハロウィン'},
-    {text: 'クリスマス', img: '/LP/event/christmas.png', url: '/recipe/search/クリスマス'},
-    {text: 'おやつ', img: '/LP/event/snack.png', url: '/recipe/search/おやつ'},
+    {text: 'お誕生日', img: '/LP/event/birthday.webp', url: '/recipe/search/お誕生日'},
+    {text: 'おうち記念日', img: '/LP/event/ouchianniversary.webp', url: '/recipe/search/おうち記念日'},
+    {text: 'お正月', img: '/LP/event/newyears.webp', url: '/recipe/search/お正月'},
+    {text: '節分', img: '/LP/event/setsubun.webp', url: '/recipe/search/節分'},
+    {text: 'ひな祭り', img: '/LP/event/hinamatsuri.webp', url: '/recipe/search/ひな祭り'},
+    {text: 'こどもの日', img: '/LP/event/kodomonohi.webp', url: '/recipe/search/こどもの日'},
+    {text: '七夕', img: '/LP/event/tanabata.webp', url: '/recipe/search/七夕'},
+    {text: 'ハロウィン', img: '/LP/event/halloween.webp', url: '/recipe/search/ハロウィン'},
+    {text: 'クリスマス', img: '/LP/event/christmas.webp', url: '/recipe/search/クリスマス'},
+    {text: 'おやつ', img: '/LP/event/snack.webp', url: '/recipe/search/おやつ'},
   ]
 
   return (
     <main className="relative flex p-[20px] min-h-screen flex-col md:items-center overflow-hidden pb-[50px] lg:pb-[200px]">
       <div className=" flex md:w-full lg:w-[70vw] h-full justify-center items-center flex-col gap-[15px]">
         <div id="logo-banner" className="relative flex flex-col justify-center items-center">
-          <img src={'/icons/logo-new.png'} className="rounded-md h-[auto] relative left-[15px] w-[130px] relative" width={10000} height={10000}  alt="website banner" />
+          <img src={'/icons/logo-new.webp'} className="rounded-md h-[auto] relative left-[15px] w-[130px] relative" width={100} height={100}  alt="website banner" />
           <h1 className={`text-[36px] text-[#6b4528] font-bold leading-tight ${mochi.className}`}>わんごはん</h1>
           <span className={`text-[10px] text-[#6b4528] ${gloria.className}`}>ALL RECIPES FOR YOUR DOG</span>
         </div>
@@ -60,7 +60,7 @@ export default async function Home() {
             <MainSearchForm />
           </div>
           <div className="w-full h-full relative">
-            <img src={'/dashboard.png'} className="rounded-md h-full w-full relative" width={10000} height={10000}  alt="website banner" />
+            <img src={'/dashboard.webp'} className="rounded-md h-full w-full relative" width={100} height={100}  alt="website banner" />
           </div>
           <div>
             <RecipeSlider title={'今週のレシピ'} recipes={weeklyRecipes}/>
@@ -79,15 +79,15 @@ export default async function Home() {
               <h1 className="text-[20px] text-[#523636] font-semibold">年齢別で探す</h1>
               <div className="flex justify-between sm:justify-center sm:gap-[20px] w-[100%]">
                 <Link href="/recipe/search/子犬" className="flex flex-[1_33%] gap-[10px] text-[13px] text-[#523636] font-bold flex-col justify-between items-center">
-                  <img src={'/LP/puppy.png'} className="relative rounded-md w-[70%]"  alt="website banner" />
+                  <img src={'/LP/puppy.webp'} className="relative rounded-md w-[70%]"  alt="website banner" />
                   <span className="relative top-[0px]">子犬用レシピ</span>
                 </Link>
                 <Link href="/recipe/search/成犬" className="flex flex-[1_33%] gap-[10px] text-[13px] relative text-[#523636] font-bold flex-col justify-between items-center">
-                  <img src={'/LP/adult.png'} className="relative rounded-md w-[50%]" alt="website banner" />
+                  <img src={'/LP/adult.webp'} className="relative rounded-md w-[50%]" alt="website banner" />
                   <span className="relative top-[0px]">成犬用レシピ</span>
                 </Link>
                 <Link href="/recipe/search/シニア犬" className="flex flex-[1_33%] relative gap-[10px] text-[13px] text-[#523636] font-bold flex-col justify-between items-center">
-                  <img src={'/LP/senior.png'} className="relative rounded-md w-[60%] bottom-[0px]"  alt="website banner" />
+                  <img src={'/LP/senior.webp'} className="relative rounded-md w-[60%] bottom-[0px]"  alt="website banner" />
                   <span className="relative top-[0px]">シニア犬用レシピ</span>
                 </Link>
               </div>
@@ -97,15 +97,15 @@ export default async function Home() {
               <h1 className="text-[20px] text-[#523636] font-semibold">サイズ別で探す</h1>
               <div className="flex justify-between sm:justify-center sm:gap-[20px] w-[100%]">
                 <Link href="/recipe/search/小型犬" className="flex flex-[1_33%] gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-between items-center">
-                  <img src={'/LP/smalldog.png'} className="relative rounded-md w-[65%]" width={10000} height={10000}  alt="website banner" />
+                  <img src={'/LP/smalldog.webp'} className="relative rounded-md w-[65%]" width={10000} height={10000}  alt="website banner" />
                   <span className="relative top-[0px]">小型犬用レシピ</span>
                 </Link>
                 <Link href="/recipe/search/中型犬" className="flex flex-[1_33%] gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-between items-center">
-                  <img src={'/LP/middledog.png'} className="relative rounded-md w-[65%]" width={10000} height={10000}  alt="website banner" />
+                  <img src={'/LP/middledog.webp'} className="relative rounded-md w-[65%]" width={10000} height={10000}  alt="website banner" />
                   <span className="relative top-[0px]">中型犬用レシピ</span>
                 </Link>
                 <Link href="/recipe/search/大型犬" className="flex flex-[1_33%] gap-[10px] flex-col relative text-[13px] text-[#523636] font-bold justify-between items-center">
-                  <img src={'/LP/bigdog.png'} className="relative top-[-10px] rounded-md w-[50%]" width={10000} height={10000}  alt="website banner" />
+                  <img src={'/LP/bigdog.webp'} className="relative top-[-10px] rounded-md w-[50%]" width={10000} height={10000}  alt="website banner" />
                   <span className="relative top-[0px]">大型犬用レシピ</span>
                 </Link>
               </div>
@@ -135,7 +135,7 @@ export default async function Home() {
             <div className="absolute flex justify-center w-[100%] top-[120px]">
               <button className=" bg-black rounded-md text-[8px] text-white py-[2px] px-[10px]">Button</button>
             </div>
-            <img src={'/LP/column.png'} className="rounded-md w-[100%] h-[100%] inline max-w-none object-fill" width={10000} height={10000}  alt="website banner" />
+            <img src={'/LP/column.webp'} className="rounded-md w-[100%] h-[100%] inline max-w-none object-fill" width={10000} height={10000}  alt="website banner" />
           </div>
         </div>
       </div>

@@ -1,6 +1,5 @@
 'use client';
 import { defineScreenMode, imageFileTypes, POPUPTIME, SUCC_MSG, textColor } from "@/constants/constants";
-import { compressImage } from "@/constants/functions";
 import { ingredients, instructions } from "@/constants/interface";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { showError, hideError, showSuccess, hideSuccess } from "@/lib/redux/states/messageSlice";
@@ -231,26 +230,16 @@ export default function CreateRecipeForm() {
                         const fileTn = [...fileThumbnails];
 
                         const beforeFile = e.target.files[0];
-                        const processedFile = await compressImage(beforeFile, {quality: .5, type: 'image/jpeg'});
-
-                        if(processedFile.file.size > 4000000) {
-                            setError(prev => ({...prev, image: "Compressed image is greater than 4mb! Click here for explanation"}));
-                            return;
-                        }
 
                         if(e.target.files[0].size > 4000000) {
                             setError(prev => ({...prev, image: "Maximum 4mb only!"}));
                             return;
                         }
 
-                        if (processedFile.status === 200) {
-                            rFiles.push(processedFile.file.size > beforeFile.size ? beforeFile : processedFile.file);
-                            fileTn.push(tempPath);
-                            setFiles([...rFiles]);
-                            setFileThumbnails([...fileTn]);
-                        } else {
-                            setError(prev => ({...prev, image: "Unsuccessful Compression!"}));
-                        }
+                        rFiles.push(beforeFile);
+                        fileTn.push(tempPath);
+                        setFiles([...rFiles]);
+                        setFileThumbnails([...fileTn]);
                     }} className="w-[100%] hidden" type="file" name="recipe-image" id="recipe-image" />
                 </label>
                 <div className='p-[5px] m-[0] w-[90vw] max-w-[768px]'>
@@ -304,7 +293,7 @@ export default function CreateRecipeForm() {
                                     prevArr[idx].amount = e.target.value;
                                     setRecipeIngredients([...prevArr]);
                                 }} className="w-[50%] border-[2px] rounded-[5px] border-grey-100 p-[7px] text-[13px] bg-[#fff8ef]" placeholder="例）1/2本" type="text" name={`recipe-ingredient-amt-${idx}`} id={`recipe-ingredient-amt-${idx}`} />
-                                <button onClick={(e) => {
+                                <button aria-label="delete-ingredients-button" onClick={(e) => {
                                     e.preventDefault();
                                     recipeIngredients.splice(idx, 1)
                                     setRecipeIngredients([...recipeIngredients])
@@ -315,7 +304,7 @@ export default function CreateRecipeForm() {
                         </div>
                     )
                 })}
-                <span onClick={(e: SyntheticEvent) => setRecipeIngredients(prev => [...recipeIngredients, {name: '', amount: ''} as ingredients])} className="text-[13px] self-start cursor-pointer">＋追加</span>
+                <button aria-label="add-ingredients-button" onClick={(e: SyntheticEvent) => setRecipeIngredients(prev => [...recipeIngredients, {name: '', amount: ''} as ingredients])} className="text-[13px] self-start cursor-pointer">＋追加</button>
             </div>
             <div className="flex-[0_0_100%] flex flex-col gap-[5px]">
                 <label htmlFor="recipe-instructions-0" className="flex items-center gap-[5px]">
@@ -334,7 +323,7 @@ export default function CreateRecipeForm() {
                                     prevArr[idx].text = e.target.value;
                                     setRecipeInstructions([...prevArr]);
                                 }} className="w-[100%] border-[2px] rounded-[5px] border-grey-100 p-[7px] text-[13px] bg-[#fff8ef]" placeholder="レシピの手順を記入" type="text" name={`recipe-instructions-${idx}`} id={`recipe-instructions-${idx}`} />
-                                <button onClick={(e) => {
+                                <button aria-label="delete-instructions-button" onClick={(e) => {
                                     e.preventDefault();
                                     recipeInstructions.splice(idx, 1)
                                     setRecipeInstructions([...recipeInstructions])
@@ -344,7 +333,7 @@ export default function CreateRecipeForm() {
                         </div>
                     )
                 })}
-                <span onClick={(e: SyntheticEvent) => setRecipeInstructions(prev => [...recipeInstructions, {text:''} as instructions])} className="text-[13px] cursor-pointer">＋追加</span>
+                <button aria-label="add-instructions-button" onClick={(e: SyntheticEvent) => setRecipeInstructions(prev => [...recipeInstructions, {text:''} as instructions])} className="text-[13px] cursor-pointer">＋追加</button>
             </div>
             <div className="flex-[0_0_100%]">
                 <label htmlFor="recipe-category" className="flex">
@@ -406,7 +395,7 @@ export default function CreateRecipeForm() {
                 </div>
             </div>
             <div className="w-full flex justify-center flex-col text-center">
-                <button disabled={submit} onClick={e => submitFunc(e)} className="bg-[#ffb762] text-white py-[10px] rounded-md text-[13px] px-[20px] font-bold self-center" type="submit">   
+                <button aria-label="create-recipe-button" disabled={submit} onClick={e => submitFunc(e)} className="bg-[#ffb762] text-white py-[10px] rounded-md text-[13px] px-[20px] font-bold self-center" type="submit">   
                     {!submit ? (
                         '作成する'
                     ): (

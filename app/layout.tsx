@@ -51,7 +51,7 @@ export default async function RootLayout({
   if(decryptedSession) {
     const user_details = await getUserDetails(decryptedSession.user.user_id);
     user.user_id= user_details.user_id,
-    user.user_image= user_details.user_image !== '' ? user_details.user_image : '/icons/user.png',
+    user.user_image= user_details.user_image !== '' ? user_details.user_image : '/icons/user.webp',
     user.user_codename= user_details.user_codename
     
   }
@@ -69,7 +69,7 @@ export default async function RootLayout({
             <ErrorModal />
             <SuccessModal />
             <div className="fixed px-[20px] w-[100%] z-[999] pt-[5px] flex justify-between items-center border-b-[1px]  shadow-md">
-              <Link href="/"><img className="w-[60px] h-[auto]" src={'/logo-final.png'} width={100} height={100} alt="website logo" /></Link>
+              <Link href="/"><img className="w-[60px] h-[auto]" src={'/logo-final.webp'} width={100} height={100} alt="website logo" /></Link>
               <LayoutSettings isLoggedIn={isLoggedIn}/>
               <div className="absolute top-0 left-0 w-[100%] h-[100%] bg-[#FFFAF0] opacity-[0.9] z-[-1]"></div>
             </div>

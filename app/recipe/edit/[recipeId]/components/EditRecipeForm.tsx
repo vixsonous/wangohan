@@ -1,6 +1,5 @@
 'use client';
 import { defineScreenMode, imageFileTypes, POPUPTIME, SUCC_MSG, textColor } from "@/constants/constants";
-import { compressImage } from "@/constants/functions";
 import { ingredients, instructions, RecipeData } from "@/constants/interface";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { showError, hideError, showSuccess, hideSuccess } from "@/lib/redux/states/messageSlice";
@@ -345,32 +344,21 @@ export default function EditRecipeForm({recipe_data} : {recipe_data: RecipeData}
         const tempPath = URL.createObjectURL(t.files[0]);
 
         const beforeFile = t.files[0];
-        const processedFile = await compressImage(beforeFile, {quality: .5, type: 'image/jpeg'});
 
-        if(processedFile.file.size > 4000000) {
-            setError(prev => ({...prev, image: "Compressed image is greater than 4mb! Click here for explanation"}));
-            return;
-        }
-
-        if(t.files[0].size > 4000000) {
+        if(beforeFile.size > 4000000) {
             setError(prev => ({...prev, image: "Maximum 4mb only!"}));
             return;
         }
 
-        if (processedFile.status === 200) {
-
-            const fs = [...state.files];
-            const f = {
-                id: -1,
-                thumbnail: tempPath,
-                file: processedFile.file.size > beforeFile.size ? beforeFile : processedFile.file
-            }
-            fs.push(f);
-            
-            setState(prev => ({...prev, files: [...fs]}));
-        } else {
-            setError(prev => ({...prev, image: "Unsuccessful Compression!"}));
+        const fs = [...state.files];
+        const f = {
+            id: -1,
+            thumbnail: tempPath,
+            file: beforeFile
         }
+        fs.push(f);
+        
+        setState(prev => ({...prev, files: [...fs]}));
     }
 
     return (

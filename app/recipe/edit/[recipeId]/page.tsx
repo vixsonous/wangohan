@@ -48,7 +48,7 @@ export default async function RecipeCreate({params, searchParams}:{params: {reci
         <div className="flex flex-col p-[20px] gap-[20px]">
             <div className="flex justify-center items-center relative mt-[10px] mb-[30px]">
                 <h1 className="absolute top-[55px] font-semibold text-[#523636] text-[2em]">レシピを書く</h1>
-                <img src={'/recipe-button.png'} className="h-[auto] w-[300px] max-w-none" width={10000} height={10000}  alt="ribbon" />
+                <img src={'/recipe-button.webp'} className="h-[auto] w-[300px] max-w-none" width={10000} height={10000}  alt="ribbon" />
             </div>
 
             <div className="create-form-container flex justify-center items-center">

@@ -1,8 +1,8 @@
 'use client';
 
+import OptImage from "@/app/components/ElementComponents/Image";
 import ErrorSpan from "@/app/components/TextComponents/ErrorSpan";
 import { ERR_MSG, POPUPTIME } from "@/constants/constants";
-import { compressImage } from "@/constants/functions";
 import { DogData } from "@/constants/interface";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { hideError, hideSuccess, showError, showSuccess } from "@/lib/redux/states/messageSlice";
@@ -51,17 +51,15 @@ export default function PetEditForm({petData} : Props) {
     const petPicOnChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if(e.target.files && e.target.files[0]) {
             const tempPath = URL.createObjectURL(e.target.files[0]);
-            setState(prev => ({...prev, pet: {...prev.pet, pet_image: tempPath}}));
 
             const beforeFile = e.target.files[0];
-            const afterFile = await compressImage(beforeFile, {quality: 0.5, type: 'image/jpeg'});
 
             if(beforeFile.size > 4000000) {
                 setState(prev => ({...prev, error: 'Picture size is greater than 4MB (Max)!'}));
                 return;
             }
             
-            setState(prev => ({...prev, pet: { ...prev.pet, pet_image: tempPath, file: beforeFile.size > afterFile.file.size ? afterFile.file : beforeFile}}))
+            setState(prev => ({...prev, pet: { ...prev.pet, pet_image: tempPath, file: beforeFile}}))
         }
     }
 
@@ -198,7 +196,7 @@ export default function PetEditForm({petData} : Props) {
         <>
             <div onClick={showEditModal} className="cursor-pointer flex flex-grow flex-shrink-0 basis-[30%] flex-wrap justify-start items-center gap-[10px]">
                 <div>
-                    <img src={petData.pet_image} className="rounded-[50%] w-[60px] h-[60px] object-cover relative" width={10000} height={10000}  alt="website banner" />
+                    <OptImage src={petData.pet_image} className="rounded-[50%] w-[60px] h-[60px] object-cover relative" width={100} height={100} alt={petData.pet_name}/>
                 </div>
                 <div className="flex flex-col gap-[5px] text-[#5b5351]">
                     <p className="text-[16px] font-bold">{petData.pet_name}</p>
@@ -226,8 +224,7 @@ export default function PetEditForm({petData} : Props) {
                             <div className="bg-[#FFFAF0] p-[30px] flex justify-center flex-wrap  items-center gap-[20px]">
                                 <div>
                                     <label htmlFor={`thumbnail-${petData.pet_id}`} className="relative group">
-                                        <img src={state.pet.pet_image} className="
-                                        rounded-[50%] w-[190px] h-[190px] object-cover relative" width={10000} height={10000}  alt="website banner" />
+                                        <OptImage src={state.pet.pet_image} className="rounded-[50%] w-[190px] h-[190px] object-cover relative" width={100} height={100}  alt={state.pet.petName}/>
                                         <div className="absolute w-full h-full bg-black group-hover:opacity-[0.3] opacity-0 top-0 flex justify-center items-center rounded-[50%] transition-all duration-500">
                                             <span className="text-white font-bold">画像を追加</span>
                                         </div>

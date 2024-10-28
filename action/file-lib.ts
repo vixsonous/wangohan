@@ -1,16 +1,70 @@
 import { storage } from "@/firebase.config";
 import { deleteObject, getDownloadURL, listAll, ref, uploadBytes } from "firebase/storage";
 import {nanoid} from 'nanoid';
+import sharp from 'sharp';
 
 export async function uploadFile(file: File, folder: string) {
     try {
         const filename = nanoid();
-        const storageRef = ref(
-            storage,
-            `${folder}/${filename}.${file.name.split(".").pop()}`
-        );
+        const tbRef = ref(storage,`${folder}/${filename}type_thumbnail.webp`);
+        const xsRef = ref(storage,`${folder}/${filename}type_xs.webp`);
+        const smRef = ref(storage,`${folder}/${filename}type_sm.webp`);
+        const mdRef = ref(storage,`${folder}/${filename}type_md.webp`);
+        const lgRef = ref(storage,`${folder}/${filename}type_lg.webp`);
+        const origRef = ref(storage,`${folder}/${filename}type_or.webp`);
+
         
-        const res = await uploadBytes(storageRef, file);
+        const tb = await sharp(await file.arrayBuffer())
+            .resize(150, null, { withoutEnlargement: true, fit: "inside"})
+            .withMetadata()
+            .toFormat('webp')
+            .webp({quality: 80})
+            .toBuffer();
+
+        const xs = await sharp(await file.arrayBuffer())
+            .resize(20, null, { withoutEnlargement: true, fit: "inside"})
+            .withMetadata()
+            .toFormat('webp')
+            .webp({quality: 80})
+            .toBuffer();
+
+        const sm = await sharp(await file.arrayBuffer())
+            .resize(480, null, { withoutEnlargement: true, fit: "inside"})
+            .withMetadata()
+            .toFormat('webp')
+            .webp({quality: 80})
+            .toBuffer();
+
+        const md = await sharp(await file.arrayBuffer())
+            .resize(640, null, { withoutEnlargement: true, fit: "inside"})
+            .withMetadata()
+            .toFormat('webp')
+            .webp({quality: 80})
+            .toBuffer();
+
+        const lg = await sharp(await file.arrayBuffer())
+            .resize(768, null, { withoutEnlargement: true, fit: "inside"})
+            .withMetadata()
+            .toFormat('webp')
+            .webp({quality: 80})
+            .toBuffer();
+
+        const or = await sharp(await file.arrayBuffer())
+            .resize(1024, null, { withoutEnlargement: true, fit: "inside"})
+            .withMetadata()
+            .toFormat('webp')
+            .webp({quality: 80})
+            .toBuffer();
+        const metadata = {
+            contentType: 'image/webp'
+        }
+
+        await uploadBytes(tbRef, tb, metadata);  
+        await uploadBytes(xsRef, xs, metadata);
+        await uploadBytes(smRef, sm, metadata);
+        await uploadBytes(mdRef, md, metadata);
+        await uploadBytes(lgRef, lg, metadata);
+        const res = await uploadBytes(origRef, or, metadata);
         const downloadUrl = await getFile(res.metadata.fullPath);
 
         return downloadUrl;

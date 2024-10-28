@@ -80,6 +80,7 @@ export const uploadRecipeFiles = async (file: File, recipe_id: number, folder:st
     }
 }
 
+
 export const deleteRecipeFiles = async (img_ids: Array<number>) => {
     try {
         const urls = await db.selectFrom("recipe_images_table")

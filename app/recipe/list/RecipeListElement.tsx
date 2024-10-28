@@ -12,7 +12,7 @@ export default function RecipeListElement({recipes} : RecipeListProps) {
 
         return (
         <div key={String(element)} className="w-[32%] pb-[32%] lg:w-[19%] lg:pb-[19%] relative flex flex-col">
-            <img src={'/dashboard.png'} className="w-[100%] h-[100%] object-cover absolute max-w-none" width={10000} height={10000} alt="website banner" />
+            <img src={'/dashboard.webp'} className="w-[100%] h-[100%] object-cover absolute max-w-none" width={10000} height={10000} alt="website banner" />
         </div>
         )
     }

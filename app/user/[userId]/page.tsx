@@ -56,7 +56,7 @@ export default async function User() {
                     </div>
                     <div className="flex justify-center items-center relative mt-12 mb-4">
                         <h1 className="absolute top-[10px] font-semibold text-[#523636]">うちのわん</h1>
-                        <img loading="lazy" src={'/icons/ribbon.png'} className="h-[auto] w-[200px] sm:w-[300px] max-w-none" width={10000} height={10000}  alt="website banner" />
+                        <img loading="lazy" src={'/icons/ribbon.webp'} className="h-[auto] w-[200px] sm:w-[300px] max-w-none" width={10000} height={10000}  alt="website banner" />
                     </div>
                     <PetList pets={pets}/>
                     <TabList owned_recipes={recipes_data} liked_recipes={liked_recipes_data}/>

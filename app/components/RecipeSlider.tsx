@@ -1,10 +1,6 @@
 'use client';
-import Image from "next/image";
-import { createElement, CSSProperties, useEffect, useRef, useState } from "react";
+import {  CSSProperties, useEffect, useState } from "react";
 import RecipeElementV1 from "./RecipeElementV1";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import Slider from 'react-slick';
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import { DisplayRecipe } from "@/constants/interface";

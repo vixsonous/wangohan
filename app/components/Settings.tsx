@@ -57,7 +57,7 @@ export default function Settings() {
     return (
         <>
         <button ref={btn} onClick={() => {setShowSettings(true);}}>
-            <img src={'/icons/bone.png'} className="self-center rounded-md h-[auto] w-[40px] relative" width={10000} height={10000}  alt="website banner" />
+            <img src={'/icons/bone.webp'} className="self-center rounded-md h-[auto] w-[40px] relative" width={100} height={100}  alt="website banner" />
         </button>
         <AnimatePresence>
             {showSettings && (
@@ -74,7 +74,7 @@ export default function Settings() {
                             dispatch(show());
                         }} className={` w-[100%] rounded-md text-[12px] sm:text-[16px] relative active:scale-[1.075] md:hover:scale-[1.075] transition-all duration-500`} type="submit">
                             <span className="absolute z-[1] w-full top-[50%] left-0 font-bold">レシピを作成する</span>
-                            <img src={'/recipe-button.png'} className="self-center rounded-md h-[auto] w-full relative absolute top-0" width={10000} height={10000}  alt="website banner" />
+                            <img src={'/recipe-button.webp'} className="self-center rounded-md h-[auto] w-full relative absolute top-0" width={10000} height={10000}  alt="website banner" />
                         </button>
                         <Link onClick={openSettings} className="w-full" href="/">
                         <div className="w-full text-[.5em] sm:text-[.75em] flex justify-between items-center border-b-[1px] border-black border-solid">
