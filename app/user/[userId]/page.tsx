@@ -31,7 +31,7 @@ export async function generateMetadata({params} : Props, parent: ResolvingMetada
 export default async function User() {
 
     const {decryptedSession, userDetails} = await retrieveDecryptedSession();
-    const image_url = userDetails.user_image === '' ? `/recipe-making/pic-background.png` : userDetails.user_image;
+    const image_url = userDetails.user_image === '' ? `/recipe-making/pic-background.webp` : userDetails.user_image;
     const pets : DogData[] = userDetails.pets;
 
     const st = logStart("Retrieving Owned Recipes");
@@ -51,7 +51,7 @@ export default async function User() {
                 <div className="relative pb-[100px] max-w-[768px]">
                     <div className="user-image relative flex flex-col justify-center items-center mt-[30px]">
                         <img loading="lazy" src={image_url} className="rounded-[100px] w-[150px] h-[150px] object-cover relative" width={10000} height={10000}  alt="website banner" />
-                        <img loading="lazy" src={'/recipe-making/pic-background.png'} className="absolute top-0 rounded-[100px] w-[150px] h-[150px] object-cover z-[-1]" width={10000} height={10000}  alt="website banner" />
+                        <img loading="lazy" src={'/recipe-making/pic-background.webp'} className="absolute top-0 rounded-[100px] w-[150px] h-[150px] object-cover z-[-1]" width={10000} height={10000}  alt="website banner" />
                         <h1 className="text-[36px] font-bold text-[#5b5351]">{userDetails.user_codename === '' ? `Wanuser` + decryptedSession.user.user_id : userDetails.user_codename}</h1>
                     </div>
                     <div className="flex justify-center items-center relative mt-12 mb-4">
@@ -62,7 +62,7 @@ export default async function User() {
                     <TabList owned_recipes={recipes_data} liked_recipes={liked_recipes_data}/>
                     <div className="fixed bottom-[20px] z-[9999] right-[10px]">
                         <Link href={`/user/${userDetails.user_id}/settings`}>
-                            <img loading="lazy" src={'/Setting/settingpaw.png'} className="h-[auto] w-[120px]  max-w-none" width={10000} height={10000}  alt="website banner" />
+                            <img loading="lazy" src={'/Setting/settingpaw.webp'} className="h-[auto] w-[120px]  max-w-none" width={10000} height={10000}  alt="website banner" />
                             <span className="relative bottom-[33px] text-[13px] text-white right-[-45px]">設定</span>
                         </Link>
                     </div>

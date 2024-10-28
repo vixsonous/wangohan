@@ -6,7 +6,7 @@ export default function OptImage({
     width=100, 
     height=100, 
     alt="", 
-    loading="eager"
+    loading="lazy"
 }: {
     src: string, 
     className?: string, 

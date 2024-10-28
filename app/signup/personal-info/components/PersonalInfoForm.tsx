@@ -29,7 +29,7 @@ const errorObj = {
 export default function PersonalInfoForm({info} : Info) {
 
     const [personalInfo, setPersonalInfo] = useState({
-        thumbnail: '/recipe-making/pic-background.png',
+        thumbnail: '/recipe-making/pic-background.webp',
         lname: '',
         fname: '',
         codename: '',
@@ -182,7 +182,7 @@ export default function PersonalInfoForm({info} : Info) {
             <div className="flex flex-wrap w-[100%] justify-center gap-[1em]">
                 <div className="flex-[0_0_100%] sm:flex-[0_0_50%]">
                     <label htmlFor="recipe-image" className="flex relative justify-center">
-                        <img src={'/recipe-making/3dogs.png'} className="top-[-20.2%] absolute h-[auto] w-[20%] sm:w-[40%] max-w-none rounded-[25px]" width={10000} height={10000}  alt="website banner" />
+                        <img src={'/recipe-making/3dogs.webp'} className="top-[-20.2%] absolute h-[auto] w-[20%] sm:w-[40%] max-w-none rounded-[25px]" width={10000} height={10000}  alt="website banner" />
                         <div className="relative pt-[50%] w-[50%] sm:pt-[100%] sm:w-[100%]">
                             <img key={imgKey} src={personalInfo.thumbnail} className="h-[100%] w-[100%] top-0 right-0 object-cover absolute rounded-[200px]" width={10000} height={10000}  alt="website banner" />
                         </div>

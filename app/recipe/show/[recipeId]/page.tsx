@@ -84,7 +84,7 @@ export default async function ShowRecipe({params, searchParams}:{params: {recipe
                         {recipe_data.recipe_event_tag !== '' ? <span className={`bg-[#523636] self-center flex justify-center items-center text-white py-[2px] px-[7px] rounded-[5px] text-[${CardTagSize}]`}>{recipe_data.recipe_event_tag}</span> : null}
                     </div>
                     <div className="flex gap-[5px] items-center">
-                        <LikeRecipe likeStatus={likeStatus.body} recipe_id={recipe_data.recipe_id} style={{width: '30px', height: '30px'}}/>
+                        {isLoggedIn && <LikeRecipe likeStatus={likeStatus.body} recipe_id={recipe_data.recipe_id} style={{width: '30px', height: '30px'}}/>}
                     </div>
                 </div>
             </div>

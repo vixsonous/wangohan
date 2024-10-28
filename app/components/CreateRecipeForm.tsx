@@ -15,7 +15,7 @@ import { Swiper as SwiperType} from "swiper/types";
 const initRecipeState = {
     recipeTitle: '',
     recipeDescr: '',
-    recipeThumbnail: '/recipe-making/pic-background.png',
+    recipeThumbnail: '/recipe-making/pic-background.webp',
     age: '',
     size: '',
     event: '',
@@ -204,7 +204,7 @@ export default function CreateRecipeForm() {
 
             <div className="flex-[0_0_100%] mt-[15%] w-[100%]">
                 <label htmlFor="recipe-image" className="flex relative">
-                    <img src={'/recipe-making/3dogs.png'} className="top-[-23.2%] left-[10%] absolute h-[auto] w-[30%] max-w-none rounded-[25px]" width={10000} height={10000}  alt="website banner" />
+                    <img src={'/recipe-making/3dogs.webp'} className="top-[-23.2%] left-[10%] absolute h-[auto] w-[30%] max-w-none rounded-[25px]" width={10000} height={10000}  alt="website banner" />
                     <img src={recipeInfo.recipeThumbnail} className="h-[auto] w-[100%] max-w-none rounded-[25px]" width={10000} height={10000}  alt="website banner" />
                     <h1 className="absolute w-[100%] flex flex-col justify-center items-center h-[100%] text-[16px] sm:text-[26px] text-center">料理の画像をアップロード
                     <br/> （横長推奨）<br /> <span className="text-[36px] required">+</span></h1>

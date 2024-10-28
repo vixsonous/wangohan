@@ -17,7 +17,7 @@ import ErrorSpan from "@/app/components/TextComponents/ErrorSpan";
 const initRecipeState = {
     recipeTitle: '',
     recipeDescr: '',
-    recipeThumbnail: '/recipe-making/pic-background.png',
+    recipeThumbnail: '/recipe-making/pic-background.webp',
     age: '',
     size: '',
     event: '',
@@ -382,8 +382,8 @@ export default function EditRecipeForm({recipe_data} : {recipe_data: RecipeData}
 
             <div className="flex-[0_0_100%] mt-[15%] w-[100%]">
                 <label htmlFor="recipe-image-edit" className="flex relative">
-                    <img src={'/recipe-making/3dogs.png'} className="top-[-2.8em] left-[10%] absolute h-[auto] w-[30%] max-w-none rounded-[25px]" width={10000} height={10000}  alt="website banner" />
-                    <img src={state.files.length > 0 ? state.files[state.files.length - 1].thumbnail : '/recipe-making/pic-background.png'} className="h-[auto] w-[100%] max-w-none rounded-[25px]" width={10000} height={10000}  alt="website banner" />
+                    <img src={'/recipe-making/3dogs.webp'} className="top-[-2.8em] left-[10%] absolute h-[auto] w-[30%] max-w-none rounded-[25px]" width={10000} height={10000}  alt="website banner" />
+                    <img src={state.files.length > 0 ? state.files[state.files.length - 1].thumbnail : '/recipe-making/pic-background.webp'} className="h-[auto] w-[100%] max-w-none rounded-[25px]" width={10000} height={10000}  alt="website banner" />
                     <h1 className="absolute w-[100%] flex flex-col justify-center items-center h-[100%] text-[16px] sm:text-[26px] text-center">料理の画像をアップロード
                     <br/> （横長推奨）<br /> <span className="text-[36px] required">+</span></h1>
                     <input onChange={fileUploadOnChange} className="w-[100%] hidden" type="file" name="recipe-image-edit" id="recipe-image-edit" />

@@ -9,7 +9,7 @@ export default async function Settings() {
     const decryptedSession = await getDecryptedSession();
     if(!decryptedSession) return;
     const userDetails = await getUserDetails(decryptedSession.user.user_id).catch(() => redirect("/signup/personal-info"));
-    userDetails.user_image = userDetails.user_image !== '' ? userDetails.user_image : '/recipe-making/pic-background.png'
+    userDetails.user_image = userDetails.user_image !== '' ? userDetails.user_image : '/recipe-making/pic-background.webp'
     const pets : DogData[] = userDetails.pets;
 
     return (
