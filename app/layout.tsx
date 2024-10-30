@@ -4,7 +4,6 @@ import "./globals.css";
 import localFont from 'next/font/local';
 import Link from "next/link";
 import {GoogleOAuthProvider } from '@react-oauth/google';
-import LayoutSettings from "./components/LayoutSettings";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import 'swiper/css';
@@ -13,12 +12,15 @@ import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import 'swiper/css/thumbs';
 import StoreProvider from "./StoreProvide";
-import CreateRecipeComponent from "./components/CreateRecipeComponent";
-import UserSetter from "./components/UserSetter";
 import { getDecryptedSession } from "@/action/lib";
 import { getUserDetails } from "@/action/users";
-import ErrorModal from "./components/ElementComponents/ErrorModal";
-import SuccessModal from "./components/ElementComponents/SuccessModal";
+import React from "react";
+
+const ErrorModal = React.lazy(() => import("./components/ElementComponents/ErrorModal"));
+const SuccessModal = React.lazy(() => import("./components/ElementComponents/SuccessModal"));
+const CreateRecipeComponent = React.lazy(() => import("./components/CreateRecipeComponent"));
+const UserSetter = React.lazy(() => import("./components/UserSetter"));
+const LayoutSettings = React.lazy(() => import("./components/LayoutSettings"));
 
 config.autoAddCss = false;
 const inter = Inter({ subsets: ["latin"] });

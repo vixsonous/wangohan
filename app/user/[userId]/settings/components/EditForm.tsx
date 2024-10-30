@@ -1,16 +1,16 @@
 'use client';
 import { faCheck, faCircleNotch, faClose, faEdit, faPlus, faSave } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {  ChangeEvent, MouseEventHandler, SyntheticEvent, useEffect, useState } from "react";
-import PetEditForm from "./PetEditForm";
-import PetAddForm from "./PetAddForm";
+import React, {  ChangeEvent, MouseEventHandler, SyntheticEvent, useEffect, useState } from "react";
+const PetEditForm = React.lazy(() => import("./PetEditForm"));
+const PetAddForm = React.lazy(() => import("./PetAddForm"));
+const ErrorSpan = React.lazy(() => import("@/app/components/TextComponents/ErrorSpan"));
 import { DogData, userDetails } from "@/constants/interface";
 import { POPUPTIME, SUCC_MSG, textColor } from "@/constants/constants";
-import ErrorSpan from "@/app/components/TextComponents/ErrorSpan";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { hideSuccess, showSuccess } from "@/lib/redux/states/messageSlice";
 import { setPets } from "@/lib/redux/states/petSlice";
-import OptImage from "@/app/components/ElementComponents/Image";
+const OptImage = React.lazy(() => import("@/app/components/ElementComponents/Image"));
 
 interface Props {
     userDetails: userDetails,
@@ -67,7 +67,7 @@ export default function EditForm({userDetails, pets} : Props) {
         
         setState(prev => ({...prev, submitState: true}));
 
-        await fetch('/api/update-profile', {
+        await fetch('/api/profile-pic', {
             method: 'PATCH',
             body: updtForm
         }).then(async res => {

@@ -333,7 +333,7 @@ export default function CreateRecipeForm() {
                         </div>
                     )
                 })}
-                <button aria-label="add-instructions-button" onClick={(e: SyntheticEvent) => setRecipeInstructions(prev => [...recipeInstructions, {text:''} as instructions])} className="text-[13px] cursor-pointer">＋追加</button>
+                <button aria-label="add-instructions-button" onClick={(e: SyntheticEvent) => setRecipeInstructions(prev => [...recipeInstructions, {text:''} as instructions])} className="text-[13px] self-start cursor-pointer">＋追加</button>
             </div>
             <div className="flex-[0_0_100%]">
                 <label htmlFor="recipe-category" className="flex">
