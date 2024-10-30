@@ -1,5 +1,5 @@
 import { getNextId } from "@/action/common";
-import { deleteFilesinFolder } from "@/action/file-lib";
+import { s3DeleteFilesInFolder } from "@/action/file-lib";
 import { padStartIds } from "@/action/common";
 import { updatePetPic, uploadPetPic } from "@/action/pet";
 import { getUserId } from "@/action/users";
@@ -42,7 +42,7 @@ export const PATCH = async (req: NextRequest) => {
         const user_id = await getUserId();
         const folder = `${padStartIds(user_id)}/pets/${petId}`;
 
-        await deleteFilesinFolder(folder);
+        await s3DeleteFilesInFolder(folder);
         const uploadedPetPic = await uploadPetPic(petPic, Number(petId));
 
         const updated_pet = await updatePetPic(uploadedPetPic, Number(petId));

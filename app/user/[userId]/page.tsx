@@ -12,6 +12,7 @@ import React, { Suspense } from "react";
 import IndexLoading from "@/app/loading";
 import Link from "next/link";
 import PetList from "./components/PetList";
+import OptImage from "@/app/components/ElementComponents/Image";
 
 type Props = {
     params: {userId: String},
@@ -50,8 +51,8 @@ export default async function User() {
             <div className="flex flex-col justify-center items-center ">
                 <div className="relative pb-[100px] max-w-[768px]">
                     <div className="user-image relative flex flex-col justify-center items-center mt-[30px]">
-                        <img loading="lazy" src={image_url} className="rounded-[100px] w-[150px] h-[150px] object-cover relative" width={10000} height={10000}  alt="website banner" />
-                        <img loading="lazy" src={'/recipe-making/pic-background.webp'} className="absolute top-0 rounded-[100px] w-[150px] h-[150px] object-cover z-[-1]" width={10000} height={10000}  alt="website banner" />
+                        <OptImage loading="lazy" src={image_url} className="rounded-[100px] w-[150px] h-[150px] object-cover relative" width={150} height={150} alt="website banner"/>
+                        <img loading="lazy" src={'/recipe-making/pic-background.webp'} className="absolute top-0 rounded-[100px] w-[150px] h-[150px] object-cover z-[-1]" width={150} height={150}  alt="website banner" />
                         <h1 className="text-[36px] font-bold text-[#5b5351]">{userDetails.user_codename === '' ? `Wanuser` + decryptedSession.user.user_id : userDetails.user_codename}</h1>
                     </div>
                     <div className="flex justify-center items-center relative mt-12 mb-4">

@@ -2,11 +2,10 @@ import { ERR_MSG, getExpireDate, SUCC_MSG } from "@/constants/constants";
 import { DBRecipeData, ingredients, instructions, recipe } from "@/constants/interface";
 import { db } from "@/lib/database/db";
 import { cookies } from "next/headers";
-import { decrypt, encrypt, getDecryptedSession } from "./lib";
+import { decrypt, getDecryptedSession } from "./lib";
 import { padStartIds } from "./common";
-import { deleteFilesinFolder, getFile } from "./file-lib";
-import { NextResponse } from "next/server";
 import { getComments } from "./comments";
+import { s3DeleteFilesInFolder } from "./file-lib";
 
 const FRONT_PAGE_RECIPE_QUERY_LIMIT = 10;
 const SEARCH_PAGE_RECIPE_QUERY_LIMIT = 50;
@@ -327,7 +326,7 @@ export const deleteRecipe = async (recipe_id: number) => {
 
         const directory = `${padStartIds(user_id)}/recipes/${padStartIds(String(recipe_id))}`;
 
-        await deleteFilesinFolder(directory);
+        await s3DeleteFilesInFolder(directory);
 
         return {message: "Successfully deleted!", body: undefined, status: 200};
 

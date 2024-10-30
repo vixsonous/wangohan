@@ -3,7 +3,7 @@ import { decrypt } from "./lib";
 import { padStartIds } from "./common";
 import { ERR_MSG } from "@/constants/constants";
 import { db } from "@/lib/database/db";
-import { deleteFile, deleteFilesinFolder, uploadFile } from "./file-lib";
+import { deleteFile, s3DeleteFilesInFolder, s3UploadFile } from "./file-lib";
 
 export const updateProfilePic = async (file: File) => {
     
@@ -16,10 +16,10 @@ export const updateProfilePic = async (file: File) => {
         const decryptedCookies = await decrypt(session.value);
         const user_id = decryptedCookies.user.user_id;
 
-        const folder = `${padStartIds(user_id)}/profile/`;
+        const folder = `${padStartIds(user_id)}/profile`;
 
-        await deleteFilesinFolder(folder);
-        const uploadedProfilePicUrl = await uploadFile(file, folder);
+        await s3DeleteFilesInFolder(folder);
+        const uploadedProfilePicUrl = await s3UploadFile(file, folder);
 
         const res = await db.updateTable("user_details_table")
         .set({ user_image: uploadedProfilePicUrl })
@@ -61,7 +61,7 @@ export const uploadRecipeFiles = async (file: File, recipe_id: number, folder:st
 
         if(!session) throw new Error(ERR_MSG['ERR10']);
 
-        const uploadedRecipe = await uploadFile(file, folder);
+        const uploadedRecipe = await s3UploadFile(file, folder);
         await db.insertInto("recipe_images_table")
             .values({ 
                 recipe_id: recipe_id,

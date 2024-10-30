@@ -194,7 +194,7 @@ export default function PetEditForm({petData} : Props) {
 
     return (
         <>
-            <div onClick={showEditModal} className="cursor-pointer flex flex-grow flex-shrink-0 basis-[30%] flex-wrap justify-start items-center gap-[10px]">
+            <div onClick={showEditModal} className="flex flex-grow flex-shrink-0 basis-[30%] justify-center items-center gap-[10px]">
                 <div>
                     <OptImage src={petData.pet_image} className="rounded-[50%] w-[60px] h-[60px] object-cover relative" width={100} height={100} alt={petData.pet_name}/>
                 </div>

@@ -1,7 +1,7 @@
 import { db } from "@/lib/database/db"
 import { getUser, getUserId } from "./users"
 import { padStartIds } from "./common";
-import { deleteFilesinFolder, uploadFile } from "./file-lib";
+import { s3DeleteFilesInFolder, s3UploadFile } from "./file-lib";
 import { DogData } from "@/constants/interface";
 import { ERR_MSG } from "@/constants/constants";
 
@@ -76,7 +76,7 @@ export const uploadPetPic = async (petPic: File | null, petId: number) => {
         if(!petPic) throw new Error(ERR_MSG.ERR31);
 
         const folder = `${padStartIds(user_id)}/pets/${petId}`;
-        const uploadedPetPic = await uploadFile(petPic, folder);
+        const uploadedPetPic = await s3UploadFile(petPic, folder);
 
         return uploadedPetPic;
         

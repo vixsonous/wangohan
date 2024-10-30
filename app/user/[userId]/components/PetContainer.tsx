@@ -14,7 +14,7 @@ export default function PetContainer ({petData}: Props) {
     }
         
     return (
-        <div className="flex flex-grow flex-shrink-0 basis-[30%] justify-center items-center gap-[20px]">
+        <div className="flex flex-grow flex-shrink-0 basis-[30%] justify-center items-center gap-[10px]">
             <div>
                 <img src={petData.pet_image} className="rounded-[50%] w-[50px] h-[50px] object-cover relative" width={10000} height={10000}  alt="website banner" />
             </div>
