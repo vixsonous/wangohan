@@ -2,9 +2,9 @@
 
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
-import CreateRecipeForm from "./CreateRecipeForm";
+import {motion } from "framer-motion";
+import React from "react";
+const CreateRecipeForm = React.lazy(() => import("./CreateRecipeForm"));
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { hide } from "@/lib/redux/states/recipeSlice";
 
@@ -24,13 +24,13 @@ export default function CreateRecipeComponent() {
                     <FontAwesomeIcon icon={faClose} size="lg"/>
                 </button>
             </div>
-            <motion.div className="flex justify-center items-center relative mt-[10px] mb-[30px]">
-                <motion.h1 className="absolute top-[55px] font-semibold text-[#523636] text-[2em]">レシピを書く</motion.h1>
-                <motion.img src={'/recipe-button.webp'} className="h-[auto] w-[300px] max-w-none" width={10000} height={10000}  alt="ribbon" />
-            </motion.div>
-            <motion.div className="create-form-container flex justify-center items-center">
+            <div className="flex justify-center items-center relative mt-[10px] mb-[30px]">
+                <h1 className="absolute top-[55px] font-semibold text-[#523636] text-[2em]">レシピを書く</h1>
+                <img src={'/recipe-button.webp'} loading="lazy" className="h-[auto] w-[300px] max-w-none" width={100} height={100}  alt="ribbon" />
+            </div>
+            <div className="create-form-container flex justify-center items-center">
                 <CreateRecipeForm />
-            </motion.div>
+            </div>
             <div className="pb-[10vh]"></div>
         </motion.div>
     )

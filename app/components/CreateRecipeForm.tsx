@@ -7,7 +7,7 @@ import { hide } from "@/lib/redux/states/recipeSlice";
 import { faCheck, faCircleNotch, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/navigation";
-import React, { SyntheticEvent, useEffect, useState } from "react";
+import React, { SyntheticEvent, useCallback, useEffect, useState } from "react";
 import { Navigation, Thumbs, Virtual } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Swiper as SwiperType} from "swiper/types";
@@ -103,7 +103,7 @@ export default function CreateRecipeForm() {
         return valid;
     }
 
-    const submitFunc = async (e:SyntheticEvent) => {
+    const submitFunc = useCallback(async (e:SyntheticEvent) => {
         e.preventDefault();
 
         if(!validationFunc()) return;
@@ -171,7 +171,7 @@ export default function CreateRecipeForm() {
                 setSubmit(false);
             });
         });
-    }
+    },[recipeInfo,files]);
 
     const [scMode, setScMode] = useState<number>(0);
     useEffect(() => {
@@ -183,6 +183,63 @@ export default function CreateRecipeForm() {
         };
     },[]);
 
+    const uploadFile = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
+        e.preventDefault();
+
+        if(!e.target.files || !e.target.files[0]) return;
+
+        if(!imageFileTypes.includes(e.target.files[0].type) && e.target.files[0].type !== "") {
+            setError(prev => ({...prev, image: "Only jpeg, png, and webp files are supported!"}));
+            return;
+        }
+
+        if(e.target.files[0].type === "" && !imageFileTypes.includes(e.target.files[0].name.split(".")[1].toLowerCase())) {
+            setError(prev => ({...prev, image: "Only jpeg, png, webp, heic, and heif files are supported!"}));
+        }
+
+        if(files.length >= 5) {
+            setError(prev => ({...prev, image: "Maximum 5 images only!"}));
+            return;
+        }
+
+        const tempPath = URL.createObjectURL(e.target.files[0]);
+        const rFiles = [...files];
+        const fileTn = [...fileThumbnails];
+
+        const beforeFile = e.target.files[0];
+
+        if(e.target.files[0].size > 4000000) {
+            setError(prev => ({...prev, image: "Maximum 4mb only!"}));
+            return;
+        }
+
+        rFiles.push(beforeFile);
+        fileTn.push(tempPath);
+        setFiles([...rFiles]);
+        setFileThumbnails([...fileTn]);
+    },[files]);
+    
+
+    const addNewRowDataOnClick = useCallback((e:React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        const nm = e.currentTarget.name;
+        
+        switch(nm) {
+            case 'ingredients':
+                setRecipeIngredients(prev => [...recipeIngredients, {name: '', amount: ''} as ingredients]);
+                break;
+            case 'instructions':
+                setRecipeInstructions(prev => [...recipeInstructions, {text:''} as instructions])
+                break;
+        }
+    },[recipeIngredients, recipeInstructions]);
+
+    const updateDescrTitleOnChange = useCallback((e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
+        e.preventDefault();
+        const nm = e.currentTarget.name;
+        setRecipeInfo(prev => ({...prev, [nm]: e.target.value}))
+    },[recipeInfo.recipeTitle, recipeInfo.recipeDescr]);
+
     return (
         <form action="" className="create-form flex flex-wrap gap-[30px] max-w-[768px] h-[100%]">
             <div className="flex-[0_0_100%]">
@@ -191,7 +248,7 @@ export default function CreateRecipeForm() {
                     <span className={`text-[.75em] self-center font-semibold ${ 25 - recipeInfo.recipeTitle.length < 0 ? `text-[${textColor.error}]` : ''}`}>（{25 - recipeInfo.recipeTitle.length}{25 - recipeInfo.recipeTitle.length >= 0 ? `文字以内` : `文字オーバーしています`}）</span>
                     <span className="ml-[5px] text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.title}</span>
                 </label>
-                <input value={recipeInfo.recipeTitle} onChange={(e) => setRecipeInfo(prev => ({...prev, recipeTitle: e.target.value}))} className="w-[100%] p-[7px] text-[13px] bg-[#fff8ef]" placeholder="例）炊飯器で簡単！夏バテでも食べられるご飯" type="text" name="recipe-title" id="recipe-title" />
+                <input value={recipeInfo.recipeTitle} name="recipeTitle" onChange={updateDescrTitleOnChange} className="w-[100%] p-[7px] text-[13px] bg-[#fff8ef]" placeholder="例）炊飯器で簡単！夏バテでも食べられるご飯" type="text" id="recipe-title" />
             </div>
 
             <div className="flex-[0_0_100%]">
@@ -199,48 +256,16 @@ export default function CreateRecipeForm() {
                     <h1 className="font-semibold text-[1.3em] required">レシピの説明</h1>
                     <span className="ml-[5px] text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.descr}</span>
                 </label>
-                <textarea value={recipeInfo.recipeDescr} onChange={(e) => setRecipeInfo(prev => ({...prev, recipeDescr: e.target.value}))} className="w-[100%] p-[7px] text-[13px] bg-[#fff8ef]" placeholder="レシピに説明をしてください例）愛犬が夏バテでなかなかご飯を食べなかったので、お魚ベースの手作りごはんを作りました。たくさん食べてくれたので是非作ってみてください。" rows={5} name="recipe-description" id="recipe-description" />
+                <textarea value={recipeInfo.recipeDescr} name="recipeDescr" onChange={updateDescrTitleOnChange} className="w-[100%] p-[7px] text-[13px] bg-[#fff8ef]" placeholder="レシピに説明をしてください例）愛犬が夏バテでなかなかご飯を食べなかったので、お魚ベースの手作りごはんを作りました。たくさん食べてくれたので是非作ってみてください。" rows={5} id="recipe-description" />
             </div>
 
             <div className="flex-[0_0_100%] mt-[15%] w-[100%]">
                 <label htmlFor="recipe-image" className="flex relative">
-                    <img src={'/recipe-making/3dogs.webp'} className="top-[-23.2%] left-[10%] absolute h-[auto] w-[30%] max-w-none rounded-[25px]" width={10000} height={10000}  alt="website banner" />
-                    <img src={recipeInfo.recipeThumbnail} className="h-[auto] w-[100%] max-w-none rounded-[25px]" width={10000} height={10000}  alt="website banner" />
+                    <img src={'/recipe-making/3dogs.webp'} loading="lazy" className="top-[-23.2%] left-[10%] absolute h-[auto] w-[30%] max-w-none rounded-[25px]" width={100} height={100}  alt="website banner" />
+                    <img src={recipeInfo.recipeThumbnail} loading="lazy" className="h-[auto] w-[100%] max-w-none rounded-[25px]" width={100} height={100}  alt="website banner" />
                     <h1 className="absolute w-[100%] flex flex-col justify-center items-center h-[100%] text-[16px] sm:text-[26px] text-center">料理の画像をアップロード
                     <br/> （横長推奨）<br /> <span className="text-[36px] required">+</span></h1>
-                    <input onChange={async (e) => {
-                        if(!e.target.files || !e.target.files[0]) return;
-
-                        if(!imageFileTypes.includes(e.target.files[0].type) && e.target.files[0].type !== "") {
-                            setError(prev => ({...prev, image: "Only jpeg, png, and webp files are supported!"}));
-                            return;
-                        }
-
-                        if(e.target.files[0].type === "" && !imageFileTypes.includes(e.target.files[0].name.split(".")[1].toLowerCase())) {
-                            setError(prev => ({...prev, image: "Only jpeg, png, webp, heic, and heif files are supported!"}));
-                        }
-
-                        if(files.length >= 5) {
-                            setError(prev => ({...prev, image: "Maximum 5 images only!"}));
-                            return;
-                        }
-
-                        const tempPath = URL.createObjectURL(e.target.files[0]);
-                        const rFiles = [...files];
-                        const fileTn = [...fileThumbnails];
-
-                        const beforeFile = e.target.files[0];
-
-                        if(e.target.files[0].size > 4000000) {
-                            setError(prev => ({...prev, image: "Maximum 4mb only!"}));
-                            return;
-                        }
-
-                        rFiles.push(beforeFile);
-                        fileTn.push(tempPath);
-                        setFiles([...rFiles]);
-                        setFileThumbnails([...fileTn]);
-                    }} className="w-[100%] hidden" type="file" name="recipe-image" id="recipe-image" />
+                    <input onChange={uploadFile} className="w-full hidden" type="file" name="recipe-image" id="recipe-image" />
                 </label>
                 <div className='p-[5px] m-[0] w-[90vw] max-w-[768px]'>
                     <Swiper
@@ -304,7 +329,7 @@ export default function CreateRecipeForm() {
                         </div>
                     )
                 })}
-                <button aria-label="add-ingredients-button" onClick={(e: SyntheticEvent) => setRecipeIngredients(prev => [...recipeIngredients, {name: '', amount: ''} as ingredients])} className="text-[13px] self-start cursor-pointer">＋追加</button>
+                <button aria-label="add-ingredients-button" onClick={addNewRowDataOnClick} name="ingredients" className="text-[13px] self-start cursor-pointer">＋追加</button>
             </div>
             <div className="flex-[0_0_100%] flex flex-col gap-[5px]">
                 <label htmlFor="recipe-instructions-0" className="flex items-center gap-[5px]">
@@ -333,7 +358,7 @@ export default function CreateRecipeForm() {
                         </div>
                     )
                 })}
-                <button aria-label="add-instructions-button" onClick={(e: SyntheticEvent) => setRecipeInstructions(prev => [...recipeInstructions, {text:''} as instructions])} className="text-[13px] self-start cursor-pointer">＋追加</button>
+                <button aria-label="add-instructions-button" name="instructions" onClick={addNewRowDataOnClick} className="text-[13px] self-start cursor-pointer">＋追加</button>
             </div>
             <div className="flex-[0_0_100%]">
                 <label htmlFor="recipe-category" className="flex">
