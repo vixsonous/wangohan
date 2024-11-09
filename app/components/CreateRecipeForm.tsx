@@ -10,7 +10,6 @@ import { useRouter } from "next/navigation";
 import React, { SyntheticEvent, useCallback, useEffect, useState } from "react";
 import { Navigation, Thumbs, Virtual } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Swiper as SwiperType} from "swiper/types";
 
 const initRecipeState = {
     recipeTitle: '',
@@ -22,7 +21,6 @@ const initRecipeState = {
 }
 
 export default function CreateRecipeForm() {
-    const CardFontSize = '13px';
     const CardTagSize = '10px';
     const dispatch = useAppDispatch();
     const router = useRouter();
@@ -32,7 +30,6 @@ export default function CreateRecipeForm() {
     const [files, setFiles] = useState<Array<File>>([]);
     const [fileThumbnails, setFileThumbnails] = useState<Array<string>>([]);
     const [recipeInfo, setRecipeInfo] = useState(structuredClone(initRecipeState));
-    const [thumbsSwiper,setThumbsSwiper] = useState<SwiperType>();
 
     const [error, setError] = useState({
         title: '',
@@ -46,7 +43,7 @@ export default function CreateRecipeForm() {
     const [recipeIngredients, setRecipeIngredients] = useState<ingredients[]>([{id: 0, name: '', amount: ''}]);
     const [recipeInstructions, setRecipeInstructions] = useState<instructions[]>([{id: 0,text: ''}]);
 
-    const validationFunc = () => {
+    const validationFunc = useCallback(() => {
         let valid = true;
         setError(prev => ({
             ...prev,
@@ -101,7 +98,7 @@ export default function CreateRecipeForm() {
         }
         
         return valid;
-    }
+    },[]);
 
     const submitFunc = useCallback(async (e:SyntheticEvent) => {
         e.preventDefault();
@@ -269,7 +266,6 @@ export default function CreateRecipeForm() {
                 </label>
                 <div className='p-[5px] m-[0] w-[90vw] max-w-[768px]'>
                     <Swiper
-                        onSwiper={(swiper: SwiperType) => setThumbsSwiper(swiper)}
                         slidesPerView={scMode <= 1 ? fileThumbnails.length < 2 ? 1 : 2 : fileThumbnails.length <= 4 ? fileThumbnails.length : 4}
                         modules={[ Virtual, Navigation, Thumbs]}
                         spaceBetween={5}

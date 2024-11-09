@@ -76,7 +76,7 @@ export default async function RootLayout({
               <div className="absolute top-0 left-0 w-[100%] h-[100%] bg-[#FFFAF0] opacity-[0.9] z-[-1]"></div>
             </div>
             
-            <CreateRecipeComponent />
+            {isLoggedIn && <CreateRecipeComponent />}
             <div className={`pt-[65.68px] overflow-hidden ${myFont.className} grow`}>
               {children}
             </div>

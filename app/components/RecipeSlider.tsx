@@ -2,7 +2,7 @@
 import {  CSSProperties, useEffect, useState } from "react";
 import RecipeElementV1 from "./RecipeElementV1";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Navigation, Pagination } from "swiper/modules";
+import { Autoplay, Navigation, Pagination, Virtual } from "swiper/modules";
 import { DisplayRecipe } from "@/constants/interface";
 import { defineScreenMode, sm } from "@/constants/constants";
 
@@ -29,7 +29,7 @@ export default function RecipeSlider ({title, recipes}:RecipeSliderInterface) {
             <div className="absolute w-full top-[51px] border-[1px] border-solid border-[#523636]"/>
             { recipes.length > 0 ? <Swiper
                 className='w-full'
-                modules={[Navigation, Pagination, Autoplay]}
+                modules={[Navigation, Pagination, Autoplay, Virtual]}
                 spaceBetween={10}
                 slidesPerView={scMode <= 1 ? 2 : 4}
                 autoplay={{
@@ -44,6 +44,8 @@ export default function RecipeSlider ({title, recipes}:RecipeSliderInterface) {
                     "--swiper-pagination-bullet-horizontal-gap": "10px"
                 } as CSSProperties} 
                 speed={1000}
+                virtual={recipes.length > 4}
+                loop={recipes.length > 4}
             >
                 {recipes.map( (recipe, idx) => {
                     return (

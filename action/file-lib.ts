@@ -150,8 +150,6 @@ export async function s3DeleteFilesInFolder(path: string) {
         }));
 
         if(listedObjects.KeyCount && listedObjects.Contents && listedObjects.KeyCount > 0) {
-
-            console.log(listedObjects.Contents);
             await Promise.all(listedObjects.Contents.map( async obj => {
                 await s3.send(new DeleteObjectCommand({
                     Bucket: Bucket,

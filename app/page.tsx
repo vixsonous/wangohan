@@ -28,8 +28,10 @@ export default async function Home() {
       '/LP/bday-dogs/puppy7.webp'
   ];
 
-  const weekly_result = await getWeeklyRecipes();
-  const popular_result = await getPopularRecipes();
+  const [weekly_result, popular_result] = await Promise.all([
+    await getWeeklyRecipes(), 
+    await getPopularRecipes()
+  ]);
 
   const weeklyRecipes = weekly_result.body as Array<DisplayRecipe>;
   const popularRecipes = popular_result.body as Array<DisplayRecipe>;
@@ -60,7 +62,7 @@ export default async function Home() {
             <MainSearchForm />
           </div>
           <div className="w-full h-full relative">
-            <img src={'/dashboard.webp'} loading="lazy" className="rounded-md h-full w-full relative" width={100} height={100}  alt="website banner" />
+            <img src={'/dashboard.webp'} loading="eager" className="rounded-md h-full w-full relative" width={100} height={100}  alt="website banner" />
           </div>
           <div>
             <RecipeSlider title={'今週のレシピ'} recipes={weeklyRecipes}/>
@@ -79,15 +81,15 @@ export default async function Home() {
               <h1 className="text-[20px] text-[#523636] font-semibold">年齢別で探す</h1>
               <div className="flex justify-between sm:justify-center sm:gap-[20px] w-[100%]">
                 <Link href="/recipe/search/子犬" className="flex flex-[1_33%] gap-[10px] text-[13px] text-[#523636] font-bold flex-col justify-between items-center">
-                  <img src={'/LP/puppy.webp'} className="relative rounded-md w-[70%]"  alt="website banner" />
+                  <img src={'/LP/puppy.webp'} loading="lazy" className="relative rounded-md w-[70%]"  alt="website banner" />
                   <span className="relative top-[0px]">子犬用レシピ</span>
                 </Link>
                 <Link href="/recipe/search/成犬" className="flex flex-[1_33%] gap-[10px] text-[13px] relative text-[#523636] font-bold flex-col justify-between items-center">
-                  <img src={'/LP/adult.webp'} className="relative rounded-md w-[50%]" alt="website banner" />
+                  <img src={'/LP/adult.webp'} loading="lazy" className="relative rounded-md w-[50%]" alt="website banner" />
                   <span className="relative top-[0px]">成犬用レシピ</span>
                 </Link>
                 <Link href="/recipe/search/シニア犬" className="flex flex-[1_33%] relative gap-[10px] text-[13px] text-[#523636] font-bold flex-col justify-between items-center">
-                  <img src={'/LP/senior.webp'} className="relative rounded-md w-[60%] bottom-[0px]"  alt="website banner" />
+                  <img src={'/LP/senior.webp'} loading="lazy" className="relative rounded-md w-[60%] bottom-[0px]"  alt="website banner" />
                   <span className="relative top-[0px]">シニア犬用レシピ</span>
                 </Link>
               </div>
@@ -97,15 +99,15 @@ export default async function Home() {
               <h1 className="text-[20px] text-[#523636] font-semibold">サイズ別で探す</h1>
               <div className="flex justify-between sm:justify-center sm:gap-[20px] w-[100%]">
                 <Link href="/recipe/search/小型犬" className="flex flex-[1_33%] gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-between items-center">
-                  <img src={'/LP/smalldog.webp'} className="relative rounded-md w-[65%]" width={100} height={100}  alt="website banner" />
+                  <img src={'/LP/smalldog.webp'} loading="lazy" className="relative rounded-md w-[65%]" width={100} height={100}  alt="website banner" />
                   <span className="relative top-[0px]">小型犬用レシピ</span>
                 </Link>
                 <Link href="/recipe/search/中型犬" className="flex flex-[1_33%] gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-between items-center">
-                  <img src={'/LP/middledog.webp'} className="relative rounded-md w-[65%]" width={100} height={100}  alt="website banner" />
+                  <img src={'/LP/middledog.webp'} loading="lazy" className="relative rounded-md w-[65%]" width={100} height={100}  alt="website banner" />
                   <span className="relative top-[0px]">中型犬用レシピ</span>
                 </Link>
                 <Link href="/recipe/search/大型犬" className="flex flex-[1_33%] gap-[10px] flex-col relative text-[13px] text-[#523636] font-bold justify-between items-center">
-                  <img src={'/LP/bigdog.webp'} className="relative top-[-10px] rounded-md w-[50%]" width={100} height={100}  alt="website banner" />
+                  <img src={'/LP/bigdog.webp'} loading="lazy" className="relative top-[-10px] rounded-md w-[50%]" width={100} height={100}  alt="website banner" />
                   <span className="relative top-[0px]">大型犬用レシピ</span>
                 </Link>
               </div>
@@ -122,7 +124,7 @@ export default async function Home() {
                   return (
                     <div className="w-[29vw] text-white flex justify-center">
                       <Link href={ev.url} className="flex gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-center items-center">
-                        <img src={ev.img} className="rounded-md h-[auto] w-[100%] max-w-none" width={100} height={100}  alt="website banner" />{ev.text}</Link>
+                        <img src={ev.img} loading="lazy" className="rounded-md h-[auto] w-[100%] max-w-none" width={100} height={100}  alt="website banner" />{ev.text}</Link>
                     </div>
                   )
                 })
@@ -135,7 +137,7 @@ export default async function Home() {
             <div className="absolute flex justify-center w-[100%] top-[120px]">
               <button className=" bg-black rounded-md text-[8px] text-white py-[2px] px-[10px]">Button</button>
             </div>
-            <img src={'/LP/column.webp'} className="rounded-md w-[100%] h-[100%] inline max-w-none object-fill" width={100} height={100}  alt="website banner" />
+            <img src={'/LP/column.webp'} loading="lazy" className="rounded-md w-[100%] h-[100%] inline max-w-none object-fill" width={100} height={100}  alt="website banner" />
           </div>
         </div>
       </div>
