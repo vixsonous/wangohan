@@ -9,6 +9,7 @@ import { Comment } from "@/constants/interface";
 import ErrorSpan from "@/app/components/TextComponents/ErrorSpan";
 import LoadingCircle from "@/app/components/IconComponents/LoadingCircle";
 import UpArrow from "@/app/components/IconComponents/UpArrow";
+import Link from "next/link";
 
 export default function CommentForm({recipe_id, isLoggedIn} : {recipe_id: number, isLoggedIn: boolean}) {
 
@@ -81,7 +82,7 @@ export default function CommentForm({recipe_id, isLoggedIn} : {recipe_id: number
                     </ErrorSpan>
                 </div>
                 </>
-            ) : <div className="w-full text-center">You must login to comment!</div>
+            ) : <div className="w-full text-center text-sm"><Link className="text-blue-400 font-bold" href="/login">ログイン</Link>してレビューを書く</div>
             }
         </form>
         </>

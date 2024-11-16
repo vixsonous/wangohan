@@ -1,7 +1,7 @@
 'use client';
 
 import { AnimatePresence } from "framer-motion";
-import Modal from "./Modal";
+import ModalCore from "./ModalCore";
 import { useAppSelector } from "@/lib/redux/hooks";
 import { textColor } from "@/constants/constants";
 
@@ -11,7 +11,7 @@ export default function SuccessModal() {
     return (
         <AnimatePresence>
             {show && (
-                <Modal>
+                <ModalCore>
                     <div className="relative p-[10px]">
                         <span className="z-[5]">
                             {message}
@@ -21,7 +21,7 @@ export default function SuccessModal() {
                             className="opacity-[1] rounded-md w-full h-full absolute top-0 left-0 z-[-1]"
                         ></div>
                     </div>
-                </Modal>
+                </ModalCore>
             )}
         </AnimatePresence>
     )

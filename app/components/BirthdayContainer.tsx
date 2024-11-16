@@ -26,6 +26,7 @@ export default function BirthdayContainer({bdayAvt} : BirthdayAvatars) {
             <Swiper  
                 slidesPerView={5}
                 loop
+                centeredSlides
                 modules={[Autoplay]}
                 autoplay={{
                     delay: 1000,

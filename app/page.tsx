@@ -51,7 +51,7 @@ export default async function Home() {
 
   return (
     <main className="relative flex p-[20px] min-h-screen flex-col md:items-center overflow-hidden pb-[50px] lg:pb-[200px]">
-      <div className=" flex md:w-full lg:w-[70vw] h-full justify-center items-center flex-col gap-[15px]">
+      <div className=" flex md:w-full lg:w-[70vw] max-w-md h-full justify-center items-center flex-col gap-[15px]">
         <div id="logo-banner" className="relative flex flex-col justify-center items-center">
           <img src={'/icons/logo-new.webp'} className="rounded-md h-[auto] relative left-[15px] w-[130px] relative" width={100} height={100}  alt="website banner" />
           <h1 className={`text-[36px] text-[#6b4528] font-bold leading-tight ${mochi.className}`}>わんごはん</h1>

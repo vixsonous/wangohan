@@ -98,9 +98,9 @@ export default function CreateRecipeForm() {
         }
         
         return valid;
-    },[]);
+    },[recipeInfo,recipeIngredients,recipeInstructions, files]);
 
-    const submitFunc = useCallback(async (e:SyntheticEvent) => {
+    const submitFunc = useCallback(async (e:React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
 
         if(!validationFunc()) return;
@@ -237,6 +237,57 @@ export default function CreateRecipeForm() {
         setRecipeInfo(prev => ({...prev, [nm]: e.target.value}))
     },[recipeInfo.recipeTitle, recipeInfo.recipeDescr]);
 
+    const slidesPerViewCondition = scMode <= 1 ? fileThumbnails.length < 2 ? 1 : 2 : fileThumbnails.length <= 4 ? fileThumbnails.length : 4;
+
+    const deleteFile = useCallback((e: React.MouseEvent<SVGElement>) => {
+        const idx = Number(e.currentTarget.id.split("-")[1]);
+        const newFiles = [...files].filter( (f, i) => i !== idx);
+        const newThumbnails = [...fileThumbnails].filter( (f, i) => i !== idx);
+        setFileThumbnails([...newThumbnails]);
+        setFiles([...newFiles]);
+    },[files, fileThumbnails]);
+
+    const deleteIngrInsOnClick = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+        const t = e.currentTarget.id;
+        const idx = Number(t.split("-")[2]);
+        const typ = t.split("-")[0];
+
+        e.preventDefault();
+
+        if(typ === "ingredients") {
+            recipeIngredients.splice(idx, 1)
+            setRecipeIngredients([...recipeIngredients])
+        } else {
+            recipeInstructions.splice(idx, 1)
+            setRecipeInstructions([...recipeInstructions])
+        }
+
+    },[recipeIngredients, recipeInstructions]);
+
+    const changeIngredientsOnChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+        const t = e.currentTarget;
+        const name = t.id.split("-")[0];
+        const idx = Number(t.id.split("-")[1]);
+
+        const prevArr = [...recipeIngredients] as ingredients[];
+        if(name === "name" || name === "amount") {
+            prevArr[idx][name] = t.value;
+        }
+        setRecipeIngredients([...prevArr]);
+    },[recipeIngredients]);
+
+    const categoryOnClick = useCallback((e: React.MouseEvent<HTMLInputElement>) => {
+        const t = e.currentTarget;
+        const name = t.name;
+        setRecipeInfo(prev => ({...prev, [name]: t.value !== recipeInfo[name as keyof typeof recipeInfo] ? t.value : ''}))
+    },[recipeInfo]);
+
+    const categoryOnChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+        const t = e.currentTarget;
+        const name = t.name;
+        setRecipeInfo(prev => ({...prev, [name]: t.value}))
+    },[recipeInfo]);
+
     return (
         <form action="" className="create-form flex flex-wrap gap-[30px] max-w-[768px] h-[100%]">
             <div className="flex-[0_0_100%]">
@@ -266,7 +317,7 @@ export default function CreateRecipeForm() {
                 </label>
                 <div className='p-[5px] m-[0] w-[90vw] max-w-[768px]'>
                     <Swiper
-                        slidesPerView={scMode <= 1 ? fileThumbnails.length < 2 ? 1 : 2 : fileThumbnails.length <= 4 ? fileThumbnails.length : 4}
+                        slidesPerView={slidesPerViewCondition}
                         modules={[ Virtual, Navigation, Thumbs]}
                         spaceBetween={5}
                         pagination={{
@@ -274,18 +325,13 @@ export default function CreateRecipeForm() {
                         }}
                         className="h-[100%] w-[100%] rounded-md"
                         virtual
-                        >
+                    >
                         {
                             fileThumbnails.map((img, idx) => {
                                 return (
                                     <SwiperSlide key={img} virtualIndex={idx} className="relative pt-[20px] w-[100%] h-[100%] relative overflow-visible">
-                                        <img src={img} className="object-cover w-[100%] h-[130px] relative rounded-[0px]" width={10000} height={10000}  alt="website banner" />
-                                        <FontAwesomeIcon onClick={() => {
-                                            const newFiles = [...files].filter( (f, i) => i !== idx);
-                                            const newThumbnails = [...fileThumbnails].filter( (f, i) => i !== idx);
-                                            setFileThumbnails([...newThumbnails]);
-                                            setFiles([...newFiles]);
-                                        }} icon={faTrash} size="sm" style={{color: '#523636'}} className="absolute p-[5px] bg-[#FFFAF0] opacity-[0.8] rounded-xl top-[10px] right-[0px]"/>
+                                        <img src={img} className="object-cover w-[100%] h-[130px] relative rounded-[0px]" width={100} height={100}  alt="website banner" />
+                                        <FontAwesomeIcon id={`del-${idx}`} onClick={deleteFile} icon={faTrash} size="sm" style={{color: '#523636'}} className="absolute p-[5px] bg-[#FFFAF0] opacity-[0.8] rounded-xl top-[10px] right-[0px]"/>
                                     </SwiperSlide>
                                 )
                             })
@@ -304,21 +350,9 @@ export default function CreateRecipeForm() {
                     return (
                         <div key={idx}>
                             <div className="flex gap-[15px]">
-                                <input value={recipeIngredients[idx].name} onChange={(e) => {
-                                    const prevArr = [...recipeIngredients];
-                                    prevArr[idx].name = e.target.value;
-                                    setRecipeIngredients([...prevArr]);
-                                }} className="w-[50%] border-[2px] rounded-[5px] border-grey-100 p-[7px] text-[13px] bg-[#fff8ef]" placeholder="例）にんじん" type="text" name={`recipe-ingredient-name-${idx}`} id={`recipe-ingredient-name-${idx}`} />
-                                <input value={recipeIngredients[idx].amount} onChange={(e) => {
-                                    const prevArr = [...recipeIngredients];
-                                    prevArr[idx].amount = e.target.value;
-                                    setRecipeIngredients([...prevArr]);
-                                }} className="w-[50%] border-[2px] rounded-[5px] border-grey-100 p-[7px] text-[13px] bg-[#fff8ef]" placeholder="例）1/2本" type="text" name={`recipe-ingredient-amt-${idx}`} id={`recipe-ingredient-amt-${idx}`} />
-                                <button aria-label="delete-ingredients-button" onClick={(e) => {
-                                    e.preventDefault();
-                                    recipeIngredients.splice(idx, 1)
-                                    setRecipeIngredients([...recipeIngredients])
-                                }}>
+                                <input value={recipeIngredients[idx].name} id={`name-${idx}`} onChange={changeIngredientsOnChange} className="w-[50%] border-[2px] rounded-[5px] border-grey-100 p-[7px] text-[13px] bg-[#fff8ef]" placeholder="例）にんじん" type="text" name={`recipe-ingredient-name-${idx}`} />
+                                <input value={recipeIngredients[idx].amount} id={`amount-${idx}`} onChange={changeIngredientsOnChange} className="w-[50%] border-[2px] rounded-[5px] border-grey-100 p-[7px] text-[13px] bg-[#fff8ef]" placeholder="例）1/2本" type="text" name={`recipe-ingredient-amt-${idx}`} />
+                                <button aria-label="delete-ingredients-button" id={`ingredients-del-${idx}`} onClick={deleteIngrInsOnClick}>
                                     <FontAwesomeIcon icon={faTrash} size="sm" style={{color: '#523636'}} className="opacity-[1] rounded-xl"/>
                                 </button>
                             </div>
@@ -344,11 +378,7 @@ export default function CreateRecipeForm() {
                                     prevArr[idx].text = e.target.value;
                                     setRecipeInstructions([...prevArr]);
                                 }} className="w-[100%] border-[2px] rounded-[5px] border-grey-100 p-[7px] text-[13px] bg-[#fff8ef]" placeholder="レシピの手順を記入" type="text" name={`recipe-instructions-${idx}`} id={`recipe-instructions-${idx}`} />
-                                <button aria-label="delete-instructions-button" onClick={(e) => {
-                                    e.preventDefault();
-                                    recipeInstructions.splice(idx, 1)
-                                    setRecipeInstructions([...recipeInstructions])
-                                }}>
+                                <button aria-label="delete-instructions-button" id={`instructions-del-${idx}`} onClick={deleteIngrInsOnClick}>
                                 <FontAwesomeIcon icon={faTrash} size="sm" style={{color: '#523636'}} className="opacity-[1] rounded-xl"/></button>
                             </div>
                         </div>
@@ -368,7 +398,7 @@ export default function CreateRecipeForm() {
                                 ['子犬', '成犬', 'シニア犬'].map((el, idx) => {
                                     return (
                                         <React.Fragment key={idx}>
-                                        <input className="hidden" type="radio" checked={recipeInfo.age === el} onClick={(e) => setRecipeInfo(prev => ({...prev, age: (e.target as HTMLInputElement).value !== recipeInfo.age ? (e.target as HTMLInputElement).value : ''}))} onChange={(e) => setRecipeInfo(prev => ({...prev, age: e.target.value}))} name="age" value={el} id={el} />
+                                        <input className="hidden" type="radio" checked={recipeInfo.age === el} onClick={categoryOnClick} onChange={categoryOnChange} name="age" value={el} id={el} />
                                         <label htmlFor={el}>
                                             <span className={`cursor-pointer bg-[#523636] self-center flex justify-center border-[2px] border-[transparent] items-center text-white py-[5px] px-[7px] rounded-[5px] text-[${CardTagSize}]`}>{el}</span>
                                         </label>
@@ -385,7 +415,7 @@ export default function CreateRecipeForm() {
                                 ['小型犬','中型犬','大型犬'].map( (el, idx) => {
                                     return (
                                         <React.Fragment key={idx}>
-                                        <input checked={recipeInfo.size === el} onClick={(e) => setRecipeInfo(prev => ({...prev, size: (e.target as HTMLInputElement).value !== recipeInfo.size ? (e.target as HTMLInputElement).value : ''}))} onChange={(e) => setRecipeInfo(prev => ({...prev, size: e.target.value}))} className="hidden" type="radio" name="size" id={el} value={el} />
+                                        <input checked={recipeInfo.size === el} onClick={categoryOnClick} onChange={categoryOnChange} className="hidden" type="radio" name="size" id={el} value={el} />
                                         <label htmlFor={el}>
                                             <span className={`cursor-pointer bg-[#523636] self-center flex justify-center border-[2px] border-[transparent] items-center text-white py-[5px] px-[7px] rounded-[5px] text-[${CardTagSize}]`}>{el}</span>
                                         </label>
@@ -403,7 +433,7 @@ export default function CreateRecipeForm() {
                                     'こどもの日','七夕','ハロウィン','クリスマス','おやつ','その他'].map( (el, idx) => {
                                         return (
                                             <React.Fragment key={idx}>
-                                                <input checked={recipeInfo.event === el} onClick={(e) => setRecipeInfo(prev => ({...prev, event: (e.target as HTMLInputElement).value !== recipeInfo.event ? (e.target as HTMLInputElement).value : ''}))} onChange={(e) => setRecipeInfo(prev => ({...prev, event: e.target.value}))} className="hidden" type="radio" name="event" id={el} value={el} />
+                                                <input checked={recipeInfo.event === el} onClick={categoryOnClick} onChange={categoryOnChange} className="hidden" type="radio" name="event" id={el} value={el} />
                                                 <label htmlFor={el}>
                                                     <span className={`cursor-pointer bg-[#523636] self-center flex justify-center border-[2px] border-[transparent] items-center text-white py-[5px] px-[7px] rounded-[5px] text-[${CardTagSize}]`}>{el}</span>
                                                 </label>
@@ -416,7 +446,7 @@ export default function CreateRecipeForm() {
                 </div>
             </div>
             <div className="w-full flex justify-center flex-col text-center">
-                <button aria-label="create-recipe-button" disabled={submit} onClick={e => submitFunc(e)} className="bg-[#ffb762] text-white py-[10px] rounded-md text-[13px] px-[20px] font-bold self-center" type="submit">   
+                <button aria-label="create-recipe-button" disabled={submit} onClick={submitFunc} className="bg-[#ffb762] text-white py-[10px] rounded-md text-[13px] px-[20px] font-bold self-center" type="submit">   
                     {!submit ? (
                         '作成する'
                     ): (

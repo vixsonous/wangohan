@@ -44,7 +44,7 @@ export default function RecipeSlider ({title, recipes}:RecipeSliderInterface) {
                     "--swiper-pagination-bullet-horizontal-gap": "10px"
                 } as CSSProperties} 
                 speed={1000}
-                virtual={recipes.length > 4}
+                
                 loop={recipes.length > 4}
             >
                 {recipes.map( (recipe, idx) => {

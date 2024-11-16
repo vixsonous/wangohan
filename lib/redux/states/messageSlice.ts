@@ -11,6 +11,9 @@ export const messageSlice = createSlice({
         success: {
             show: false,
             message: ''
+        },
+        modal: {
+          show: false,
         }
     },
     reducers: {
@@ -25,8 +28,13 @@ export const messageSlice = createSlice({
             state.success.show = true;
         },
         hideSuccess: state => {state.success.show = false;},
+
+        showModal: (state) => {
+          state.modal.show = true;
+        },
+        hideModal: state => {state.modal.show = false;},
     }
 });
 
-export const { showError, hideError, showSuccess, hideSuccess } = messageSlice.actions;
+export const { showError, hideError, showSuccess, hideSuccess, showModal, hideModal } = messageSlice.actions;
 export default messageSlice.reducer;

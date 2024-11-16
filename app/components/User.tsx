@@ -1,9 +1,9 @@
 'use client';
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 
-export default function User() {
+export default memo(function User() {
 
     const userIcn = useRef<HTMLImageElement>(null);
     const div = useRef<HTMLDivElement>(null);
@@ -36,4 +36,4 @@ export default function User() {
             </div>
         </div>
     )
-}
+});

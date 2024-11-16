@@ -2,11 +2,11 @@
 import Image from "next/image";
 import Settings from "./Settings";
 import User from "./User";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useAppSelector } from "@/lib/redux/hooks";
 
-export default function LayoutSettings({isLoggedIn} : {isLoggedIn: boolean}) {
+export default memo(function LayoutSettings({isLoggedIn} : {isLoggedIn: boolean}) {
 
     const pathname = usePathname();
     const [user, setUser] = useState(isLoggedIn);
@@ -41,4 +41,4 @@ export default function LayoutSettings({isLoggedIn} : {isLoggedIn: boolean}) {
         }
         </>
     )
-}
+});

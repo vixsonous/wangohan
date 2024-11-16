@@ -15,6 +15,7 @@ import StoreProvider from "./StoreProvide";
 import { getDecryptedSession } from "@/action/lib";
 import { getUserDetails } from "@/action/users";
 import React from "react";
+import Modal from "./components/ElementComponents/Modal";
 
 const ErrorModal = React.lazy(() => import("./components/ElementComponents/ErrorModal"));
 const SuccessModal = React.lazy(() => import("./components/ElementComponents/SuccessModal"));
@@ -77,7 +78,7 @@ export default async function RootLayout({
             </div>
             
             {isLoggedIn && <CreateRecipeComponent />}
-            <div className={`pt-[65.68px] overflow-hidden ${myFont.className} grow`}>
+            <div className={`pt-[65.68px] ${myFont.className} grow`}>
               {children}
             </div>
             <div className="footer mt-[100px]">
