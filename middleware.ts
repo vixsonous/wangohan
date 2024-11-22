@@ -1,9 +1,9 @@
 import { NextRequest } from "next/server";
 import { updateSession } from "./action/lib";
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
     const currentUser = request.cookies.get('session')?.value;
-
+    
     const protectedRoutes = []
 
     if(!currentUser && (request.nextUrl.pathname.startsWith('/user')

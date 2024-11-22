@@ -39,7 +39,7 @@ export default function ImageSwiper({
         <div className='relative'>
             {loginSts.isLoggedIn && owner_id === loginSts.user_id && <RecipeOptions recipe_id={recipe_id} />}
             <Swiper
-                className='w-full h-[30vh]'
+                className='w-full h-[50vh]'
                 modules={[Navigation, Pagination, Thumbs]}
                 spaceBetween={50}
                 slidesPerView={1}
@@ -57,14 +57,15 @@ export default function ImageSwiper({
                     recipe_images.map((img, idx) => {
                         return (
                             <SwiperSlide key={idx} className="relative">
-                                <img key={idx} src={img} className="object-cover relative h-[100%] rounded-[0px] w-[100%] max-w-none" width={10000} height={10000}  alt="website banner" />
+                                <div className='absolute top-0 w-full h-full bg-primary-text opacity-50 z-[-1]'></div>
+                                <img key={idx} src={img} className="object-contain relative h-[100%] rounded-[0px] w-[100%] max-w-none" width={10000} height={10000}  alt="website banner" />
                             </SwiperSlide>
                         )
                     })
                 }
             </Swiper>
             {recipe_images.length > 1 ? (
-                <div className='p-[5px] m-[0]'>
+                <div className='p-2 md:px-0 m-[0]'>
                     <Swiper
                         key={recipe_images.length}
                         onSwiper={setThumbsSwiper}
@@ -73,7 +74,7 @@ export default function ImageSwiper({
                         spaceBetween={5}
                         watchSlidesProgress={true}
                         modules={[ Navigation, Thumbs]}
-                        className="h-[100px]"
+                        className="h-32"
                         >
                         {
                             recipe_images.map((img, idx) => {

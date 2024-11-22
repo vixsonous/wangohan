@@ -15,6 +15,7 @@ import StarReviews from "../../../components/ElementComponents/StarReviews";
 import CommentForm from "./components/CommentForm";
 import CommentSection from "./components/CommentSection";
 import LikeRecipe from "@/app/components/ElementComponents/LikeRecipe";
+import { getUserDetails } from "@/action/users";
 
 type Props = {
     params: {recipeId: String},
@@ -54,7 +55,8 @@ export default async function ShowRecipe({params, searchParams}:{params: {recipe
 
     const {recipeId} = params;
 
-    const ret = await getRecipeData(Number(recipeId));
+    const [ret, decryptedSession] = await Promise.all([await getRecipeData(Number(recipeId)), await getDecryptedSession()]);
+
     const recipe_data = ret.body;
 
     if(recipe_data === undefined || recipe_data.user === undefined ) redirect("/"); 
@@ -67,9 +69,8 @@ export default async function ShowRecipe({params, searchParams}:{params: {recipe
 
     const reviewComments:Array<Comment> = recipe_data.recipe_comments;
 
-    const decryptedSession = await getDecryptedSession();
+    
     const isLoggedIn = decryptedSession ? true : false;
-
     const likeStatus = await isLikedExist(recipe_data.recipe_id,decryptedSession ? decryptedSession.user.user_id : -1);
     
     return (
@@ -84,7 +85,15 @@ export default async function ShowRecipe({params, searchParams}:{params: {recipe
                         {recipe_data.recipe_event_tag !== '' ? <span className={`bg-[#523636] self-center flex justify-center items-center text-white py-[2px] px-[7px] rounded-[5px] text-[${CardTagSize}]`}>{recipe_data.recipe_event_tag}</span> : null}
                     </div>
                     <div className="flex gap-[5px] items-center">
-                        {isLoggedIn && <LikeRecipe likeStatus={likeStatus.body} recipe_id={recipe_data.recipe_id} style={{width: '30px', height: '30px'}}/>}
+                        {isLoggedIn && 
+                          <LikeRecipe 
+                            user_name={decryptedSession.user.codename} 
+                            likeStatus={likeStatus.body} 
+                            user_id={decryptedSession.user.user_id} 
+                            recipe_id={recipe_data.recipe_id} 
+                            recipe_name={recipe_data.recipe_name}
+                            style={{width: '30px', height: '30px'}}
+                          />}
                     </div>
                 </div>
             </div>

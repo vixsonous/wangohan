@@ -1,4 +1,5 @@
 import { encrypt } from "@/action/lib";
+import { registerSocketUser } from "@/action/socket";
 import { getUser } from "@/action/users";
 import { getExpireDate } from "@/constants/constants";
 import { cookies, headers } from "next/headers";
@@ -19,7 +20,7 @@ export const POST = async ( req: Request) => {
 
         const expires = getExpireDate();
         const session = await encrypt({user, expires});
-
+        registerSocketUser(user.user_id);
         response.cookies.set('session', session, {
             path: '/',
             httpOnly: true, 

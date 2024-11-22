@@ -49,7 +49,7 @@ export default async function User() {
     return (
         <Suspense fallback={<IndexLoading />}>
             <div className="flex flex-col justify-center items-center ">
-                <div className="relative pb-[100px] max-w-[768px]">
+                <div className="relative pb-[100px] max-w-md">
                     <div className="user-image relative flex flex-col justify-center items-center mt-[30px]">
                         <OptImage loading="lazy" src={image_url} className="rounded-[100px] w-[150px] h-[150px] object-cover relative" width={150} height={150} alt="website banner"/>
                         <img loading="lazy" src={'/recipe-making/pic-background.webp'} className="absolute top-0 rounded-[100px] w-[150px] h-[150px] object-cover z-[-1]" width={150} height={150}  alt="website banner" />

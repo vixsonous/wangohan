@@ -20,9 +20,9 @@ export default function MainSearchForm() {
     const searchOnChange = (e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value);
 
     return (
-        <form className="flex gap-[10px] w-[100%] flex justify-end" action="">
-            <input value={search} onChange={searchOnChange} className="py-[5px] px-[5px] w-[50%] h-[25px] rounded-[3px] text-[9px]" placeholder="キーワードで検索" type="text" />
-            <button onClick={searchFunc} className="px-[10px] w-[50px] h-[25px] rounded-[3px] bg-black text-white text-[9px]" type="submit">検索</button>
+        <form className="flex gap-[10px] w-[100%] flex justify-start" action="">
+            <input value={search} onChange={searchOnChange} className="py-1 px-4 w-[80%] rounded-md text-xs md:text-sm" placeholder="キーワードで検索" type="text" />
+            <button onClick={searchFunc} className="px-4 rounded-md bg-black text-white text-xs" type="submit">検索</button>
         </form>
     )
 }

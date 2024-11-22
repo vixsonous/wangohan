@@ -73,13 +73,13 @@ export default async function RootLayout({
             <SuccessModal />
             <div className="fixed px-[20px] w-[100%] z-[999] pt-[5px] flex justify-between items-center border-b-[1px]  shadow-md">
               <Link href="/"><img className="w-[60px] h-[auto]" src={'/logo-final.webp'} width={100} height={100} alt="website logo" /></Link>
-              <LayoutSettings isLoggedIn={isLoggedIn}/>
+              <LayoutSettings user_id={user.user_id} isLoggedIn={isLoggedIn}/>
               <div className="absolute top-0 left-0 w-[100%] h-[100%] bg-[#FFFAF0] opacity-[0.9] z-[-1]"></div>
             </div>
             
             {isLoggedIn && <CreateRecipeComponent />}
-            <div className={`pt-[65.68px] ${myFont.className} grow`}>
-              {children}
+            <div className={`pt-[65.68px] ${myFont.className} flex grow justify-center`}>
+              <div className='w-screen max-w-lg'>{children}</div>
             </div>
             <div className="footer mt-[100px]">
               <div className="border-[1px] border-black overflow-hidden " />

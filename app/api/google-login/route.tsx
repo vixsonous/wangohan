@@ -1,4 +1,5 @@
 import { encrypt } from "@/action/lib";
+import { registerSocketUser } from "@/action/socket";
 import { findGoogleUser, getUserDetails } from "@/action/users";
 import { ERR_MSG, getExpireDate } from "@/constants/constants";
 import { NextRequest, NextResponse } from "next/server";
@@ -17,7 +18,7 @@ export async function POST(req: NextRequest) {
         const session = await encrypt({user, expires});
 
         const response = NextResponse.redirect(new URL("/", req.url), {status: 302});
-        
+        registerSocketUser(user_id);
         response.cookies.set('session', session, {
             path: '/',
             httpOnly: true, 
