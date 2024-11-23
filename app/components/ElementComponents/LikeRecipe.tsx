@@ -14,6 +14,7 @@ const socket = getSocket();
 export default memo(function LikeRecipe({
   recipe_id, 
   recipe_name, 
+  recipe_owner_id,
   user_id, 
   user_name, 
   style={}, 
@@ -21,6 +22,7 @@ export default memo(function LikeRecipe({
 } : {
   recipe_id: number, 
   recipe_name: string, 
+  recipe_owner_id: number,
   user_id:number, 
   user_name: string, 
   style?:object, 
@@ -54,7 +56,9 @@ export default memo(function LikeRecipe({
       recipe_id: recipe_id, 
       user_id: user_id,
       recipe_name: recipe_name,
+      recipe_owner_id: recipe_owner_id,
       user_name: user_name,
+      liked: !state.isLiked
     }));
 
     setState(prev => ({...prev, isLiked: !prev.isLiked, processing: true, bounce: true}));

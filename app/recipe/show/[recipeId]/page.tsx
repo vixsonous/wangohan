@@ -91,6 +91,7 @@ export default async function ShowRecipe({params, searchParams}:{params: {recipe
                             likeStatus={likeStatus.body} 
                             user_id={decryptedSession.user.user_id} 
                             recipe_id={recipe_data.recipe_id} 
+                            recipe_owner_id={recipe_data.user_id}
                             recipe_name={recipe_data.recipe_name}
                             style={{width: '30px', height: '30px'}}
                           />}
