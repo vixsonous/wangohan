@@ -212,7 +212,7 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
           maxWidth={this.__maxWidth}
           nodeKey={this.getKey()}
           showCaption={this.__showCaption}
-          caption={this.__caption}
+          caption={{current: this.__caption.getRootElement() as HTMLDivElement}}
           captionsEnabled={this.__captionsEnabled}
           resizable={true}
         />
