@@ -9,11 +9,10 @@ const socket = getSocket();
 
 export default memo(function LayoutSettings({isLoggedIn, user_id} : {isLoggedIn: boolean, user_id: number}) {
 
-  const sessionNotifications = sessionStorage.getItem(String(user_id));
     const pathname = usePathname();
     const [user, setUser] = useState(isLoggedIn);
     const [notificationCount, setNotificationCount] = useState(0);
-    const [notifications, setNotifications] = useState(sessionNotifications ? JSON.parse(sessionNotifications) as String[] : [] as String[]);
+    const [notifications, setNotifications] = useState([] as String[]);
     const [openNotification, setOpenNotification] = useState(false);
 
     const notificationUpdate = useCallback( (message:string) => {
@@ -34,8 +33,9 @@ export default memo(function LayoutSettings({isLoggedIn, user_id} : {isLoggedIn:
     },[]);
 
     useEffect(() => {
-      console.log(notifications);
-    },[notifications]);
+      const sessionNotifications = sessionStorage.getItem(String(user_id));
+      setNotifications(sessionNotifications ? JSON.parse(sessionNotifications) as String[] : [] as String[]);
+    },[]);
 
     useEffect(() => {
         const fetchSession = async () => {
