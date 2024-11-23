@@ -21,8 +21,6 @@ app.prepare().then(() => {
   io.on("connection", (socket) => {
     // ...
     console.log('A user connected', socket.id);
-    console.log(socketUsers);
-    console.log(userSockets);
   
     // Handle chat messages
     socket.on('chat message',async (message) => {

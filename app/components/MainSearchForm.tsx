@@ -21,8 +21,8 @@ export default function MainSearchForm() {
 
     return (
         <form className="flex gap-[10px] w-[100%] flex justify-start" action="">
-            <input value={search} onChange={searchOnChange} className="py-1 px-4 w-[80%] rounded-md text-xs md:text-sm" placeholder="キーワードで検索" type="text" />
-            <button onClick={searchFunc} className="px-4 rounded-md bg-black text-white text-xs" type="submit">検索</button>
+            <input value={search} onChange={searchOnChange} className="py-2 px-4 w-[75%] rounded-md text-xs md:text-sm" placeholder="キーワードで検索" type="text" />
+            <button onClick={searchFunc} className="px-4 rounded-md bg-primary-text text-white text-xs" type="submit">検索</button>
         </form>
     )
 }

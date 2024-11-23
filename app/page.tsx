@@ -6,6 +6,7 @@ import { getPopularRecipes, getWeeklyRecipes } from "@/action/recipe";
 import { DisplayRecipe } from "@/constants/interface";
 import MainSearchForm from "./components/MainSearchForm";
 import Link from "next/link";
+import TopRecipeSlider from "./components/TopRecipeSlider";
 
 const gloria = Gloria_Hallelujah({
   weight: '400',
@@ -165,9 +166,9 @@ export default async function Home() {
           <div className="search-form relative flex justify-end md:hidden">
             <MainSearchForm />
           </div>
-          <div className='flex gap-2 items-start'>
-            <div className="md:flex-[1_0_60%] flex-[1_0_100%] w-full h-full relative">
-              <img src={'/dashboard.webp'} loading="eager" className="rounded-md h-full w-full relative" width={100} height={100}  alt="website banner" />
+          <div className='flex gap-8 items-start'>
+            <div className='md:flex-[1_0_60%] flex-[1_0_100%] max-w-full md:max-w-[60%] h-full relative' >
+              <TopRecipeSlider recipes={popularRecipes}/>
             </div>
             <div className="hidden flex-[1_0_40%] md:block w-full h-full relative">
               <div className="search-form relative flex justify-end hidden md:block">

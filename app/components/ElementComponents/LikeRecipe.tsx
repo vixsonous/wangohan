@@ -13,7 +13,8 @@ const socket = getSocket();
 
 export default memo(function LikeRecipe({
   recipe_id, 
-  recipe_name, 
+  recipe_image, 
+  recipe_name,
   recipe_owner_id,
   user_id, 
   user_name, 
@@ -21,6 +22,7 @@ export default memo(function LikeRecipe({
   likeStatus={isLikedExist: false, liked: false}
 } : {
   recipe_id: number, 
+  recipe_image: string, 
   recipe_name: string, 
   recipe_owner_id: number,
   user_id:number, 
@@ -55,14 +57,14 @@ export default memo(function LikeRecipe({
     socket.emit('like recipe', JSON.stringify({
       recipe_id: recipe_id, 
       user_id: user_id,
-      recipe_name: recipe_name,
+      recipe_image: recipe_image,
       recipe_owner_id: recipe_owner_id,
-      user_name: user_name,
-      liked: !state.isLiked
+      message: `${user_name}があなたのレシピにいいねしました。`,
+      liked: !state.isLiked,
+      isRead: false,
     }));
 
     setState(prev => ({...prev, isLiked: !prev.isLiked, processing: true, bounce: true}));
-    // setState(prev => ({...prev, bounce: false}));
 
     await fetch('/api/recipe-like', {
         method: likeStatus.isLikedExist ? 'PATCH' : 'POST',
@@ -83,7 +85,6 @@ export default memo(function LikeRecipe({
 
   return (
       <button disabled={state.processing} onClick={likeFunc}>
-          {/* <FontAwesomeIcon color={state.isLiked ? textColor.error : ''} size="sm" bounce={state.bounce} style={style} icon={faHeart}/> */}
           <Heart color={state.isLiked ? textColor.error : ''} weight={state.isLiked ? "fill" : "regular"} size={28}/>
       </button>
   )

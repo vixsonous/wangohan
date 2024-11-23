@@ -5,6 +5,7 @@ import Image from "next/image";
 import Slider from "react-slick";
 import { Swiper, SwiperClass, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
+import { md } from "@/constants/constants";
 
 interface BirthdayAvatars {
     bdayAvt: Array<String>
@@ -19,12 +20,20 @@ export default memo(function BirthdayContainer({bdayAvt} : BirthdayAvatars) {
   return (
       <div className="flex flex-col gap-[40px] justify-center items-center mt-[30px] relative">
           <div className="title">
-              <h1 className="text-[23px] font-bold text-[#523636] relative after:content-[''] z-[1] after:w-[105%] after:left-[-7px] after:h-[40px] after:top-[5px] after:z-[-1] after:flex after:absolute after:bg-[#FFE9C9]">本日お誕生日のわんちゃん</h1>
+              <h1 className="text-2xl font-bold text-[#523636] relative after:content-[''] z-[1] after:w-[105%] after:left-[-7px] after:h-[40px] after:top-[5px] after:z-[-1] after:flex after:absolute after:bg-[#FFE9C9]">本日お誕生日のわんちゃん</h1>
               <div className="absolute z-[-1] left-[0px] w-full top-[17px] border-[1px] border-solid border-[#523636]"/>
           </div>
           <div className="w-full">
           <Swiper  
-              slidesPerView={5}
+              breakpoints= {{
+                300: {
+                  slidesPerView: 3,
+                },
+                1024: {
+                  slidesPerView: 5,
+                },
+              }}
+              
               loop
               centeredSlides
               modules={[Autoplay]}
@@ -33,7 +42,7 @@ export default memo(function BirthdayContainer({bdayAvt} : BirthdayAvatars) {
                   disableOnInteraction: false,
               }}
               speed={2000}
-              style={{overflow: 'visible'}}
+              style={{overflow: 'visible', width: '100%'}}
           >
           {
               bdayAvt.map((el, idx) => {

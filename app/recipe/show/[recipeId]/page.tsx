@@ -56,7 +56,8 @@ export default async function ShowRecipe({params, searchParams}:{params: {recipe
     const {recipeId} = params;
 
     const [ret, decryptedSession] = await Promise.all([await getRecipeData(Number(recipeId)), await getDecryptedSession()]);
-
+    
+    const user_details = decryptedSession ? await getUserDetails(decryptedSession.user.user_id) : undefined
     const recipe_data = ret.body;
 
     if(recipe_data === undefined || recipe_data.user === undefined ) redirect("/"); 
@@ -87,11 +88,12 @@ export default async function ShowRecipe({params, searchParams}:{params: {recipe
                     <div className="flex gap-[5px] items-center">
                         {isLoggedIn && 
                           <LikeRecipe 
-                            user_name={decryptedSession.user.codename} 
+                            user_name={user_details ? user_details.user_codename : ''} 
                             likeStatus={likeStatus.body} 
                             user_id={decryptedSession.user.user_id} 
                             recipe_id={recipe_data.recipe_id} 
                             recipe_owner_id={recipe_data.user_id}
+                            recipe_image={recipe_images[0]}
                             recipe_name={recipe_data.recipe_name}
                             style={{width: '30px', height: '30px'}}
                           />}
