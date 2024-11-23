@@ -78,7 +78,7 @@ export default async function RootLayout({
             </div>
             
             {isLoggedIn && <CreateRecipeComponent />}
-            <div className={`pt-[65.68px] ${myFont.className} flex grow justify-center`}>
+            <div className={`pt-[65.68px] min-h-screen ${myFont.className} flex grow justify-center`}>
               <div className='w-screen max-w-lg'>{children}</div>
             </div>
             <div className="footer mt-[100px]">

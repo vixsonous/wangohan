@@ -77,39 +77,41 @@ export default function Settings() {
                             <img src={'/recipe-button.webp'} className="self-center rounded-md h-[auto] w-full relative absolute top-0" width={10000} height={10000}  alt="website banner" />
                         </button>
                         <Link onClick={openSettings} className="w-full" href="/">
-                        <div className="w-full text-[.5em] sm:text-[.75em] flex justify-between items-center border-b-[1px] border-black border-solid">
-                            <FontAwesomeIcon icon={faHouse} style={{color: '#523636'}}  />
-                            ホーム
-                        </div>
+                          <div className="w-full text-sm flex justify-between items-center border-b-[1px] border-black border-solid">
+                              <FontAwesomeIcon icon={faHouse} style={{color: '#523636'}}  />
+                              ホーム
+                          </div>
                         </Link>
         
                         <Link onClick={openSettings} className="w-full" href={`/user/${user.user_id}`}>
-                        <div className="w-full text-[.5em] sm:text-[.75em] flex justify-between items-center border-b-[1px] border-black border-solid">
-                            <FontAwesomeIcon icon={faUser} style={{color: '#523636'}}  />
-                            マイページ
-                        </div>
+                          <div className="w-full text-sm flex justify-between items-center border-b-[1px] border-black border-solid">
+                              <FontAwesomeIcon icon={faUser} style={{color: '#523636'}}  />
+                              マイページ
+                          </div>
                         </Link>
         
                         <Link onClick={openSettings} className="w-full" href="/recipe/list/1">
-                        <div className="w-full text-[.5em] sm:text-[.75em] flex justify-between items-center border-b-[1px] border-black border-solid">
-                            <FontAwesomeIcon icon={faBook} style={{color: '#523636'}}  />
-                            レシピ図鑑
-                        </div>
+                          <div className="w-full text-sm flex justify-between items-center border-b-[1px] border-black border-solid">
+                              <FontAwesomeIcon icon={faBook} style={{color: '#523636'}}  />
+                              レシピ図鑑
+                          </div>
                         </Link>
         
                         <Link onClick={openSettings} className="w-full" href="/user/settings">
-                        <div className="w-full text-[.5em] sm:text-[.75em] flex justify-between items-center border-b-[1px] border-black border-solid">
-                            <FontAwesomeIcon icon={faLanguage} style={{color: '#523636'}}  />
-                            言語
-                        </div>
+                          <div className="w-full text-sm flex justify-between items-center border-b-[1px] border-black border-solid">
+                              <FontAwesomeIcon icon={faLanguage} style={{color: '#523636'}}  />
+                              言語
+                          </div>
                         </Link>
         
-                        <div className="w-full text-[.5em] sm:text-[.75em] flex justify-between items-center border-b-[1px] border-black border-solid">
-                            <FontAwesomeIcon icon={faDog} style={{color: '#523636'}}  />
-                            コラム
-                        </div>
+                        <Link onClick={openSettings} className="w-full" href="/">
+                          <div className="w-full text-sm flex justify-between items-center border-b-[1px] border-black border-solid">
+                              <FontAwesomeIcon icon={faDog} style={{color: '#523636'}}  />
+                              コラム
+                          </div>
+                        </Link>
         
-                        <div onClick={logout} className="w-full text-[.5em] sm:text-[.75em] flex justify-between items-center border-b-[1px] border-black border-solid">
+                        <div onClick={logout} className="w-full text-sm flex justify-between items-center border-b-[1px] border-black border-solid">
                             <FontAwesomeIcon icon={faSignOut} style={{color: '#523636'}}  />
                             ログアウト
                         </div>

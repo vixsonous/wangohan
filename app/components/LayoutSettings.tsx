@@ -59,7 +59,10 @@ export default memo(function LayoutSettings({isLoggedIn, user_id} : {isLoggedIn:
       }
     },[user_id]);
 
-    const openNotificationOnClick = useCallback(() => setOpenNotification(prev => !prev),[]);
+    const openNotificationOnClick = useCallback(() => {
+      sessionStorage.removeItem(String(user_id));
+      setOpenNotification(prev => !prev);
+    },[]);
 
     return (
         <>

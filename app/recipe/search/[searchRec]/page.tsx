@@ -31,7 +31,7 @@ export default async function SearchPage({params, searchParams}:{params: {search
                 <h1 className="absolute top-[10px] font-semibold text-[#523636]">"{decoded}"を含むレシピ</h1>
                 <img loading="lazy" src={'/icons/ribbon.webp'} className="h-[auto] w-[200px] sm:w-[300px] max-w-none opacity-0" width={10000} height={10000}  alt="website banner" />
             </div>
-            <div className="grid grid-cols-2 gap-x-[10px] gap-y-[20px]">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-x-[10px] gap-y-[20px]">
             {
                 result && result.length != 0 ? (
                     result.map( (rec, idx) => {
