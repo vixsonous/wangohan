@@ -275,3 +275,19 @@ export async function updateUserInfo(codenm: string, profPic: File, user_id: num
       return {message: _e, body: undefined, status: 500};
   }
 }
+
+export async function saveNotification(user_id: number, notification_content: string) {
+  try {
+    
+    const saveNotif = await db.insertInto("notifications_table").values({
+      user_id: user_id,
+      notification_content: notification_content,
+      updated_at: new Date(),
+      created_at: new Date()
+    }).execute();
+
+  } catch(e) {
+    let _e = (e as Error).message;
+    return {message: _e, body: undefined, status: 500};
+  }
+}

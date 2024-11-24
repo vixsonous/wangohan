@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { getSocket } from "@/action/socket";
 import OptImage from "./ElementComponents/Image";
 import Link from "next/link";
-import { Heart } from "@phosphor-icons/react/dist/ssr";
+import { Heart, Star } from "@phosphor-icons/react/dist/ssr";
 import { textColor } from "@/constants/constants";
 
 const socket = getSocket(); 
@@ -19,16 +19,41 @@ export default memo(function LayoutSettings({isLoggedIn, user_id} : {isLoggedIn:
     const [notifications, setNotifications] = useState([] as String[]);
     const [openNotification, setOpenNotification] = useState(false);
 
-    const notificationUpdate = useCallback( (message:string) => {
+    const likeNotificationUpdate = useCallback( (message:string) => {
 
       setNotifications(prev =>{
         const parsedMessage = JSON.parse(message);
-        if(prev.filter(x => JSON.parse(x as string).recipe_id === parsedMessage.recipe_id).length > 0) {
-          prev = prev.map(c => JSON.stringify({...JSON.parse(c as string), liked: JSON.parse(c as string).recipe_id === parsedMessage.recipe_id ? parsedMessage.liked : JSON.parse(c as string).liked}));
-          prev = prev.filter(c => JSON.parse(c as string).liked && JSON.parse(c as string).recipe_owner_id === user_id);
+        if(prev.filter(x => JSON.parse(x as string).type === 'like' && JSON.parse(x as string).recipe_id === parsedMessage.recipe_id).length > 0) {
+          prev = prev.map(c => {
+            const jsonParsed = JSON.parse(c as string)
+            const retJson = jsonParsed.type === 'like' ? 
+              {...jsonParsed, liked: jsonParsed.recipe_id === parsedMessage.recipe_id ? parsedMessage.liked : jsonParsed.liked, created_at: parsedMessage.created_at} : 
+              {...jsonParsed}
+
+            return JSON.stringify(retJson)
+          });
+          
+          prev = prev.filter(c => {
+            const jsonParsed = JSON.parse(c as string);
+            return (jsonParsed.liked || jsonParsed.liked === undefined) && jsonParsed.recipe_owner_id === user_id;
+          });
+
         } else {
-          prev = parsedMessage.recipe_owner_id === user_id && parsedMessage.liked ? [...prev, message] : [...prev];
+          prev = parsedMessage.recipe_owner_id === user_id && (parsedMessage.liked || parsedMessage.type !== 'like') ? [...prev, message] : [...prev];
         }
+
+        setNotificationCount(prev.filter(x => !JSON.parse(x as string).isRead).length);
+        sessionStorage.setItem(String(user_id), JSON.stringify(prev));
+        return [...prev];
+      });
+    },[]);
+
+    const reviewNotificationUpdate = useCallback((message: string) => {
+      const parsedMessage = JSON.parse(message);
+      
+      setNotifications(prev =>{
+        const parsedMessage = JSON.parse(message);
+        prev = parsedMessage.recipe_owner_id === user_id ? [...prev, message] : [...prev];
 
         setNotificationCount(prev.filter(x => !JSON.parse(x as string).isRead).length);
         sessionStorage.setItem(String(user_id), JSON.stringify(prev));
@@ -61,9 +86,11 @@ export default memo(function LayoutSettings({isLoggedIn, user_id} : {isLoggedIn:
       if(user_id) {
         socket.emit("register", user_id);
       }
-      socket.on('like recipe', notificationUpdate);
+      socket.on('like recipe', likeNotificationUpdate);
+      socket.on('review recipe', reviewNotificationUpdate);
       return () => {
-        socket.off('like recipe', notificationUpdate);
+        socket.off('like recipe', likeNotificationUpdate);
+        socket.off('review recipe', reviewNotificationUpdate);
       }
     },[user_id]);
 
@@ -121,7 +148,8 @@ export default memo(function LayoutSettings({isLoggedIn, user_id} : {isLoggedIn:
                       <div className="flex py-1 gap-4 items-center ">
                         <div className='relative'>
                           <OptImage className="h-8 w-12 object-cover rounded-sm" src={data.recipe_image}/>
-                          <Heart className='absolute -bottom-2 -right-2' size={16} weight="fill" color={textColor.error}/>
+                          {data.type === 'like' && <Heart className='absolute -bottom-2 -right-2' size={16} weight="fill" color={textColor.error}/>}
+                          {data.type === 'review' && <Star className='absolute -bottom-2 -right-2' size={16} weight="fill" color={textColor.warning}/>}
                         </div>
                         <span className=" w-full break-words max-w-full py-2">
                           {data.message}

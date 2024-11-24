@@ -14,7 +14,6 @@ const socket = getSocket();
 export default memo(function LikeRecipe({
   recipe_id, 
   recipe_image, 
-  recipe_name,
   recipe_owner_id,
   user_id, 
   user_name, 
@@ -23,7 +22,6 @@ export default memo(function LikeRecipe({
 } : {
   recipe_id: number, 
   recipe_image: string, 
-  recipe_name: string, 
   recipe_owner_id: number,
   user_id:number, 
   user_name: string, 
@@ -55,6 +53,7 @@ export default memo(function LikeRecipe({
     e.preventDefault();
 
     socket.emit('like recipe', JSON.stringify({
+      type: 'like',
       recipe_id: recipe_id, 
       user_id: user_id,
       recipe_image: recipe_image,
@@ -62,6 +61,7 @@ export default memo(function LikeRecipe({
       message: `${user_name}があなたのレシピにいいねしました。`,
       liked: !state.isLiked,
       isRead: false,
+      created_at: new Date()
     }));
 
     setState(prev => ({...prev, isLiked: !prev.isLiked, processing: true, bounce: true}));

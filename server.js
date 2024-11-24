@@ -61,6 +61,20 @@ app.prepare().then(() => {
       })
     });
 
+    socket.on('review recipe',async (message) => {
+      const data = JSON.parse(message);
+      const conns = userSockets.get(data.user_id);
+
+      for(let i = 0; i < conns.length; i++) {
+        io.to(conns[i]).emit('review recipe', message);
+      }
+  
+      await fetch(`${be}/api/socket`, {
+        method: 'POST',
+        body: JSON.stringify({message: 'This is a message'})
+      })
+    });
+
     socket.on('disconnect', () => {
       console.log('Client disconnected');
       const arr = userSockets.get(socketUsers.get(socket.id));

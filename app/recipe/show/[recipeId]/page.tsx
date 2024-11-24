@@ -94,7 +94,6 @@ export default async function ShowRecipe({params, searchParams}:{params: {recipe
                             recipe_id={recipe_data.recipe_id} 
                             recipe_owner_id={recipe_data.user_id}
                             recipe_image={recipe_images[0]}
-                            recipe_name={recipe_data.recipe_name}
                             style={{width: '30px', height: '30px'}}
                           />}
                     </div>
@@ -149,7 +148,14 @@ export default async function ShowRecipe({params, searchParams}:{params: {recipe
                     <div className="absolute w-full top-[13px] border-[1px] border-solid border-[#523636]"/>
                 </div>
                 <CommentSection reviewComments={reviewComments} recipe_id={recipe_data.recipe_id} total_comments={recipe_data.recipe_rating_data.totalRating}/>
-                <CommentForm isLoggedIn={isLoggedIn} recipe_id={recipe_data.recipe_id}/>
+                <CommentForm 
+                  isLoggedIn={isLoggedIn} 
+                  user_id={decryptedSession ? decryptedSession.user.user_id : -1} 
+                  recipe_owner_id={recipe_data.user_id} 
+                  recipe_image={recipe_images[0]} 
+                  recipe_id={recipe_data.recipe_id}
+                  user_name={user_details ? user_details.user_codename : ''} 
+                />
             </div>
         </section>
     )

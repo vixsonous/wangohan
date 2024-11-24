@@ -12,6 +12,7 @@ export interface Database {
   recipe_instructions_table: RecipeInstructionsTable;
   favourites_table: FavouritesTable;
   likes_table: LikesTable;
+  notifications_table: NotificationsTable;
 }
 
 export interface UserTable {
@@ -126,6 +127,14 @@ export interface LikesTable {
   user_id: number;
   recipe_id: number;
   is_liked: boolean;
+  updated_at: Date;
+  created_at: Date;
+}
+
+export interface NotificationsTable {
+  notification_id: Generated<number>;
+  user_id: number;
+  notification_content: string;
   updated_at: Date;
   created_at: Date;
 }
