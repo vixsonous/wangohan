@@ -16,6 +16,8 @@ import { getDecryptedSession } from "@/action/lib";
 import { getUserDetails } from "@/action/users";
 import React from "react";
 import Modal from "./components/ElementComponents/Modal";
+import MainSearchForm from "./components/MainSearchForm";
+import BarMainSearch from "./components/ElementComponents/BarMainSearch";
 
 const ErrorModal = React.lazy(() => import("./components/ElementComponents/ErrorModal"));
 const SuccessModal = React.lazy(() => import("./components/ElementComponents/SuccessModal"));
@@ -72,7 +74,12 @@ export default async function RootLayout({
             <ErrorModal />
             <SuccessModal />
             <div className="fixed px-[20px] w-[100%] z-[999] pt-[5px] flex justify-between items-center border-b-[1px]  shadow-md">
-              <Link href="/"><img className="w-[60px] h-[auto]" src={'/logo-final.webp'} width={100} height={100} alt="website logo" /></Link>
+              <div className='flex flex-row gap-4 w-full'>
+                <Link href="/"><img className="w-[60px] h-[auto]" src={'/logo-final.webp'} width={100} height={100} alt="website logo" /></Link>
+                <div className="w-[250px] md:w-[500px]">
+                  <BarMainSearch />
+                </div>
+              </div>
               <LayoutSettings user_id={user.user_id} isLoggedIn={isLoggedIn}/>
               <div className="absolute top-0 left-0 w-[100%] h-[100%] bg-[#FFFAF0] opacity-[0.9] z-[-1]"></div>
             </div>

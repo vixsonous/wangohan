@@ -4,6 +4,7 @@ import { recipeSlice } from "./states/recipeSlice";
 import {userSlice} from "./states/userSlice";
 import {messageSlice} from "./states/messageSlice";
 import {petSlice} from "./states/petSlice";
+import { formSlice } from "./states/formSlice";
 
 export const makeStore = () => {
     return configureStore({
@@ -12,7 +13,8 @@ export const makeStore = () => {
             recipeSlice: recipeSlice.reducer,
             user: userSlice.reducer,
             message: messageSlice.reducer,
-            pet: petSlice.reducer
+            pet: petSlice.reducer,
+            form: formSlice.reducer,
         }
     })
 }
