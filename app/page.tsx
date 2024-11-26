@@ -30,18 +30,18 @@ const DogCategoryMedCore = () => {
     </div>
     <div className="first-row w-full flex mt-[-20px] gap-[20px] justify-center flex-col items-center  ">
       <h1 className="text-[20px] text-[#523636] font-semibold">年齢別で探す</h1>
-      <div className="flex justify-between sm:justify-center sm:gap-[20px] w-[100%]">
-        <Link href="/recipe/search/子犬" className="flex flex-[1_33%] gap-[10px] text-[13px] text-[#523636] font-bold flex-col justify-between items-center">
-          <img src={'/LP/puppy.webp'} loading="lazy" className="relative rounded-md w-[70%]"  alt="website banner" />
-          <span className="relative top-[0px]">子犬用レシピ</span>
+      <div className="grid grid-cols-3 w-[100%]">
+        <Link href="/recipe/search/子犬" className="flex gap-2 text-primary-text font-bold flex-col justify-center items-center">
+          <OptImage src={'/LP/puppy-thumbnail.webp'} centered={true} height={70} loading="lazy" className="relative rounded-md"  alt="website banner" />
+          <span className="relative text-xs">子犬用レシピ</span>
         </Link>
-        <Link href="/recipe/search/成犬" className="flex flex-[1_33%] gap-[10px] text-[13px] relative text-[#523636] font-bold flex-col justify-between items-center">
-          <img src={'/LP/adult.webp'} loading="lazy" className="relative rounded-md w-[50%]" alt="website banner" />
-          <span className="relative top-[0px]">成犬用レシピ</span>
+        <Link href="/recipe/search/成犬" className="flex gap-2 relative text-primary-text font-bold flex-col justify-center items-center">
+          <OptImage src={'/LP/adult-thumbnail.webp'} centered={true} height={70} loading="lazy" className="relative rounded-md" alt="website banner" />
+          <span className="relative text-xs">成犬用レシピ</span>
         </Link>
-        <Link href="/recipe/search/シニア犬" className="flex flex-[1_33%] relative gap-[10px] text-[13px] text-[#523636] font-bold flex-col justify-between items-center">
-          <img src={'/LP/senior.webp'} loading="lazy" className="relative rounded-md w-[60%] bottom-[0px]"  alt="website banner" />
-          <span className="relative top-[0px]">シニア犬用レシピ</span>
+        <Link href="/recipe/search/シニア犬" className="flex gap-2 relative text-primary-text font-bold flex-col justify-center items-center">
+          <OptImage src={'/LP/senior-thumbnail.webp'} centered={true} height={70} loading="lazy" className="relative rounded-md bottom-[0px]"  alt="website banner" />
+          <span className="relative text-xs">シニア犬用レシピ</span>
         </Link>
       </div>
     </div>
@@ -90,17 +90,17 @@ const DogCategorySmCore = () => {
 
     <div className="first-row mt-4 gap-4 w-full flex justify-center flex-col items-center  ">
       <h1 className="text-[20px] text-[#523636] font-semibold">サイズ別で探す</h1>
-      <div className="flex justify-between sm:justify-center sm:gap-[20px] w-[100%]">
-        <Link href="/recipe/search/小型犬" className="flex flex-[1_33%] gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-between items-center">
-          <img src={'/LP/55.png'} loading="lazy" className="relative rounded-md w-[65%]" width={100} height={100}  alt="website banner" />
+      <div className="grid grid-cols-3 w-[100%]">
+        <Link href="/recipe/search/小型犬" className="flex gap-2 flex-col text-xs text-[#523636] font-bold justify-between items-center">
+          <OptImage src={'/LP/smalldog-thumbnail.webp'} centered={true} loading="lazy" className="relative rounded-md" height={70}  alt="website banner" />
           <span className="relative top-[0px]">小型犬用レシピ</span>
         </Link>
-        <Link href="/recipe/search/中型犬" className="flex flex-[1_33%] gap-[10px] flex-col text-[13px] text-[#523636] font-bold justify-between items-center">
-          <img src={'/LP/55-1.png'} loading="lazy" className="relative rounded-md w-[65%]" width={100} height={100}  alt="website banner" />
+        <Link href="/recipe/search/中型犬" className="flex gap-2 flex-col text-xs text-[#523636] font-bold justify-between items-center">
+          <OptImage src={'/LP/middledog-thumbnail.webp'} centered={true} loading="lazy" className="relative rounded-md" height={70}  alt="website banner" />
           <span className="relative top-[0px]">中型犬用レシピ</span>
         </Link>
-        <Link href="/recipe/search/大型犬" className="flex flex-[1_33%] gap-[10px] flex-col relative text-[13px] text-[#523636] font-bold justify-between items-center">
-          <img src={'/LP/55-2.png'} loading="lazy" className="relative top-[-10px] rounded-md w-[50%]" width={100} height={100}  alt="website banner" />
+        <Link href="/recipe/search/大型犬" className="flex gap-2 flex-col relative text-xs text-[#523636] font-bold justify-between items-center">
+          <OptImage src={'/LP/bigdog-thumbnail.webp'} centered={true} loading="lazy" className="relative rounded-md" height={70}  alt="website banner" />
           <span className="relative top-[0px]">大型犬用レシピ</span>
         </Link>
       </div>
@@ -111,7 +111,7 @@ const DogCategorySmCore = () => {
 
 const DogCategoryMed = memo(() => {
   return (
-    <div className={`flex flex-col gap-[40px] justify-center items-center mt-[30px] md:hidden relative`}>
+    <div className={`flex flex-col gap-[40px] justify-center items-center mt-[30px] lg:hidden relative`}>
       <DogCategoryMedCore />
     </div>
   )
@@ -119,7 +119,7 @@ const DogCategoryMed = memo(() => {
 
 const DogCategorySm = memo(() => {
   return (
-    <div className={`flex flex-col mt-4 justify-center w-[100%] items-start hidden md:block relative`}>
+    <div className={`flex flex-col mt-4 justify-center w-[100%] items-start hidden lg:block relative`}>
       <DogCategorySmCore />
     </div>
   )
@@ -158,23 +158,23 @@ export default async function Home() {
   ]
 
   return (
-    <main className="relative flex p-[20px] min-h-screen flex-col md:items-center overflow-hidden pb-[50px] lg:pb-[200px]">
-      <div className=" flex md:w-full lg:w-[70vw] max-w-lg h-full justify-center items-center flex-col gap-[15px]">
-        <div id="logo-banner" className="mt-8 md:mt-0 relative flex flex-col justify-center items-center">
+    <main className="relative flex p-[20px] min-h-screen flex-col lg:items-center overflow-hidden pb-[50px] lg:pb-[200px]">
+      <div className=" flex max-w-xl h-full justify-center items-center flex-col gap-[15px]">
+        <div id="logo-banner" className="mt-8 lg:mt-0 relative flex flex-col justify-center items-center">
           <img src={'/icons/logo-new.webp'} className="rounded-md h-[auto] relative left-[15px] w-[130px] relative" width={100} height={100}  alt="website banner" />
           <h1 className={`text-[36px] text-[#6b4528] font-bold leading-tight ${mochi.className}`}>わんごはん</h1>
           <span className={`text-[10px] text-[#6b4528] ${gloria.className}`}>ALL RECIPES FOR YOUR DOG</span>
         </div>
         <div className="w-full h-full relative flex flex-col gap-[10px]">
-          <div className="mt-8 search-form relative flex justify-end md:hidden">
+          <div className="mt-8 search-form relative flex justify-end lg:hidden">
             <BodyMainSearch />
           </div>
-          <div className=' md:my-16 flex gap-8 items-start'>
-            <div className='md:flex-[1_0_60%] flex-[1_0_100%] max-w-full md:max-w-[60%] h-full relative' >
+          <div className=' lg:my-4 grid grid-cols-1 lg:grid-cols-5 items-start'>
+            <div className='lg:col-span-3 max-w-full h-full relative' >
               <TopRecipeSlider recipes={popularRecipes}/>
             </div>
-            <div className="invisible flex-[1_0_40%] md:visible w-full h-full relative">
-              <div className="search-form relative flex justify-start invisible md:visible">
+            <div className="lg:col-span-2 hidden lg:block invisible lg:visible w-full h-full relative">
+              <div className="search-form relative flex justify-end invisible lg:visible">
                 <BodyMainSearch />
               </div>
               <DogCategorySm/>
@@ -194,7 +194,7 @@ export default async function Home() {
               <h1 className="text-[26px] font-bold text-[#523636] relative after:content-[''] z-[1] after:w-[125%] after:left-[-15px] after:h-[40px] after:top-[10px] after:z-[-1] after:flex after:absolute after:bg-[#FFE9C9]">イベント</h1>
               <div className="absolute z-[-1] left-[0px] w-full top-[17px] border-[1px] border-solid border-[#523636]"/>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
               {
                 events.map( (ev, idx) => {
                   return (

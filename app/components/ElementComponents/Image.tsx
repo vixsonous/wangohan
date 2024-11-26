@@ -36,7 +36,7 @@ export default function OptImage({
 
     const setOnLoad = () => setLoaded(true);
     return (
-        <div className="w-full h-full">
+        <div className={`w-full h-full ${centered ? 'flex justify-center items-center' : ''}`}>
           <picture className={`${centered ? 'flex justify-center items-center' : ''}`}>
             <source media="(max-width: 340px)" srcSet={`${xs}.webp`} type="image/webp"  /> 
             <source media="(max-width: 340px)" srcSet={xs} type="image/jpeg"  /> 

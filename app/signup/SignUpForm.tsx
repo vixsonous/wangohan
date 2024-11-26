@@ -138,7 +138,7 @@ export default function SignUpForm() {
             <span className="text-[.5em] sm:text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error}</span>
         </form>
         <div className="w-[100%] max-w-[100%] sm:max-w-[460px] mt-[30px] gap-[10px] flex flex-col justify-center">
-            <button className={`text-[#6b4528] flex justify-center items-center bg-[white] border-[2px] rounded-md border-[#ffcd92] text-[12px] sm:text-[16px] px-[10px] py-[10px] font-bold`}>
+            {/* <button className={`text-[#6b4528] flex justify-center items-center bg-[white] border-[2px] rounded-md border-[#ffcd92] text-[12px] sm:text-[16px] px-[10px] py-[10px] font-bold`}>
                 <svg width="15" height="15" viewBox="0 0 98 87" fill="none" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
                 <rect width="98" height="87" fill="url(#pattern0_50_454)"/>
                 <defs>
@@ -149,7 +149,7 @@ export default function SignUpForm() {
                 </defs>
                 </svg>
                 Appleで続ける
-            </button>
+            </button> */}
             <button disabled={openGoogleSignup || signupState} onClick={() => {
                 setOpenGoogleSignup(true);
                 googleSignup()

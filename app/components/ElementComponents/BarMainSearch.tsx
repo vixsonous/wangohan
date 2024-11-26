@@ -9,8 +9,8 @@ export default memo(function BarMainSearch() {
   const barView = useAppSelector(state => state.form.barView);
 
   return (
-    <div>
-      <MainSearchForm isInView={barView}/>
+    <div className="w-[170px] sm:w-[250px] md:w-[500px]">
+      <MainSearchForm isInView={barView} isBar={true}/>
     </div>
     
   )

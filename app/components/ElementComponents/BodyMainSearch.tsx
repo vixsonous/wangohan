@@ -16,7 +16,7 @@ export default memo(function BodyMainSearch() {
     if(!isInView) dispatch(offView());
   },[isInView]);
   return (
-    <div className="w-full" ref={div}>
+    <div className="w-full lg:w-[400px]" ref={div}>
       <MainSearchForm isInView={isInView}/>
     </div>
   )
