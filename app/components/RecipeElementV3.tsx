@@ -11,11 +11,6 @@ interface Props {
 }
 
 export default function RecipeElementV3 ({recipe} : {recipe: DisplayRecipe}) {
-
-    const [state, setState] = useState({
-        displayMenu: false
-    });
-
     return (
         <img src={recipe.recipe_image} className="top-0 bottom-0 right-0 left-0 w-full h-full absolute object-cover" alt="website banner" />
     )

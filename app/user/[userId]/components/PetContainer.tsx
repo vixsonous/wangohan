@@ -1,3 +1,4 @@
+import OptImage from "@/app/components/ElementComponents/Image";
 import { DogData } from "@/constants/interface";
 import Image from "next/image"
 
@@ -16,7 +17,7 @@ export default function PetContainer ({petData}: Props) {
     return (
         <div className="flex flex-grow flex-shrink-0 basis-[30%] justify-center items-center gap-[10px]">
             <div>
-                <img src={petData.pet_image} className="rounded-[50%] w-[50px] h-[50px] object-cover relative" width={10000} height={10000}  alt="website banner" />
+                <OptImage src={petData.pet_image} className="rounded-full object-cover relative" width={50} height={50}  alt="website banner"/>
             </div>
             <div className="flex flex-col gap-[5px] text-[#5b5351]">
                 <p className="text-[16px] font-bold">{petData.pet_name}</p>

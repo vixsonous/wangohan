@@ -44,8 +44,8 @@ export default function OptImage({
             <source media="(max-width: 640px)" srcSet={sm} type="image/jpeg" />
             <source media="(max-width: 768px)" srcSet={`${md}.webp`} type="image/webp" />
             <source media="(max-width: 768px)" srcSet={md} type="image/jpeg" />
-            <source media="(max-width: 1024)" srcSet={`${lg}.webp`} type="image/webp" />
-            <source media="(max-width: 1024)" srcSet={lg} type="image/jpeg" />
+            <source media="(max-width: 1024px)" srcSet={`${lg}.webp`} type="image/webp" />
+            <source media="(max-width: 1024px)" srcSet={lg} type="image/jpeg" />
             <img onLoad={setOnLoad} src={src} loading={loading} className={`${!loaded ? 'hidden': 'visible'} ` + className} width={width} height={height} alt={alt} />
           </picture>
           {!loaded && <img src={xs} loading={loading} className={className} width={width} height={height} alt={alt} />}
