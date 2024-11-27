@@ -93,10 +93,11 @@ export default function EditForm({userDetails, pets} : Props) {
     },[]);
 
     return (
-        <form action="" className="relative max-w-[768px]">
+        <form action="" className="relative max-w-xl">
             <div className="user-image flex flex-col justify-center items-center mt-[30px]">
                 <label htmlFor="profile-image" className="relative group">
-                    <OptImage src={state.profilePic.thumbnail} width={100} height={100} className="border-[1px] border-[#523636] rounded-[100px] w-[200px] h-[200px] relative object-cover" alt={state.dispUsrnm}/>
+                    <OptImage src={state.profilePic.thumbnail} containerClass="hidden md:flex" width={350} height={350} className="hidden md:block border border-primary-text rounded-full relative object-cover" alt={state.dispUsrnm}/>
+                    <OptImage src={state.profilePic.thumbnail} containerClass="flex md:hidden" width={150} height={150} className="block md:hidden border border-primary-text rounded-full relative object-cover" alt={state.dispUsrnm}/>
                     <input onChange={profPicOnChange} className="w-[100%] hidden" type="file" name="profile-image" id="profile-image" />
                     <div className="absolute w-full h-full bg-black group-hover:opacity-[0.3] opacity-0 top-0 flex justify-center items-center rounded-[50%] transition-all duration-500">
                         <span className="text-white font-bold">画像を追加</span>
@@ -115,11 +116,12 @@ export default function EditForm({userDetails, pets} : Props) {
                     <FontAwesomeIcon icon={state.curUsrnmIcn} size="lg" className="absolute right-[30px] text-[20px]"/>
                 </label>
             </div>
-            <div className="flex justify-center items-center relative mt-[40px] mb-[10px]">
-                <h1 className="absolute top-[10px] font-semibold text-[#523636]">うちのわん</h1>
-                <img src={'/icons/ribbon.webp'} className="h-[auto] w-[200px] sm:w-[300px] max-w-none" width={10000} height={10000}  alt="website banner" />
+            <div className="flex justify-center self-center items-center w-full relative mt-[40px] mb-[10px]">
+                <h1 className="absolute top-4 text-lg font-semibold text-[#523636]">うちのわん</h1>
+                <OptImage src={'/icons/ribbon.webp'} containerClass="hidden md:block" centered className="hidden md:block h-[auto] self-center max-w-none relative" width={300} height={122}  alt="website banner" />
+                <OptImage src={'/icons/ribbon.webp'} containerClass="block md:hidden" centered className="block md:hidden h-[auto] self-center max-w-none relative" width={200} height={122}  alt="website banner" />
             </div>
-            <div className="pet-list p-[20px] flex flex-wrap gap-[20px] items-center">
+            <div className="pet-list p-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 items-center">
                 {
                     !isSet && (
                         <span>Loading...</span>

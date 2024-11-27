@@ -196,12 +196,16 @@ export default function PetEditForm({petData} : Props) {
         <>
             <div onClick={showEditModal} className="flex flex-grow flex-shrink-0 basis-[30%] justify-center items-center gap-[10px]">
                 <div>
-                    <OptImage src={petData.pet_image} className="rounded-[50%] w-[60px] h-[60px] object-cover relative" width={100} height={100} alt={petData.pet_name}/>
+                    {/* <OptImage src={petData.pet_image} className="rounded-[50%] w-[60px] h-[60px] object-cover relative" width={100} height={100} alt={petData.pet_name}/>
+                    <OptImage src={petData.pet_image} className="rounded-[50%] w-[60px] h-[60px] object-cover relative" width={100} height={100} alt={petData.pet_name}/> */}
+
+                    <OptImage src={petData.pet_image} centered className="hidden md:block rounded-full object-cover relative" square width={150} height={150}  alt="website banner"/>
+                    <OptImage src={petData.pet_image} centered className="block md:hidden rounded-full object-cover relative" square width={60} height={60}  alt="website banner"/>
                 </div>
-                <div className="flex flex-col gap-[5px] text-[#5b5351]">
-                    <p className="text-[16px] font-bold">{petData.pet_name}</p>
-                    <p className="text-[10px] flex gap-[5px] flex-wrap"><span>{petData.pet_birthdate.split('T')[0]}</span><span>{`(${calculateAge(new Date(petData.pet_birthdate))}才) `}</span></p>
-                    <p className="text-[10px]">{petData.pet_breed}</p>
+                <div className="flex flex-col gap-2 text-[#5b5351]">
+                    <p className="text-base md:text-xl font-bold">{petData.pet_name}</p>
+                    <p className="text-xs md:text-sm flex gap-2 flex-wrap"><span>{petData.pet_birthdate.split('T')[0]}</span><span>{`(${calculateAge(new Date(petData.pet_birthdate))}才) `}</span></p>
+                    <p className="text-xs md:text-sm">{petData.pet_breed}</p>
                 </div> 
             </div>
             <AnimatePresence>

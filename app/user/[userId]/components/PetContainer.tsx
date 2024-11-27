@@ -4,10 +4,11 @@ import Image from "next/image"
 import { memo } from "react";
 
 interface Props {
-    petData: DogData
+    petData: DogData,
+    className?: string
 }
 
-export default memo(function PetContainer ({petData}: Props) {
+export default memo(function PetContainer ({petData, className=''}: Props) {
 
   function _calculateAge(birthDate : Date) { // birthday is a date
       var ageDifMs = Date.now() - birthDate.getTime();
@@ -16,7 +17,7 @@ export default memo(function PetContainer ({petData}: Props) {
   }
   
   return (
-      <div className="flex flex-grow flex-shrink-0 justify-center items-center gap-4">
+      <div className={`flex flex-grow flex-shrink-0 justify-center items-center gap-4 ${className}`}>
           <div>
               <OptImage src={petData.pet_image} centered className="hidden md:block rounded-full object-cover relative" square width={150} height={150}  alt="website banner"/>
               <OptImage src={petData.pet_image} centered className="block md:hidden rounded-full object-cover relative" square width={60} height={60}  alt="website banner"/>

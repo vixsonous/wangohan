@@ -18,10 +18,13 @@ export default function PetList({pets} : {pets: Array<DogData>}) {
             dispatch(setPets(pets));
         }
     },[]);
+
+    const mdStart = petState.length === 1 ? '2' : '1';
+    const lgStart = petState.length <= 3 ? `${(petState.length - 1) - 3}` : '1'
     return (
-        <div className="pet-list p-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 items-center">
-            {
-                petState.map(pet => <PetContainer key={new Date().getTime() * Math.random()} petData={pet} />)
+        <div className="pet-list py-16 p-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 items-center">
+            { 
+                petState.map((pet, idx) => <PetContainer className={`first:col-start-1 md:col-start-${mdStart} lg:col-start-${lgStart}`} petData={pet} />)
             }
         </div>
     )

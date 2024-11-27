@@ -23,11 +23,11 @@ export default function TabList({owned_recipes, liked_recipes}:{owned_recipes: D
     const likedRecipeActivate = () => setState(prev => ({...prev, active: false}));
     return (
         <div className="tab-list p-4">
-            <div className="flex gap-2 items-center">
-                <button onClick={myRecipeActivate} className={`${state.active ? 'bg-[#5b5351] text-white' : 'bg-[#FFFAF0] text-[#5b5351]'} py-2 lg:py-4 lg:px-8 px-[5px] text-[10px] sm:text-xs font-bold rounded-tl`}>自分のレシピ</button>
-                <button onClick={likedRecipeActivate} className={`${!state.active ? 'bg-[#5b5351] text-white' : 'bg-[#FFFAF0] text-[#5b5351]'} flex items-center py-2 lg:py-4 lg:px-8 px-[5px] text-[10px] sm:text-xs font-bold rounded-tr`}>
-                  <Heart size={20} color={`${!true ? '#5b5351' : '#fff'}`}/>
-                  したレシピ
+            <div className="flex items-center">
+                <button onClick={myRecipeActivate} className={`${state.active ? 'bg-[#5b5351] text-white' : 'bg-[#FFFAF0] text-[#5b5351]'} py-2 lg:py-4 lg:px-8 px-4 text-[10px] sm:text-xs font-bold rounded-tl`}>自分のレシピ</button>
+                <button onClick={likedRecipeActivate} className={`${!state.active ? 'bg-[#5b5351] text-white' : 'bg-[#FFFAF0] text-[#5b5351]'} flex items-center gap-1 lg:gap-2 py-2 lg:py-4 lg:px-8 px-4 text-[10px] sm:text-xs font-bold rounded-tr`}>
+                  <Heart size={16} color={`${state.active ? '#5b5351' : '#fff'}`}/>
+                  <span>したレシピ</span>
                 </button>
             </div>
             <div ref={imgContainer} className={`${!state.active ? 'hidden' : ''} recipe-list__container max-w-xl grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 masonry p-[2px] gap-[${GAP}px] bg-secondary-bg items-center relative`}>

@@ -11,7 +11,8 @@ export default function OptImage({
     alt="", 
     loading="lazy",
     centered=false,
-    square=false
+    square=false,
+    containerClass=''
 }: {
     src: string, 
     className?: string, 
@@ -20,7 +21,8 @@ export default function OptImage({
     alt?: string, 
     loading?: LoadingType,
     centered?:boolean,
-    square?: boolean
+    square?: boolean,
+    containerClass?:string
 }) {
 
   const getSrcVariants = useCallback((src: string) => {
@@ -38,7 +40,7 @@ export default function OptImage({
 
     const setOnLoad = () => setLoaded(true);
     return (
-        <div className={`w-full h-full ${centered ? 'flex justify-center items-center' : ''}`}>
+        <div className={`${containerClass} w-full h-full ${centered ? 'flex justify-center items-center' : ''}`}>
           <picture className={`${centered ? 'flex justify-center items-center' : ''}`}>
             <source media="(max-width: 340px)" srcSet={`${xs}.webp`} type="image/webp"  /> 
             <source media="(max-width: 340px)" srcSet={xs} type="image/jpeg"  /> 
@@ -48,9 +50,9 @@ export default function OptImage({
             <source media="(max-width: 768px)" srcSet={md} type="image/jpeg" />
             <source media="(max-width: 1024px)" srcSet={`${lg}.webp`} type="image/webp" />
             <source media="(max-width: 1024px)" srcSet={lg} type="image/jpeg" />
-            <img onLoad={setOnLoad} src={src} loading={loading} className={`${!loaded ? 'hidden': 'visible'} ${square ? 'aspect-square' : ''} h-[${height}px] w-[${width}px] ` + className} width={width} height={height} alt={alt} />
+            <img onLoad={setOnLoad} src={src} loading={loading} className={`${!loaded ? 'hidden': 'block'} ${square ? 'aspect-square' : ''} h-[${height}px] w-[${width}px] ` + className} width={width} height={height} alt={alt} />
           </picture>
-          {!loaded && <img src={xs} loading={loading} className={`h-[${height}px] w-[${width}px] ${square ? 'aspect-square' : ''} absolute top-0` + className} width={width} height={height} alt={alt} />}
+          {!loaded && <img src={xs} loading={loading} className={`h-[${height}px] w-[${width}px] ${square ? 'aspect-square' : ''} absolute top-0 ` + className} width={width} height={height} alt={alt} />}
         </div>
     )
 }
