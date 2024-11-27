@@ -10,7 +10,8 @@ export default function OptImage({
     height=100, 
     alt="", 
     loading="lazy",
-    centered=false
+    centered=false,
+    square=false
 }: {
     src: string, 
     className?: string, 
@@ -18,7 +19,8 @@ export default function OptImage({
     height?: number, 
     alt?: string, 
     loading?: LoadingType,
-    centered?:boolean
+    centered?:boolean,
+    square?: boolean
 }) {
 
   const getSrcVariants = useCallback((src: string) => {
@@ -46,9 +48,9 @@ export default function OptImage({
             <source media="(max-width: 768px)" srcSet={md} type="image/jpeg" />
             <source media="(max-width: 1024px)" srcSet={`${lg}.webp`} type="image/webp" />
             <source media="(max-width: 1024px)" srcSet={lg} type="image/jpeg" />
-            <img onLoad={setOnLoad} src={src} loading={loading} className={`${!loaded ? 'hidden': 'visible'} ` + className} width={width} height={height} alt={alt} />
+            <img onLoad={setOnLoad} src={src} loading={loading} className={`${!loaded ? 'hidden': 'visible'} ${square ? 'aspect-square' : ''} h-[${height}px] w-[${width}px] ` + className} width={width} height={height} alt={alt} />
           </picture>
-          {!loaded && <img src={xs} loading={loading} className={className} width={width} height={height} alt={alt} />}
+          {!loaded && <img src={xs} loading={loading} className={`h-[${height}px] w-[${width}px] ${square ? 'aspect-square' : ''} absolute top-0` + className} width={width} height={height} alt={alt} />}
         </div>
     )
 }

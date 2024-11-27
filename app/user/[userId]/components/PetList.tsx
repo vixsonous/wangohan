@@ -19,7 +19,7 @@ export default function PetList({pets} : {pets: Array<DogData>}) {
         }
     },[]);
     return (
-        <div className="pet-list p-[20px] flex flex-wrap gap-[20px] items-center">
+        <div className="pet-list p-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 items-center">
             {
                 petState.map(pet => <PetContainer key={new Date().getTime() * Math.random()} petData={pet} />)
             }

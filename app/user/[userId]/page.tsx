@@ -51,11 +51,12 @@ export default async function User() {
             <div className="flex flex-col justify-center items-center ">
                 <div className="relative pb-[100px] max-w-xl">
                     <div className="user-image relative flex flex-col justify-center items-center mt-[30px]">
-                        <OptImage centered loading="lazy" src={image_url} className="rounded-full object-cover relative" width={350} height={350} alt="website banner"/>
+                        <OptImage centered loading="lazy" src={image_url} className="hidden md:block rounded-full object-cover relative" width={350} height={350} alt="website banner"/>
+                        <OptImage centered loading="lazy" src={image_url} className="block md:hidden rounded-full object-cover relative" width={150} height={150} alt="website banner"/>
                         <h1 className="text-[36px] font-bold text-[#5b5351]">{userDetails.user_codename === '' ? `Wanuser` + decryptedSession.user.user_id : userDetails.user_codename}</h1>
                     </div>
                     <div className="flex justify-center items-center relative mt-12 mb-4">
-                        <h1 className="absolute top-[10px] font-semibold text-[#523636]">うちのわん</h1>
+                        <h1 className="absolute text-sm md:text-lg top-2 md:top-4 font-semibold text-[#523636]">うちのわん</h1>
                         <img loading="lazy" src={'/icons/ribbon.webp'} className="h-[auto] w-[200px] sm:w-[300px] max-w-none" width={100} height={100}  alt="website banner" />
                     </div>
                     <PetList pets={pets}/>
