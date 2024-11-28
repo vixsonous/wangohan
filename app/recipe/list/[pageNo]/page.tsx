@@ -19,7 +19,7 @@ export async function generateMetadata({params} : Props, parent: ResolvingMetada
 export default function RecipeList() {
     return (
         <div className="flex flex-col mt-[30px] gap-[30px]">
-            <div className="flex flex-col justify-center items-center relative">
+            <div className="flex flex-col justify-center items-center relative p-2 lg:p-0">
                 <h1 className="absolute top-[15px] text-[18px] font-semibold text-[#523636]">わんごはん図鑑</h1>
                 <img src={'/icons/ribbon.webp'} className="h-[auto] w-[270px] sm:w-[300px] max-w-none mb-[30px]" width={10000} height={10000}  alt="website banner" />
                 <RecipeListElement recipes={[1,2,3,4,5,6,7,8,9,10, 11, 12, 13, 14, 15, 1,2,3,4,5,6,7,8,9,10, 11, 12, 13, 14, 15, 1,2,3,4,5,6,7,8,9,10, 11, 12, 13, 14, 15]}/>

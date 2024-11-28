@@ -12,6 +12,7 @@ import { useAppDispatch, useAppSelector, useAppStore } from "@/lib/redux/hooks";
 import { increment, initializeCount } from "@/lib/redux/states/counterSlice";
 import { show } from "@/lib/redux/states/recipeSlice";
 import { showError } from "@/lib/redux/states/messageSlice";
+import Button from "./Button";
 
 export default function Settings() {
     const settings = useRef<HTMLDivElement>(null);
@@ -61,14 +62,13 @@ export default function Settings() {
         </button>
         <AnimatePresence>
             {showSettings && (
-                <motion.div initial={{x: 100}} animate={{x: 0}} exit={{x: 500}} ref={settings} style={{width: 'clamp(200px, 50%, 300px)'}} className="z-50 absolute border-l-2 border-[#ffb762] right-0 overflow-x-hidden h-[100vh] top-[0px] bg-[#FFFAF0]">
+                <motion.div initial={{x: 100}} animate={{x: 0}} exit={{x: 500}} ref={settings} style={{width: 'clamp(200px, 50%, 300px)'}} className="z-50 absolute border-l-2 border-[#ffb762] right-0 overflow-x-hidden h-[100vh] top-[0px] bg-primary-bg">
                     <div className="w-full p-[10px]">
                         <button onClick={openSettings}>
                             <FontAwesomeIcon icon={faArrowRight} size="lg"/>
                         </button>
                     </div>
-                    <div className="px-[30px] flex flex-col w-full items-center justify-center text-[26px] gap-[20px]">
-                        
+                    <div className="px-8 flex flex-col w-full items-center justify-center text-[26px] gap-[20px]">
                         <button onClick={() => {
                             openSettings();
                             dispatch(show());
@@ -76,44 +76,49 @@ export default function Settings() {
                             <span className="absolute z-[1] w-full top-[50%] left-0 font-bold">レシピを作成する</span>
                             <img src={'/recipe-button.webp'} className="self-center rounded-md h-[auto] w-full relative absolute top-0" width={10000} height={10000}  alt="website banner" />
                         </button>
-                        <Link onClick={openSettings} className="w-full" href="/">
-                          <div className="w-full text-sm flex justify-between items-center border-b-[1px] border-black border-solid">
-                              <FontAwesomeIcon icon={faHouse} style={{color: '#523636'}}  />
-                              ホーム
-                          </div>
-                        </Link>
-        
-                        <Link onClick={openSettings} className="w-full" href={`/user/${user.user_id}`}>
-                          <div className="w-full text-sm flex justify-between items-center border-b-[1px] border-black border-solid">
-                              <FontAwesomeIcon icon={faUser} style={{color: '#523636'}}  />
-                              マイページ
-                          </div>
-                        </Link>
-        
-                        <Link onClick={openSettings} className="w-full" href="/recipe/list/1">
-                          <div className="w-full text-sm flex justify-between items-center border-b-[1px] border-black border-solid">
-                              <FontAwesomeIcon icon={faBook} style={{color: '#523636'}}  />
-                              レシピ図鑑
-                          </div>
-                        </Link>
-        
-                        <Link onClick={openSettings} className="w-full" href="/user/settings">
-                          <div className="w-full text-sm flex justify-between items-center border-b-[1px] border-black border-solid">
-                              <FontAwesomeIcon icon={faLanguage} style={{color: '#523636'}}  />
-                              言語
-                          </div>
-                        </Link>
-        
-                        <Link onClick={openSettings} className="w-full" href="/">
-                          <div className="w-full text-sm flex justify-between items-center border-b-[1px] border-black border-solid">
-                              <FontAwesomeIcon icon={faDog} style={{color: '#523636'}}  />
-                              コラム
-                          </div>
-                        </Link>
-        
-                        <div onClick={logout} className="w-full text-sm flex justify-between items-center border-b-[1px] border-black border-solid">
-                            <FontAwesomeIcon icon={faSignOut} style={{color: '#523636'}}  />
-                            ログアウト
+                        
+                        <div className="font-bold flex flex-col bg-secondary-bg w-full p-4 gap-4 rounded-2xl border border-primary-text">
+                          <Link onClick={openSettings} className="w-full hover:opacity-75" href="/">
+                            <div className="w-full text-sm flex justify-between items-center">
+                                <FontAwesomeIcon icon={faHouse} style={{color: '#523636'}}  />
+                                ホーム
+                            </div>
+                          </Link>
+          
+                          <Link onClick={openSettings} className="w-full hover:opacity-75" href={`/user/${user.user_id}`}>
+                            <div className="w-full text-sm flex justify-between items-center">
+                                <FontAwesomeIcon icon={faUser} style={{color: '#523636'}}  />
+                                マイページ
+                            </div>
+                          </Link>
+          
+                          <Link onClick={openSettings} className="w-full hover:opacity-75" href="/recipe/list/1">
+                            <div className="w-full text-sm flex justify-between items-center">
+                                <FontAwesomeIcon icon={faBook} style={{color: '#523636'}}  />
+                                レシピ図鑑
+                            </div>
+                          </Link>
+          
+                          <Link onClick={openSettings} className="w-full hover:opacity-75" href="/user/settings">
+                            <div className="w-full text-sm flex justify-between items-center">
+                                <FontAwesomeIcon icon={faLanguage} style={{color: '#523636'}}  />
+                                言語
+                            </div>
+                          </Link>
+          
+                          <Link onClick={openSettings} className="w-full hover:opacity-75" href="/">
+                            <div className="w-full text-sm flex justify-between items-center">
+                                <FontAwesomeIcon icon={faDog} style={{color: '#523636'}}  />
+                                コラム
+                            </div>
+                          </Link>
+          
+                          <Button onClick={logout}>
+                            <div  className="w-full hover:opacity-75 text-sm flex justify-between items-center">
+                                <FontAwesomeIcon icon={faSignOut} style={{color: '#523636'}}  />
+                                ログアウト
+                            </div>
+                          </Button>
                         </div>
                     </div>
                 </motion.div>

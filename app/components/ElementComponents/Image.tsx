@@ -42,17 +42,17 @@ export default function OptImage({
     return (
         <div className={`${containerClass} w-full h-full ${centered ? 'flex justify-center items-center' : ''}`}>
           <picture className={`${centered ? 'flex justify-center items-center' : ''}`}>
-            <source media="(max-width: 340px)" srcSet={`${xs}.webp`} type="image/webp"  /> 
+            <source media="(max-width: 340px)" srcSet={`${xs}`} type="image/webp"  /> 
             <source media="(max-width: 340px)" srcSet={xs} type="image/jpeg"  /> 
-            <source media="(max-width: 640px)" srcSet={`${sm}.webp`} type="image/webp" />
+            <source media="(max-width: 640px)" srcSet={`${sm}`} type="image/webp" />
             <source media="(max-width: 640px)" srcSet={sm} type="image/jpeg" />
-            <source media="(max-width: 768px)" srcSet={`${md}.webp`} type="image/webp" />
+            <source media="(max-width: 768px)" srcSet={`${md}`} type="image/webp" />
             <source media="(max-width: 768px)" srcSet={md} type="image/jpeg" />
-            <source media="(max-width: 1024px)" srcSet={`${lg}.webp`} type="image/webp" />
+            <source media="(max-width: 1024px)" srcSet={`${lg}`} type="image/webp" />
             <source media="(max-width: 1024px)" srcSet={lg} type="image/jpeg" />
             <img onLoad={setOnLoad} src={src} loading={loading} className={`${!loaded ? 'hidden': 'block'} ${square ? 'aspect-square' : ''} h-[${height}px] w-[${width}px] ` + className} width={width} height={height} alt={alt} />
+            {!loaded && <img src={xs} loading={loading} className={`h-[${height}px] w-[${width}px] ${square ? 'aspect-square' : ''} absolute top-0 ` + className} width={width} height={height} alt={alt} />}
           </picture>
-          {!loaded && <img src={xs} loading={loading} className={`h-[${height}px] w-[${width}px] ${square ? 'aspect-square' : ''} absolute top-0 ` + className} width={width} height={height} alt={alt} />}
         </div>
     )
 }

@@ -34,7 +34,9 @@ export default function EditForm({userDetails, pets} : Props) {
         },
         submitState: false,
         successState: false,
-        errMsg: ''
+        errMsg: '',
+        mdStart: '1',
+        lgStart: '1'
 
     });
 
@@ -92,12 +94,20 @@ export default function EditForm({userDetails, pets} : Props) {
         }
     },[]);
 
+    useEffect(() => {
+      setState({
+        ...state,
+        mdStart: petState.length === 3 ? `lg:grid-cols-3` : petState.length === 2 ? `lg:grid-cols-2`: petState.length === 1 ? `lg:grid-cols-1` : `lg:grid-cols-3`,
+        lgStart: petState.length === 3 ? `lg:grid-cols-3` : petState.length === 2 ? `lg:grid-cols-3`: petState.length === 1 ? `lg:grid-cols-1` : `lg:grid-cols-5`
+      })
+    },[petState]);
+
     return (
         <form action="" className="relative max-w-xl">
             <div className="user-image flex flex-col justify-center items-center mt-[30px]">
                 <label htmlFor="profile-image" className="relative group">
-                    <OptImage src={state.profilePic.thumbnail} containerClass="hidden md:flex" width={350} height={350} className="hidden md:block border border-primary-text rounded-full relative object-cover" alt={state.dispUsrnm}/>
-                    <OptImage src={state.profilePic.thumbnail} containerClass="flex md:hidden" width={150} height={150} className="block md:hidden border border-primary-text rounded-full relative object-cover" alt={state.dispUsrnm}/>
+                    <OptImage src={state.profilePic.thumbnail} containerClass="hidden md:flex" width={350} height={350} className="hidden md:block border border-primary-text rounded-full object-cover" alt={state.dispUsrnm}/>
+                    <OptImage src={state.profilePic.thumbnail} containerClass="flex md:hidden" width={150} height={150} className="block md:hidden border border-primary-text rounded-full object-cover" alt={state.dispUsrnm}/>
                     <input onChange={profPicOnChange} className="w-[100%] hidden" type="file" name="profile-image" id="profile-image" />
                     <div className="absolute w-full h-full bg-black group-hover:opacity-[0.3] opacity-0 top-0 flex justify-center items-center rounded-[50%] transition-all duration-500">
                         <span className="text-white font-bold">画像を追加</span>
@@ -118,10 +128,10 @@ export default function EditForm({userDetails, pets} : Props) {
             </div>
             <div className="flex justify-center self-center items-center w-full relative mt-[40px] mb-[10px]">
                 <h1 className="absolute top-4 text-lg font-semibold text-[#523636]">うちのわん</h1>
-                <OptImage src={'/icons/ribbon.webp'} containerClass="hidden md:block" centered className="hidden md:block h-[auto] self-center max-w-none relative" width={300} height={122}  alt="website banner" />
-                <OptImage src={'/icons/ribbon.webp'} containerClass="block md:hidden" centered className="block md:hidden h-[auto] self-center max-w-none relative" width={200} height={122}  alt="website banner" />
+                <OptImage src={'/icons/ribbon.webp'} containerClass="hidden md:block" centered className="hidden md:block h-[auto] self-center max-w-none" width={300} height={122}  alt="website banner" />
+                <OptImage src={'/icons/ribbon.webp'} containerClass="block md:hidden" centered className="block md:hidden h-[auto] self-center max-w-none" width={200} height={122}  alt="website banner" />
             </div>
-            <div className="pet-list p-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 items-center">
+            <div className={`pet-list p-4 grid grid-cols-2 ${petState.length <=3 ? state.mdStart:'md:grid-cols-3'} ${petState.length <=3 ? state.lgStart:'lg:grid-cols-5'} gap-4 items-center`}>
                 {
                     !isSet && (
                         <span>Loading...</span>

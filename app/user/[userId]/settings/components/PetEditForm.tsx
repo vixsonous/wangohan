@@ -13,9 +13,10 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 
 interface Props {
-    petData: DogData
+    petData: DogData,
+    className?: string
 }
-export default function PetEditForm({petData} : Props) {
+export default function PetEditForm({petData, className=''} : Props) {
 
     function calculateAge(birthDate : Date) { // birthday is a date
         var ageDifMs = Date.now() - birthDate.getTime();
@@ -168,7 +169,6 @@ export default function PetEditForm({petData} : Props) {
             setState(prev => ({...prev, submitState: false, error: (err as Error).message}));
             return false;
         });
-
         
     }
 
@@ -194,13 +194,13 @@ export default function PetEditForm({petData} : Props) {
 
     return (
         <>
-            <div onClick={showEditModal} className="flex flex-grow flex-shrink-0 basis-[30%] justify-center items-center gap-[10px]">
+            <div onClick={showEditModal} className={"flex flex-grow flex-shrink-0 basis-[30%] justify-center items-center gap-[10px]" + className}>
                 <div>
                     {/* <OptImage src={petData.pet_image} className="rounded-[50%] w-[60px] h-[60px] object-cover relative" width={100} height={100} alt={petData.pet_name}/>
                     <OptImage src={petData.pet_image} className="rounded-[50%] w-[60px] h-[60px] object-cover relative" width={100} height={100} alt={petData.pet_name}/> */}
 
-                    <OptImage src={petData.pet_image} centered className="hidden md:block rounded-full object-cover relative" square width={150} height={150}  alt="website banner"/>
-                    <OptImage src={petData.pet_image} centered className="block md:hidden rounded-full object-cover relative" square width={60} height={60}  alt="website banner"/>
+                    <OptImage src={petData.pet_image} centered className="hidden md:block rounded-full object-cover" square width={150} height={150}  alt="website banner"/>
+                    <OptImage src={petData.pet_image} centered className="block md:hidden rounded-full object-cover" square width={60} height={60}  alt="website banner"/>
                 </div>
                 <div className="flex flex-col gap-2 text-[#5b5351]">
                     <p className="text-base md:text-xl font-bold">{petData.pet_name}</p>
@@ -228,7 +228,7 @@ export default function PetEditForm({petData} : Props) {
                             <div className="bg-[#FFFAF0] p-[30px] flex justify-center flex-wrap  items-center gap-[20px]">
                                 <div>
                                     <label htmlFor={`thumbnail-${petData.pet_id}`} className="relative group">
-                                        <OptImage src={state.pet.pet_image} className="rounded-[50%] w-[190px] h-[190px] object-cover relative" width={100} height={100}  alt={state.pet.petName}/>
+                                        <OptImage src={state.pet.pet_image} className="rounded-[50%] w-[190px] h-[190px] object-cover" width={100} height={100}  alt={state.pet.petName}/>
                                         <div className="absolute w-full h-full bg-black group-hover:opacity-[0.3] opacity-0 top-0 flex justify-center items-center rounded-[50%] transition-all duration-500">
                                             <span className="text-white font-bold">画像を追加</span>
                                         </div>

@@ -50,6 +50,7 @@ export async function getUserDetails(user_id: number) {
       const pets = await db.selectFrom("pets_table as pets")
           .select(['pet_id','pet_name','pet_birthdate','pet_breed','pet_image'])
           .where('pets.user_id','=',user_id)
+          .limit(1)
           .execute();
 
       if(user === undefined) throw new Error(ERR_MSG['ERR4']);

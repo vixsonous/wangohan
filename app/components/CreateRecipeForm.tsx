@@ -289,25 +289,28 @@ export default memo(function CreateRecipeForm() {
   },[recipeInfo]);
 
   return (
-      <form action="" className="create-form flex flex-wrap gap-[30px] max-w-[768px] h-[100%]">
-          <div className="flex-[0_0_100%]">
-              <label htmlFor="recipe-title" aria-required className="flex items-center flex-wrap gap-[5px]">
-                  <h1 className="font-semibold text-[1.3em] required">レシピタイトル</h1>
-                  <span className={`text-[.75em] self-center font-semibold ${ 25 - recipeInfo.recipeTitle.length < 0 ? `text-[${textColor.error}]` : ''}`}>（{25 - recipeInfo.recipeTitle.length}{25 - recipeInfo.recipeTitle.length >= 0 ? `文字以内` : `文字オーバーしています`}）</span>
-                  <span className="ml-[5px] text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.title}</span>
-              </label>
-              <input value={recipeInfo.recipeTitle} name="recipeTitle" onChange={updateDescrTitleOnChange} className="w-[100%] p-[7px] text-[13px] bg-[#fff8ef]" placeholder="例）炊飯器で簡単！夏バテでも食べられるご飯" type="text" id="recipe-title" />
+      <div className="w-full flex justify-center items-center h-full max-w-screen">
+        <form action="" className="create-form flex flex-wrap justify-between gap-8 max-w-xl h-[100%] w-full">
+          <div className="flex flex-wrap gap-[30px] lg:gap-0 flex-[0_0_100%] lg:flex-[0_0_45%]">
+            <div className="flex-[0_0_100%] self-center">
+                <label htmlFor="recipe-title" aria-required className="flex items-center flex-wrap gap-[5px]">
+                    <h1 className="font-semibold text-[1.3em] required">レシピタイトル</h1>
+                    <span className={`text-[.75em] self-center font-semibold ${ 25 - recipeInfo.recipeTitle.length < 0 ? `text-[${textColor.error}]` : ''}`}>（{25 - recipeInfo.recipeTitle.length}{25 - recipeInfo.recipeTitle.length >= 0 ? `文字以内` : `文字オーバーしています`}）</span>
+                    <span className="ml-[5px] text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.title}</span>
+                </label>
+                <input value={recipeInfo.recipeTitle} name="recipeTitle" onChange={updateDescrTitleOnChange} className="w-[100%] p-[7px] text-[13px] bg-[#fff8ef]" placeholder="例）炊飯器で簡単！夏バテでも食べられるご飯" type="text" id="recipe-title" />
+            </div>
+
+            <div className="flex-[0_0_100%] self-start">
+                <label htmlFor="recipe-description" className="flex items-center flex-wrap gap-[5px]">
+                    <h1 className="font-semibold text-[1.3em] required">レシピの説明</h1>
+                    <span className="ml-[5px] text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.descr}</span>
+                </label>
+                <textarea value={recipeInfo.recipeDescr} name="recipeDescr" onChange={updateDescrTitleOnChange} className="w-[100%] p-[7px] text-[13px] bg-[#fff8ef]" placeholder="レシピに説明をしてください例）愛犬が夏バテでなかなかご飯を食べなかったので、お魚ベースの手作りごはんを作りました。たくさん食べてくれたので是非作ってみてください。" rows={5} id="recipe-description" />
+            </div>
           </div>
 
-          <div className="flex-[0_0_100%]">
-              <label htmlFor="recipe-description" className="flex items-center flex-wrap gap-[5px]">
-                  <h1 className="font-semibold text-[1.3em] required">レシピの説明</h1>
-                  <span className="ml-[5px] text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.descr}</span>
-              </label>
-              <textarea value={recipeInfo.recipeDescr} name="recipeDescr" onChange={updateDescrTitleOnChange} className="w-[100%] p-[7px] text-[13px] bg-[#fff8ef]" placeholder="レシピに説明をしてください例）愛犬が夏バテでなかなかご飯を食べなかったので、お魚ベースの手作りごはんを作りました。たくさん食べてくれたので是非作ってみてください。" rows={5} id="recipe-description" />
-          </div>
-
-          <div className="flex-[0_0_100%] mt-[15%] w-[100%]">
+          <div className="flex-[0_0_100%] lg:flex-[0_0_45%] mt-[15%] lg:mt-0 w-[100%]">
               <label htmlFor="recipe-image" className="flex relative">
                   <img src={'/recipe-making/3dogs.webp'} loading="lazy" className="top-[-23.2%] left-[10%] absolute h-[auto] w-[30%] max-w-none rounded-[25px]" width={100} height={100}  alt="website banner" />
                   <img src={recipeInfo.recipeThumbnail} loading="lazy" className="h-[auto] w-[100%] max-w-none rounded-[25px]" width={100} height={100}  alt="website banner" />
@@ -315,7 +318,7 @@ export default memo(function CreateRecipeForm() {
                   <br/> （横長推奨）<br /> <span className="text-[36px] required">+</span></h1>
                   <input onChange={uploadFile} className="w-full hidden" type="file" name="recipe-image" id="recipe-image" />
               </label>
-              <div className='p-[5px] m-[0] w-[90vw] max-w-[768px]'>
+              <div className='p-[5px] m-[0] w-full max-w-full'>
                   <Swiper
                       slidesPerView={slidesPerViewCondition}
                       modules={[ Virtual, Navigation, Thumbs]}
@@ -456,6 +459,7 @@ export default memo(function CreateRecipeForm() {
               </button>
               <span className="text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.generalError}</span>
           </div>
-      </form>
+        </form>
+      </div>
   )
 })

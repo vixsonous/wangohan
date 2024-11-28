@@ -19,7 +19,7 @@ export default memo(function CreateRecipeComponent() {
   }
 
   return (
-      <motion.div initial={"closed"} variants={variants} animate={show ? 'open' : 'closed'} exit={{opacity: 0, x: -500}} className="fixed min-h-modal bottom-0 overflow-y-scroll left-[0px] bg-[#FFE9C9] top-0 flex flex-col p-[20px] gap-[20px] z-[9999] border-b-[2px] border-b-[#ffb762]">
+      <motion.div initial={"closed"} variants={variants} animate={show ? 'open' : 'closed'} exit={{opacity: 0, x: -500}} className={`fixed min-h-modal w-full bottom-0 overflow-y-scroll left-[0px] bg-[#FFE9C9] top-0 flex flex-col p-[20px] gap-[20px] ${show ? 'z-[9999]' : 'z-[-9999]'} border-b-[2px] border-b-[#ffb762]`}>
           <div className="flex justify-end">
               <button aria-label="close-create-recipe" onClick={() => dispatch(hide())}>
                   <FontAwesomeIcon icon={faClose} size="lg"/>
