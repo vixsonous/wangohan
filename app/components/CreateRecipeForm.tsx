@@ -288,29 +288,72 @@ export default memo(function CreateRecipeForm() {
       setRecipeInfo(prev => ({...prev, [name]: t.value}))
   },[recipeInfo]);
 
+  const onKeyEnter = (e:React.KeyboardEvent<HTMLInputElement>) => {
+    if(e.key === "Enter") {
+      const d = e.currentTarget;
+      if(d.name === "recipeTitle") {
+        const t = (document.querySelector('textarea[name="recipeDescr"]') as HTMLTextAreaElement);
+        t.focus();
+      }
+
+      if(d.name.includes("recipe-ingredient-name")) {
+        e.preventDefault();
+        const x = d.name.split("-")[3];
+        (document.querySelector(`input[name="recipe-ingredient-amt-${x}"]`) as HTMLInputElement).focus();
+      }
+
+      if(d.name.includes("recipe-ingredient-amt")) {
+        e.preventDefault();
+        const x = d.name.split("-")[3];
+        if(document.querySelector(`input[name="recipe-ingredient-amt-${parseInt(x) + 1}"]`)) {
+          (document.querySelector(`input[name="recipe-ingredient-name-${parseInt(x) + 1}"]`) as HTMLInputElement).focus();
+        } else {
+          (document.querySelector("button[name='ingredients']") as HTMLButtonElement).click();
+          setTimeout(() => {
+            (document.querySelector(`input[name="recipe-ingredient-name-${parseInt(x) + 1}"]`) as HTMLInputElement).focus();
+          },5);
+        }
+      }
+
+      if(d.name.includes("recipe-instructions")) {
+        e.preventDefault();
+        const x = d.name.split("-")[2];
+        if(document.querySelector(`input[name="recipe-instructions-${parseInt(x) + 1}"]`)) {
+          (document.querySelector(`input[name="recipe-instructions-${parseInt(x) + 1}"]`) as HTMLInputElement).focus();
+        } else {
+          (document.querySelector("button[name='instructions']") as HTMLButtonElement).click();
+          setTimeout(() => {
+            (document.querySelector(`input[name="recipe-instructions-${parseInt(x) + 1}"]`) as HTMLInputElement).focus();
+          },5);
+        }
+        
+      }
+    }
+  } 
+
   return (
       <div className="w-full flex justify-center items-center h-full max-w-screen">
         <form action="" className="create-form flex flex-wrap justify-between gap-8 max-w-xl h-[100%] w-full">
-          <div className="flex flex-wrap gap-[30px] lg:gap-0 flex-[0_0_100%] lg:flex-[0_0_45%]">
+          <div className="flex justify-start flex-wrap gap-8 lg:gap-0 flex-[0_0_100%] lg:flex-[0_0_35%] lg:-mt-8">
             <div className="flex-[0_0_100%] self-center">
-                <label htmlFor="recipe-title" aria-required className="flex items-center flex-wrap gap-[5px]">
+                <label htmlFor="recipeTitle" aria-required className="flex items-center flex-wrap gap-[5px]">
                     <h1 className="font-semibold text-[1.3em] required">レシピタイトル</h1>
                     <span className={`text-[.75em] self-center font-semibold ${ 25 - recipeInfo.recipeTitle.length < 0 ? `text-[${textColor.error}]` : ''}`}>（{25 - recipeInfo.recipeTitle.length}{25 - recipeInfo.recipeTitle.length >= 0 ? `文字以内` : `文字オーバーしています`}）</span>
-                    <span className="ml-[5px] text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.title}</span>
+                    <span className="ml-[5px] text-[.75em] font-semibold text-[#E53935]">{error.title}</span>
                 </label>
-                <input value={recipeInfo.recipeTitle} name="recipeTitle" onChange={updateDescrTitleOnChange} className="w-[100%] p-[7px] text-[13px] bg-[#fff8ef]" placeholder="例）炊飯器で簡単！夏バテでも食べられるご飯" type="text" id="recipe-title" />
+                <input value={recipeInfo.recipeTitle} name="recipeTitle" onKeyDown={onKeyEnter} onChange={updateDescrTitleOnChange} className="w-[100%] p-[7px] text-[13px] bg-[#fff8ef]" placeholder="例）炊飯器で簡単！夏バテでも食べられるご飯" type="text" id="recipe-title" />
             </div>
 
             <div className="flex-[0_0_100%] self-start">
-                <label htmlFor="recipe-description" className="flex items-center flex-wrap gap-[5px]">
+                <label htmlFor="recipeDescr" className="flex items-center flex-wrap gap-[5px]">
                     <h1 className="font-semibold text-[1.3em] required">レシピの説明</h1>
-                    <span className="ml-[5px] text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.descr}</span>
+                    <span className="ml-[5px] text-[.75em] font-semibold text-[#E53935]">{error.descr}</span>
                 </label>
                 <textarea value={recipeInfo.recipeDescr} name="recipeDescr" onChange={updateDescrTitleOnChange} className="w-[100%] p-[7px] text-[13px] bg-[#fff8ef]" placeholder="レシピに説明をしてください例）愛犬が夏バテでなかなかご飯を食べなかったので、お魚ベースの手作りごはんを作りました。たくさん食べてくれたので是非作ってみてください。" rows={5} id="recipe-description" />
             </div>
           </div>
 
-          <div className="flex-[0_0_100%] lg:flex-[0_0_45%] mt-[15%] lg:mt-0 w-[100%]">
+          <div className="items-center flex-[0_0_100%] lg:flex-[0_0_55%] mt-[15%] lg:mt-16 w-[100%]">
               <label htmlFor="recipe-image" className="flex relative">
                   <img src={'/recipe-making/3dogs.webp'} loading="lazy" className="top-[-23.2%] left-[10%] absolute h-[auto] w-[30%] max-w-none rounded-[25px]" width={100} height={100}  alt="website banner" />
                   <img src={recipeInfo.recipeThumbnail} loading="lazy" className="h-[auto] w-[100%] max-w-none rounded-[25px]" width={100} height={100}  alt="website banner" />
@@ -318,28 +361,30 @@ export default memo(function CreateRecipeForm() {
                   <br/> （横長推奨）<br /> <span className="text-[36px] required">+</span></h1>
                   <input onChange={uploadFile} className="w-full hidden" type="file" name="recipe-image" id="recipe-image" />
               </label>
-              <div className='p-[5px] m-[0] w-full max-w-full'>
-                  <Swiper
-                      slidesPerView={slidesPerViewCondition}
-                      modules={[ Virtual, Navigation, Thumbs]}
-                      spaceBetween={5}
-                      pagination={{
-                          type: 'fraction',
-                      }}
-                      className="h-[100%] w-[100%] rounded-md"
-                      virtual
-                  >
-                      {
-                          fileThumbnails.map((img, idx) => {
-                              return (
-                                  <SwiperSlide key={img} virtualIndex={idx} className="relative pt-[20px] w-[100%] h-[100%] relative overflow-visible">
-                                      <img src={img} className="object-cover w-[100%] h-[130px] relative rounded-[0px]" width={100} height={100}  alt="website banner" />
-                                      <FontAwesomeIcon id={`del-${idx}`} onClick={deleteFile} icon={faTrash} size="sm" style={{color: '#523636'}} className="absolute p-[5px] bg-[#FFFAF0] opacity-[0.8] rounded-xl top-[10px] right-[0px]"/>
-                                  </SwiperSlide>
-                              )
-                          })
-                      }
-                  </Swiper>
+              <div className="w-full flex justify-center">
+                <div className='mx-auto flex justify-center p-[5px] m-[0] lg:w-[78%] max-w-[100%]'>
+                    <Swiper
+                        slidesPerView={slidesPerViewCondition}
+                        modules={[ Virtual, Navigation, Thumbs]}
+                        spaceBetween={5}
+                        pagination={{
+                            type: 'fraction',
+                        }}
+                        className="h-[100%] w-[100%] rounded-md"
+                        virtual
+                    >
+                        {
+                            fileThumbnails.map((img, idx) => {
+                                return (
+                                    <SwiperSlide key={img} virtualIndex={idx} className="relative pt-[20px] w-[100%] h-[100%] relative overflow-visible">
+                                        <img src={img} className="object-cover w-[100%] h-[130px] relative rounded-[0px]" width={100} height={100}  alt="website banner" />
+                                        <FontAwesomeIcon id={`del-${idx}`} onClick={deleteFile} icon={faTrash} size="sm" style={{color: '#523636'}} className="absolute p-[5px] bg-[#FFFAF0] opacity-[0.8] rounded-xl top-[10px] right-[0px]"/>
+                                    </SwiperSlide>
+                                )
+                            })
+                        }
+                    </Swiper>
+                </div>
               </div>
               <span className="ml-[5px] text-[.75em] font-semibold text-[#E53935]">{error.image}</span>
           </div>
@@ -347,14 +392,14 @@ export default memo(function CreateRecipeForm() {
           <div className="flex-[0_0_100%] flex flex-col gap-[5px]">
               <label htmlFor="recipe-ingredient-name-0" className="flex items-center gap-[5px]">
                   <h1 className="font-semibold text-[1.3em] required">材料・分量</h1>
-                  <span className="ml-[5px] text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.ingredients}</span>
+                  <span className="ml-[5px] text-[.75em] font-semibold text-[#E53935]">{error.ingredients}</span>
               </label>
               {recipeIngredients.map((el, idx) => {
                   return (
                       <div key={idx}>
                           <div className="flex gap-[15px]">
-                              <input value={recipeIngredients[idx].name} id={`name-${idx}`} onChange={changeIngredientsOnChange} className="w-[50%] border-[2px] rounded-[5px] border-grey-100 p-[7px] text-[13px] bg-[#fff8ef]" placeholder="例）にんじん" type="text" name={`recipe-ingredient-name-${idx}`} />
-                              <input value={recipeIngredients[idx].amount} id={`amount-${idx}`} onChange={changeIngredientsOnChange} className="w-[50%] border-[2px] rounded-[5px] border-grey-100 p-[7px] text-[13px] bg-[#fff8ef]" placeholder="例）1/2本" type="text" name={`recipe-ingredient-amt-${idx}`} />
+                              <input onKeyDown={onKeyEnter} value={recipeIngredients[idx].name} id={`name-${idx}`} onChange={changeIngredientsOnChange} className="w-[50%] border-[2px] rounded-[5px] border-grey-100 p-[7px] text-[13px] bg-[#fff8ef]" placeholder="例）にんじん" type="text" name={`recipe-ingredient-name-${idx}`} />
+                              <input onKeyDown={onKeyEnter} value={recipeIngredients[idx].amount} id={`amount-${idx}`} onChange={changeIngredientsOnChange} className="w-[50%] border-[2px] rounded-[5px] border-grey-100 p-[7px] text-[13px] bg-[#fff8ef]" placeholder="例）1/2本" type="text" name={`recipe-ingredient-amt-${idx}`} />
                               <button aria-label="delete-ingredients-button" id={`ingredients-del-${idx}`} onClick={deleteIngrInsOnClick}>
                                   <FontAwesomeIcon icon={faTrash} size="sm" style={{color: '#523636'}} className="opacity-[1] rounded-xl"/>
                               </button>
@@ -367,7 +412,7 @@ export default memo(function CreateRecipeForm() {
           <div className="flex-[0_0_100%] flex flex-col gap-[5px]">
               <label htmlFor="recipe-instructions-0" className="flex items-center gap-[5px]">
                   <h1 className="font-semibold text-[1.3em] required">作り方</h1>
-                  <span className="text-[.75em] ml-[5px] text-[#7f7464] font-semibold text-[#E53935]">{error.instructions}</span>
+                  <span className="text-[.75em] ml-[5px] font-semibold text-[#E53935]">{error.instructions}</span>
               </label>
               {recipeInstructions.map((el, idx) => {
                   return (
@@ -376,7 +421,7 @@ export default memo(function CreateRecipeForm() {
                               <span className="ml-[10px] flex justify-center items-center rounded-xl relative">{idx + 1}
                                   <div className="border-[1px] border-black absolute h-[25px] w-[25px] rounded-[35px]"></div>
                               </span>
-                              <input value={recipeInstructions[idx].text} onChange={(e) => {
+                              <input onKeyDown={onKeyEnter} value={recipeInstructions[idx].text} onChange={(e) => {
                                   const prevArr = [...recipeInstructions];
                                   prevArr[idx].text = e.target.value;
                                   setRecipeInstructions([...prevArr]);

@@ -54,7 +54,7 @@ export default function OptImage({
             <source media="(max-width: 1024px)" srcSet={`${lg}`} type="image/webp" />
             { resize ? (
               <>
-              <img style={style} onLoad={setOnLoad} src={`http://localhost:3000/api/image?src=${src}&h=${width}&w=${height}&fit=${fit}`} loading={loading} className={`${!loaded ? 'hidden': 'block'} ${square ? 'aspect-square' : ''} h-[${height}px] w-[${width}px] ` + className} width={width} height={height} alt={alt} />
+              <img style={style} onLoad={setOnLoad} src={`http://localhost:3000/api/image?src=${src}&w=${width}&h=${height}&fit=${fit}`} loading={loading} className={`${!loaded ? 'hidden': 'block'} ${square ? 'aspect-square' : ''} h-[${height}px] w-[${width}px] ` + className} width={width} height={height} alt={alt} />
               {!loaded && <img style={style} src={`http://localhost:3000/api/image?src=${xs}`} loading={loading} className={`h-[${height}px] w-[${width}px] ${square ? 'aspect-square' : ''} absolute top-0 ` + className} width={width} height={height} alt={alt} />}
               </>
             ) : (

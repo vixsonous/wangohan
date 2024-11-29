@@ -50,7 +50,7 @@ export default function RecipeSlider ({title, recipes}:RecipeSliderInterface) {
                 {recipes.map( (recipe, idx) => {
                     return (
                         <SwiperSlide key={idx}>
-                            <RecipeElementV1  recipe={recipe} />
+                            <RecipeElementV1 recipe={recipe} />
                         </SwiperSlide>
                     )
                 })}

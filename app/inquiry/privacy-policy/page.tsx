@@ -106,7 +106,24 @@ export default function PrivacyPolicy() {
                 </div>
 
                 <div>
-                    <h1 className="font-bold">第9条（プライバシーポリシーの変更）</h1>
+                    <h1 className="font-bold">第9条（広告について）</h1>
+                    <ol className="list-decimal list-inside flex flex-col">
+                        <li>当サイトは第三者配信の広告サービス「Google Adsense グーグルアドセンス」を利用しています。
+                        Googleを含む広告配信事業者は、Cookie を使用して、ユーザーがそのウェブサイトや他のウェブサイトに過去にアクセスした際の情報に基づいて広告を配信しています。この目的は、ユーザーがそのサイトや他のサイトにアクセスした際の情報に基づいて、Google やそのパートナーが適切な広告をユーザーに表示するためです。</li>
+                        <li>Cookie（クッキー）を無効にする設定およびGoogleアドセンスに関する詳細は「<Link className="text-blue-500 underline" href="https://policies.google.com/technologies/ads?gl=jp">広告 – ポリシーと規約 – Google</Link>」をご覧ください。パーソナライズ広告を無効にする手続きは「<Link className="text-blue-500 underline" href="https://myadcenter.google.com/home?sasb=true&ref=ad-settings">広告設定ーGoogle</Link>」からお手続きください。</li>
+                    </ol>
+                </div>
+
+                <div>
+                    <h1 className="font-bold">第10条（アクセス解析ツールについて）</h1>
+                    <ol className="list-decimal list-inside flex flex-col">
+                        <li>当サイトでは、Googleによるアクセス解析ツール「Googleアナリティクス」を利用しています。</li>
+                        <li>このGoogleアナリティクスはトラフィックデータの収集のためにCookieを使用しています。このトラフィックデータは匿名で収集されており、個人を特定するものではありません。この機能はCookieを無効にすることで収集を拒否することが出来ますので、お使いのブラウザの設定をご確認ください。この規約に関して、詳しくは「<Link className="text-blue-500 underline" href="https://marketingplatform.google.com/about/analytics/terms/jp/">Googleアナリティクス利用規約</Link>」をご覧ください。</li>
+                    </ol>
+                </div>
+
+                <div>
+                    <h1 className="font-bold">第11条（プライバシーポリシーの変更）</h1>
                     <ol className="list-decimal list-inside flex flex-col">
                         <li>本ポリシーの内容は，法令その他本ポリシーに別段の定めのある事項を除いて，ユーザーに通知することなく，変更することができるものとします。</li>
                         <li>当サイトが別途定める場合を除いて，変更後のプライバシーポリシーは，本ウェブサイトに掲載したときから効力を生じるものとします。</li>
@@ -114,7 +131,7 @@ export default function PrivacyPolicy() {
                 </div>
 
                 <div>
-                    <h1 className="font-bold">第10条（お問い合わせ窓口）</h1>
+                    <h1 className="font-bold">第12条（お問い合わせ窓口）</h1>
                     <span>本ポリシーに関するお問い合わせは<Link className="text-blue-500 underline" href="/inquiry/send-inquiry">こちら</Link>よりお願いいたします。</span>
                 </div>
             </div>
