@@ -12,7 +12,10 @@ export default function OptImage({
     loading="lazy",
     centered=false,
     square=false,
-    containerClass=''
+    containerClass='',
+    fit='contain',
+    resize=false,
+    style={}
 }: {
     src: string, 
     className?: string, 
@@ -23,6 +26,9 @@ export default function OptImage({
     centered?:boolean,
     square?: boolean,
     containerClass?:string
+    fit?: 'contain' | 'cover' | 'fill' | 'inside' | 'outside',
+    resize?: boolean
+    style?:object
 }) {
 
   const getSrcVariants = useCallback((src: string) => {
@@ -41,17 +47,23 @@ export default function OptImage({
     const setOnLoad = () => setLoaded(true);
     return (
         <div className={`${containerClass} w-full h-full ${centered ? 'flex justify-center items-center' : ''}`}>
-          <picture className={`${centered ? 'flex justify-center items-center' : ''}`}>
+          <picture className={`relative ${centered ? 'flex justify-center items-center' : ''}`}>
             <source media="(max-width: 340px)" srcSet={`${xs}`} type="image/webp"  /> 
-            <source media="(max-width: 340px)" srcSet={xs} type="image/jpeg"  /> 
             <source media="(max-width: 640px)" srcSet={`${sm}`} type="image/webp" />
-            <source media="(max-width: 640px)" srcSet={sm} type="image/jpeg" />
             <source media="(max-width: 768px)" srcSet={`${md}`} type="image/webp" />
-            <source media="(max-width: 768px)" srcSet={md} type="image/jpeg" />
             <source media="(max-width: 1024px)" srcSet={`${lg}`} type="image/webp" />
-            <source media="(max-width: 1024px)" srcSet={lg} type="image/jpeg" />
-            <img onLoad={setOnLoad} src={src} loading={loading} className={`${!loaded ? 'hidden': 'block'} ${square ? 'aspect-square' : ''} h-[${height}px] w-[${width}px] ` + className} width={width} height={height} alt={alt} />
-            {!loaded && <img src={xs} loading={loading} className={`h-[${height}px] w-[${width}px] ${square ? 'aspect-square' : ''} absolute top-0 ` + className} width={width} height={height} alt={alt} />}
+            { resize ? (
+              <>
+              <img style={style} onLoad={setOnLoad} src={`http://localhost:3000/api/image?src=${src}&h=${width}&w=${height}&fit=${fit}`} loading={loading} className={`${!loaded ? 'hidden': 'block'} ${square ? 'aspect-square' : ''} h-[${height}px] w-[${width}px] ` + className} width={width} height={height} alt={alt} />
+              {!loaded && <img style={style} src={`http://localhost:3000/api/image?src=${xs}`} loading={loading} className={`h-[${height}px] w-[${width}px] ${square ? 'aspect-square' : ''} absolute top-0 ` + className} width={width} height={height} alt={alt} />}
+              </>
+            ) : (
+              <>
+              <img onLoad={setOnLoad} style={style} src={src} loading={loading} className={`${!loaded ? 'hidden': 'block'} ${square ? 'aspect-square' : ''} h-[${height}px] w-[${width}px] ` + className} width={width} height={height} alt={alt} />
+              {!loaded && <img src={xs} style={style} loading={loading} className={`h-[${height}px] w-[${width}px] ${square ? 'aspect-square' : ''} absolute top-0 ` + className} width={width} height={height} alt={alt} />}
+              </>
+            )}
+            
           </picture>
         </div>
     )

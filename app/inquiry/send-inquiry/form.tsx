@@ -5,7 +5,7 @@ export default function SendInquiryForm() {
 
     const [name, setName] = useState('');
     return (
-        <form action="" className="w-[100%] md:max-w-[70%] flex flex-col md:flex-row gap-[10px] mt-[30px] items-center">
+        <form action="" className="w-[100%] md:max-w-[70%] flex flex-col gap-[10px] mt-[30px] items-center">
             <div className="w-[100%]">
                 <label htmlFor="recipe-title" className="flex">
                     <h1 className="font-semibold text-[13px]">お名前</h1>

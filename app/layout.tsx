@@ -15,9 +15,8 @@ import StoreProvider from "./StoreProvide";
 import { getDecryptedSession } from "@/action/lib";
 import { getUserDetails } from "@/action/users";
 import React from "react";
-import Modal from "./components/ElementComponents/Modal";
-import MainSearchForm from "./components/MainSearchForm";
 import BarMainSearch from "./components/ElementComponents/BarMainSearch";
+import OptImage from "./components/ElementComponents/Image";
 
 const ErrorModal = React.lazy(() => import("./components/ElementComponents/ErrorModal"));
 const SuccessModal = React.lazy(() => import("./components/ElementComponents/SuccessModal"));
@@ -70,12 +69,15 @@ export default async function RootLayout({
       }
       <GoogleOAuthProvider clientId={String(process.env.GOOGLE_AUTH_CLIENT_ID)}>
         <html lang="en">
+          <head>
+            <link rel="icon" href="/favicon.ico" sizes="any" />
+          </head>
           <body className={`${inter.className} bg-[#FFE9C9] h-full min-h-[100vh] flex flex-col text-[#523636]`}>
             <ErrorModal />
             <SuccessModal />
             <div className="fixed px-4 w-full z-[999] pt-[5px] flex items-center border-b-[1px] gap-2 shadow-md">
               <div className='flex flex-row gap-4 w-full items-center'>
-                <Link href="/"><img className="w-[60px] h-[auto]" src={'/logo-final.webp'} width={100} height={100} alt="website logo" /></Link>
+                <Link href="/"><OptImage className='relative' src={'/logo-final.webp'} width={60} height={60} alt="website logo" /></Link>
                 <BarMainSearch />
               </div>
               <LayoutSettings user_id={user.user_id} isLoggedIn={isLoggedIn}/>
@@ -88,7 +90,7 @@ export default async function RootLayout({
             </div>
             <div className="footer mt-[100px]">
               <div className="border-[1px] border-black overflow-hidden " />
-              <div className="relative bg-[url('')]  bg-contain bg-no-repeat bg-bottom">
+              <div className="relative  bg-contain bg-no-repeat bg-bottom">
                 <div className="grid grid-cols-12 p-4 md:pt-16">
                   <div className="col-span-6 md:col-span-4 ">
                     <div className="flex flex-col justify-center items-center w-full">

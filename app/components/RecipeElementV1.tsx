@@ -17,7 +17,7 @@ export default function RecipeElementV1 ({recipe}:Props) {
     return (
     <Link href={`/recipe/show/${recipe.recipe_id}`}>
         <div className="flex flex-col gap-[8px]">
-            <OptImage src={recipe.recipe_image} loading="lazy" className="will-change-transform object-cover rounded-md w-full h-[100px] sm:h-[130px] lg:h-[170px] relative max-w-[100%] block" height={50} width={50} />
+            <OptImage resize src={recipe.recipe_image} loading="lazy" className="will-change-transform object-cover rounded-md w-full h-[100px] sm:h-[130px] lg:h-[170px] relative max-w-[100%] block" height={300} width={500} />
             <h1 className={`text-[${CardFontSize}] overflow-hidden text-ellipsis font-bold line-clamp-2`}>{recipe.recipe_name}</h1>
             <div className="flex justify-between mt-[-4px]">
                 <div className="flex items-center ml-[-4px]">

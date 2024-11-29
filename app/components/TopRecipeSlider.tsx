@@ -28,7 +28,7 @@ export default memo(function TopRecipeSlider({
                   recipes.map((img, idx) => {
                       return (
                           <SwiperSlide key={idx} className="relative">
-                              <OptImage loading='eager' key={idx} src={img.recipe_image} className="object-cover relative h-[100%] rounded-[0px] w-[100%] max-w-none" width={534} height={365}  alt="website banner" />
+                              <OptImage resize fit='cover' loading='eager' width={1024} height={768} key={idx} src={img.recipe_image} className="object-cover relative h-[100%] rounded-[0px] w-[100%] max-w-none"   alt="website banner" />
                           </SwiperSlide>
                       )
                   })

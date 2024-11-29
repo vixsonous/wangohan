@@ -161,7 +161,7 @@ export default async function Home() {
     <main className="relative flex p-[20px] min-h-screen flex-col lg:items-center overflow-hidden pb-[50px] lg:pb-[200px]">
       <div className=" flex max-w-xl h-full justify-center items-center flex-col gap-[15px]">
         <div id="logo-banner" className="mt-8 lg:mt-0 relative flex flex-col justify-center items-center">
-          <img src={'/icons/logo-new.webp'} className="rounded-md h-[auto] relative left-[15px] w-[130px] relative" width={100} height={100}  alt="website banner" />
+          <img src={'/icons/logo-new-v2.webp'} className="rounded-md h-[auto] left-[15px] w-[130px] relative" width={130} height={130}  alt="website banner" />
           <h1 className={`text-[36px] text-[#6b4528] font-bold leading-tight ${mochi.className}`}>わんごはん</h1>
           <span className={`text-[10px] text-[#6b4528] ${gloria.className}`}>ALL RECIPES FOR YOUR DOG</span>
         </div>
@@ -200,7 +200,7 @@ export default async function Home() {
                   return (
                     <div className="w-full text-white flex justify-center">
                       <Link href={ev.url} className="flex gap-[10px] flex-col text-sm text-[#523636] font-bold justify-center items-center">
-                        <img src={ev.img} loading="lazy" className="rounded-md h-[auto] w-[100%] max-w-none" width={100} height={100}  alt="website banner" />{ev.text}</Link>
+                        <OptImage src={ev.img} loading="lazy" className="rounded-md h-[auto] w-[100%]" width={250} height={150}  alt="website banner" />{ev.text}</Link>
                     </div>
                   )
                 })
