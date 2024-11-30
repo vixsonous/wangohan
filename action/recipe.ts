@@ -1,14 +1,16 @@
 import { ERR_MSG, getExpireDate, SUCC_MSG } from "@/constants/constants";
-import { DBRecipeData, ingredients, instructions, recipe } from "@/constants/interface";
+import { DBRecipeData, DisplayRecipe, ingredients, instructions, recipe } from "@/constants/interface";
 import { db } from "@/lib/database/db";
 import { cookies } from "next/headers";
 import { decrypt, getDecryptedSession } from "./lib";
 import { padStartIds } from "./common";
 import { getComments } from "./comments";
 import { s3DeleteFilesInFolder } from "./file-lib";
+import NodeCache from 'node-cache';
 
 const FRONT_PAGE_RECIPE_QUERY_LIMIT = 10;
 const SEARCH_PAGE_RECIPE_QUERY_LIMIT = 50;
+const recipe_cache = new NodeCache({stdTTL: 300});
 
 export const postRecipe = async (recipe:recipe) => {
     try {
@@ -238,8 +240,13 @@ export const processRecipes = async (recipes: Array<DBRecipeData>) => {
     return updated_recipes;
 }
 
-export const getWeeklyRecipes = async (page: number = 0) => {
+export const getWeeklyRecipes = async (page: number = 0, limit: number = 10) => {
     try {
+      const cacheKey = `weekly-recipes`;
+      const cachedData = recipe_cache.get(cacheKey) as DisplayRecipe[];
+      if(cachedData) {
+        return {message: '完了',body: cachedData, status: 200};
+      }
 
         const OFFSET = page * FRONT_PAGE_RECIPE_QUERY_LIMIT;
         const recipes = await db.selectFrom("recipes_table").select(["recipe_name", "recipe_id", "recipe_age_tag", 
@@ -252,8 +259,9 @@ export const getWeeklyRecipes = async (page: number = 0) => {
             .execute();
 
         const updated_recipes = await processRecipes(recipes);
+        recipe_cache.set(cacheKey, updated_recipes);
 
-        return {message: 'asd!',body: updated_recipes, status: 200};
+        return {message: '完了',body: updated_recipes, status: 200};
     } catch(e) {
         let _e = (e as Error).message;
         return {message: _e, body: undefined, status: 500};
@@ -263,23 +271,59 @@ export const getWeeklyRecipes = async (page: number = 0) => {
 export const getPopularRecipes = async (page: number = 0) => {
 
     try {
+      const cacheKey = `popular-recipes`;
+      const cachedData = recipe_cache.get(cacheKey) as DisplayRecipe[];
+
+      if(cachedData) {
+        return {message: '完了',body: cachedData, status: 200};
+      }
         const OFFSET = page * FRONT_PAGE_RECIPE_QUERY_LIMIT;
         const recipes = await db.selectFrom("recipes_table").select(["recipe_name", "recipe_id", "recipe_age_tag", 
             "recipe_event_tag","recipe_size_tag", "recipe_description","user_id", "created_at", "total_likes", "total_views"
         ])
-            // .where("created_at", ">=", new Date(Date.now() - 7 * 24 * 60 * 60 * 1000))
             .orderBy("total_views", "desc")
             .limit(FRONT_PAGE_RECIPE_QUERY_LIMIT)
             .offset(OFFSET)
             .execute();
 
         const updated_recipes = await processRecipes(recipes);
+        recipe_cache.set(cacheKey, updated_recipes);
 
         return {message: '完了',body: updated_recipes, status: 200};
     } catch(e) {
         let _e = (e as Error).message;
         return {message: _e, body: undefined, status: 500};
     }
+}
+
+export const getAllRecipes = async (page: number = 0, limit: number = 10) => {
+
+  try {
+    const cacheKey = `recipes-${page}-${limit}`;
+    const cachedData = recipe_cache.get(cacheKey) as DisplayRecipe[];
+
+    if(cachedData) {
+      return {message: '完了',body: cachedData, status: 200};
+    }
+
+      const OFFSET = page * limit;
+      const recipes = await db.selectFrom("recipes_table").select(["recipe_name", "recipe_id", "recipe_age_tag", 
+          "recipe_event_tag","recipe_size_tag", "recipe_description","user_id", "created_at", "total_likes", "total_views"
+      ])
+          .orderBy("created_at", "desc")
+          .limit(limit)
+          .offset(OFFSET)
+          .execute();
+
+      const updated_recipes = await processRecipes(recipes);
+
+      recipe_cache.set(cacheKey, updated_recipes);
+
+      return {message: '完了',body: updated_recipes, status: 200};
+  } catch(e) {
+      let _e = (e as Error).message;
+      return {message: _e, body: undefined, status: 500};
+  }
 }
 
 export const updateRecipeViews = async (recipe_id: number) => {

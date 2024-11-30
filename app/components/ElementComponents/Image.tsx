@@ -43,24 +43,36 @@ export default function OptImage({
   
     const { xs, sm, md, lg } = getSrcVariants(src);
     const [loaded, setLoaded] = useState(false);
+    const [srcState, setSrcState] = useState(src);
 
     const setOnLoad = () => setLoaded(true);
+
+    // useEffect(() => {
+    //   console.log(loaded);
+    //   const reload = setTimeout(() => {
+    //     setSrcState(srcState);
+    //   },5000);
+
+    //   if(loaded) clearTimeout(reload);
+
+    //   return () => clearTimeout(reload);
+    // },[loaded]);
     return (
         <div className={`${containerClass} w-full h-full ${centered ? 'flex justify-center items-center' : ''}`}>
-          <picture className={`relative ${centered ? 'flex justify-center items-center' : ''}`}>
-            <source media="(max-width: 340px)" srcSet={`${xs}`} type="image/webp"  /> 
-            <source media="(max-width: 640px)" srcSet={`${sm}`} type="image/webp" />
-            <source media="(max-width: 768px)" srcSet={`${md}`} type="image/webp" />
-            <source media="(max-width: 1024px)" srcSet={`${lg}`} type="image/webp" />
+          <picture className={`relative ${centered ? 'flex justify-center items-center' : ''} h-[${height}px] w-[${width}px]`}>
+            <source media="(max-width: 340px)" srcSet={`http://localhost:3000/api/image?src=${src}&w=60&h=60&fit=${fit}`} type="image/webp"  /> 
+            <source media="(max-width: 640px)" srcSet={`http://localhost:3000/api/image?src=${src}&w=${width}&h=${height}&fit=${fit}`} type="image/webp" />
+            <source media="(max-width: 768px)" srcSet={`http://localhost:3000/api/image?src=${src}&w=${width}&h=${height}&fit=${fit}`} type="image/webp" />
+            <source media="(max-width: 1024px)" srcSet={`http://localhost:3000/api/image?src=${src}&w=${width}&h=${height}&fit=${fit}`} type="image/webp" />
             { resize ? (
               <>
-              <img style={style} onLoad={setOnLoad} src={`http://localhost:3000/api/image?src=${src}&w=${width}&h=${height}&fit=${fit}`} loading={loading} className={`${!loaded ? 'hidden': 'block'} ${square ? 'aspect-square' : ''} h-[${height}px] w-[${width}px] ` + className} width={width} height={height} alt={alt} />
-              {!loaded && <img style={style} src={`http://localhost:3000/api/image?src=${xs}`} loading={loading} className={`h-[${height}px] w-[${width}px] ${square ? 'aspect-square' : ''} absolute top-0 ` + className} width={width} height={height} alt={alt} />}
+              <img style={style} onLoad={setOnLoad} src={`http://localhost:3000/api/image?src=${src}&w=${width}&h=${height}&fit=${fit}`} loading={loading} className={`${square ? 'aspect-square' : ''} h-[${height}px] w-[${width}px] relative top-0  ` + className} width={width} height={height} alt={alt} />
+              {!loaded && <img style={style} src={`http://localhost:3000/api/image?src=${src}&w=60&h=60&fit=cover`} loading={loading} className={`h-[${height}px] w-[${width}px] ${square ? 'aspect-square' : ''}  absolute top-0 ` + className} width={width} height={height} alt={alt} />}
               </>
             ) : (
               <>
-              <img onLoad={setOnLoad} style={style} src={src} loading={loading} className={`${!loaded ? 'hidden': 'block'} ${square ? 'aspect-square' : ''} h-[${height}px] w-[${width}px] ` + className} width={width} height={height} alt={alt} />
-              {!loaded && <img src={xs} style={style} loading={loading} className={`h-[${height}px] w-[${width}px] ${square ? 'aspect-square' : ''} absolute top-0 ` + className} width={width} height={height} alt={alt} />}
+              <img onLoad={setOnLoad} style={style} src={src} loading={loading} className={`${!loaded ? 'hidden': 'block'} ${square ? 'aspect-square' : ''} h-[${height}px] w-[${width}px] relative top-0  ` + className} width={width} height={height} alt={alt} />
+              {!loaded && <img src={`http://localhost:3000/api/image?src=${src}&w=60&h=60&fit=cover`} style={style} loading={loading} className={`h-[${height}px] w-[${width}px] ${square ? 'aspect-square' : ''} absolute top-0 ` + className} width={width} height={height} alt={alt} />}
               </>
             )}
             
