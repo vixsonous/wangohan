@@ -376,7 +376,7 @@ export default memo(function CreateRecipeForm() {
                         {
                             fileThumbnails.map((img, idx) => {
                                 return (
-                                    <SwiperSlide key={img} virtualIndex={idx} className="relative pt-[20px] w-[100%] h-[100%] relative overflow-visible">
+                                    <SwiperSlide key={img} virtualIndex={idx} className="relative pt-[20px] w-[100%] h-[100%] overflow-visible">
                                         <img src={img} className="object-cover w-[100%] h-[130px] relative rounded-[0px]" width={100} height={100}  alt="website banner" />
                                         <FontAwesomeIcon id={`del-${idx}`} onClick={deleteFile} icon={faTrash} size="sm" style={{color: '#523636'}} className="absolute p-[5px] bg-[#FFFAF0] opacity-[0.8] rounded-xl top-[10px] right-[0px]"/>
                                     </SwiperSlide>
@@ -502,7 +502,7 @@ export default memo(function CreateRecipeForm() {
                       :<FontAwesomeIcon icon={faCircleNotch} spin size="lg"/>
                   )}
               </button>
-              <span className="text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.generalError}</span>
+              <span className="text-[.75em] font-semibold text-[#E53935]">{error.generalError}</span>
           </div>
         </form>
       </div>

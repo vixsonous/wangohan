@@ -348,7 +348,7 @@ export default function ToolbarPlugin() {
       </Button>
       <Divider />
       <Dropdown openIcon={activeTextButton} closeIcon={activeTextButton}>
-        <ul className="block flex flex-col gap-2 bg-secondary-bg items-center rounded-md border border-primary-text">
+        <ul className=" flex flex-col gap-2 bg-secondary-bg items-center rounded-md border border-primary-text">
           <li className={`flex items-center justify-between w-full px-2 ${icons.justifyIdx === 0 ? 'bg-primary-bg' : ''} rounded-t-md`}>
             <Button
               onClick={formatHeading}
@@ -462,7 +462,7 @@ export default function ToolbarPlugin() {
         <BracketsAngle size={IconSize} />
       </Button>
       <Dropdown openIcon={<ButtonIcon>Aa <CaretDown size={IconSize}/></ButtonIcon>} closeIcon={<ButtonIcon>Aa <CaretDown size={IconSize}/></ButtonIcon>}>
-        <ul className="block flex flex-col gap-2 bg-secondary-bg items-center rounded-md border border-primary-text">
+        <ul className=" flex flex-col gap-2 bg-secondary-bg items-center rounded-md border border-primary-text">
           <li className={`flex items-center justify-between w-full px-2 ${isStrikethrough ? 'bg-primary-bg' : ''} rounded-t-md`}>
             <Button
               onClick={() => {
@@ -500,7 +500,7 @@ export default function ToolbarPlugin() {
       </Dropdown>
       <Divider />
       <Dropdown openIcon={<ButtonIcon><Plus /><ButtonText>Insert</ButtonText><CaretDown size={IconSize}/></ButtonIcon>} closeIcon={<ButtonIcon><Plus /><ButtonText>Insert</ButtonText><CaretDown size={IconSize}/></ButtonIcon>}>
-        <ul className="block flex flex-col gap-2 bg-secondary-bg items-center rounded-md border border-primary-text">
+        <ul className=" flex flex-col gap-2 bg-secondary-bg items-center rounded-md border border-primary-text">
           <li className={`flex items-center justify-between w-full px-2 ${icons.justifyIdx === 0 ? 'bg-primary-bg' : ''} rounded-t-md`}>
             <Button
               onClick={() => dispatch(showModal())}
@@ -551,7 +551,7 @@ export default function ToolbarPlugin() {
       </Dropdown>
       <Divider />
       <Dropdown openIcon={icons.justify} closeIcon={icons.justify}>
-        <ul className="block flex flex-col gap-2 bg-secondary-bg items-center rounded-md border border-primary-text">
+        <ul className=" flex flex-col gap-2 bg-secondary-bg items-center rounded-md border border-primary-text">
           <li className={`flex items-center justify-between w-full px-2 ${icons.justifyIdx === 0 ? 'bg-primary-bg' : ''} rounded-t-md`}>
             <Button
               onClick={() => {
@@ -682,7 +682,7 @@ export default function ToolbarPlugin() {
             </div>
           </Dropdown>
           <Dropdown className='w-full' closeOnClick={false} openIcon={<FileButton />} closeIcon={<FileButton />}>
-            <div className='p-2 flex flex gap-2 items-center'>
+            <div className='p-2 flex gap-2 items-center'>
               <Button aria-label='file' name="file" >
                 <label htmlFor="file">
                   <input onChange={uploadPreviewFile} ref={imageFileRef} type="file" hidden name="file" id="file" />

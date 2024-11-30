@@ -26,7 +26,7 @@ export default function MainSearchForm({isInView, isBar=false}:{isInView:boolean
     
 
     return (
-        <motion.form initial={{width: isInView ? '100%' : '10%', opacity: isInView ? 1 : 0}} animate={{width: isInView ? '100%' : '10%', opacity: isInView ? 1 : 0}} className="flex gap-[10px] opacity-0 flex md:justify-start" action="">
+        <motion.form initial={{width: isInView ? '100%' : '10%', opacity: isInView ? 1 : 0}} animate={{width: isInView ? '100%' : '10%', opacity: isInView ? 1 : 0}} className="flex gap-[10px] opacity-0 md:justify-start" action="">
           <div className="relative w-full flex items-center">
             <input value={search} onChange={searchOnChange} className={`py-2 px-4 ${isBar ? 'w-[100%]': 'w-[100%]'} border border-primary-text rounded-md text-xs md:text-sm`} placeholder="キーワードで検索" type="text" />
             <button onClick={searchFunc} className="absolute right-2">

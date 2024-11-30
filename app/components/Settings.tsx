@@ -74,7 +74,7 @@ export default function Settings() {
                             dispatch(show());
                         }} className={` w-[100%] rounded-md text-[12px] sm:text-[16px] relative active:scale-[1.075] md:hover:scale-[1.075] transition-all duration-500`} type="submit">
                             <span className="absolute z-[1] w-full top-[50%] left-0 font-bold">レシピを作成する</span>
-                            <img src={'/recipe-button.webp'} className="self-center rounded-md h-[auto] w-full relative absolute top-0" width={10000} height={10000}  alt="website banner" />
+                            <img src={'/recipe-button.webp'} className="self-center rounded-md h-[auto] w-full relative top-0" width={10000} height={10000}  alt="website banner" />
                         </button>
                         
                         <div className="font-bold flex flex-col bg-secondary-bg w-full p-4 gap-4 rounded-2xl border border-primary-text">
