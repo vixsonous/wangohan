@@ -5,8 +5,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { GoogleLogin, TokenResponse, useGoogleLogin } from "@react-oauth/google";
 import { Inter } from "next/font/google";
 import Link from "next/link";
-import { redirect } from "next/navigation";
-import { useRouter } from "next/router";
 import { SyntheticEvent, useState } from "react";
 
 const inter = Inter({ subsets: ["latin"], display: 'swap', adjustFontFallback: false });
@@ -149,7 +147,7 @@ export default function LoginForm() {
                     :<FontAwesomeIcon icon={faCircleNotch} spin size="lg"/>
                 )}
             </button>
-            <span className="text-[.5em] sm:text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error}</span>
+            <span className="text-[.5em] sm:text-[.75em] font-semibold text-[#E53935]">{error}</span>
         </form>
         <div className="w-[100%] max-w-[100%] sm:max-w-[460px] mt-[30px] gap-[10px] flex flex-col justify-center">
             {/* <button className={`text-[#6b4528] flex justify-center items-center bg-[white] border-[2px] rounded-md border-[#ffcd92] text-[12px] sm:text-[16px] px-[10px] py-[10px] font-bold`}>

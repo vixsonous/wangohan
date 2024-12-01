@@ -147,7 +147,7 @@ export default memo(function LayoutSettings({isLoggedIn, user_id} : {isLoggedIn:
                       <div className='border-b border-primary-text pb-2'></div>
                       <div className="flex py-1 gap-4 items-center ">
                         <div className='relative'>
-                          <OptImage className="h-8 w-12 object-cover rounded-sm" src={data.recipe_image}/>
+                          <OptImage height={60} width={60} className="w-8 aspect-square object-cover rounded-sm" src={data.recipe_image}/>
                           {data.type === 'like' && <Heart className='absolute -bottom-2 -right-2' size={16} weight="fill" color={textColor.error}/>}
                           {data.type === 'review' && <Star className='absolute -bottom-2 -right-2' size={16} weight="fill" color={textColor.warning}/>}
                         </div>

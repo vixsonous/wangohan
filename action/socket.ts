@@ -9,7 +9,7 @@ export const registerSocketUser = (user_id: number) => {
 
 export const getSocket = () => {
   if(!socket) {
-    socket = io(`http://localhost:3000`);
+    socket = io(process.env.BASE_URL);
   }
 
   return socket;
