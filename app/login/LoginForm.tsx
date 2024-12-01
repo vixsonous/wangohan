@@ -9,7 +9,7 @@ import { redirect } from "next/navigation";
 import { useRouter } from "next/router";
 import { SyntheticEvent, useState } from "react";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"], display: 'swap', adjustFontFallback: false });
 
 interface tokenType {
     access_token: string,

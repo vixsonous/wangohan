@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Timer from "./Timer";
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({ subsets: ['latin'], display: 'swap', adjustFontFallback: false });
 
 export default function FinishSignup() {
     return (

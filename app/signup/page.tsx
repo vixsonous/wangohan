@@ -7,7 +7,7 @@ export const metadata:Metadata = {
     title: "Sign Up"
 }
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ['latin'], display: 'swap', adjustFontFallback: false })
 
 export default function SignUp() {
     return (

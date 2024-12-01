@@ -14,11 +14,13 @@ import OptImage from "./components/ElementComponents/Image";
 const gloria = Gloria_Hallelujah({
   weight: '400',
   subsets: ['latin']
+  , display: 'swap', adjustFontFallback: false
 });
 
 const mochi = Mochiy_Pop_P_One({
   weight: '400',
   subsets: ['latin']
+  , display: 'swap', adjustFontFallback: false
 });
 
 const DogCategoryMedCore = () => {
