@@ -32,6 +32,7 @@ export interface userDetails {
     pets: DogData[];
     user_codename: string;
     user_detail_id: number;
+    user_id: number;
     user_image: string;
 }
 

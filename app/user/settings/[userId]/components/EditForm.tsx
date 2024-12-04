@@ -85,7 +85,7 @@ export default function EditForm({userDetails, pets} : Props) {
                 setTimeout(() => {
                     dispatch(hideSuccess());
                 }, POPUPTIME);
-                router.push("/")
+                router.push("/user/" + userDetails.user_id)
             }
         }).catch(err => {
             setState(prev => ({...prev, errMsg: (err as Error).message, submitState: false}));
@@ -131,7 +131,7 @@ export default function EditForm({userDetails, pets} : Props) {
                 </label>
             </div>
             <div className="flex justify-center self-center items-center w-full relative mt-[40px] mb-[10px]">
-                <h1 className="absolute top-4 text-lg font-semibold text-[#523636]">うちのわん</h1>
+                <h1 className="absolute top-2 text-lg font-semibold text-[#523636]">うちのわん</h1>
                 <img src={'/icons/ribbon.webp'} className="hidden md:block h-[auto] self-center max-w-none" width={300} height={122}  alt="website banner" />
                 <img src={'/icons/ribbon.webp'} className="block md:hidden h-[auto] self-center max-w-none" width={200} height={122}  alt="website banner" />
             </div>
