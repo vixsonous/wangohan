@@ -110,8 +110,8 @@ export default function EditForm({userDetails, pets} : Props) {
         <form action="" className="relative max-w-xl w-full">
             <div className="user-image flex flex-col justify-center items-center mt-[30px]">
                 <label htmlFor="profile-image" className="relative group">
-                    <OptImage src={state.profilePic.thumbnail} containerClass="hidden md:flex" width={350} height={350} className="hidden md:block border border-primary-text rounded-full object-cover" alt={state.dispUsrnm}/>
-                    <OptImage src={state.profilePic.thumbnail} containerClass="flex md:hidden" width={150} height={150} className="block md:hidden border border-primary-text rounded-full object-cover" alt={state.dispUsrnm}/>
+                    <OptImage src={state.profilePic.thumbnail} containerClass="hidden md:flex" square={true} width={350} height={350} className="hidden md:block border border-primary-text rounded-full object-cover" alt={state.dispUsrnm}/>
+                    <OptImage src={state.profilePic.thumbnail} containerClass="flex md:hidden" square={true} width={150} height={150} className="block md:hidden border border-primary-text rounded-full object-cover" alt={state.dispUsrnm}/>
                     <input onChange={profPicOnChange} className="w-[100%] hidden" type="file" name="profile-image" id="profile-image" />
                     <div className="absolute w-full h-full bg-black group-hover:opacity-[0.3] opacity-0 top-0 flex justify-center items-center rounded-[50%] transition-all duration-500">
                         <span className="text-white font-bold">画像を追加</span>
