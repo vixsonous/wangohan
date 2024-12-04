@@ -296,6 +296,18 @@ export const getPopularRecipes = async (page: number = 0) => {
     }
 }
 
+export const totalRecipes = async() => {
+  try {
+    const [num] = await db.selectFrom("recipes_table").select(({fn, val, ref}) => [
+      fn.count<number>('recipe_id').as('recipes_total')
+    ]).execute();
+
+    return num.recipes_total;
+  } catch(e) {
+    return -1;
+  }
+}
+
 export const getAllRecipes = async (page: number = 0, limit: number = 10) => {
 
   try {

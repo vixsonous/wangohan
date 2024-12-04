@@ -66,7 +66,7 @@ export default async function User() {
                     <PetList pets={pets}/>
                     <TabList owned_recipes={recipes_data} liked_recipes={liked_recipes_data}/>
                     <div className="fixed bottom-[20px] z-[9999] right-[10px]">
-                        <Link href={`/user/${userDetails.user_id}/settings`}>
+                        <Link href={`/user/settings/${userDetails.user_id}`}>
                             <img loading="lazy" src={'/Setting/settingpaw.webp'} className="h-[auto] w-[120px]  max-w-none" width={100} height={100}  alt="website banner" />
                             <span className="relative bottom-[33px] text-[13px] text-white right-[-45px]">設定</span>
                         </Link>
