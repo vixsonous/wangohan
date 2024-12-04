@@ -30,15 +30,15 @@ export default function TabList({owned_recipes, liked_recipes}:{owned_recipes: D
                   <span>したレシピ</span>
                 </button>
             </div>
-            <div ref={imgContainer} className={`${!state.active ? 'hidden' : ''} recipe-list__container max-w-xl grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 masonry p-[2px] gap-[${GAP}px] bg-secondary-bg items-center relative`}>
-                {owned_recipes.map( (recipe, idx) => <div key={idx} className="relative w-[170px] md:w-[200px] lg:w-[245px] pb-[100%] top-[0]" ref={ref => {imgRefs.current[idx] = ref}}>
+            <div ref={imgContainer} className={`${!state.active ? 'hidden' : ''} recipe-list__container max-w-xl grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 masonry p-1 gap-1 bg-secondary-bg items-center relative`}>
+                {owned_recipes.map( (recipe, idx) => <div key={idx} className="relative pb-[100%] top-[0]" ref={ref => {imgRefs.current[idx] = ref}}>
                     <Link href={`/recipe/show/` + recipe.recipe_id}>
                         <RecipeElementV3  key={idx} recipe={recipe}/>
                     </Link>
                 </div>)}
             </div>
-            <div ref={imgContainer} className={`${state.active ? 'hidden' : ''} recipe-list__container max-w-xl grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 masonry p-[2px] gap-[${GAP}px] bg-[#FFFAF0] items-center relative`}>
-                {liked_recipes.map( (recipe, idx) => <div key={idx} className="relative w-[170px] md:w-[200px] lg:w-[245px] pb-[100%] top-[0]" ref={ref => {imgRefs.current[idx] = ref}}>
+            <div ref={imgContainer} className={`${state.active ? 'hidden' : ''} recipe-list__container max-w-xl grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 masonry p-1 gap-1 bg-[#FFFAF0] items-center relative`}>
+                {liked_recipes.map( (recipe, idx) => <div key={idx} className="relative pb-[100%] top-[0]" ref={ref => {imgRefs.current[idx] = ref}}>
                     <Link href={`/recipe/show/` + recipe.recipe_id}>
                         <RecipeElementV3  key={idx} recipe={recipe}/>
                     </Link>

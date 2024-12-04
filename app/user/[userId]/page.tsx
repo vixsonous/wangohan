@@ -49,10 +49,14 @@ export default async function User() {
     return (
         <Suspense fallback={<IndexLoading />}>
             <div className="flex flex-col justify-center items-center ">
-                <div className="relative pb-[100px] max-w-xl">
+                <div className="relative pb-[100px] max-w-xl w-full">
                     <div className="user-image relative flex flex-col justify-center items-center mt-[30px]">
-                        <OptImage centered loading="lazy" src={image_url} className="hidden md:block rounded-full object-cover" width={350} height={350} alt="website banner"/>
-                        <OptImage centered loading="lazy" src={image_url} className="block md:hidden rounded-full object-cover" width={150} height={150} alt="website banner"/>
+                        <div className="hidden md:block">
+                          <OptImage src={image_url} centered className=" rounded-full object-cover relative" square width={350} height={350}  alt="website banner"/>
+                        </div>
+                        <div className="block md:hidden">
+                          <OptImage src={image_url} centered className=" rounded-full object-cover relative" square width={150} height={150}  alt="website banner"/>
+                        </div>
                         <h1 className="text-[36px] font-bold text-[#5b5351]">{userDetails.user_codename === '' ? `Wanuser` + decryptedSession.user.user_id : userDetails.user_codename}</h1>
                     </div>
                     <div className="flex justify-center items-center relative mt-12 mb-4">

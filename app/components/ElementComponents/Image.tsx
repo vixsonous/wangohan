@@ -47,6 +47,14 @@ export default function OptImage({
 
     const setOnLoad = () => setLoaded(true);
 
+    useEffect(() => {
+      if(src === "https://wangohan-public.s3.ap-northeast-1.amazonaws.com/00000003/profile/MlXG7GuTcRjVhQS2FB7VPtype_or.webp") {
+        console.log(src);
+        console.log(loaded);
+      }
+      
+    },[loaded]);
+
     // useEffect(() => {
     //   console.log(loaded);
     //   const reload = setTimeout(() => {
@@ -58,21 +66,24 @@ export default function OptImage({
     //   return () => clearTimeout(reload);
     // },[loaded]);
     return (
-        <div className={`${containerClass} w-full h-full ${centered ? 'flex justify-center items-center' : ''}`}>
-          <picture className={`relative ${centered ? 'flex justify-center items-center' : ''} h-[${height}px] w-[${width}px]`}>
+        <div  className={`${containerClass} w-full h-full ${centered ? 'flex justify-center items-center' : ''}`}>
+          <picture style={{
+            backgroundImage: `url(/api/image?src=${src}&w=60&h=60&fit=cover)`,
+            backgroundSize:'cover', objectFit: 'cover', 
+            objectPosition: 'center', 
+            backgroundRepeat: 'no-repeat'
+          }} className={`relative ${square ? 'aspect-square' : ''} h-[${height}px] w-[${width}px] relative top-0  ` + className}>
             { resize ? (
               <>
               <source media="(max-width: 340px)" srcSet={`/api/image?src=${src}&w=60&h=60&fit=${fit}`} type="image/webp"  /> 
               <source media="(max-width: 640px)" srcSet={`/api/image?src=${src}&w=${width}&h=${height}&fit=${fit}`} type="image/webp" />
               <source media="(max-width: 768px)" srcSet={`/api/image?src=${src}&w=${width}&h=${height}&fit=${fit}`} type="image/webp" />
               <source media="(max-width: 1024px)" srcSet={`/api/image?src=${src}&w=${width}&h=${height}&fit=${fit}`} type="image/webp" />
-              <img style={style} onLoad={setOnLoad} src={`/api/image?src=${src}&w=${width}&h=${height}&fit=${fit}`} loading={loading} className={`${square ? 'aspect-square' : ''} h-[${height}px] w-[${width}px] relative top-0  ` + className} width={width} height={height} alt={alt} />
-              {!loaded && <img style={style} src={`/api/image?src=${src}&w=60&h=60&fit=cover`} loading={loading} className={`h-[${60}px] w-[${60}px] ${square ? 'aspect-square' : ''}  absolute top-0 ` + className} width={60} height={60} alt={alt} />}
+              <img style={style} src={`/api/image?src=${src}&w=${width}&h=${height}&fit=${fit}`} loading={loading} className={`${square ? 'aspect-square' : ''} h-[${height}px] w-[${width}px] relative top-0  ` + className} width={width} height={height} alt={alt} />
               </>
             ) : (
               <>
-              <img onLoad={setOnLoad} style={style} src={src} loading={loading} className={`${!loaded ? 'hidden': 'block'} ${square ? 'aspect-square' : ''} h-[${height}px] w-[${width}px] relative top-0  ` + className} width={width} height={height} alt={alt} />
-              {!loaded && <img src={`/api/image?src=${src}&w=60&h=60&fit=cover`} style={style} loading={loading} className={`h-[${60}px] w-[${60}px] ${square ? 'aspect-square' : ''} absolute top-0 ` + className} width={60} height={60} alt={alt} />}
+              <img className={`${square ? 'aspect-square' : ''} h-[${height}px] w-[${width}px] relative top-0  ` + className} onLoad={setOnLoad} style={style} src={src} loading={loading} width={width} height={height} alt={alt} />
               </>
             )}
             

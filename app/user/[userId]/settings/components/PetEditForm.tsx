@@ -10,6 +10,7 @@ import { setPets } from "@/lib/redux/states/petSlice";
 import { faCircleNotch, faClose, faEdit, faSave } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { AnimatePresence, motion } from "framer-motion";
+import { redirect } from "next/navigation";
 import { useState } from "react";
 
 interface Props {
@@ -194,10 +195,8 @@ export default function PetEditForm({petData, className=''} : Props) {
 
     return (
         <>
-            <div onClick={showEditModal} className={"flex flex-grow flex-shrink-0 basis-[30%] justify-center items-center gap-[10px]" + className}>
+            <div onClick={showEditModal} className={"flex md:flex-col flex-grow flex-shrink-0 justify-center items-center gap-[10px]" + className}>
                 <div>
-                    {/* <OptImage src={petData.pet_image} className="rounded-[50%] w-[60px] h-[60px] object-cover relative" width={100} height={100} alt={petData.pet_name}/>
-                    <OptImage src={petData.pet_image} className="rounded-[50%] w-[60px] h-[60px] object-cover relative" width={100} height={100} alt={petData.pet_name}/> */}
 
                     <OptImage src={petData.pet_image} centered className="hidden md:block rounded-full object-cover" square width={150} height={150}  alt="website banner"/>
                     <OptImage src={petData.pet_image} centered className="block md:hidden rounded-full object-cover" square width={60} height={60}  alt="website banner"/>

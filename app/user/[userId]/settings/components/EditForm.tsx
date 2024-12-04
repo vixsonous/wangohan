@@ -10,6 +10,7 @@ import { POPUPTIME, SUCC_MSG, textColor } from "@/constants/constants";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { hideSuccess, showSuccess } from "@/lib/redux/states/messageSlice";
 import { setPets } from "@/lib/redux/states/petSlice";
+import { useRouter } from "next/navigation";
 const OptImage = React.lazy(() => import("@/app/components/ElementComponents/Image"));
 
 interface Props {
@@ -39,6 +40,8 @@ export default function EditForm({userDetails, pets} : Props) {
         lgStart: '1'
 
     });
+
+    const router = useRouter();
 
     const nameOnBlurEvent = () => {
         setState(prev => ({...prev, curUsrnmIcn: faEdit}));
@@ -82,6 +85,7 @@ export default function EditForm({userDetails, pets} : Props) {
                 setTimeout(() => {
                     dispatch(hideSuccess());
                 }, POPUPTIME);
+                router.push("/")
             }
         }).catch(err => {
             setState(prev => ({...prev, errMsg: (err as Error).message, submitState: false}));
@@ -103,7 +107,7 @@ export default function EditForm({userDetails, pets} : Props) {
     },[petState]);
 
     return (
-        <form action="" className="relative max-w-xl">
+        <form action="" className="relative max-w-xl w-full">
             <div className="user-image flex flex-col justify-center items-center mt-[30px]">
                 <label htmlFor="profile-image" className="relative group">
                     <OptImage src={state.profilePic.thumbnail} containerClass="hidden md:flex" width={350} height={350} className="hidden md:block border border-primary-text rounded-full object-cover" alt={state.dispUsrnm}/>
@@ -128,8 +132,8 @@ export default function EditForm({userDetails, pets} : Props) {
             </div>
             <div className="flex justify-center self-center items-center w-full relative mt-[40px] mb-[10px]">
                 <h1 className="absolute top-4 text-lg font-semibold text-[#523636]">うちのわん</h1>
-                <OptImage src={'/icons/ribbon.webp'} containerClass="hidden md:block" centered className="hidden md:block h-[auto] self-center max-w-none" width={300} height={122}  alt="website banner" />
-                <OptImage src={'/icons/ribbon.webp'} containerClass="block md:hidden" centered className="block md:hidden h-[auto] self-center max-w-none" width={200} height={122}  alt="website banner" />
+                <img src={'/icons/ribbon.webp'} className="hidden md:block h-[auto] self-center max-w-none" width={300} height={122}  alt="website banner" />
+                <img src={'/icons/ribbon.webp'} className="block md:hidden h-[auto] self-center max-w-none" width={200} height={122}  alt="website banner" />
             </div>
             <div className={`pet-list p-4 grid grid-cols-2 ${petState.length <=3 ? state.mdStart:'md:grid-cols-3'} ${petState.length <=3 ? state.lgStart:'lg:grid-cols-5'} gap-4 items-center`}>
                 {
