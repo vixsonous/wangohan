@@ -1,6 +1,8 @@
 import { searchRecipes } from "@/action/recipe";
 import RecipeElementV1 from "@/app/components/RecipeElementV1";
+import { ArrowLeft } from "@phosphor-icons/react/dist/ssr";
 import { Metadata, ResolvingMetadata } from "next";
+import Link from "next/link";
 
 type Props = {
     params: {searchRec: string},
@@ -45,6 +47,9 @@ export default async function SearchPage({params, searchParams}:{params: {search
                     <span>レシピがありません。</span>
                 )
             }
+            </div>
+            <div className="w-full flex justify-end">
+              <Link href={`/`} className="flex gap-2 items-center"><ArrowLeft size={20}/> 戻る</Link>
             </div>
         </section>
     )

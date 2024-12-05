@@ -24,7 +24,7 @@ export default memo(function BirthdayAvatar({src, active} : BirthdayAvatarInterf
   
   return (
     <div className="relative flex-[0_0_100%] text-white flex flex-col items-center justify-center">
-      <div style={{scale: active ? state.lg : state.md}} className="transition-all duration-1000 w-full flex justify-center">
+      <div style={{scale: active ? state.lg : state.md}} className={`transition-all duration-1000 w-full flex justify-center ${active ? 'animate-bubble': ''}`}>
           <OptImage width={200} fit="cover" height={150} resize centered containerClass="aspect-square max-w-[100px] max-h-[100px]" src={src.toString()} loading="lazy" className="aspect-square max-w-[100px] max-h-[100px] rounded-full object-cover overflow-hidden" alt="website banner" />
       </div>
       <h1 className="relative text-sm opacity-90 z-10 bg-primary-bg px-20 font-bold text-[#523636] text-center">

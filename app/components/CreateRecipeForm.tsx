@@ -289,20 +289,18 @@ export default memo(function CreateRecipeForm() {
   },[recipeInfo]);
 
   const onKeyEnter = (e:React.KeyboardEvent<HTMLInputElement>) => {
+    
     if(e.key === "Enter") {
+      e.preventDefault();
       const d = e.currentTarget;
       if(d.name === "recipeTitle") {
         const t = (document.querySelector('textarea[name="recipeDescr"]') as HTMLTextAreaElement);
         t.focus();
-      }
-
-      if(d.name.includes("recipe-ingredient-name")) {
+      }else if(d.name.includes("recipe-ingredient-name")) {
         e.preventDefault();
         const x = d.name.split("-")[3];
         (document.querySelector(`input[name="recipe-ingredient-amt-${x}"]`) as HTMLInputElement).focus();
-      }
-
-      if(d.name.includes("recipe-ingredient-amt")) {
+      }else if(d.name.includes("recipe-ingredient-amt")) {
         e.preventDefault();
         const x = d.name.split("-")[3];
         if(document.querySelector(`input[name="recipe-ingredient-amt-${parseInt(x) + 1}"]`)) {
@@ -313,9 +311,7 @@ export default memo(function CreateRecipeForm() {
             (document.querySelector(`input[name="recipe-ingredient-name-${parseInt(x) + 1}"]`) as HTMLInputElement).focus();
           },5);
         }
-      }
-
-      if(d.name.includes("recipe-instructions")) {
+      }else if(d.name.includes("recipe-instructions")) {
         e.preventDefault();
         const x = d.name.split("-")[2];
         if(document.querySelector(`input[name="recipe-instructions-${parseInt(x) + 1}"]`)) {
@@ -326,7 +322,6 @@ export default memo(function CreateRecipeForm() {
             (document.querySelector(`input[name="recipe-instructions-${parseInt(x) + 1}"]`) as HTMLInputElement).focus();
           },5);
         }
-        
       }
     }
   } 

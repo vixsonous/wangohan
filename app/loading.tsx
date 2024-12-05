@@ -1,10 +1,9 @@
-import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { CircleNotch } from "@phosphor-icons/react/dist/ssr";
 
 export default function IndexLoading() {
     return (
         <div className="w-full h-screen flex justify-center items-center">
-            <FontAwesomeIcon className="w-[25px] h-[25px] text-[#6b4528]" spin icon={faCircleNotch} size="sm"/>
+            <CircleNotch className="animate-spin" size={40}/>
         </div>
     )
 }

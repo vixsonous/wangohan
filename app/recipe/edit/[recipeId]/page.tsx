@@ -52,7 +52,7 @@ export default async function RecipeCreate({params, searchParams}:{params: {reci
             </div>
 
             <div className="create-form-container flex justify-center items-center">
-                <EditRecipeForm recipe_data={recipe_data} />
+                <EditRecipeForm recipe_data={recipe_data} userId={decryptedSession.user.user_id} />
             </div>
         </div>
     )

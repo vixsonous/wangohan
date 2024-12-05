@@ -4,6 +4,9 @@ import { Metadata, ResolvingMetadata } from "next";
 import { getAllRecipes, totalRecipes } from "@/action/recipe";
 import { DisplayRecipe } from "@/constants/interface";
 import Link from "next/link";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { ArrowLeft } from "@phosphor-icons/react/dist/ssr";
 
 type Props = {
     params: {pageNo: String},
@@ -44,6 +47,9 @@ export default async function RecipeList({params, searchParams}:{params: {pageNo
                     <span className=" rounded-[10px] p-[10px]">4</span>
                     <span>...</span>
                     <span className=" rounded-[10px] p-[10px]">20</span> */}
+                </div>
+                <div className="w-full flex justify-end">
+                  <Link href={`/`} className="flex gap-2 items-center"><ArrowLeft size={20}/> 戻る</Link>
                 </div>
             </div>
         </div>

@@ -2,6 +2,7 @@
 import { withSpecialCharacters, validateEmail, textColor, SUCC_MSG, ERR_MSG } from "@/constants/constants";
 import { faCheck, faCircleNotch, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Check, Circle, CircleNotch } from "@phosphor-icons/react/dist/ssr";
 import { GoogleLogin, TokenResponse, useGoogleLogin } from "@react-oauth/google";
 import { Inter } from "next/font/google";
 import Link from "next/link";
@@ -144,7 +145,7 @@ export default function LoginForm() {
                     'ログイン'
                 ): (
                     loginSuccess.regular ? <><span style={{color: textColor.success}}>{SUCC_MSG.SUCCESS1} </span><FontAwesomeIcon icon={faCheck} style={{color: textColor.success}} size="lg"/></> 
-                    :<FontAwesomeIcon icon={faCircleNotch} spin size="lg"/>
+                    :<CircleNotch size={32} className="animate-spin"/>
                 )}
             </button>
             <span className="text-[.5em] sm:text-[.75em] font-semibold text-[#E53935]">{error}</span>
@@ -182,8 +183,8 @@ export default function LoginForm() {
                 {!openGoogleSignup ? (
                     'Googleで続ける'
                 ): (
-                    loginSuccess.google ? <><span style={{color: textColor.success}}>{SUCC_MSG.SUCCESS1} </span><FontAwesomeIcon icon={faCheck} style={{color: textColor.success}} size="lg"/></> 
-                    :<FontAwesomeIcon icon={faCircleNotch} spin size="lg"/>
+                    loginSuccess.google ? <><span style={{color: textColor.success}}>{SUCC_MSG.SUCCESS1} </span><Check size={20} style={{color: textColor.success}}/></> 
+                    :<CircleNotch fontVariant={"bold"} size={20} className="animate-spin"/>
                 )}
             </button>
             <h1 className="text-[8px] sm:text-[12px] font-bold text-right">新規登録（無料）は<Link className="text-[#007BFF]" href={'signup'}>こちら</Link></h1>

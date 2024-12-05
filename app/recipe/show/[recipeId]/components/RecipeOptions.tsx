@@ -1,36 +1,58 @@
 'use client';
 
-import { fontSize, textColor } from "@/constants/constants";
+import { fontSize, POPUPTIME, textColor } from "@/constants/constants";
 import { faEdit, faEllipsisV, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useCallback, useEffect, useState } from "react";
 import {motion} from 'framer-motion';
 import Link from "next/link";
-import { DotsThreeOutlineVertical } from "@phosphor-icons/react/dist/ssr";
+import { CircleNotch, DotsThreeOutlineVertical } from "@phosphor-icons/react/dist/ssr";
+import Modal from "@/app/components/ElementComponents/Modal";
+import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
+import { hideError, hideModal, showError, showModal } from "@/lib/redux/states/messageSlice";
+import { useRouter } from "next/navigation";
 
 export default function RecipeOptions({recipe_id} : {recipe_id: number}) {
+  const dispatch = useAppDispatch();
+  const user = useAppSelector(state => state.user.user);
+  const router = useRouter();
+
     const menuVariants = {
         open: {scale: 1, opacity: 1},
         closed: {scale: 0, opacity: 0}
     }
     const [state, setState] = useState({
-        displayMenu: false
+        displayMenu: false,
+        isDeleting: false,
     });
 
+    const deleteModal = () => dispatch(showModal());
+    const closeDeleteModal = () => dispatch(hideModal());
+
     const deleteRecipe = async () => {
-        await fetch('/api/recipe', {
-            method: 'DELETE',
-            body: JSON.stringify({recipe_id: recipe_id})
-        }).then(res => {
+      setState(prev => ({...prev, isDeleting: true}));
+      const res = await fetch('/api/recipe', {
+          method: 'DELETE',
+          body: JSON.stringify({recipe_id: recipe_id})
+      });
 
-        }).catch( err => {
+      setState(prev => ({...prev, isDeleting: false}));
 
-        });
+      if(res.ok) {
+        router.push("/user/" + user.user_id);
+        router.refresh();
+        dispatch(hideModal());
+        dispatch(showError("削除しました"));
+        setTimeout(() => {
+          dispatch(hideError());
+        },POPUPTIME);
+      }
     }
 
     const openOptions = useCallback(() => setState(prev => ({...prev, displayMenu: !state.displayMenu})), [state.displayMenu]);
 
     return (
+        <>
         <div className="absolute z-[5] right-0">
             <button className="relative right-8 top-4 bg-primary-text p-1 rounded-full text-[#FFFAF0] z-30 flex justify-center items-center">
               <DotsThreeOutlineVertical size={20} onClick={openOptions}/>
@@ -44,7 +66,7 @@ export default function RecipeOptions({recipe_id} : {recipe_id: number}) {
                         </Link>
                     </button>
                     <hr />
-                    <button onClick={deleteRecipe} className="flex gap-[5px] items-center justify-center z-20">
+                    <button onClick={deleteModal} className="flex gap-[5px] items-center justify-center z-20">
                         <FontAwesomeIcon icon={faTrash} color={"#FFFAF0"} className="self-center"/>
                         <h1 style={{fontSize: fontSize.l2}} className="whitespace-nowrap text-[#FFFAF0]">削除する</h1>
                     </button>
@@ -52,5 +74,19 @@ export default function RecipeOptions({recipe_id} : {recipe_id: number}) {
                 </div>
             </motion.div>
         </div>
+        <Modal>
+          <div className="bg-secondary-bg flex flex-col gap-4 z-[999] py-4 px-8 rounded-lg">
+            <h1 className="text-xl font-semibold">本当に削除しますか？</h1>
+            <hr />
+            <div className="flex justify-end gap-2">
+              <button onClick={closeDeleteModal} className="w-32 text-center py-2 px-4 bg-gray-200 rounded-lg">キャンセル</button>
+              <button disabled={state.isDeleting} onClick={deleteRecipe} className={`w-32 justify-center py-2 px-4 bg-red-500 text-white rounded-lg flex gap-2 items-center ${state.isDeleting ? 'opacity-50': ''}`}>
+                {state.isDeleting && <CircleNotch className="animate-spin" size={20}/>}
+                削除
+              </button>
+            </div>
+          </div>
+        </Modal>
+        </>
     )
 }

@@ -10,6 +10,8 @@ const config: Config = {
     extend: {
       animation:{
         'shake': 'shake 0.82s cubic-bezier(.36,.07,.19,.97) both',
+        'spin': 'spin 1s linear infinite',
+        'bubble': 'bubble 2s ease-out' 
       },
       keyframes: {
         'shake' : {
@@ -25,7 +27,31 @@ const config: Config = {
           '40%, 60%': {
             transform: 'translate3d(4px, 0, 0)'
           }
-        }
+        },
+
+        'spin' : {
+          from: { transform: 'scale(1) rotate(0deg)' },
+          to: { transform: 'scale(1) rotate(360deg)' },
+        },
+
+        'bubble': {
+          '0%': {
+            transform: 'scale(1)' },
+        
+          '20%': {
+            transform: 'scaleY(0.95) scaleX(1.05)' },
+        
+          '48% ': {
+            transform: 'scaleY(1.1) scaleX(0.9)' },
+        
+          '68%': {
+            transform: 'scaleY(0.98) scaleX(1.02)' },
+        
+          '80%': {
+            transform: 'scaleY(1.02) scaleX(0.98)' },
+        
+          '97%, 100%': {
+            transform: 'scale(1)' } }
       },
       colors: {
         'primary-bg': '#FFE9C9',

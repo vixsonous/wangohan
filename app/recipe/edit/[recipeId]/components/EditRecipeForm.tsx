@@ -29,7 +29,7 @@ interface FileObj {
     thumbnail: string
 }
 
-export default function EditRecipeForm({recipe_data} : {recipe_data: RecipeData}) {
+export default function EditRecipeForm({recipe_data, userId} : {recipe_data: RecipeData, userId: number}) {
     const CardFontSize = '13px';
     const CardTagSize = '10px';
     const dispatch = useAppDispatch();
@@ -172,6 +172,7 @@ export default function EditRecipeForm({recipe_data} : {recipe_data: RecipeData}
                     dispatch(hideSuccess());
                 }, POPUPTIME);
                 setSubmitSuccess(true);
+                router.push("/user/" + userId);
             } else if(res.status === 200 && files2send.length > 0) {
                 return body;
             }
@@ -207,6 +208,7 @@ export default function EditRecipeForm({recipe_data} : {recipe_data: RecipeData}
                             dispatch(hideSuccess());
                         }, POPUPTIME);
                         setSubmitSuccess(true);
+                        router.push("/user/" + userId);
                     }
                 }).catch(err => {
                     const msg = (err as Error).message;
@@ -367,7 +369,7 @@ export default function EditRecipeForm({recipe_data} : {recipe_data: RecipeData}
                 <label htmlFor="recipe-title" aria-required className="flex items-center flex-wrap gap-[5px]">
                     <h1 className="font-semibold text-[1.3em] required">レシピタイトル</h1>
                     <span className={`text-[.75em] self-center font-semibold ${ 25 - state.recipeInfo.recipeTitle.length < 0 ? `text-[${textColor.error}]` : ''}`}>（{25 - state.recipeInfo.recipeTitle.length}{25 - state.recipeInfo.recipeTitle.length >= 0 ? `文字以内` : `文字オーバーしています`}）</span>
-                    <span className="ml-[5px] text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.title}</span>
+                    <span className="ml-[5px] text-[.75em] font-semibold text-[#E53935]">{error.title}</span>
                 </label>
                 <input value={state.recipeInfo.recipeTitle} onChange={categoryOnChange} className="w-[100%] p-[7px] text-[13px] bg-[#fff8ef]" placeholder="例）炊飯器で簡単！夏バテでも食べられるご飯" type="text" name="recipeTitle-edit" id="recipe-title" />
             </div>
@@ -375,7 +377,7 @@ export default function EditRecipeForm({recipe_data} : {recipe_data: RecipeData}
             <div className="flex-[0_0_100%]">
                 <label htmlFor="recipe-description" className="flex items-center flex-wrap gap-[5px]">
                     <h1 className="font-semibold text-[1.3em] required">レシピの説明</h1>
-                    <span className="ml-[5px] text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.descr}</span>
+                    <span className="ml-[5px] text-[.75em] font-semibold text-[#E53935]">{error.descr}</span>
                 </label>
                 <textarea value={state.recipeInfo.recipeDescr} onChange={categoryOnChange} className="w-[100%] p-[7px] text-[13px] bg-[#fff8ef]" placeholder="レシピに説明をしてください例）愛犬が夏バテでなかなかご飯を食べなかったので、お魚ベースの手作りごはんを作りました。たくさん食べてくれたので是非作ってみてください。" rows={5} name="recipeDescr-edit" id="recipe-description" />
             </div>
@@ -403,7 +405,7 @@ export default function EditRecipeForm({recipe_data} : {recipe_data: RecipeData}
                         {
                             state.files.map((img, idx) => {
                                 return (
-                                    <SwiperSlide key={idx} virtualIndex={idx} className="relative pt-[20px] w-[100%] h-[100%] relative overflow-visible">
+                                    <SwiperSlide key={idx} virtualIndex={idx} className="pt-[20px] w-[100%] h-[100%] relative overflow-visible">
                                         <img src={img.thumbnail} className="object-cover w-[100%] h-[130px] relative rounded-[0px]" width={10000} height={10000}  alt="website banner" />
                                         <FontAwesomeIcon onClick={fileDeleteOnClick} icon={faTrash} id={`ft-${idx}`} size="sm" style={{color: '#523636'}} className="absolute p-[5px] bg-[#FFFAF0] opacity-[0.8] rounded-xl top-[10px] right-[0px]"/>
                                     </SwiperSlide>
@@ -418,7 +420,7 @@ export default function EditRecipeForm({recipe_data} : {recipe_data: RecipeData}
             <div className="flex-[0_0_100%] flex flex-col gap-[5px]">
                 <label htmlFor="recipe-ingredient-name-0" className="flex items-center gap-[5px]">
                     <h1 className="font-semibold text-[1.3em] required">材料・分量</h1>
-                    <span className="ml-[5px] text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.ingredients}</span>
+                    <span className="ml-[5px] text-[.75em] font-semibold text-[#E53935]">{error.ingredients}</span>
                 </label>
                 {state.recipeIngredients.map((el, idx) => {
                     return (
@@ -438,7 +440,7 @@ export default function EditRecipeForm({recipe_data} : {recipe_data: RecipeData}
             <div className="flex-[0_0_100%] flex flex-col gap-[5px]">
                 <label htmlFor="recipe-instructions-0" className="flex items-center gap-[5px]">
                     <h1 className="font-semibold text-[1.3em] required">作り方</h1>
-                    <span className="text-[.75em] ml-[5px] text-[#7f7464] font-semibold text-[#E53935]">{error.instructions}</span>
+                    <span className="text-[.75em] ml-[5px] font-semibold text-[#E53935]">{error.instructions}</span>
                 </label>
                 {state.recipeInstructions.map((el, idx) => {
                     return (
@@ -494,7 +496,7 @@ export default function EditRecipeForm({recipe_data} : {recipe_data: RecipeData}
             <div className="w-full flex justify-center flex-col text-center">
                 <button disabled={submit} onClick={submitFunc} className="bg-[#ffb762] text-white py-[10px] rounded-md text-[13px] px-[20px] font-bold self-center" type="submit">   
                     {!submit ? (
-                        '作成する'
+                        '更新する'
                     ): (
                         submitSuccess ? <><span style={{color: textColor.success}}>{SUCC_MSG.SUCCESS1} </span><FontAwesomeIcon icon={faCheck} style={{color: textColor.success}} size="lg"/></> 
                         :<FontAwesomeIcon icon={faCircleNotch} spin size="lg"/>

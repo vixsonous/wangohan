@@ -7,6 +7,7 @@ import { hideError, hideSuccess, showError, showSuccess } from "@/lib/redux/stat
 import { addPet } from "@/lib/redux/states/petSlice";
 import { faArrowLeft, faCircleNotch, faClose, faEdit, faPlus, faSave } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { ArrowLeft } from "@phosphor-icons/react/dist/ssr";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -201,7 +202,7 @@ export default function PetAddForm() {
         <>
         <div className="p-[20px] flex flex-wrap justify-between items-center">
             <button onClick={showAddPetOnClick}><FontAwesomeIcon icon={faPlus}/> 家族を追加</button>
-            <Link href={`/user/${user.user_id}`}><FontAwesomeIcon icon={faArrowLeft}/> 戻る</Link>
+            <Link href={`/user/${user.user_id}`} className="flex items-center gap-2"><ArrowLeft size={20}/>  戻る</Link>
         </div>
 
         {/* Add Pet Popup */}
