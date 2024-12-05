@@ -292,37 +292,37 @@ export default memo(function CreateRecipeForm() {
     
     if(e.key === "Enter") {
       e.preventDefault();
-      const d = e.currentTarget;
-      if(d.name === "recipeTitle") {
-        const t = (document.querySelector('textarea[name="recipeDescr"]') as HTMLTextAreaElement);
-        t.focus();
-      }else if(d.name.includes("recipe-ingredient-name")) {
-        e.preventDefault();
-        const x = d.name.split("-")[3];
-        (document.querySelector(`input[name="recipe-ingredient-amt-${x}"]`) as HTMLInputElement).focus();
-      }else if(d.name.includes("recipe-ingredient-amt")) {
-        e.preventDefault();
-        const x = d.name.split("-")[3];
-        if(document.querySelector(`input[name="recipe-ingredient-amt-${parseInt(x) + 1}"]`)) {
-          (document.querySelector(`input[name="recipe-ingredient-name-${parseInt(x) + 1}"]`) as HTMLInputElement).focus();
-        } else {
-          (document.querySelector("button[name='ingredients']") as HTMLButtonElement).click();
-          setTimeout(() => {
-            (document.querySelector(`input[name="recipe-ingredient-name-${parseInt(x) + 1}"]`) as HTMLInputElement).focus();
-          },5);
-        }
-      }else if(d.name.includes("recipe-instructions")) {
-        e.preventDefault();
-        const x = d.name.split("-")[2];
-        if(document.querySelector(`input[name="recipe-instructions-${parseInt(x) + 1}"]`)) {
-          (document.querySelector(`input[name="recipe-instructions-${parseInt(x) + 1}"]`) as HTMLInputElement).focus();
-        } else {
-          (document.querySelector("button[name='instructions']") as HTMLButtonElement).click();
-          setTimeout(() => {
-            (document.querySelector(`input[name="recipe-instructions-${parseInt(x) + 1}"]`) as HTMLInputElement).focus();
-          },5);
-        }
-      }
+      // const d = e.currentTarget;
+      // if(d.name === "recipeTitle") {
+      //   const t = (document.querySelector('textarea[name="recipeDescr"]') as HTMLTextAreaElement);
+      //   t.focus();
+      // }else if(d.name.includes("recipe-ingredient-name")) {
+      //   e.preventDefault();
+      //   const x = d.name.split("-")[3];
+      //   (document.querySelector(`input[name="recipe-ingredient-amt-${x}"]`) as HTMLInputElement).focus();
+      // }else if(d.name.includes("recipe-ingredient-amt")) {
+      //   e.preventDefault();
+      //   const x = d.name.split("-")[3];
+      //   if(document.querySelector(`input[name="recipe-ingredient-amt-${parseInt(x) + 1}"]`)) {
+      //     (document.querySelector(`input[name="recipe-ingredient-name-${parseInt(x) + 1}"]`) as HTMLInputElement).focus();
+      //   } else {
+      //     (document.querySelector("button[name='ingredients']") as HTMLButtonElement).click();
+      //     setTimeout(() => {
+      //       (document.querySelector(`input[name="recipe-ingredient-name-${parseInt(x) + 1}"]`) as HTMLInputElement).focus();
+      //     },5);
+      //   }
+      // }else if(d.name.includes("recipe-instructions")) {
+      //   e.preventDefault();
+      //   const x = d.name.split("-")[2];
+      //   if(document.querySelector(`input[name="recipe-instructions-${parseInt(x) + 1}"]`)) {
+      //     (document.querySelector(`input[name="recipe-instructions-${parseInt(x) + 1}"]`) as HTMLInputElement).focus();
+      //   } else {
+      //     (document.querySelector("button[name='instructions']") as HTMLButtonElement).click();
+      //     setTimeout(() => {
+      //       (document.querySelector(`input[name="recipe-instructions-${parseInt(x) + 1}"]`) as HTMLInputElement).focus();
+      //     },5);
+      //   }
+      // }
     }
   } 
 
