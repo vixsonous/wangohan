@@ -6,6 +6,7 @@ import { showError, hideError, showSuccess, hideSuccess } from "@/lib/redux/stat
 import { hide } from "@/lib/redux/states/recipeSlice";
 import { faCheck, faCircleNotch, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { CircleNotch } from "@phosphor-icons/react/dist/ssr";
 import { useRouter } from "next/navigation";
 import React, { memo, SyntheticEvent, useCallback, useEffect, useState } from "react";
 import { Navigation, Thumbs, Virtual } from "swiper/modules";
@@ -151,12 +152,18 @@ export default memo(function CreateRecipeForm() {
               if(res.status === 500) {
                   throw new Error(body.message);
               } else if (res.status === 200 && files.length === (idx + 1) ) {
-                  setRecipeInfo(structuredClone(initRecipeState));
+                // Reset recipe info
+                  setRecipeInfo(initRecipeState);
+                  setRecipeIngredients([{id: 0, name: '', amount: ''}]);
+                  setRecipeInstructions([{id: 0,text: ''}]);
+                  setFiles([]);
+                  setFileThumbnails([]);
+
                   dispatch(showSuccess(body.message));
                   setTimeout(() => {
                       dispatch(hideSuccess());
                   }, POPUPTIME);
-                  setSubmitSuccess(true);
+                  setSubmit(false);
               }
           }).catch(err => {
               const msg = (err as Error).message;
@@ -485,12 +492,13 @@ export default memo(function CreateRecipeForm() {
               </div>
           </div>
           <div className="w-full flex justify-center flex-col text-center">
-              <button aria-label="create-recipe-button" disabled={submit} onClick={submitFunc} className="bg-[#ffb762] text-white py-[10px] rounded-md text-[13px] px-[20px] font-bold self-center" type="submit">   
+              <button aria-label="create-recipe-button" disabled={submit} onClick={submitFunc} className={`bg-[#ffb762] text-white py-[10px] rounded-md text-[13px] px-[20px] font-bold self-center ${submit ? 'opacity-50' : ''}`} type="submit">   
                   {!submit ? (
                       '作成する'
                   ): (
-                      submitSuccess ? <><span style={{color: textColor.success}}>{SUCC_MSG.SUCCESS1} </span><FontAwesomeIcon icon={faCheck} style={{color: textColor.success}} size="lg"/></> 
-                      :<FontAwesomeIcon icon={faCircleNotch} spin size="lg"/>
+                    <span className="flex justify-center items-center">
+                      <CircleNotch size={20} className="animate-spin"/> 作成する
+                    </span>
                   )}
               </button>
               <span className="text-[.75em] font-semibold text-[#E53935]">{error.generalError}</span>

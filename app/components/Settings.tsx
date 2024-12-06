@@ -1,26 +1,44 @@
 'use client';
 
-import Image from "next/image";
-import { SyntheticEvent, useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHouse } from "@fortawesome/free-solid-svg-icons/faHouse";
 import {motion, AnimatePresence} from "framer-motion";
-import { faArrowAltCircleRight, faArrowRight, faBook, faClose, faDog, faLanguage, faList, faSignOut, faUser } from "@fortawesome/free-solid-svg-icons";
+import {  faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
-import CreateRecipeForm from "../recipe/edit/[recipeId]/components/EditRecipeForm";
 import { useAppDispatch, useAppSelector, useAppStore } from "@/lib/redux/hooks";
-import { increment, initializeCount } from "@/lib/redux/states/counterSlice";
+import { initializeCount } from "@/lib/redux/states/counterSlice";
 import { show } from "@/lib/redux/states/recipeSlice";
-import { showError } from "@/lib/redux/states/messageSlice";
 import Button from "./Button";
+import { Book, House, PawPrint, SignOut, Translate, User } from "@phosphor-icons/react/dist/ssr";
+import { usePathname } from "next/navigation";
 
 export default function Settings() {
     const settings = useRef<HTMLDivElement>(null);
     const btn = useRef<HTMLButtonElement>(null);
     const [showSettings, setShowSettings] = useState(false);
+    const pathname = usePathname();
+
+    const [active, setActive] = useState({
+      home: false,
+      user: false,
+      list: false,
+      language: false,
+      column: false,
+    });
+
+    useEffect(() => {
+      const path = window.location.pathname;
+      setActive({
+        home: path === "/" ,
+        user: path.includes("/user") ,
+        list: path.includes("/recipe/list") ,
+        language: path === "/",
+        column: path === "/" ,
+      });
+    },[pathname]);
 
     const openSettings = () => {
-        setShowSettings( prev => !prev);
+        setShowSettings( prev => !prev);;
     }
 
     const logout = async () => {
@@ -74,48 +92,48 @@ export default function Settings() {
                             dispatch(show());
                         }} className={` w-[100%] rounded-md text-[12px] sm:text-[16px] relative active:scale-[1.075] md:hover:scale-[1.075] transition-all duration-500`} type="submit">
                             <span className="absolute z-[1] w-full top-[50%] left-0 font-bold">レシピを作成する</span>
-                            <img src={'/recipe-button.webp'} className="self-center rounded-md h-[auto] w-full relative top-0" width={10000} height={10000}  alt="website banner" />
+                            <img src={'/recipe-button.webp'} className="self-center rounded-md h-[auto] w-full relative top-0" width={100} height={100}  alt="website banner" />
                         </button>
                         
-                        <div className="font-bold flex flex-col bg-secondary-bg w-full p-4 gap-4 rounded-2xl border border-primary-text">
-                          <Link onClick={openSettings} className="w-full hover:opacity-75" href="/">
+                        <div className="font-bold flex flex-col bg-secondary-bg w-full p-2 gap-2 rounded-2xl border border-primary-text">
+                          <Link onClick={openSettings} className={`${active.home ? 'bg-primary-text text-secondary-bg py-2' : 'hover:opacity-75 py-1'}  px-4  rounded-full w-full`} href="/">
                             <div className="w-full text-sm flex justify-between items-center">
-                                <FontAwesomeIcon icon={faHouse} style={{color: '#523636'}}  />
+                                <House size={20}/>
                                 ホーム
                             </div>
                           </Link>
           
-                          <Link onClick={openSettings} className="w-full hover:opacity-75" href={`/user/${user.user_id}`}>
+                          <Link onClick={openSettings} className={`${active.user ? 'bg-primary-text text-secondary-bg py-2' : 'hover:opacity-75 py-1'} w-full px-4 py-1 rounded-full`} href={`/user/${user.user_id}`}>
                             <div className="w-full text-sm flex justify-between items-center">
-                                <FontAwesomeIcon icon={faUser} style={{color: '#523636'}}  />
+                                <User size={20}/>
                                 マイページ
                             </div>
                           </Link>
           
-                          <Link onClick={openSettings} className="w-full hover:opacity-75" href="/recipe/list/1">
+                          <Link onClick={openSettings} className={`${active.list ? 'bg-primary-text text-secondary-bg py-2' : 'hover:opacity-75 py-1'} w-full px-4 py-1 rounded-full`} href="/recipe/list/1">
                             <div className="w-full text-sm flex justify-between items-center">
-                                <FontAwesomeIcon icon={faBook} style={{color: '#523636'}}  />
+                                <Book size={20}/>
                                 レシピ図鑑
                             </div>
                           </Link>
           
-                          <Link onClick={openSettings} className="w-full hover:opacity-75" href="/user/settings">
+                          <Link onClick={openSettings} className="w-full hover:opacity-75 px-4 py-1 rounded-full" href="/user/settings">
                             <div className="w-full text-sm flex justify-between items-center">
-                                <FontAwesomeIcon icon={faLanguage} style={{color: '#523636'}}  />
+                                <Translate size={20}/>
                                 言語
                             </div>
                           </Link>
           
-                          <Link onClick={openSettings} className="w-full hover:opacity-75" href="/">
+                          <Link onClick={openSettings} className="w-full hover:opacity-75 px-4 py-1 rounded-full" href="/">
                             <div className="w-full text-sm flex justify-between items-center">
-                                <FontAwesomeIcon icon={faDog} style={{color: '#523636'}}  />
+                                <PawPrint size={20}/>
                                 コラム
                             </div>
                           </Link>
           
                           <Button onClick={logout}>
-                            <div  className="w-full hover:opacity-75 text-sm flex justify-between items-center">
-                                <FontAwesomeIcon icon={faSignOut} style={{color: '#523636'}}  />
+                            <div  className="w-full hover:opacity-75 text-sm flex justify-between items-center px-4 py-1 rounded-full">
+                                <SignOut />
                                 ログアウト
                             </div>
                           </Button>

@@ -35,7 +35,7 @@ export default memo(function BirthdayContainer({bdayAvt} : BirthdayAvatars) {
                 },
               }}
               
-              loop
+              loop={bdayAvt.length > 8}
               centeredSlides
               modules={[Autoplay]}
               autoplay={{
