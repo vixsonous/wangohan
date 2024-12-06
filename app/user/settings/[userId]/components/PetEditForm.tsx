@@ -9,6 +9,7 @@ import { hideError, hideSuccess, showError, showSuccess } from "@/lib/redux/stat
 import { setPets } from "@/lib/redux/states/petSlice";
 import { faCircleNotch, faClose, faEdit, faSave } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { CircleNotch, FloppyDisk } from "@phosphor-icons/react/dist/ssr";
 import { AnimatePresence, motion } from "framer-motion";
 import { redirect } from "next/navigation";
 import { useState } from "react";
@@ -252,7 +253,7 @@ export default function PetEditForm({petData, className=''} : Props) {
                                     </div>
                                     <div>
                                         <span>Pet Birthdate</span>
-                                        <div className="appearance-none w-full flex items-center justify-between relative flex-wrap w-[100%] px-[10px] py-[4px] border-[2px] rounded-md border-[#ffcd92]">
+                                        <div className="appearance-none w-full flex items-center justify-between relative flex-wrap px-[10px] py-[4px] border-[2px] rounded-md border-[#ffcd92]">
                                             <input 
                                                 className="appearance-none focus:outline-none text-[1em] bg-[transparent] text-left font-bold text-[#5b5351]" 
                                                 value={state.pet.petBday && state.pet.petBday.valueOf() !== 0 ? 
@@ -286,9 +287,13 @@ export default function PetEditForm({petData, className=''} : Props) {
                                 <div className="w-full flex justify-center flex-col items-center gap-[5px]">
                                     <button type="submit" className="w-[100%] max-w-[190px] bg-[#ffb762] text-white py-[10px] rounded-md text-[12px] sm:text-[16px]" onClick={submitFunc}>
                                         {!state.submitState ? (
-                                            <><FontAwesomeIcon icon={faSave}/> 保存する</>
+                                            <span className="flex items-center gap-2 justify-center">
+                                              <FloppyDisk size={20}/> 保存する
+                                            </span>
                                         ): (
-                                            <FontAwesomeIcon icon={faCircleNotch} spin size="lg"/>
+                                            <span className="flex justify-center items-center">
+                                              <CircleNotch size={20} className="animate-spin"/>
+                                            </span>
                                         )}
                                     </button>
                                     <ErrorSpan>

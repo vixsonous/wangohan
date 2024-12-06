@@ -11,7 +11,7 @@ const config: Config = {
       animation:{
         'shake': 'shake 0.82s cubic-bezier(.36,.07,.19,.97) both',
         'spin': 'spin 1s linear infinite',
-        'bubble': 'bubble 2s ease-out' 
+        'bubble': 'bubble 1s ease-out' 
       },
       keyframes: {
         'shake' : {

@@ -4,6 +4,7 @@ import { padStartIds } from "./common";
 import { s3DeleteFilesInFolder, s3UploadFile } from "./file-lib";
 import { DogData } from "@/constants/interface";
 import { ERR_MSG } from "@/constants/constants";
+import { sql } from "kysely";
 
 export const postPet = async (petName: string, petBday: Date, petBreed: string, uploadedPetPic: string) => {
 
@@ -105,4 +106,25 @@ export const updatePetPic = async (uploadedPetPic: string, petId: number) => {
     } catch(e) {
 
     }
+}
+
+export const getBdayPets = async () => {
+  try {
+    const curMonth = new Date().getMonth() + 1;
+    
+    const bdayPets = await db
+    .selectFrom("pets_table as p")
+    .selectAll()
+    .where(
+      sql`EXTRACT(MONTH FROM p.pet_birthdate)`,
+        "=",
+        curMonth
+    )
+    .execute()
+    console.log("[Success]: " + bdayPets);
+    return bdayPets;
+  } catch (e) {
+    console.error("[Error]:" + (e as Error).message);
+    return [];
+  }
 }

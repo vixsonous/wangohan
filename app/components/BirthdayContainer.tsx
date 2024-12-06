@@ -6,9 +6,10 @@ import Slider from "react-slick";
 import { Swiper, SwiperClass, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import { md } from "@/constants/constants";
+import { DogData } from "@/constants/interface";
 
 interface BirthdayAvatars {
-    bdayAvt: Array<String>
+    bdayAvt: Array<DogData>
 }
 export default memo(function BirthdayContainer({bdayAvt} : BirthdayAvatars) {
 
@@ -45,12 +46,12 @@ export default memo(function BirthdayContainer({bdayAvt} : BirthdayAvatars) {
               style={{overflow: 'visible', width: '100%'}}
           >
           {
-              bdayAvt.map((el, idx) => {
+              bdayAvt.map((pet, idx) => {
                   return (
                       <SwiperSlide key={idx}>
                           {
                             ({isActive}) => (
-                              <BirthdayAvatar src={String(el)} active={isActive}/>
+                              <BirthdayAvatar pet={pet} active={isActive}/>
                             )
                           }
                       </SwiperSlide>

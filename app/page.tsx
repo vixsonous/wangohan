@@ -3,7 +3,7 @@ import BirthdayContainer from "./components/BirthdayContainer";
 import { Gloria_Hallelujah, Mochiy_Pop_P_One } from "next/font/google";
 import { Metadata } from "next";
 import { getPopularRecipes, getWeeklyRecipes } from "@/action/recipe";
-import { DisplayRecipe } from "@/constants/interface";
+import { DisplayRecipe, DogData } from "@/constants/interface";
 import MainSearchForm from "./components/MainSearchForm";
 import Link from "next/link";
 import TopRecipeSlider from "./components/TopRecipeSlider";
@@ -11,6 +11,7 @@ import { memo } from "react";
 import BodyMainSearch from "./components/ElementComponents/BodyMainSearch";
 import OptImage from "./components/ElementComponents/Image";
 import MotionDiv from "./components/ElementComponents/MotionDiv";
+import { getBdayPets } from "@/action/pet";
 
 const gloria = Gloria_Hallelujah({
   weight: '400',
@@ -139,10 +140,21 @@ export default async function Home() {
       '/LP/bday-dogs/puppy7.webp'
   ];
 
-  const [weekly_result, popular_result] = await Promise.all([
+  const [weekly_result, popular_result, bdayPets] = await Promise.all([
     await getWeeklyRecipes(), 
-    await getPopularRecipes()
+    await getPopularRecipes(),
+    await getBdayPets()
   ]);
+
+  const bday = bdayPets.map(p => {
+    return {
+      pet_id: p.pet_id,
+      pet_image: p.pet_image,
+      pet_name: p.pet_name,
+      pet_birthdate: p.pet_birthdate.toISOString(),
+      pet_breed: p.pet_breed
+    }
+  }) as DogData[];
 
   const weeklyRecipes = weekly_result.body as Array<DisplayRecipe>;
   const popularRecipes = popular_result.body as Array<DisplayRecipe>;
@@ -192,7 +204,7 @@ export default async function Home() {
           </MotionDiv>
           {/* Birthday Section */}
           <MotionDiv>
-            <BirthdayContainer bdayAvt={birthdays} />
+            <BirthdayContainer bdayAvt={bday} />
           </MotionDiv>
           <MotionDiv>
             <DogCategoryMed/>

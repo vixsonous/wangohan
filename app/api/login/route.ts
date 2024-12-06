@@ -16,7 +16,7 @@ export const POST = async ( req: Request) => {
 
         if(!user) throw new Error("User not found!");
 
-        const response = NextResponse.redirect(new URL("/", req.url), {status: 302});
+        const response = NextResponse.redirect(new URL("/", process.env.BASE_URL), {status: 302});
 
         const expires = getExpireDate();
         const session = await encrypt({user, expires});

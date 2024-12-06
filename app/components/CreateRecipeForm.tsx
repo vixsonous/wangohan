@@ -185,13 +185,9 @@ export default memo(function CreateRecipeForm() {
 
       if(!e.target.files || !e.target.files[0]) return;
 
-      if(!imageFileTypes.includes(e.target.files[0].type) && e.target.files[0].type !== "") {
-          setError(prev => ({...prev, image: "Only jpeg, png, and webp files are supported!"}));
+      if(!(imageFileTypes.includes(e.target.files[0].type) || e.target.files[0].name.toLowerCase().endsWith('.heic') || e.target.files[0].name.toLowerCase().endsWith('.heif'))) {
+          setError(prev => ({...prev, image: "Only image files are supported!"}));
           return;
-      }
-
-      if(e.target.files[0].type === "" && !imageFileTypes.includes(e.target.files[0].name.split(".")[1].toLowerCase())) {
-          setError(prev => ({...prev, image: "Only jpeg, png, webp, heic, and heif files are supported!"}));
       }
 
       if(files.length >= 5) {
