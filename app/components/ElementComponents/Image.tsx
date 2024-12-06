@@ -31,40 +31,6 @@ export default function OptImage({
     style?:object
 }) {
 
-  const getSrcVariants = useCallback((src: string) => {
-    if (!src.includes("type_or")) return { xs: src, sm: src, md: src, lg: src };
-      return {
-          xs: src.replace("type_or", "type_xs"),
-          sm: src.replace("type_or", "type_sm"),
-          md: src.replace("type_or", "type_md"),
-          lg: src.replace("type_or", "type_lg"),
-      };
-  },[]);
-  
-    const { xs, sm, md, lg } = getSrcVariants(src);
-    const [loaded, setLoaded] = useState(false);
-    const [srcState, setSrcState] = useState(src);
-
-    const setOnLoad = () => setLoaded(true);
-
-    useEffect(() => {
-      if(src === "https://wangohan-public.s3.ap-northeast-1.amazonaws.com/00000003/profile/MlXG7GuTcRjVhQS2FB7VPtype_or.webp") {
-        console.log(src);
-        console.log(loaded);
-      }
-      
-    },[loaded]);
-
-    // useEffect(() => {
-    //   console.log(loaded);
-    //   const reload = setTimeout(() => {
-    //     setSrcState(srcState);
-    //   },5000);
-
-    //   if(loaded) clearTimeout(reload);
-
-    //   return () => clearTimeout(reload);
-    // },[loaded]);
     return (
         <div  className={`${containerClass} w-full h-full ${centered ? 'flex justify-center items-center' : ''}`}>
           <picture style={{
@@ -83,7 +49,7 @@ export default function OptImage({
               </>
             ) : (
               <>
-              <img className={`${square ? 'aspect-square' : ''} h-[${height}px] w-[${width}px] relative top-0  ` + className} onLoad={setOnLoad} style={style} src={src} loading={loading} width={width} height={height} alt={alt} />
+              <img className={`${square ? 'aspect-square' : ''} h-[${height}px] w-[${width}px] relative top-0  ` + className} style={style} src={src} loading={loading} width={width} height={height} alt={alt} />
               </>
             )}
             
