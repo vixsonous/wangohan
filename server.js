@@ -129,7 +129,7 @@ app.prepare().then(() => {
 
     socket.on('like recipe',async (message) => {
       const data = JSON.parse(message);
-      const conns = userSockets.get(data.user_id);
+      const conns = userSockets.get(data.recipe_owner_id);
       console.log("User-id: " + data.user_id);
       console.log("Connections: ");
       console.log(conns);

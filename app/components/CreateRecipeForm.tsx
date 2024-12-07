@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import React, { memo, SyntheticEvent, useCallback, useEffect, useState } from "react";
 import { Navigation, Thumbs, Virtual } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
+import heic2any from "heic2any";
 
 const initRecipeState = {
     recipeTitle: '',
@@ -201,6 +202,8 @@ export default memo(function CreateRecipeForm() {
           setError(prev => ({...prev, image: "Maximum 5 images only!"}));
           return;
       }
+
+      
 
       const tempPath = URL.createObjectURL(e.target.files[0]);
       const rFiles = [...files];
