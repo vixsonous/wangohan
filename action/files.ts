@@ -73,9 +73,11 @@ export const uploadRecipeFiles = async (file: File, recipe_id: number, folder:st
             })
             .execute()
 
+        console.log("[Success]:");
         return true;
     } catch(e) {
         let _e = (e as Error).message;
+        console.error("[Error]: " + e);
         throw _e;
     }
 }

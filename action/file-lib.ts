@@ -43,9 +43,11 @@ export async function s3UploadFile(file: File, folder: string) {
             return res[0].Location;
         });
 
+        console.log("[Success]: " + url);
         return url || '';
         
     } catch(e) {
+      console.error("[Error]: " + e);
         let _e = (e as Error).message;
         throw _e;
     }
