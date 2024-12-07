@@ -203,23 +203,41 @@ export default memo(function CreateRecipeForm() {
           return;
       }
 
-      
-
-      const tempPath = URL.createObjectURL(e.target.files[0]);
-      const rFiles = [...files];
-      const fileTn = [...fileThumbnails];
-
-      const beforeFile = e.target.files[0];
-
       if(e.target.files[0].size > 4000000) {
-          setError(prev => ({...prev, image: "Maximum 4mb only!"}));
-          return;
+        setError(prev => ({...prev, image: "Maximum 4mb only!"}));
+        return;
+    }
+
+      const fileName = e.target.files[0].name;
+      const fileNameExt = fileName.substring(fileName.lastIndexOf('.') + 1);
+
+      if((fileNameExt.toLowerCase() === "heic" || fileNameExt.toLowerCase() === "heif")) {
+        const convertedBlob = await heic2any({
+          blob: e.target.files[0],
+          toType: 'image/jpeg',
+          quality: 0.8
+        }).then(blob => {
+          console.log("this is the converted blob inside await");
+          console.log(blob);
+          return blob;
+        });
+
+        console.log("this is the converted blob");
+        console.log(convertedBlob)
+      } else {
+        const tempPath = URL.createObjectURL(e.target.files[0]);
+        const rFiles = [...files];
+        const fileTn = [...fileThumbnails];
+
+        const beforeFile = e.target.files[0];
+
+        rFiles.push(beforeFile);
+        fileTn.push(tempPath);
+        setFiles([...rFiles]);
+        setFileThumbnails([...fileTn]);
       }
 
-      rFiles.push(beforeFile);
-      fileTn.push(tempPath);
-      setFiles([...rFiles]);
-      setFileThumbnails([...fileTn]);
+      
   },[files]);
   
 

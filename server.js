@@ -148,7 +148,7 @@ app.prepare().then(() => {
 
     socket.on('review recipe',async (message) => {
       const data = JSON.parse(message);
-      const conns = userSockets.get(data.user_id);
+      const conns = userSockets.get(data.recipe_owner_id);
 
       for(let i = 0; i < conns.length; i++) {
         io.to(conns[i]).emit('review recipe', message);

@@ -11,7 +11,7 @@ export default function RecipeElementV2 ({element}:Props) {
 
     return (
         <div key={new Date().getTime() * Math.random()} className="flex-grow flex-shrink-0 basis-[30%] flex flex-col gap-[5px]">
-            <img src={'/dashboard.webp'} className="rounded-md w-[100%] h-[auto] object-cover relative max-w-none" width={10000} height={10000} alt="website banner" />
+            <img src={'/dashboard.webp'} className="rounded-md w-[100%] h-[auto] object-cover relative max-w-none" width={100} height={100} alt="website banner" />
             <h1 className={`text-[${CardFontSize}]`}>炊飯器で簡単！夏バテでも食べられるご飯</h1>
             <div className="flex items-center ml-[-4px]">
             <svg className="w-4 h-4 text-yellow-300 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
