@@ -8,7 +8,7 @@ export const POST = async ( req:NextRequest) => {
 
         await registerUserDetails(reqInput);
 
-        const response = NextResponse.redirect(new URL("/signup/finish", process.env.BASE_URL), {status: 302});
+        const response = NextResponse.redirect(process.env.BASE_URL + "/signup/finish", {status: 302});
         return response;
     } catch(e) {
 

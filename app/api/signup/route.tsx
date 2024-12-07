@@ -19,7 +19,7 @@ export const POST = async (req: NextRequest) => {
 
             const user = await registerUser(email, hash);
 
-            const response = NextResponse.redirect(new URL("/signup/personal-info", process.env.BASE_URL), {status: 302});
+            const response = NextResponse.redirect(process.env.BASE_URL + "/signup/personal-info", {status: 302});
             const expires = new Date(Date.now() + 10 * 1000);
             const session = await encrypt({user, expires});
 

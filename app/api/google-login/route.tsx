@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
         const expires = getExpireDate();
         const session = await encrypt({user, expires});
 
-        const response = NextResponse.redirect(new URL("/", process.env.BASE_URL), {status: 302});
+        const response = NextResponse.redirect(process.env.BASE_URL + "/", {status: 302});
         registerSocketUser(user_id);
         response.cookies.set('session', session, {
             path: '/',

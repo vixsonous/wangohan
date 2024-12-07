@@ -14,7 +14,7 @@ export async function POST( req: NextRequest) {
 
         const user = await registerGoogleUser(reqJson.email, reqJson.id);
 
-        const response = NextResponse.redirect(new URL("/signup/personal-info", process.env.BASE_URL), {status: 302});
+        const response = NextResponse.redirect( process.env.BASE_URL + "/signup/personal-info", {status: 302});
         
         const expires = getExpireDate();
         const session = await encrypt({user, expires});

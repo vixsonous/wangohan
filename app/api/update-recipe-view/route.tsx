@@ -40,7 +40,7 @@ export async function PATCH (req: NextRequest) {
 
             return res;
         } else {
-            return NextResponse.redirect(new URL("/", process.env.BASE_URL),{status: 302});
+            return NextResponse.redirect(process.env.BASE_URL + "/",{status: 302});
         }
     } catch(e) {
         let _e = (e as Error).message;
