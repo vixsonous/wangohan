@@ -212,13 +212,23 @@ export default memo(function CreateRecipeForm() {
       const fileNameExt = fileName.substring(fileName.lastIndexOf('.') + 1);
 
       if(await isHeic(e.target.files[0])) {
-        const jpeg = await heicTo({
+        const image = await heicTo({
           blob: e.target.files[0],
-          type: "image/jpeg",
-          quality: 0.5
+          type: "image/png",
+          quality: 0.8
         });
 
-        console.log(jpeg)
+        const tempPath = URL.createObjectURL(image);
+        const rFiles = [...files];
+        const fileTn = [...fileThumbnails];
+
+        const beforeFile = e.target.files[0];
+
+        rFiles.push(beforeFile);
+        fileTn.push(tempPath);
+        setFiles([...rFiles]);
+        setFileThumbnails([...fileTn]);
+
       } else {
         const tempPath = URL.createObjectURL(e.target.files[0]);
         const rFiles = [...files];
