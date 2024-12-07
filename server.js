@@ -130,6 +130,11 @@ app.prepare().then(() => {
     socket.on('like recipe',async (message) => {
       const data = JSON.parse(message);
       const conns = userSockets.get(data.user_id);
+      console.log("User-id: " + data.user_id);
+      console.log("Connections: ");
+      console.log(conns);
+      console.log("All Connections: ");
+      console.log(userSockets);
 
       for(let i = 0; i < conns.length; i++) {
         io.to(conns[i]).emit('like recipe', message);

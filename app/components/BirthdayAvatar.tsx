@@ -28,7 +28,7 @@ export default memo(function BirthdayAvatar({pet, active} : BirthdayAvatarInterf
       <div style={{scale: active ? state.lg : state.md}} className={`transition-all duration-1000 w-full flex justify-center ${active ? 'animate-bubble': ''}`}>
           <OptImage width={200} fit="cover" height={150} resize centered containerClass="aspect-square max-w-[100px] max-h-[100px]" src={pet.pet_image} loading="lazy" className="aspect-square max-w-[100px] max-h-[100px] rounded-full object-cover overflow-hidden" alt="website banner" />
       </div>
-      <h1 className="relative text-sm opacity-90 z-10 bg-primary-bg px-20 font-bold text-[#523636] text-center">
+      <h1 className="whitespace-nowrap relative text-sm opacity-90 z-10 bg-primary-bg px-20 font-bold text-[#523636] text-center">
         {pet.pet_name}
         <div className='absolute w-full h-full top-0 left-0 bg-primary-bg opacity-10'></div>
       </h1>

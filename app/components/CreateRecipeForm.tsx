@@ -356,7 +356,7 @@ export default memo(function CreateRecipeForm() {
                   <img src={'/recipe-making/3dogs.webp'} loading="lazy" className="top-[-23.2%] left-[10%] absolute h-[auto] w-[30%] max-w-none rounded-[25px]" width={100} height={100}  alt="website banner" />
                   <img src={recipeInfo.recipeThumbnail} loading="lazy" className="h-[auto] w-[100%] max-w-none rounded-[25px]" width={100} height={100}  alt="website banner" />
                   <h1 className="absolute w-[100%] flex flex-col justify-center items-center h-[100%] text-[16px] sm:text-[26px] text-center">料理の画像をアップロード
-                  <br/> （横長推奨）<br /> <span className="text-[36px] required">+</span></h1>
+                  <br/> （横長or正方形推奨）<br /> <span className="text-[36px] required">+</span></h1>
                   <input onChange={uploadFile} className="w-full hidden" type="file" name="recipe-image" id="recipe-image" />
               </label>
               <div className="w-full flex justify-center">

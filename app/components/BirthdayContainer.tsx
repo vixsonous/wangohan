@@ -19,9 +19,9 @@ export default memo(function BirthdayContainer({bdayAvt} : BirthdayAvatars) {
       if(vidRef.current) vidRef.current.play();
   },[]);
   return (
-      <div className="flex flex-col gap-24 justify-center items-center mt-[30px] relative">
+      <div className="flex flex-col gap-12 md:gap-20 justify-center items-center mt-20 relative">
           <div className="title">
-              <h1 className="text-2xl font-bold text-[#523636] relative after:content-[''] z-[1] after:w-[105%] after:left-[-7px] after:h-[40px] after:top-[5px] after:z-[-1] after:flex after:absolute after:bg-[#FFE9C9]">本日お誕生日のわんちゃん</h1>
+              <h1 className="text-2xl font-bold text-[#523636] relative after:content-[''] z-[1] after:w-[105%] after:left-[-7px] after:h-[40px] after:top-[5px] after:z-[-1] after:flex after:absolute after:bg-[#FFE9C9]">今月お誕生日のわんちゃん</h1>
               <div className="absolute z-[-1] left-[0px] w-full top-[17px] border-[1px] border-solid border-[#523636]"/>
           </div>
           <div className="w-full">
