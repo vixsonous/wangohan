@@ -16,6 +16,8 @@
 # production
 /build
 .env.production
+.env.staging
+vercel.env.unused
 
 # misc
 .DS_Store
