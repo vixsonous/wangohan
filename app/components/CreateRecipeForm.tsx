@@ -222,7 +222,7 @@ export default memo(function CreateRecipeForm() {
         const rFiles = [...files];
         const fileTn = [...fileThumbnails];
 
-        const beforeFile = e.target.files[0];
+        const beforeFile = new File([image], e.target.files[0].name);
 
         rFiles.push(beforeFile);
         fileTn.push(tempPath);
