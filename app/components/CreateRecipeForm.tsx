@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 import React, { memo, SyntheticEvent, useCallback, useEffect, useState } from "react";
 import { Navigation, Thumbs, Virtual } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import heic2any from "heic2any";
+import {isHeic, heicTo} from 'heic-to';
 
 const initRecipeState = {
     recipeTitle: '',
@@ -211,19 +211,14 @@ export default memo(function CreateRecipeForm() {
       const fileName = e.target.files[0].name;
       const fileNameExt = fileName.substring(fileName.lastIndexOf('.') + 1);
 
-      if((fileNameExt.toLowerCase() === "heic" || fileNameExt.toLowerCase() === "heif")) {
-        const convertedBlob = await heic2any({
+      if(await isHeic(e.target.files[0])) {
+        const jpeg = await heicTo({
           blob: e.target.files[0],
-          toType: 'image/jpeg',
-          quality: 0.8
-        }).then(blob => {
-          console.log("this is the converted blob inside await");
-          console.log(blob);
-          return blob;
+          type: "image/jpeg",
+          quality: 0.5
         });
 
-        console.log("this is the converted blob");
-        console.log(convertedBlob)
+        console.log(jpeg)
       } else {
         const tempPath = URL.createObjectURL(e.target.files[0]);
         const rFiles = [...files];
