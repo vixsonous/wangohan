@@ -212,22 +212,22 @@ export default memo(function CreateRecipeForm() {
       const fileNameExt = fileName.substring(fileName.lastIndexOf('.') + 1);
 
       if(await isHeic(e.target.files[0])) {
-        const image = await heicTo({
-          blob: e.target.files[0],
-          type: "image/png",
-          quality: 0.8
-        });
+        // const image = await heicTo({
+        //   blob: e.target.files[0],
+        //   type: "image/png",
+        //   quality: 0.8
+        // });
 
-        const tempPath = URL.createObjectURL(image);
-        const rFiles = [...files];
-        const fileTn = [...fileThumbnails];
+        // const tempPath = URL.createObjectURL(image);
+        // const rFiles = [...files];
+        // const fileTn = [...fileThumbnails];
 
-        const beforeFile = new File([image], e.target.files[0].name);
+        // const beforeFile = new File([image], e.target.files[0].name);
 
-        rFiles.push(beforeFile);
-        fileTn.push(tempPath);
-        setFiles([...rFiles]);
-        setFileThumbnails([...fileTn]);
+        // rFiles.push(beforeFile);
+        // fileTn.push(tempPath);
+        // setFiles([...rFiles]);
+        // setFileThumbnails([...fileTn]);
 
       } else {
         const tempPath = URL.createObjectURL(e.target.files[0]);
