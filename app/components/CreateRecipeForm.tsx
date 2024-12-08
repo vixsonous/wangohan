@@ -11,7 +11,8 @@ import { useRouter } from "next/navigation";
 import React, { memo, SyntheticEvent, useCallback, useEffect, useState } from "react";
 import { Navigation, Thumbs, Virtual } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import {isHeic, heicTo} from 'heic-to';
+import convert from 'heic-convert/browser';
+import { fileToArrayBuffer } from "@/constants/functions";
 
 const initRecipeState = {
     recipeTitle: '',
@@ -210,6 +211,17 @@ export default memo(function CreateRecipeForm() {
 
       const fileName = e.target.files[0].name;
       const fileNameExt = fileName.substring(fileName.lastIndexOf('.') + 1);
+
+      console.log(e.target.files[0]);
+      console.log(fileNameExt);
+      if(fileNameExt.toLowerCase() === "heic" || fileNameExt.toLowerCase() === "heif") {
+        const fd = new FormData();
+        fd.append('file', e.target.files[0]);
+        const res = await fetch("/api/convert-image", {
+          method: 'POST',
+          body: fd
+        })
+      }
 
       // if(await isHeic(e.target.files[0])) {
         // const image = await heicTo({

@@ -38,3 +38,14 @@ export const initOutsideClose = (settings: RefObject<HTMLDivElement>, btn: RefOb
 
   document.addEventListener("click", outsideClick);
 }
+
+export const fileToArrayBuffer = async (file: File):Promise<ArrayBuffer> => {
+  return new Promise<ArrayBuffer>((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = () => resolve(reader.result as ArrayBuffer);
+    reader.onerror = (err) => reject(err);
+
+    reader.readAsArrayBuffer(file);
+  })
+}
