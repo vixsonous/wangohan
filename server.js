@@ -5,7 +5,6 @@ import { Server } from "socket.io";
 import path from "node:path";
 import sharp from "sharp";
 import fs from 'fs/promises';
-import formidable from "formidable";
 
 
 const dev = process.env.NODE_ENV !== "production";
@@ -32,32 +31,6 @@ app.prepare().then(() => {
 
   expApp.use(express.json());
   const publicFolder = path.resolve(process.cwd(), 'public');
-
-  expApp.post("/api/convert-image", async (req, res) => {
-    try {
-      const f = formidable({multiples: false});
-      f.parse(req, async (err, fields, files) => {
-        if(err) {
-          res.status(400).send('Error parsing files!');
-          return;
-        }
-        console.log(files);
-        const file = await fs.readFile(files.file[0].filepath);
-
-        const image = await sharp(file)
-        .toFormat('png')
-        .toBuffer()
-        console.log(image);
-        res.status(200).json({message: 'Success! Not heic', file: image})
-        return;
-      });
-    } catch(e) {
-      console.error('[Error]: ' + e);
-      res.status(400).json({message: e, file: undefined});
-      return;
-    }
-
-  });
 
   expApp.get("/api/image", async (req, res) => {
     const {src,h=60 ,w=60, fit='cover', quality=100, format="webp", upscale=false, upscaleMethod="nearest"} = req.query;

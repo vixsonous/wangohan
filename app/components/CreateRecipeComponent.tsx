@@ -6,8 +6,10 @@ import {motion } from "framer-motion";
 import React, { memo } from "react";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { hide } from "@/lib/redux/states/recipeSlice";
+import dynamic from "next/dynamic";
+import { CircleNotch } from "@phosphor-icons/react/dist/ssr";
 
-const CreateRecipeForm = React.lazy(() => import("./CreateRecipeForm"));
+const CreateRecipeForm = dynamic(() => import('./CreateRecipeForm'), { ssr: false, loading: () => <CircleNotch size={20} className="animate-spin"/> });
 
 export default memo(function CreateRecipeComponent() {
   const show = useAppSelector(state => state.recipeSlice.show);

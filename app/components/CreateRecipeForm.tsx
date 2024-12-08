@@ -11,8 +11,7 @@ import { useRouter } from "next/navigation";
 import React, { memo, SyntheticEvent, useCallback, useEffect, useState } from "react";
 import { Navigation, Thumbs, Virtual } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import convert from 'heic-convert/browser';
-import { fileToArrayBuffer } from "@/constants/functions";
+import heic2any from 'heic2any';
 
 const initRecipeState = {
     recipeTitle: '',
@@ -108,75 +107,76 @@ export default memo(function CreateRecipeForm() {
 
       if(!validationFunc()) return;
 
-      const data2Send = {...recipeInfo, 
+      try {
+        const data2Send = {...recipeInfo, 
           recipeIngredients: recipeIngredients, 
           recipeInstructions: recipeInstructions, 
           fileThumbnailsLength: fileThumbnails.length
-      };
-      setSubmit(true);
-      dispatch(hide());
-      if(window.location.pathname !== "/") router.push("/");
+        };
+        setSubmit(true);
+        dispatch(hide());
+        if(window.location.pathname !== "/") router.push("/");
 
-      const recipe_id = await fetch('/api/recipe', {
-          method: 'POST',
-          body: JSON.stringify(data2Send),
-      }).then(async res => {
-          const body = await res.json()
-          if(res.status === 500) {
-              throw new Error(body.message);
-          } else if(res.status === 200) {
-              return body;
-          }
+        const recipe = await fetch('/api/recipe', {
+            method: 'POST',
+            body: JSON.stringify(data2Send),
+        });
+
+        if(!recipe.ok) throw new Error('recipe_creation_error');
+        const recipe_res = await recipe.json();
+        if(recipe_res === undefined) return;
+        
+        const file_upload = files.map( (file, idx) => {
+          const f = new FormData();
+          f.append('file', file);
+          f.append('recipe_id', recipe_res.body);
+
+          return f;
+        });
+        
+        const requests = await Promise.all(file_upload.map( async file => {
+          const response = await fetch('/api/upload-recipe-files', {
+            method: 'POST',
+            body: file
+          })
           
-      }).catch(err => {
-          const msg = (err as Error).message;
-          setError(prev => ({...prev, generalError: msg}));
-          setSubmit(false);
-          dispatch(showError(msg));
-          setTimeout(() => {
-              dispatch(hideError());
-          }, POPUPTIME);
-      });
+          if(!response.ok) {
+            await fetch('/api/recipe', {
+              method: 'DELETE',
+              body: JSON.stringify({recipe_id: recipe_res.body})
+            });
 
-      if(recipe_id === undefined) return;
+            throw new Error('file_upload_error');
+          }
 
-      
-      files.forEach( async (file, idx) => {
-          const filesForm = new FormData();
-          filesForm.append('file', file);
-          filesForm.append('recipe_id', recipe_id.body);
+          return response;
+        }));
 
-          await fetch('/api/upload-recipe-files', {
-              method: 'POST',
-              body: filesForm
-          }).then(async res => {
-              const body = await res.json();
-              if(res.status === 500) {
-                  throw new Error(body.message);
-              } else if (res.status === 200 && files.length === (idx + 1) ) {
-                // Reset recipe info
-                  setRecipeInfo(initRecipeState);
-                  setRecipeIngredients([{id: 0, name: '', amount: ''}]);
-                  setRecipeInstructions([{id: 0,text: ''}]);
-                  setFiles([]);
-                  setFileThumbnails([]);
+        setRecipeInfo(initRecipeState);
+        setRecipeIngredients([{id: 0, name: '', amount: ''}]);
+        setRecipeInstructions([{id: 0,text: ''}]);
+        setFiles([]);
+        setFileThumbnails([]);
 
-                  dispatch(showSuccess(body.message));
-                  setTimeout(() => {
-                      dispatch(hideSuccess());
-                  }, POPUPTIME);
-                  setSubmit(false);
-              }
-          }).catch(err => {
-              const msg = (err as Error).message;
-              setError(prev => ({...prev, generalError: msg}));
-              dispatch(showError(msg));
-              setTimeout(() => {
-                  dispatch(hideError());
-              }, POPUPTIME);
-              setSubmit(false);
-          });
-      });
+        dispatch(showSuccess('レシピを作成しました'));
+        setTimeout(() => {
+            dispatch(hideSuccess());
+        }, POPUPTIME);
+        setSubmit(false);
+
+      } catch(e) {
+        const msg = (e as Error).message;
+        const err = {
+          recipe_creation_error: 'エラーが起きました。もう一度レシピを作成してください',
+          file_upload_error: '画像のアップロードに失敗しました'
+        }
+        setError(prev => ({...prev, generalError: err[msg as keyof typeof err]}));
+        dispatch(showError(msg));
+        setTimeout(() => {
+            dispatch(hideError());
+        }, POPUPTIME);
+        setSubmit(false);
+      }
   },[recipeInfo,files]);
 
   const [scMode, setScMode] = useState<number>(0);
@@ -211,51 +211,35 @@ export default memo(function CreateRecipeForm() {
 
       const fileName = e.target.files[0].name;
       const fileNameExt = fileName.substring(fileName.lastIndexOf('.') + 1);
-
-      console.log(e.target.files[0]);
-      console.log(fileNameExt);
-      if(fileNameExt.toLowerCase() === "heic" || fileNameExt.toLowerCase() === "heif") {
-        const fd = new FormData();
-        fd.append('file', e.target.files[0]);
-        const res = await fetch("/api/convert-image", {
-          method: 'POST',
-          body: fd
-        })
-      }
-
-      // if(await isHeic(e.target.files[0])) {
-        // const image = await heicTo({
-        //   blob: e.target.files[0],
-        //   type: "image/png",
-        //   quality: 0.8
-        // });
-
-        // const tempPath = URL.createObjectURL(image);
-        // const rFiles = [...files];
-        // const fileTn = [...fileThumbnails];
-
-        // const beforeFile = new File([image], e.target.files[0].name);
-
-        // rFiles.push(beforeFile);
-        // fileTn.push(tempPath);
-        // setFiles([...rFiles]);
-        // setFileThumbnails([...fileTn]);
-
-      // } else {
-        const tempPath = URL.createObjectURL(e.target.files[0]);
-        const rFiles = [...files];
-        const fileTn = [...fileThumbnails];
-
-        const beforeFile = e.target.files[0];
-
-        rFiles.push(beforeFile);
-        fileTn.push(tempPath);
-        setFiles([...rFiles]);
-        setFileThumbnails([...fileTn]);
-      // }
-
       
+      if(typeof window !== 'undefined' && (fileNameExt.toLowerCase() === "heic" || fileNameExt.toLowerCase() === "heif")) {
+        const image = await heic2any({
+          blob: e.target.files[0],
+          toType: 'image/webp',
+          quality: 0.8
+        });
+
+        const img = !Array.isArray(image) ? [image] : image;
+        const f = new File(img, fileName);
+
+        const tempPath = URL.createObjectURL(f);
+        appendFiles(f, tempPath);
+      } else {
+
+        const tempPath = URL.createObjectURL(e.target.files[0]);
+        appendFiles(e.target.files[0], tempPath);
+      }
   },[files]);
+
+  const appendFiles = useCallback((file:File, tempPath: string) => {
+    const rFiles = [...files];
+    const fileTn = [...fileThumbnails];
+
+    rFiles.push(file);
+    fileTn.push(tempPath);
+    setFiles([...rFiles]);
+    setFileThumbnails([...fileTn]);
+  },[files, fileThumbnails]);
   
 
   const addNewRowDataOnClick = useCallback((e:React.MouseEvent<HTMLButtonElement>) => {
