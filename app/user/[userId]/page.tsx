@@ -1,18 +1,15 @@
 
 import { Metadata, ResolvingMetadata } from "next";
-import Image from "next/image";
 import TabList from "./components/TabList";
-import { getUser, getUserDetails, retrieveDecryptedSession, retrieveLikedRecipes, retrieveUserRecipes } from "@/action/users";
-import { cookies } from "next/headers";
-import { decrypt, logEnd, logStart } from "@/action/lib";
-import { redirect } from "next/navigation";
+import { retrieveDecryptedSession, retrieveLikedRecipes, retrieveUserRecipes } from "@/action/users";
+import { logEnd, logStart } from "@/action/lib";
 import { DogData } from "@/constants/interface";
-import { getFile } from "@/action/file-lib";
 import React, { Suspense } from "react";
 import IndexLoading from "@/app/loading";
 import Link from "next/link";
 import PetList from "./components/PetList";
 import OptImage from "@/app/components/ElementComponents/Image";
+import { redirect } from "next/navigation";
 
 type Props = {
     params: {userId: String},
@@ -32,6 +29,7 @@ export async function generateMetadata({params} : Props, parent: ResolvingMetada
 export default async function User() {
 
     const {decryptedSession, userDetails} = await retrieveDecryptedSession();
+    if(userDetails.user_id === 0) redirect("/signup/personal-info");
     const image_url = userDetails.user_image === '' ? `/recipe-making/pic-background.webp` : userDetails.user_image;
     const pets : DogData[] = userDetails.pets;
 

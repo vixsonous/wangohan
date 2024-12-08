@@ -54,10 +54,10 @@ export default async function RootLayout({
 
   if(decryptedSession) {
     const user_details = await getUserDetails(decryptedSession.user.user_id);
+
     user.user_id= user_details.user_id,
     user.user_image= user_details.user_image !== '' ? user_details.user_image : '/icons/user.webp',
     user.user_codename= user_details.user_codename
-    
   }
 
   const isLoggedIn = decryptedSession ? true : false;

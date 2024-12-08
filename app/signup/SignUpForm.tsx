@@ -2,8 +2,10 @@
 import { ERR_MSG, SUCC_MSG, textColor, validateEmail, withSpecialCharacters } from "@/constants/constants";
 import { faCheck, faCircleNotch, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { CircleNotch } from "@phosphor-icons/react/dist/ssr";
 import { TokenResponse, useGoogleLogin } from "@react-oauth/google";
 import { SyntheticEvent, useState } from "react"
+import InputLoading from "../components/ElementComponents/InputLoading";
 
 export default function SignUpForm() {
 
@@ -127,15 +129,15 @@ export default function SignUpForm() {
                 <input type={showPass ? 'text' : "password"} value={signup.password} onChange={(e) => setSignup(prevState => ({...prevState, password: e.target.value}))} className={`w-[100%] text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]`} name="password" placeholder="パスワードを入力" id="password" />
                 <FontAwesomeIcon onClick={(e) => setShowPass(prev => !prev)} className="absolute cursor-pointer right-[12px] top-[12px]" icon={showPass ? faEye : faEyeSlash} size="lg" />
             </div>
-            <button disabled={openGoogleSignup || signupState} onClick={(e:SyntheticEvent) => signUpFunc(e)} className={`w-[100%] bg-[#ffb762] transition-all duration-500 text-white py-[10px] rounded-md text-[12px] sm:text-[16px]`} type="submit">
+            <button disabled={openGoogleSignup || signupState} onClick={(e:SyntheticEvent) => signUpFunc(e)} className={`w-[100%] bg-[#ffb762] h-12 transition-all duration-500 text-white py-[10px] rounded-md text-[12px] sm:text-[16px]`} type="submit">
                 {!signupState ? (
                     '新規登録'
                 ): (
                     signupSuccess.regular ? <><span style={{color: textColor.success}}>{SUCC_MSG.SUCCESS1} </span><FontAwesomeIcon icon={faCheck} style={{color: textColor.success}} size="lg"/></> 
-                    :<FontAwesomeIcon icon={faCircleNotch} spin size="lg"/>
+                    : <InputLoading />
                 )}
             </button>
-            <span className="text-[.5em] sm:text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error}</span>
+            <span className="text-[.5em] sm:text-[.75em] font-semibold text-[#E53935]">{error}</span>
         </form>
         <div className="w-[100%] max-w-[100%] sm:max-w-[460px] mt-[30px] gap-[10px] flex flex-col justify-center">
             {/* <button className={`text-[#6b4528] flex justify-center items-center bg-[white] border-[2px] rounded-md border-[#ffcd92] text-[12px] sm:text-[16px] px-[10px] py-[10px] font-bold`}>
@@ -153,7 +155,7 @@ export default function SignUpForm() {
             <button disabled={openGoogleSignup || signupState} onClick={() => {
                 setOpenGoogleSignup(true);
                 googleSignup()
-            }} className={`text-[#6b4528] flex justify-center items-center gap-[5px] bg-[white] border-[2px] rounded-md border-[#ffcd92] text-[12px] sm:text-[16px] px-[10px] py-[10px] font-bold`}>
+            }} className={`text-[#6b4528] h-12 flex justify-center items-center gap-[5px] bg-[white] border-[2px] rounded-md border-[#ffcd92] text-[12px] sm:text-[16px] px-[10px] py-[10px] font-bold`}>
                 <svg width="15" height="15" viewBox="0 0 67 64" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <g clipPath="url(#clip0_50_449)">
                     <path d="M66.9643 32.2042C66.9643 29.6139 66.7364 27.7237 66.2431 25.7634H34.167V37.4548H52.9949C52.6155 40.3603 50.5656 44.7359 46.0104 47.6761L45.9465 48.0675L56.0884 55.3126L56.791 55.3773C63.2441 49.8815 66.9643 41.7954 66.9643 32.2042Z" fill="#4285F4"/>
@@ -171,7 +173,7 @@ export default function SignUpForm() {
                     'Googleで続ける'
                 ): (
                     signupSuccess.google ? <><span style={{color: textColor.success}}>{SUCC_MSG.SUCCESS1} </span><FontAwesomeIcon icon={faCheck} style={{color: textColor.success}} size="lg"/></> 
-                    :<FontAwesomeIcon icon={faCircleNotch} spin size="lg"/>
+                    :<CircleNotch size={20} className="animate-spin"/>
                 )}
             </button>
             <div className="flex justify-center gap-[2rem]">

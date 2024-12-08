@@ -1,10 +1,11 @@
 'use client';
 
+import InputLoading from "@/app/components/ElementComponents/InputLoading";
+import ErrorSpan from "@/app/components/TextComponents/ErrorSpan";
 import { fontSize, SUCC_MSG, textColor, withAlphabetical, withSpecialCharactersAndNumbers } from "@/constants/constants";
-import { faCheck, faCircleNotch } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Image from "next/image";
-import { SyntheticEvent, useEffect, useState } from "react";
+import { Check, CircleNotch } from "@phosphor-icons/react/dist/ssr";
+import React, { useCallback, useEffect, useState } from "react";
+import heic2any from 'heic2any';
 
 type InfoType = {
     fname: string,
@@ -50,9 +51,9 @@ export default function PersonalInfoForm({info} : Info) {
 
     const [signup, setSignup] = useState(false);
     const [signupSuccess, setSignupSuccess] = useState(false);
+    const [upload, setUpload] = useState(false);
 
     const [profilePic, setProfilePic] = useState<File | null>(null);
-    const [imgKey, setImgKey] = useState(new Date().getTime() * Math.random());
 
     const validateInputs = () => {
         
@@ -93,9 +94,8 @@ export default function PersonalInfoForm({info} : Info) {
         return validation;
     }
 
-    const submitFunc = async (e: SyntheticEvent) => {
+    const submitFunc = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        
         if(!validateInputs()) return;
 
         const formSubmit = new FormData();
@@ -177,50 +177,125 @@ export default function PersonalInfoForm({info} : Info) {
         }
     }, [info]);
 
+    const onFileChange = useCallback(async (e:React.ChangeEvent<HTMLInputElement>) => {
+      e.preventDefault();
+
+      if(!e.target.files || !e.target.files[0]) return;
+
+      const fileName = e.target.files[0].name;
+      const fileNameExt = fileName.substring(fileName.lastIndexOf('.') + 1);
+
+      if(typeof window !== 'undefined' && (fileNameExt.toLowerCase() === "heic" || fileNameExt.toLowerCase() === "heif")) {
+        setUpload(true);
+        const image = await heic2any({
+          blob: e.target.files[0],
+          toType: 'image/webp',
+          quality: 0.8
+        });
+        setUpload(false);
+
+        const b = !Array.isArray(image) ? [image] : image;
+
+        const f = new File(b, fileName);
+        setPicture(f);
+      } else {
+        setPicture(e.target.files[0]);
+      }
+      
+    },[]);
+
+    const setPicture = useCallback((file: File) => {
+      const tempPath = URL.createObjectURL(file);
+      setPersonalInfo(prevState => ({...prevState, thumbnail:tempPath}));
+      setProfilePic(file);
+    },[]);
+
+    const changePersonalInfo = useCallback((e:React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+      e.preventDefault();
+
+      const t = e.currentTarget;
+      const name = t.name;
+
+      setPersonalInfo(prevState => ({...prevState, [name]: t.value}))
+    },[]);
+
     return (
-        <form action="" className="w-[100%] max-w-[100%] sm:max-w-[460px] flex flex-col gap-[10px] items-start pt-[10vw]">
-            <div className="flex flex-wrap w-[100%] justify-center gap-[1em]">
+        <form action="" className="w-full max-w-full sm:max-w-[460px] flex flex-col gap-[10px] items-start pt-[10vw]">
+            <div className="flex flex-wrap w-full justify-center gap-[1em]">
                 <div className="flex-[0_0_100%] sm:flex-[0_0_50%]">
-                    <label htmlFor="recipe-image" className="flex relative justify-center">
-                        <img src={'/recipe-making/3dogs.webp'} className="top-[-20.2%] absolute h-[auto] w-[20%] sm:w-[40%] max-w-none rounded-[25px]" width={10000} height={10000}  alt="website banner" />
-                        <div className="relative pt-[50%] w-[50%] sm:pt-[100%] sm:w-[100%]">
-                            <img key={imgKey} src={personalInfo.thumbnail} className="h-[100%] w-[100%] top-0 right-0 object-cover absolute rounded-[200px]" width={10000} height={10000}  alt="website banner" />
+                    <label htmlFor="personal-image" className="flex relative items-center justify-center">
+                        <img src={'/recipe-making/3dogs.webp'} className="top-[-20.2%] absolute h-[auto] w-[20%] sm:w-[40%] max-w-none rounded-[25px]" width={100} height={100}  alt="website banner" />
+                        {
+                          upload && (
+                            <div className="absolute z-10 flex justify-center gap-2 items-center">
+                              <CircleNotch size={20} className="animate-spin"/>
+                              <span>アップロード中...</span>
+                            </div>
+                          )
+                        }
+                        <div className="relative pt-[50%] w-[50%] sm:pt-[100%] sm:w-full">
+                            <img src={personalInfo.thumbnail} className="h-full w-full top-0 right-0 object-cover absolute rounded-[200px]" width={100} height={100}  alt="website banner" />
                         </div>
-                        <input onChange={(e) => {
-                                if(e.target.files && e.target.files[0]) {
-                                    const tempPath = URL.createObjectURL(e.target.files[0]);
-                                    setPersonalInfo(prevState => ({...prevState, thumbnail:tempPath}));
-                                    setImgKey(new Date().getTime() * Math.random());
-                                    setProfilePic(e.target.files[0]);
-                                }
-                            }} className="w-[100%] hidden" type="file" name="recipe-image" id="recipe-image" />
+                        <input disabled={upload} onChange={onFileChange} className="hidden" type="file" name="personal-image" id="personal-image" />
                     </label>
                 </div>
-                <div className="flex-[0_0_100%] flex flex-wrap sm:flex-nowrap sm:flex-col gap-[1rem] w-[100%]">
-                    <div className="w-[100%]">
-                        <label htmlFor="姓" className={`text-[${fontSize.l2}] font-semibold`}>姓 </label><span className="text-[.5em] sm:text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.lname}</span>
-                        <input value={personalInfo.lname} onChange={(e) => setPersonalInfo(prevState => ({...prevState, lname: e.target.value}))} id="姓" className={`w-[100%] text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]`} type="text" name="last-name" placeholder="姓を入力"  />
+                <div className="flex-[0_0_100%] flex flex-wrap sm:flex-nowrap sm:flex-col gap-[1rem] w-full">
+                    <div className="w-full">
+                        <label htmlFor="lname" className={`text-[${fontSize.l2}] font-semibold`}>姓 </label><ErrorSpan>{error.lname}</ErrorSpan>
+                        <input 
+                          value={personalInfo.lname} 
+                          onChange={changePersonalInfo} 
+                          id="lname" 
+                          className={`w-full text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]`} 
+                          type="text" 
+                          name="lname" 
+                          placeholder="姓を入力"  
+                        />
                     </div>
-                    <div className="w-[100%]">
-                        <label htmlFor="名" className={`text-[${fontSize.l2}] font-semibold`}>名 </label><span className="text-[.5em] sm:text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.fname}</span>
-                        <input value={personalInfo.fname} onChange={(e) => setPersonalInfo(prevState => ({...prevState, fname: e.target.value}))} id="codename" className={`w-[100%] text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]`} type="text" name="first-name" placeholder="名を入力"  />
+                    <div className="w-full">
+                        <label htmlFor="fname" className={`text-[${fontSize.l2}] font-semibold`}>名 </label><ErrorSpan>{error.fname}</ErrorSpan>
+                        <input 
+                          value={personalInfo.fname} 
+                          onChange={changePersonalInfo} 
+                          id="fname" 
+                          className={`w-full text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]`} 
+                          type="text" 
+                          name="fname" 
+                          placeholder="名を入力"  
+                        />
                     </div>
                 </div>
             </div>
 
-            <div className="w-[100%]">
-                <label htmlFor="ユーザー名" className={`text-[${fontSize.l2}] font-semibold`}>ユーザー名 </label><span className="text-[.5em] sm:text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.codename}</span>
-                <input value={personalInfo.codename} onChange={(e) => setPersonalInfo(prevState => ({...prevState, codename: e.target.value}))} id="ユーザー名" className={`w-[100%] text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]`} type="text" name="codename" placeholder="ユーザー名を入力"  />
+            <div className="w-full">
+                <label htmlFor="codename" className={`text-[${fontSize.l2}] font-semibold`}>ユーザー名 </label><ErrorSpan>{error.codename}</ErrorSpan>
+                <input 
+                  value={personalInfo.codename} 
+                  onChange={changePersonalInfo} 
+                  id="codename" 
+                  className={`w-full text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]`} 
+                  type="text" 
+                  name="codename" 
+                  placeholder="ユーザー名を入力"  
+                />
             </div>
             <div className="flex flex-wrap justify-between">
                 <div className="flex-[0_0_48%]">
-                    <label htmlFor="誕生日" className={`text-[${fontSize.l2}] font-semibold`}>誕生日 </label><span className="text-[.5em] sm:text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.birthdate}</span>
-                    <input value={personalInfo.birthdate} onChange={(e) => setPersonalInfo(prev => ({...prev, birthdate: e.target.value}))} id="誕生日" className="w-[100%] text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]" type="date" name="birthdate" placeholder="誕生日を入力" />
+                    <label htmlFor="birthdate" className={`text-[${fontSize.l2}] font-semibold`}>誕生日 </label><ErrorSpan>{error.birthdate}</ErrorSpan>
+                    <input 
+                      value={personalInfo.birthdate} 
+                      onChange={changePersonalInfo} 
+                      id="birthdate" 
+                      className="w-full text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]" 
+                      type="date" 
+                      name="birthdate" 
+                      placeholder="誕生日を入力"
+                    />
                 </div>
 
                 <div className="flex-[0_0_48%]">
-                    <label htmlFor="性別" className={`text-[${fontSize.l2}] font-semibold`}>性別 </label><span className="text-[.5em] sm:text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.gender}</span>
-                    <select value={personalInfo.gender} onChange={(e) => setPersonalInfo(prev => ({...prev, gender: e.target.value}))} className={`w-[100%] text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]`} name="性別" id="性別">
+                    <label htmlFor="gender" className={`text-[${fontSize.l2}] font-semibold`}>性別 </label><ErrorSpan>{error.gender}</ErrorSpan>
+                    <select value={personalInfo.gender} onChange={changePersonalInfo} className={`w-full text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]`} name="gender" id="gender">
                         <option disabled value="">性別を選択</option>
                         <option value="男性">男性</option>
                         <option value="女性">女性</option>
@@ -229,21 +304,21 @@ export default function PersonalInfoForm({info} : Info) {
                     </select>
                 </div>
             </div>
-            <div className="w-[100%]">
-                <label htmlFor="職業" className={`text-[${fontSize.l2}] font-semibold`}>職業 </label><span className="text-[.5em] sm:text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.occupation}</span>
-                <input value={personalInfo.occupation} onChange={(e) => setPersonalInfo(prev => ({...prev, occupation: e.target.value}))} id="職業" className={`w-[100%] text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]`} type="text" name="recipe-image" placeholder="職業を入力"  />
+            <div className="w-full">
+                <label htmlFor="occupation" className={`text-[${fontSize.l2}] font-semibold`}>職業 </label><ErrorSpan>{error.occupation}</ErrorSpan>
+                <input value={personalInfo.occupation} onChange={changePersonalInfo} id="occupation" className={`w-full text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]`} type="text" name="occupation" placeholder="職業を入力"  />
             </div>
             
             <div className="w-full flex justify-center flex-col items-center gap-[10px]">
-                <button disabled={signup} onClick={(e:SyntheticEvent) => submitFunc(e)} className={`w-[100%] bg-[#ffb762] border-[1px] border-[#FFD99A] text-white py-[10px] rounded-md text-[12px] sm:text-[16px] transition-all duration-500`} type="submit">
+                <button disabled={signup} onClick={submitFunc} className={`w-full h-12 bg-[#ffb762] border-[1px] border-[#FFD99A] text-white py-[10px] rounded-md text-[12px] sm:text-[16px] transition-all duration-500`} type="submit">
                     {!signup ? (
                     '新規登録'
                     ): (
-                        signupSuccess ? <><span style={{color: textColor.success}}>{SUCC_MSG.SUCCESS1} </span><FontAwesomeIcon icon={faCheck} style={{color: textColor.success}} size="lg"/></> 
-                        :<FontAwesomeIcon icon={faCircleNotch} spin size="lg"/>
+                        signupSuccess ? <div className="w-full flex justify-center items-center"><span style={{color: textColor.success}}>{SUCC_MSG.SUCCESS1} </span><Check size={20}/></div> 
+                        :<InputLoading />
                     )}
                 </button>
-                <span className="text-[.5em] sm:text-[.75em] text-[#7f7464] font-semibold text-[#E53935]">{error.generalError}</span>
+                <ErrorSpan>{error.generalError}</ErrorSpan>
             </div>
         </form>
     )

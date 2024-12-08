@@ -7,6 +7,7 @@ import { GoogleLogin, TokenResponse, useGoogleLogin } from "@react-oauth/google"
 import { Inter } from "next/font/google";
 import Link from "next/link";
 import { SyntheticEvent, useState } from "react";
+import InputLoading from "../components/ElementComponents/InputLoading";
 
 const inter = Inter({ subsets: ["latin"], display: 'swap', adjustFontFallback: false });
 
@@ -35,9 +36,8 @@ export default function LoginForm() {
     const [showPass, setShowPass] = useState(false);
     const [openGoogleSignup, setOpenGoogleSignup] = useState(false);
 
-    const loginFunc = async (e:SyntheticEvent) => {
+    const loginFunc = async (e:React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-
         if(!validateEmail(credentials.email)) {
             setError(ERR_MSG.ERR5);
             return;
@@ -62,7 +62,6 @@ export default function LoginForm() {
         const login = await fetch('/api/login',{
             method: 'POST',
             body: JSON.stringify(credentials),
-            headers: {'Content-type' : 'application/json'}
         })
         .then(async res => {
             
@@ -81,6 +80,7 @@ export default function LoginForm() {
         })
         .catch(_e => {
             let message = (_e as Error).message;
+            console.log("[Error]: " + message);
             setLoginState(false);
             setError(message);
         });
@@ -140,12 +140,12 @@ export default function LoginForm() {
                 <FontAwesomeIcon onClick={(e) => setShowPass(prev => !prev)} className="absolute cursor-pointer right-[12px] top-[12px]" icon={showPass ? faEye : faEyeSlash} size="lg" />
             </div>
             <span className="text-[.5em] sm:text-[.75em] text-[#7f7464] font-semibold">パスワードを忘れた場合</span>
-            <button disabled={openGoogleSignup || loginState} onClick={(e:SyntheticEvent) => loginFunc(e)} className={`w-[100%] bg-[${loginSuccess.regular ? '#FFD99A' : '#ffb762'}] border-[1px] border-[${loginState ? '#ffb762' : '#FFD99A'}] text-white py-[10px] rounded-md text-[12px] sm:text-[16px]`} type="submit">
+            <button disabled={openGoogleSignup || loginState} onClick={loginFunc} className={`w-[100%] h-12 bg-[${loginSuccess.regular ? '#FFD99A' : '#ffb762'}] border-[1px] border-[${loginState ? '#ffb762' : '#FFD99A'}] text-white py-[10px] rounded-md text-[12px] sm:text-[16px]`} type="submit">
                 {!loginState ? (
                     'ログイン'
                 ): (
                     loginSuccess.regular ? <><span style={{color: textColor.success}}>{SUCC_MSG.SUCCESS1} </span><FontAwesomeIcon icon={faCheck} style={{color: textColor.success}} size="lg"/></> 
-                    :<CircleNotch size={32} className="animate-spin"/>
+                    :<InputLoading />
                 )}
             </button>
             <span className="text-[.5em] sm:text-[.75em] font-semibold text-[#E53935]">{error}</span>

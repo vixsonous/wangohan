@@ -28,7 +28,7 @@ export default memo(function CreateRecipeForm() {
   const router = useRouter();
 
   const [submit, setSubmit] = useState(false);
-  const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [upload, setUpload] = useState(false);
   const [files, setFiles] = useState<Array<File>>([]);
   const [fileThumbnails, setFileThumbnails] = useState<Array<string>>([]);
   const [recipeInfo, setRecipeInfo] = useState(structuredClone(initRecipeState));
@@ -212,6 +212,7 @@ export default memo(function CreateRecipeForm() {
       const fileName = e.target.files[0].name;
       const fileNameExt = fileName.substring(fileName.lastIndexOf('.') + 1);
       
+      setUpload(true);
       if(typeof window !== 'undefined' && (fileNameExt.toLowerCase() === "heic" || fileNameExt.toLowerCase() === "heif")) {
         const image = await heic2any({
           blob: e.target.files[0],
@@ -229,6 +230,7 @@ export default memo(function CreateRecipeForm() {
         const tempPath = URL.createObjectURL(e.target.files[0]);
         appendFiles(e.target.files[0], tempPath);
       }
+      setUpload(false);
   },[files]);
 
   const appendFiles = useCallback((file:File, tempPath: string) => {
@@ -377,9 +379,20 @@ export default memo(function CreateRecipeForm() {
               <label htmlFor="recipe-image" className="flex relative">
                   <img src={'/recipe-making/3dogs.webp'} loading="lazy" className="top-[-23.2%] left-[10%] absolute h-[auto] w-[30%] max-w-none rounded-[25px]" width={100} height={100}  alt="website banner" />
                   <img src={recipeInfo.recipeThumbnail} loading="lazy" className="h-[auto] w-[100%] max-w-none rounded-[25px]" width={100} height={100}  alt="website banner" />
-                  <h1 className="absolute w-[100%] flex flex-col justify-center items-center h-[100%] text-[16px] sm:text-[26px] text-center">料理の画像をアップロード
-                  <br/> （横長or正方形推奨）<br /> <span className="text-[36px] required">+</span></h1>
-                  <input onChange={uploadFile} className="w-full hidden" type="file" name="recipe-image" id="recipe-image" />
+                  {
+                    upload ? (
+                      <div className="absolute w-full h-full z-10 flex justify-center gap-2 items-center">
+                        <CircleNotch size={20} className="animate-spin"/>
+                        <span className="text-xl font-bold">アップロード中...</span>
+                      </div>
+                    ) : (
+                      <h1 className="absolute w-[100%] flex flex-col justify-center items-center h-[100%] text-[16px] sm:text-[26px] text-center">料理の画像をアップロード
+                      <br/> （横長or正方形推奨）<br /> <span className="text-[36px] required">+</span></h1>
+                    )
+                  }
+
+                  
+                  <input disabled={upload} onChange={uploadFile} className="w-full hidden" type="file" name="recipe-image" id="recipe-image" />
               </label>
               <div className="w-full flex justify-center">
                 <div className='mx-auto flex justify-center p-[5px] m-[0] lg:w-[78%] max-w-[100%]'>

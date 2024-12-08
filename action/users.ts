@@ -7,6 +7,7 @@ import { decrypt } from "./lib";
 import { DogData } from "@/constants/interface";
 import { redirect } from "next/navigation";
 import { processRecipes } from "./recipe";
+import { emptyUser, nonUser } from "@/constants/objects";
 
 const FRONT_PAGE_RECIPE_QUERY_LIMIT = 10;
 
@@ -38,7 +39,7 @@ export async function getUser(email: string, password: string) {
 }
 
 export async function getUserDetails(user_id: number) {
-  if(!user_id) throw new Error(ERR_MSG['ERR3']);
+  if(!user_id) return emptyUser();
 
   try {
 
@@ -52,40 +53,40 @@ export async function getUserDetails(user_id: number) {
           .where('pets.user_id','=',user_id)
           .execute();
 
-      if(user === undefined) throw new Error(ERR_MSG['ERR4']);
+
+          
+      if(user === undefined) return emptyUser();
 
       const updated_pets = pets.map( pet => ({...pet, pet_birthdate: pet.pet_birthdate.toISOString()}));
       const combinedRes = {...user, pets: updated_pets as DogData[]}
       return combinedRes;
   } catch(e) {
-      let _e = (e as Error).message;
-      throw _e;
+      return emptyUser();
   }
 }
 
 export async function checkIfUserNotExist(email: string) {
   
   try {
-    if(!email) throw new Error(ERR_MSG['ERR5']);
+    if(!email) return false;
 
     const user = await db.selectFrom("users_table as user")
         .select(['user.user_id'])
         .where('user.email','=', email)
         .executeTakeFirst();
 
-    if(user) throw new Error(ERR_MSG['ERR6']);
+    if(user) return false;
 
     return true;
   } catch(e) {
-    let _e = (e as Error).message;
-    throw _e;
+    return false;
   }
 }
 
 export async function registerUser(email: string, password: string) {
 
   try {
-    if(!email && !password) throw new Error(ERR_MSG['ERR8']);
+    if(!email && !password) return nonUser();
 
     const resultUser = await db.insertInto('users_table')
       .values({
@@ -101,14 +102,13 @@ export async function registerUser(email: string, password: string) {
 
       return resultUser;
   } catch(e) {
-    let _e = (e as Error).message;
-    throw _e;
+    return nonUser();
   }
 }
 
 export async function registerUserDetails(formData: FormData) {
   try {
-    if(!formData) throw new Error(ERR_MSG['ERR11']);
+    if(!formData) return false;
 
     const docCookies = cookies();
     const session = docCookies.get('session');
@@ -116,7 +116,7 @@ export async function registerUserDetails(formData: FormData) {
 
     const decryptedCookies = await decrypt(session.value);
 
-    const resultUser = await db.insertInto("user_details_table")
+    await db.insertInto("user_details_table")
       .values({
         user_first_name: formData.get('fname') as string,
         user_last_name: formData.get('lname') as string,
@@ -132,16 +132,15 @@ export async function registerUserDetails(formData: FormData) {
       })
       .executeTakeFirstOrThrow();
 
-      return resultUser;
+      return true;
   } catch(e) {
-    let _e = (e as Error).message;
-    throw _e;
+    return false;
   }
 }
 
 export async function findGoogleUser(google_id: string) {
   try {
-    if(!google_id) throw new Error(ERR_MSG['ERR12']);
+    if(!google_id) return -2;
 
     const user_id = await db.selectFrom("users_table as users")
             .select(["users.user_id"])
@@ -150,8 +149,7 @@ export async function findGoogleUser(google_id: string) {
     
     return user_id ? user_id.user_id : -1;
   } catch(e) {
-    let _e = (e as Error).message;
-    throw _e;
+    return -2;
   } 
 }
 
