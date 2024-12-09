@@ -76,7 +76,7 @@ export const uploadPetPic = async (petPic: File | null, petId: number) => {
 
         if(!petPic) throw new Error(ERR_MSG.ERR31);
 
-        const folder = `${padStartIds(user_id)}/pets/${petId}`;
+        const folder = `${padStartIds(String(user_id))}/pets/${petId}`;
         const uploadedPetPic = await s3UploadFile(petPic, folder);
 
         return uploadedPetPic;
