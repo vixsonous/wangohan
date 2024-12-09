@@ -1,5 +1,6 @@
 'use client';
 
+import InputLoading from "@/app/components/ElementComponents/InputLoading";
 import ErrorSpan from "@/app/components/TextComponents/ErrorSpan";
 import { ERR_MSG, POPUPTIME } from "@/constants/constants";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
@@ -7,8 +8,9 @@ import { hideError, hideSuccess, showError, showSuccess } from "@/lib/redux/stat
 import { addPet } from "@/lib/redux/states/petSlice";
 import { faArrowLeft, faCircleNotch, faClose, faEdit, faPlus, faSave } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { ArrowLeft } from "@phosphor-icons/react/dist/ssr";
+import { ArrowLeft, CircleNotch, Plus } from "@phosphor-icons/react/dist/ssr";
 import { AnimatePresence, motion } from "framer-motion";
+import heic2any from "heic2any";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -18,8 +20,9 @@ export default function PetAddForm() {
     // Pet add
     const [state, setState] = useState({
         modalDisp: false,
+        fileUp: false,
         pet: {
-            thumbnail: '/icons/default-pet.webp',
+            thumbnail: '/recipe-making/pic-background.png',
             file: null,
             petName: '',
             petBday: null,
@@ -43,18 +46,34 @@ export default function PetAddForm() {
     const user = useAppSelector(state => state.user.user);
 
     const petImgOnChange = async (e:React.ChangeEvent<HTMLInputElement>) => {
-        if(e.currentTarget.files && e.currentTarget.files[0]) {
-            const tempPath = URL.createObjectURL(e.currentTarget.files[0]);
+      e.preventDefault();
 
-            const beforeFile = e.currentTarget.files[0];
+      if(!e.currentTarget.files || !e.currentTarget.files[0]) return;
+      
+      const fileName = e.currentTarget.files[0].name;
+      const fileNameExt = fileName.substring(fileName.lastIndexOf('.') + 1);
 
-            if(beforeFile.size > 4000000) {
-                setState(prev => ({...prev, error: 'Picture size is greater than 4MB (Max)!'}));
-                return;
-            }
-            
-            setState(prev => ({...prev, pet: { ...prev.pet, thumbnail: tempPath, file: beforeFile}}))
-        }
+      if(typeof window !== 'undefined' && (fileNameExt.toLowerCase() === "heic" || fileNameExt.toLowerCase() === "heif")) {
+        setState(prev => ({...prev, fileUp: true}));
+        const image = await heic2any({
+          blob: e.currentTarget.files[0],
+          toType: 'image/webp',
+          quality: 0.8
+        });
+        setState(prev => ({...prev, fileUp: false}));
+
+        const b = !Array.isArray(image) ? [image] : image;
+
+        const f = new File(b, fileName);
+        const tempPath = URL.createObjectURL(f);
+        setState(prev => ({...prev, pet: { ...prev.pet, thumbnail: tempPath, file: f}}))
+      } else {
+        const file = e.currentTarget.files[0];
+        const tempPath = URL.createObjectURL(file);
+        setState(prev => ({...prev, pet: { ...prev.pet, thumbnail: tempPath, file: file}}))
+      }
+      
+      
     }
 
     const showAddPetOnClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -160,6 +179,31 @@ export default function PetAddForm() {
                     dispatch(hideSuccess());
                 }, POPUPTIME);
                 setState(prev => ({...prev, submitState: false, modalDisp: false}));
+
+                setState({
+                  modalDisp: false,
+                  fileUp: false,
+                  pet: {
+                      thumbnail: '/recipe-making/pic-background.png',
+                      file: null,
+                      petName: '',
+                      petBday: null,
+                      petBreed: ''
+                  } as {
+                      thumbnail: string,
+                      file: File | null,
+                      petName: string,
+                      petBday: Date | null,
+                      petBreed: string
+                  },
+                  icns: {
+                      petNameIcn: faEdit,
+                      petBdayIcn: faEdit,
+                      petBreedIcn: faEdit,
+                  },
+                  submitState: false,
+                  error: ''
+                });
             }
         }).catch( err => {
 
@@ -226,10 +270,18 @@ export default function PetAddForm() {
                         <div className="bg-[#FFFAF0] p-[30px] flex justify-center flex-wrap items-center gap-[20px]">
                             <div>
                                 <label htmlFor={`thumbnail-0`} className="relative group">
+                                    {
+                                      state.fileUp && (
+                                        <div className="absolute z-10 w-full h-full flex justify-center gap-2 items-center">
+                                          <CircleNotch size={20} className="animate-spin"/>
+                                          <span>アップロード中...</span>
+                                        </div>
+                                      )
+                                    }
                                     <img src={state.pet.thumbnail} className="
-                                    rounded-[50%] w-[190px] h-[190px] object-cover relative" width={10000} height={10000}  alt="website banner" />
+                                    rounded-[50%] w-[190px] h-[190px] object-cover relative" width={100} height={100}  alt="website banner" />
                                     <div className="absolute w-full h-full bg-black group-hover:opacity-[0.3] opacity-0 top-0 flex justify-center items-center rounded-[50%] transition-all duration-500">
-                                        <span className="text-white font-bold">画像を追加</span>
+                                        <span className="text-white font-bold z-20">画像を追加</span>
                                     </div>
                                 </label>
                                 <input onChange={petImgOnChange} className="hidden" type="file" name="" id={`thumbnail-0`} />
@@ -290,9 +342,9 @@ export default function PetAddForm() {
                                     onClick={submitFunc}
                                 >
                                     {!state.submitState ? (
-                                        <><FontAwesomeIcon icon={faPlus}/> 家族を追加</>
+                                        <div className="flex justify-center items-center gap-2"><Plus size={20}/> 家族を追加</div>
                                     ): (
-                                        <FontAwesomeIcon icon={faCircleNotch} spin size="lg"/>
+                                        <InputLoading />
                                     )}
                                 </button>
                                 <ErrorSpan>

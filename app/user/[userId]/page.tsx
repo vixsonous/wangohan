@@ -65,8 +65,8 @@ export default async function User() {
                     <TabList owned_recipes={recipes_data} liked_recipes={liked_recipes_data}/>
                     <div className="fixed bottom-8 z-[9999] right-8">
                         <Link className="relative" href={`/user/settings/${userDetails.user_id}`}>
-                            <img loading="lazy" src={'/Setting/settingpaw.webp'} className="h-[auto] w-[120px] md:w-[140px]  max-w-none" width={100} height={100}  alt="website banner" />
-                            <span className="absolute bottom-6 text-[13px] md:text-xl text-white right-12 md:right-12">設定</span>
+                            <img loading="lazy" src={'/Setting/settingpaw.webp'} className="h-[auto] w-[100px] md:w-[140px]  max-w-none" width={100} height={100}  alt="website banner" />
+                            <span className="absolute bottom-4 md:bottom-6 text-[13px] md:text-xl text-white right-10 md:right-12">設定</span>
                         </Link>
                     </div>
                 </div>

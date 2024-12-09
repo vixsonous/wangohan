@@ -1,5 +1,5 @@
 import { logEnd, logStart } from "@/action/lib";
-import { deleteRecipe, getRemainingCreatedRecipe, postIngredients, postInstructions, postRecipe, updateIngredients, updateInstructions, updateRecipe } from "@/action/recipe";
+import { deleteRecipe, getRemainingCreatedRecipe, getRemainingLikedRecipe, postIngredients, postInstructions, postRecipe, updateIngredients, updateInstructions, updateRecipe } from "@/action/recipe";
 import { getUserId } from "@/action/users";
 import { ERR_MSG, SUCC_MSG } from "@/constants/constants";
 import { instructions, recipe } from "@/constants/interface";
@@ -108,15 +108,15 @@ export const GET = async (req: NextRequest) => {
         const getUserData = await getUserId();
  
         if(String(params.get('category')) === 'created') {
-          const recipes = await getRemainingCreatedRecipe(9, 1, 0, getUserData);
+          const recipes = await getRemainingCreatedRecipe(10, 1, 0, getUserData);
           if(recipes.status === 500) return NextResponse.json({message: "Error getting recipes", body: []}, {status: 500});
           
           return NextResponse.json({message: SUCC_MSG.SUCCESS1, body: recipes.body}, {status: 200});
         } else {
-          const recipes = await getRemainingCreatedRecipe(9, 1, 0, getUserData);
+          const recipes = await getRemainingLikedRecipe(10, 1, 0, getUserData);
           if(recipes.status === 500) return NextResponse.json({message: "Error getting recipes", body: []}, {status: 500});
           
-          return NextResponse.json({message: SUCC_MSG.SUCCESS1, body: recipes}, {status: 200});
+          return NextResponse.json({message: SUCC_MSG.SUCCESS1, body: recipes.body}, {status: 200});
         }
 
     } catch(e) {

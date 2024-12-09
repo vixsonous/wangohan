@@ -3,18 +3,25 @@ import RecipeElementV3 from "@/app/components/RecipeElementV3";
 import { DisplayRecipe } from "@/constants/interface";
 import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Heart } from "@phosphor-icons/react/dist/ssr";
+import { CircleNotch, Heart } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
 
 const GAP = 2;
 
 export default function TabList({owned_recipes, liked_recipes}:{owned_recipes: DisplayRecipe[], liked_recipes: DisplayRecipe[]}) {
-    const [state, setState] = useState({
+  const [recipes, setRecipes] = useState({
+    owned_recipes: owned_recipes,
+    owned_recipes_loading: false,
+    liked_recipes: liked_recipes,
+    liked_recipes_loading: false,
+  })  
+  const [state, setState] = useState({
         active: true,
         imageLoaded: false,
         finishProcess: false,
-        loadingRecipes: false,
+        createdLoadingRecipes: false,
+        likedLoadingRecipes: false,
         error: '',
     })
 
@@ -27,6 +34,7 @@ export default function TabList({owned_recipes, liked_recipes}:{owned_recipes: D
     const getAllCreatedRecipes = async (e: React.MouseEvent<HTMLButtonElement>) => {
       e.preventDefault();
 
+      setState(prev => ({...prev, createdLoadingRecipes: true}));
       const res = await fetch('/api/recipe?category=created');
       if(!res.ok) {
         setState(prev => ({...prev, error: 'There was an error getting the recipes!'}));
@@ -34,7 +42,25 @@ export default function TabList({owned_recipes, liked_recipes}:{owned_recipes: D
       }
 
       const r = await res.json();
-      console.log(r.body);
+      const t = [...owned_recipes].concat(r.body);
+      setRecipes(prev => ({...prev, owned_recipes: t, owned_recipes_loading: true}));
+      setState(prev => ({...prev, createdLoadingRecipes: false}));
+    }
+
+    const getAllLikedRecipes = async (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.preventDefault();
+
+      setState(prev => ({...prev, likedLoadingRecipes: true}));
+      const res = await fetch('/api/recipe?category=liked');
+      if(!res.ok) {
+        setState(prev => ({...prev, error: 'There was an error getting the recipes!'}));
+        return;
+      }
+
+      const r = await res.json();
+      const t = [...liked_recipes].concat(r.body);
+      setRecipes(prev => ({...prev, liked_recipes: t, liked_recipes_loading: true}));
+      setState(prev => ({...prev, likedLoadingRecipes: false}));
     }
     return (
         <div className="tab-list p-4 w-full">
@@ -45,10 +71,10 @@ export default function TabList({owned_recipes, liked_recipes}:{owned_recipes: D
                   <span>したレシピ</span>
                 </button>
             </div>
-            <div ref={imgContainer} className={`${!state.active ? 'hidden' : ''} min-h-[50vh] lg:min-h-screen recipe-list__container max-w-xl grid ${owned_recipes.length > 0 ? 'grid-cols-3 md:grid-cols-4 lg:grid-cols-5' : 'grid-cols-1'} masonry p-1 gap-1 bg-secondary-bg items-center relative`}>
+            <div ref={imgContainer} className={`${!state.active ? 'hidden' : ''} ${recipes.owned_recipes.length === 0 ? 'min-h-[50vh] lg:min-h-screen' : ''} recipe-list__container max-w-xl grid ${owned_recipes.length > 0 ? 'grid-cols-3 md:grid-cols-4 lg:grid-cols-5' : 'grid-cols-1'} masonry p-1 gap-0.5 bg-secondary-bg items-center relative`}>
                 {
-                  owned_recipes.length > 0 ? (
-                    owned_recipes.map( (recipe, idx) => <div key={idx} className="relative pb-[100%] top-[0]" ref={ref => {imgRefs.current[idx] = ref}}>
+                  recipes.owned_recipes.length > 0 ? (
+                    recipes.owned_recipes.map( (recipe, idx) => <div key={idx} className="relative pb-[100%] top-[0]" ref={ref => {imgRefs.current[idx] = ref}}>
                         <Link href={`/recipe/show/` + recipe.recipe_id}>
                             <RecipeElementV3  key={idx} recipe={recipe}/>
                         </Link>
@@ -62,9 +88,9 @@ export default function TabList({owned_recipes, liked_recipes}:{owned_recipes: D
                   )
                 }
             </div>
-            <div ref={imgContainer} className={`${state.active ? 'hidden' : ''} min-h-[50vh] lg:min-h-screen recipe-list__container max-w-xl grid ${liked_recipes.length > 0 ? 'grid-cols-3 md:grid-cols-4 lg:grid-cols-5' : 'grid-cols-1'} masonry p-1 gap-1 bg-[#FFFAF0] items-center relative`}>
-                {liked_recipes.length > 0 ? (
-                  liked_recipes.map( (recipe, idx) => <div key={idx} className="relative pb-[100%] top-[0]" ref={ref => {imgRefs.current[idx] = ref}}>
+            <div ref={imgContainer} className={`${state.active ? 'hidden' : ''} ${recipes.owned_recipes.length === 0 ? 'min-h-[50vh] lg:min-h-screen' : ''} recipe-list__container max-w-xl grid ${liked_recipes.length > 0 ? 'grid-cols-3 md:grid-cols-4 lg:grid-cols-5' : 'grid-cols-1'} masonry p-1 gap-0.5 bg-[#FFFAF0] items-center relative`}>
+                {recipes.liked_recipes.length > 0 ? (
+                  recipes.liked_recipes.map( (recipe, idx) => <div key={idx} className="relative pb-[100%] top-[0]" ref={ref => {imgRefs.current[idx] = ref}}>
                     <Link href={`/recipe/show/` + recipe.recipe_id}>
                       <RecipeElementV3  key={idx} recipe={recipe}/>
                     </Link>
@@ -79,15 +105,21 @@ export default function TabList({owned_recipes, liked_recipes}:{owned_recipes: D
             </div>
             {
                 state.active ? (
-                    owned_recipes.length > 9 && (
+                  (recipes.owned_recipes.length > 9 && recipes.owned_recipes_loading === false) && (
                         <div className="w-[100%] flex justify-center">
-                            <button onClick={getAllCreatedRecipes} className="text-sm md:text-base font-bold p-4">全てのレシピを見る</button>
+                            <button onClick={getAllCreatedRecipes} disabled={state.createdLoadingRecipes} className="flex items-center gap-2 text-sm md:text-base font-bold p-4">
+                              {state.createdLoadingRecipes && <CircleNotch size={20} className="animate-spin"/>}
+                              全てのレシピを見る
+                            </button>
                         </div>
                     )
                 ) : (
-                    liked_recipes.length > 9 && (
+                  (recipes.liked_recipes.length > 9 && recipes.liked_recipes_loading === false) && (
                         <div className="w-[100%] flex justify-center">
-                            <button className="text-sm md:text-base font-bold p-4">全てのレシピを見る</button>
+                            <button onClick={getAllLikedRecipes} disabled={state.likedLoadingRecipes} className="flex items-center gap-2 text-sm md:text-base font-bold p-4">
+                              {state.likedLoadingRecipes && <CircleNotch size={20} className="animate-spin"/>}
+                              全てのレシピを見る
+                            </button>
                         </div>
                     )
                 )

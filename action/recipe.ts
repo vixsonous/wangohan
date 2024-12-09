@@ -506,6 +506,7 @@ export const getRemainingCreatedRecipe = async (offset: number, page: number, li
     if(cachedData) {
       return {message: '完了',body: cachedData, status: 200};
     }
+
       const recipes = await db.selectFrom("recipes_table").select(["recipe_name", "recipe_id", "recipe_age_tag", 
           "recipe_event_tag","recipe_size_tag", "recipe_description","user_id", "created_at", "total_likes", "total_views"
       ])
@@ -521,6 +522,37 @@ export const getRemainingCreatedRecipe = async (offset: number, page: number, li
       return {message: '完了',body: updated_recipes, status: 200};
   } catch(e) {
       let _e = (e as Error).message;
+      return {message: _e, body: undefined, status: 500};
+  }
+}
+
+export const getRemainingLikedRecipe = async (offset: number, page: number, limit: number = 0, user_id: number) => {
+  try {
+    const off = offset * page;
+    const cacheKey = `recipes-liked-${off}`;
+    const cachedData = recipe_cache.get(cacheKey) as DisplayRecipe[];
+
+    if(cachedData) {
+      return {message: '完了',body: cachedData, status: 200};
+    }
+
+    const likes = await db.selectFrom("likes_table").select("recipe_id").where("user_id", "=", user_id).offset(off).execute();
+    const ids = likes.map(l => l.recipe_id);
+      const recipes = await db.selectFrom("recipes_table").select(["recipe_name", "recipe_id", "recipe_age_tag", 
+          "recipe_event_tag","recipe_size_tag", "recipe_description","user_id", "created_at", "total_likes", "total_views"
+      ])
+          .where("recipe_id", "in", ids)
+          .orderBy("created_at", "desc")
+          .execute();
+    
+      const updated_recipes = await processRecipes(recipes);
+
+      recipe_cache.set(cacheKey, updated_recipes);
+
+      return {message: '完了',body: updated_recipes, status: 200};
+  } catch(e) {
+      let _e = (e as Error).message;
+      console.error("[Error]: " + _e);
       return {message: _e, body: undefined, status: 500};
   }
 }

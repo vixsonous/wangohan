@@ -2,16 +2,19 @@
 import { faCheck, faCircleNotch, faClose, faEdit, faPlus, faSave } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, {  ChangeEvent, MouseEventHandler, SyntheticEvent, useEffect, useState } from "react";
-const PetEditForm = React.lazy(() => import("./PetEditForm"));
-const PetAddForm = React.lazy(() => import("./PetAddForm"));
-const ErrorSpan = React.lazy(() => import("@/app/components/TextComponents/ErrorSpan"));
 import { DogData, userDetails } from "@/constants/interface";
 import { POPUPTIME, SUCC_MSG, textColor } from "@/constants/constants";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { hideSuccess, showSuccess } from "@/lib/redux/states/messageSlice";
 import { setPets } from "@/lib/redux/states/petSlice";
 import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
+import { CircleNotch } from "@phosphor-icons/react/dist/ssr";
+import InputLoading from "@/app/components/ElementComponents/InputLoading";
 const OptImage = React.lazy(() => import("@/app/components/ElementComponents/Image"));
+const PetEditForm = React.lazy(() => import("./PetEditForm"));
+const PetAddForm = dynamic(() => import("./PetAddForm"), { ssr: false, loading: () => <InputLoading />});
+const ErrorSpan = React.lazy(() => import("@/app/components/TextComponents/ErrorSpan"));
 
 interface Props {
     userDetails: userDetails,
@@ -152,7 +155,7 @@ export default function EditForm({userDetails, pets} : Props) {
                 <button 
                     disabled={state.submitState} 
                     onClick={submitBtnOnClick} //
-                    className={`bg-[#ffb762] w-[150px] border-[1px] border-[${state.submitState ? '#ffb762' : '#FFD99A'}] text-white py-[10px] rounded-md text-[12px] self-center sm:text-[16px]`} 
+                    className={`bg-[#ffb762] mt-4 w-[150px] border-[1px] border-[${state.submitState ? '#ffb762' : '#FFD99A'}] text-white py-[10px] rounded-md text-[12px] self-center sm:text-[16px]`} 
                     type="submit"
                 >
                     {!state.submitState ? (

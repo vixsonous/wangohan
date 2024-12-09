@@ -109,7 +109,7 @@ export default async function RootLayout({
                     <Link href="/inquiry/terms-of-service" className="text-[8px] md:text-xs self-center flex">利用規約</Link>
                     <Link href="/inquiry/disclaimer" className="text-[8px] md:text-xs self-center flex">免責事項</Link>
                     <Link href="/inquiry/privacy-policy" className="text-[8px] md:text-xs self-center flex">プライバシーポリシー</Link>
-                    <Link href="/user" className="text-[8px] md:text-xs self-center flex">Myページ</Link>
+                    <Link href={user.user_id !== 0 ? `/user/${user.user_id}` : '/login'} className="text-[8px] md:text-xs self-center flex">Myページ</Link>
                     <Link href="/" className="text-[8px] md:text-xs self-center flex">HOME</Link>
                     <Link href="/inquiry/send-inquiry" className="text-[8px] md:text-xs self-center flex">ご意見・お問い合わせ</Link>
                   </div>

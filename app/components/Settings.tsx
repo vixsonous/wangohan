@@ -76,7 +76,7 @@ export default function Settings() {
     return (
         <>
         <button ref={btn} onClick={() => {setShowSettings(true);}}>
-            <img src={'/icons/bone.webp'} className="self-center rounded-md h-[auto] w-[40px] relative" width={100} height={100}  alt="website banner" />
+            <img src={'/icons/bone.webp'} className="self-center rounded-md h-[auto] w-16 md:w-10 relative" width={100} height={100}  alt="website banner" />
         </button>
         <AnimatePresence>
             {showSettings && (
@@ -117,19 +117,19 @@ export default function Settings() {
                             </div>
                           </Link>
           
-                          <Link onClick={openSettings} className="w-full hover:opacity-75 px-4 py-1 rounded-full" href="/user/settings">
+                          <button disabled onClick={openSettings} className="w-full opacity-75 hover:opacity-75 px-4 py-1 rounded-full">
                             <div className="w-full text-sm flex justify-between items-center">
                                 <Translate size={20}/>
                                 言語
                             </div>
-                          </Link>
+                          </button>
           
-                          <Link onClick={openSettings} className="w-full hover:opacity-75 px-4 py-1 rounded-full" href="/">
+                          <button disabled onClick={openSettings} className="w-full opacity-75 hover:opacity-75 px-4 py-1 rounded-full">
                             <div className="w-full text-sm flex justify-between items-center">
                                 <PawPrint size={20}/>
                                 コラム
                             </div>
-                          </Link>
+                          </button>
           
                           <Button onClick={logout}>
                             <div  className="w-full hover:opacity-75 text-sm flex justify-between items-center px-4 py-1 rounded-full">

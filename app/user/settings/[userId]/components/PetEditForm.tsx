@@ -203,7 +203,7 @@ export default function PetEditForm({petData, className=''} : Props) {
                     <OptImage src={petData.pet_image} centered className="block md:hidden rounded-full object-cover" square width={60} height={60}  alt="website banner"/>
                 </div>
                 <div className="flex flex-col gap-2 text-[#5b5351]">
-                    <p className="text-base md:text-xl font-bold">{petData.pet_name}</p>
+                    <p className="text-base md:text-xl font-bold text-ellipsis overflow-hidden max-w-[95px]">{petData.pet_name}</p>
                     <p className="text-xs md:text-sm flex gap-2 flex-wrap"><span>{petData.pet_birthdate.split('T')[0]}</span><span>{`(${calculateAge(new Date(petData.pet_birthdate))}才) `}</span></p>
                     <p className="text-xs md:text-sm">{petData.pet_breed}</p>
                 </div> 

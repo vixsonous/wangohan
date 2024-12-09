@@ -128,7 +128,7 @@ export default memo(function LayoutSettings({isLoggedIn, user_id} : {isLoggedIn:
       <div className={'menu flex gap-6'}>
         <div className="self-center relative">
           <button ref={btn} onClick={openNotificationOnClick}>
-            <img src={'/icons/notification.webp'} className="self-center rounded-md h-[auto] z-10 w-[35px] relative" width={100} height={100}  alt="website banner" />
+            <img src={'/icons/notification.webp'} className="self-center rounded-md h-[auto] z-10 w-16 md:w-10 relative" width={100} height={100}  alt="website banner" />
           </button>
           {notificationCount > 0 && <span className='absolute z-10 top-4 left-6 bg-red-600 text-white p-2 text-xs rounded-full flex justify-center items-center h-4 w-4'>{
             notificationCount  
