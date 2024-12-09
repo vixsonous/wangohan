@@ -1,7 +1,7 @@
 "use client";
 
 import { DogData } from "@/constants/interface";
-import { useEffect, lazy, useState } from "react";
+import React, { useEffect, lazy, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { setPets } from "@/lib/redux/states/petSlice";
 
@@ -36,7 +36,7 @@ export default function PetList({pets} : {pets: Array<DogData>}) {
           isSet ? (
             <div className={`pet-list py-16 p-4 grid grid-cols-2 ${petState.length <=3 ? state.mdStart:'md:grid-cols-3'} ${petState.length <=3 ? `lg:grid-cols-${petState.length}`:'lg:grid-cols-5'} gap-8 items-center`}>
               { 
-                petState.map((pet, idx) => <PetContainer petData={pet} />)
+                petState.map((pet, idx) => <React.Fragment key={idx}><PetContainer petData={pet} /></React.Fragment>)
               }
             </div>
           ) : (

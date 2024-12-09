@@ -207,7 +207,7 @@ export async function getUserId() {
 
   const decryptedSession = await decrypt(session as string);
   
-  return decryptedSession.user.user_id;
+  return decryptedSession ? decryptedSession.user.user_id as number : -1;
 }
 
 export async function retrieveUserRecipes(user_id: number, page: number) {

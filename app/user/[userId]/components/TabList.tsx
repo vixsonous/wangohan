@@ -5,7 +5,7 @@ import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Heart } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 const GAP = 2;
 
@@ -14,6 +14,8 @@ export default function TabList({owned_recipes, liked_recipes}:{owned_recipes: D
         active: true,
         imageLoaded: false,
         finishProcess: false,
+        loadingRecipes: false,
+        error: '',
     })
 
     const imgRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -21,6 +23,19 @@ export default function TabList({owned_recipes, liked_recipes}:{owned_recipes: D
 
     const myRecipeActivate = () => setState(prev => ({...prev, active: true}));
     const likedRecipeActivate = () => setState(prev => ({...prev, active: false}));
+
+    const getAllCreatedRecipes = async (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.preventDefault();
+
+      const res = await fetch('/api/recipe?category=created');
+      if(!res.ok) {
+        setState(prev => ({...prev, error: 'There was an error getting the recipes!'}));
+        return;
+      }
+
+      const r = await res.json();
+      console.log(r.body);
+    }
     return (
         <div className="tab-list p-4 w-full">
             <div className="flex items-center">
@@ -66,13 +81,13 @@ export default function TabList({owned_recipes, liked_recipes}:{owned_recipes: D
                 state.active ? (
                     owned_recipes.length > 9 && (
                         <div className="w-[100%] flex justify-center">
-                            <button className="text-[10px] font-bold p-[10px]">全てのレシピを見る</button>
+                            <button onClick={getAllCreatedRecipes} className="text-sm md:text-base font-bold p-4">全てのレシピを見る</button>
                         </div>
                     )
                 ) : (
                     liked_recipes.length > 9 && (
                         <div className="w-[100%] flex justify-center">
-                            <button className="text-[10px] font-bold p-[10px]">全てのレシピを見る</button>
+                            <button className="text-sm md:text-base font-bold p-4">全てのレシピを見る</button>
                         </div>
                     )
                 )

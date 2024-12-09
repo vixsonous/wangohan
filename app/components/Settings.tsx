@@ -80,7 +80,7 @@ export default function Settings() {
         </button>
         <AnimatePresence>
             {showSettings && (
-                <motion.div initial={{x: 100}} animate={{x: 0}} exit={{x: 500}} ref={settings} style={{width: 'clamp(200px, 50%, 300px)'}} className="z-50 absolute border-l-2 border-[#ffb762] right-0 overflow-x-hidden h-[100vh] top-[0px] bg-primary-bg">
+                <motion.div initial={{x: 100}} animate={{x: 0}} exit={{x: 500}} ref={settings} style={{width: 'clamp(300px, 50%, 300px)'}} className="z-50 absolute border-l-2 border-[#ffb762] right-0 overflow-x-hidden h-[100vh] top-[0px] bg-primary-bg">
                     <div className="w-full p-[10px]">
                         <button onClick={openSettings}>
                             <FontAwesomeIcon icon={faArrowRight} size="lg"/>

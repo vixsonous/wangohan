@@ -496,3 +496,31 @@ export const updateLike = async (recipe_id: number, user_id: number, liked: bool
         return {message: (e as Error).message, body: undefined, status: 500};
     }
 }
+
+export const getRemainingCreatedRecipe = async (offset: number, page: number, limit: number = 0, user_id: number) => {
+  try {
+    const off = offset * page;
+    const cacheKey = `recipes-created-${off}`;
+    const cachedData = recipe_cache.get(cacheKey) as DisplayRecipe[];
+
+    if(cachedData) {
+      return {message: '完了',body: cachedData, status: 200};
+    }
+      const recipes = await db.selectFrom("recipes_table").select(["recipe_name", "recipe_id", "recipe_age_tag", 
+          "recipe_event_tag","recipe_size_tag", "recipe_description","user_id", "created_at", "total_likes", "total_views"
+      ])
+          .where("user_id", "=", user_id)
+          .orderBy("created_at", "desc")
+          .offset(off)
+          .execute();
+
+      const updated_recipes = await processRecipes(recipes);
+
+      recipe_cache.set(cacheKey, updated_recipes);
+
+      return {message: '完了',body: updated_recipes, status: 200};
+  } catch(e) {
+      let _e = (e as Error).message;
+      return {message: _e, body: undefined, status: 500};
+  }
+}

@@ -16,7 +16,7 @@ import { getDecryptedSession } from "@/action/lib";
 import { getUserDetails } from "@/action/users";
 import React from "react";
 import BarMainSearch from "./components/ElementComponents/BarMainSearch";
-import OptImage from "./components/ElementComponents/Image";
+import { GoogleAnalytics  } from '@next/third-parties/google'
 
 const ErrorModal = React.lazy(() => import("./components/ElementComponents/ErrorModal"));
 const SuccessModal = React.lazy(() => import("./components/ElementComponents/SuccessModal"));
@@ -72,6 +72,7 @@ export default async function RootLayout({
           <head>
             <link rel="icon" href="/favicon.ico" sizes="any" />
           </head>
+          <GoogleAnalytics gaId="G-FG7VR2H1WJ"/>
           <body className={`${inter.className} bg-[#FFE9C9] h-full min-h-[100vh] flex flex-col text-[#523636]`}>
             <ErrorModal />
             <SuccessModal />
