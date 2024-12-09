@@ -13,7 +13,7 @@ export const POST = async (req: NextRequest) => {
         const recipe_id = Number(body.recipe_id);
         const user_id = await getUserId();
 
-        if(!user_id) throw new Error(ERR_MSG.ERR10);
+        if(user_id === -1) throw new Error(ERR_MSG.ERR10);
 
         const st = logStart("Posting Like")
         const res = await postLike(recipe_id, user_id);
@@ -36,7 +36,7 @@ export const PATCH = async (req: NextRequest) => {
         const user_id = await getUserId();
         const liked = body.isLiked;
 
-        if(!user_id) throw new Error(ERR_MSG.ERR10);
+        if(user_id === -1) throw new Error(ERR_MSG.ERR10);
 
         const st = logStart("Updating Like")
         const res = await updateLike(recipe_id, user_id, liked);

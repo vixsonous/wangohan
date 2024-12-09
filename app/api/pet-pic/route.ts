@@ -40,7 +40,7 @@ export const PATCH = async (req: NextRequest) => {
         if(!petPic) throw new Error(ERR_MSG.ERR31);
         
         const user_id = await getUserId();
-        const folder = `${padStartIds(user_id)}/pets/${petId}`;
+        const folder = `${padStartIds(String(user_id))}/pets/${petId}`;
 
         await s3DeleteFilesInFolder(folder);
         const uploadedPetPic = await uploadPetPic(petPic, Number(petId));
