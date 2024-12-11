@@ -6,7 +6,7 @@ export async function middleware(request: NextRequest) {
     
     const protectedRoutes = []
 
-    if(!currentUser && (request.nextUrl.pathname.startsWith('/user')
+    if(!currentUser && (request.nextUrl.pathname.startsWith('/user/settings')
         || request.nextUrl.pathname.startsWith('/recipe/create')
         || request.nextUrl.pathname.startsWith('/recipe/edit')
         || request.nextUrl.pathname.startsWith('/signup/personal-info')
@@ -16,7 +16,7 @@ export async function middleware(request: NextRequest) {
     }
 
     if (currentUser && request.nextUrl.pathname.startsWith('/login')) {
-        return Response.redirect(new URL('/user/settings', request.url));
+        return Response.redirect(new URL('/user', request.url));
     }
 
     if(currentUser) {
