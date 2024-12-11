@@ -10,7 +10,7 @@ import { processRecipes } from "./recipe";
 import { emptyUser, nonUser } from "@/constants/objects";
 import { sql } from "kysely";
 
-const FRONT_PAGE_RECIPE_QUERY_LIMIT = 10;
+const FRONT_PAGE_RECIPE_QUERY_LIMIT = 12;
 
 export async function getUser(email: string, password: string) {
 
@@ -223,6 +223,7 @@ export async function retrieveUserRecipes(user_id: number, page: number) {
         .offset(OFFSET)
         .execute();
     const updated_recipes = await processRecipes(recipes);
+    console.log(updated_recipes.length);
 
     return {message: 'asd!',body: updated_recipes, status: 200};
   } catch(e) {
