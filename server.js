@@ -5,6 +5,7 @@ import { Server } from "socket.io";
 import path from "node:path";
 import sharp from "sharp";
 import fs from 'fs/promises';
+import nodemailer from 'nodemailer';
 
 
 const dev = process.env.NODE_ENV !== "production";
@@ -91,6 +92,42 @@ app.prepare().then(() => {
     
   });
 
+  expApp.post('/api/email', async (req, res) => {
+    try {
+      const {name, title, email, type, message} = req.body;
+  
+      const transporter = nodemailer.createTransport({
+        host: 'smtp.gmail.com',
+        port:465,
+        secure: true,
+        auth: {
+          user: process.env.NODEMAILER_APP_EMAIL,
+          pass: process.env.NODEMAILER_APP_PASS
+        }
+      });
+  
+      const mailOptions = {
+        cc:  email,
+        to: process.env.NODEMAILER_APP_EMAIL,
+        subject: title,
+        html: message
+      }
+  
+      const response = transporter.sendMail(mailOptions, (error, info) => {
+        if(error) {
+          return res.status(500).json({message: error, data: info.response});
+        } else {
+          return res.status(200).json({message: 'Success!', data: undefined});
+        }
+      });
+
+      return response;
+  
+    } catch(e) {
+      return res.status(500).json({message:e.message, data: undefined});
+    }
+  });
+
   expApp.all("*", (req, res) => {
     return handler(req,res);
   });
@@ -151,13 +188,13 @@ app.prepare().then(() => {
       const conns = userSockets.get(data.recipe_owner_id);
 
       for(let i = 0; i < conns.length; i++) {
-        io.to(conns[i]).emit('review recipe', message);
+        io.to(conns[i]).emit('review recipe', JSON.stringify({...data, inserted: true}));
       }
   
-      await fetch(`${be}/api/socket`, {
+      await fetch(`${be}/api/notification`, {
         method: 'POST',
-        body: JSON.stringify({message: 'This is a message'})
-      })
+        body: JSON.stringify({...data})
+      });
     });
 
     socket.on('disconnect', () => {

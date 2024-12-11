@@ -8,10 +8,11 @@ import OptImage from "./ElementComponents/Image";
 import Link from "next/link";
 import { Heart, Star } from "@phosphor-icons/react/dist/ssr";
 import { textColor } from "@/constants/constants";
+import { NotificationData } from "@/constants/interface";
 
 const socket = getSocket(); 
 
-export default memo(function LayoutSettings({isLoggedIn, user_id} : {isLoggedIn: boolean, user_id: number}) {
+export default memo(function LayoutSettings({isLoggedIn, user_id, db_notifications} : {isLoggedIn: boolean, user_id: number,db_notifications: Array<String>}) {
 
     const pathname = usePathname();
     const [user, setUser] = useState(isLoggedIn);
@@ -43,7 +44,7 @@ export default memo(function LayoutSettings({isLoggedIn, user_id} : {isLoggedIn:
         }
 
         setNotificationCount(prev.filter(x => !JSON.parse(x as string).is_read).length);
-        sessionStorage.setItem(String(user_id), JSON.stringify(prev));
+        // sessionStorage.setItem(String(user_id), JSON.stringify(prev));
         return [...prev];
       });
     },[]);
@@ -56,16 +57,14 @@ export default memo(function LayoutSettings({isLoggedIn, user_id} : {isLoggedIn:
         prev = parsedMessage.recipe_owner_id === user_id ? [...prev, message] : [...prev];
 
         setNotificationCount(prev.filter(x => !JSON.parse(x as string).is_read).length);
-        sessionStorage.setItem(String(user_id), JSON.stringify(prev));
+        // sessionStorage.setItem(String(user_id), JSON.stringify(prev));
         return [...prev];
       });
     },[]);
 
     useEffect(() => {
-      const sessionNotifications = sessionStorage.getItem(String(user_id));
-      const notifArr = sessionNotifications ? (JSON.parse(sessionNotifications) as String[]) : [] as String[];
-      setNotifications([...notifArr]);
-      setNotificationCount(notifArr.filter(x => !JSON.parse(x as string).is_read).length);
+      setNotifications([...db_notifications]);
+      setNotificationCount(db_notifications.filter(x => !JSON.parse(x as string).is_read).length);
     },[]);
 
     const fetchSession = useCallback(async () => {
@@ -94,15 +93,20 @@ export default memo(function LayoutSettings({isLoggedIn, user_id} : {isLoggedIn:
       }
     },[user_id]);
 
-    const openNotificationOnClick = useCallback(() => {
+    const openNotificationOnClick = useCallback(async () => {
       
       setNotifications(prev => {
         prev = prev.map(x => JSON.stringify({...JSON.parse(x as string), is_read: true}))
-        sessionStorage.setItem(String(user_id), JSON.stringify([...prev]));
+        // sessionStorage.setItem(String(user_id), JSON.stringify([...prev]));
         return [...prev];
       });
+      const send = notifications.map(x => JSON.stringify({...JSON.parse(x as string), is_read: true}));
       setNotificationCount(0);
       setOpenNotification(prev => !prev);
+      const res = await fetch('/api/notification', {
+        method: 'PATCH',
+        body: JSON.stringify(send)
+      });
     },[notificationCount]);
 
   const settings = useRef<HTMLDivElement>(null);

@@ -299,8 +299,7 @@ export async function uploadNotifications(
       is_read: is_read,
     };
 
-    const conflictKeys = ['user_id', 'recipe_owner_id', 'type'];
-    const insert =  db.insertInto("notifications_table").values(dt).compile();
+    const conflictKeys = ['user_id', 'recipe_owner_id', 'type', 'recipe_id'];
     const conflictColumns = conflictKeys.map(key => `"${key}"`).join(', ');
 
     const updateFields = Object.keys(dt)
@@ -309,15 +308,15 @@ export async function uploadNotifications(
     .join(', ');
 
     const upsertQuery = sql`
-    INSERT INTO notifications (
+    INSERT INTO notifications_table (
       user_id, recipe_owner_id, notification_content, type,
       recipe_image, recipe_id, liked, updated_at, created_at, is_read
     ) VALUES (
       ${dt.user_id}, ${dt.recipe_owner_id}, ${dt.notification_content}, ${dt.type},
-      ${dt.recipe_image}, ${dt.recipe_id}, ${dt.liked}, ${dt.updated_at}, ${dt.created_at}, ${dt.is_read}
+      ${dt.recipe_image}, ${dt.recipe_id}, ${dt.liked || false}, ${dt.updated_at}, ${dt.created_at}, ${dt.is_read}
     )
       ON CONFLICT (${sql.raw(conflictColumns)})
-      WHERE type = 'like'
+      WHERE type = ${dt.type}
       DO UPDATE SET ${sql.raw(updateFields)}
     `.compile(db);
     
@@ -367,5 +366,17 @@ export async function updateNotifications(
 }
 
 export async function getNotifications(user_id: number) {
+  try {
+    const notifs = await db.selectFrom("notifications_table")
+        .selectAll()
+        .where("user_id", "=", user_id)
+        .orderBy("created_at desc")
+        .execute();
 
+    console.log("[Success]: Successfully retrieved notifications!");
+    return notifs;
+  } catch(e) {
+    console.error("[Error]: " + (e as Error).message);
+    return [];
+  }
 }

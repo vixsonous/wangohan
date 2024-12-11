@@ -17,6 +17,7 @@ import CommentSection from "./components/CommentSection";
 import LikeRecipe from "@/app/components/ElementComponents/LikeRecipe";
 import { getUserDetails } from "@/action/users";
 import Head from "next/head";
+import Link from "next/link";
 
 type Props = {
     params: {recipeId: String},
@@ -80,7 +81,7 @@ export default async function ShowRecipe({params, searchParams}:{params: {recipe
       "@type": "Recipe",
       "name": recipe_data.recipe_name,
       "description": recipe_data.recipe_description,
-      "image": recipe_data.recipe_images[0].recipe_image,
+      "image": recipe_data.recipe_images.length > 0 ? recipe_data.recipe_images[0].recipe_image : "",
       "author": {
         "@type": "Person",
         "name": recipe_data.user.user_codename
@@ -153,7 +154,9 @@ export default async function ShowRecipe({params, searchParams}:{params: {recipe
                     <span>No. {recipe_data.recipe_id}</span>
                     <span className="flex items-center gap-[10px]">
                         Recipe by 
-                        <img src={user_image} className="h-[30px] w-[30px] rounded-[100px] object-cover" width={10000} height={10000}  alt="website banner" />
+                        <Link href={"/user/" + recipe_data.user.user_id}>
+                          <img src={user_image} className="h-[30px] w-[30px] rounded-[100px] object-cover" width={100} height={100}  alt="website banner" />
+                        </Link>
                     </span>
                 </div>
                 <div className="w-full relative">

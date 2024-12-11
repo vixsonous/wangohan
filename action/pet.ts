@@ -121,7 +121,7 @@ export const getBdayPets = async () => {
         curMonth
     )
     .execute()
-    console.log("[Success]: " + bdayPets);
+    console.log("[Success]: Successfully retrieved birthday pets");
     return bdayPets;
   } catch (e) {
     console.error("[Error]:" + (e as Error).message);

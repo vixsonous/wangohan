@@ -289,7 +289,7 @@ export default function PetAddForm() {
                             <div className="flex flex-col gap-[5px] text-[#5b5351]">
                                 <label className="group">
                                     <span>愛犬の名前</span>
-                                    <label htmlFor="petName" className="flex items-center justify-center relative w-[100%] px-[10px] py-[5px] border-[2px] rounded-md border-[#ffcd92]">
+                                    <label htmlFor="petName" className="h-10 flex items-center justify-center relative w-[100%] px-[10px] py-[5px] border-[2px] rounded-md border-[#ffcd92]">
                                         <input 
                                             id="pet-name" 
                                             className="w-[100%] focus:outline-none text-[1em] bg-[transparent] text-left font-bold text-[#5b5351]" 
@@ -304,7 +304,7 @@ export default function PetAddForm() {
                                 </label>
                                 <label className="group">
                                     <span>誕生日</span>
-                                    <label htmlFor="petBday" className="appearance-none w-full flex items-center justify-between relative flex-wrap w-[100%] px-[10px] py-[4px] border-[2px] rounded-md border-[#ffcd92]">
+                                    <label htmlFor="petBday" className="h-10 appearance-none w-full flex items-center justify-between relative flex-wrap px-4 py-2 border-[2px] rounded-md border-[#ffcd92]">
                                         <input 
                                             className="appearance-none focus:outline-none text-[1em] bg-[transparent] text-left font-bold text-[#5b5351]" 
                                             value={state.pet.petBday && state.pet.petBday.valueOf() !== 0 ? 
@@ -322,7 +322,7 @@ export default function PetAddForm() {
                                 </label>
                                 <label className="group">
                                     <span>犬種</span>
-                                    <label htmlFor="petBreed" className="flex items-center justify-center relative w-[100%] px-[10px] py-[5px] border-[2px] rounded-md border-[#ffcd92]">
+                                    <label htmlFor="petBreed" className="h-12 flex items-center justify-center relative w-[100%] px-[10px] py-[5px] border-[2px] rounded-md border-[#ffcd92]">
                                         <input 
                                             value={state.pet.petBreed} 
                                             className="w-[100%] focus:outline-none text-[1em] bg-[transparent] text-left font-bold text-[#5b5351]" 

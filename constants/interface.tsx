@@ -84,6 +84,20 @@ export interface DBRecipeData {
     created_at: Date;
 }
 
+export interface NotificationData {
+  user_id: number;
+  updated_at: Date;
+  created_at: Date;
+  notification_id: number;
+  recipe_owner_id: number;
+  notification_content: string;
+  is_read: boolean;
+  type: string;
+  liked: boolean;
+  recipe_id: number;
+  recipe_image: string;
+}
+
 export interface RecipeData {
     recipe_id: number;
     user_id: number;

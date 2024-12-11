@@ -13,10 +13,12 @@ import 'swiper/css/scrollbar';
 import 'swiper/css/thumbs';
 import StoreProvider from "./StoreProvide";
 import { getDecryptedSession } from "@/action/lib";
-import { getUserDetails } from "@/action/users";
+import { getNotifications, getUserDetails } from "@/action/users";
 import React from "react";
 import BarMainSearch from "./components/ElementComponents/BarMainSearch";
 import { GoogleAnalytics  } from '@next/third-parties/google'
+import { getComments } from "@/action/comments";
+import { NotificationData } from "@/constants/interface";
 
 const ErrorModal = React.lazy(() => import("./components/ElementComponents/ErrorModal"));
 const SuccessModal = React.lazy(() => import("./components/ElementComponents/SuccessModal"));
@@ -51,15 +53,6 @@ export const metadata:Metadata = {
     type: 'website',
     images: [
         { url: 'https://wangohanjp.com/logo-final.webp', width: 500, height: 500, alt: 'わんごはん' }
-    ]
-  },
-  twitter: {
-    card: 'summary_large_image',
-    site: '@your_twitter_handle',
-    title: 'わんごはん - 愛犬の健康を守るレシピサイト',
-    description: '愛犬のための簡単な手作りごはんレシピを投稿・検索！',
-    images: [
-      'https://wangohanjp.com/logo-final.webp'
     ]
   },
   robots: {
@@ -103,8 +96,15 @@ export default async function RootLayout({
     user_codename: ''
   };
 
+  let notifications:Array<String> = [];
+
   if(decryptedSession) {
-    const user_details = await getUserDetails(decryptedSession.user.user_id);
+    const [user_details, notif_temp] = await Promise.all([
+      await getUserDetails(decryptedSession.user.user_id), 
+      await getNotifications(decryptedSession.user.user_id)
+    ]);
+
+    notifications = notif_temp.map( n => JSON.stringify(n));
 
     user.user_id= user_details.user_id,
     user.user_image= user_details.user_image !== '' ? user_details.user_image : '/icons/user.webp',
@@ -112,7 +112,6 @@ export default async function RootLayout({
   }
 
   const isLoggedIn = decryptedSession ? true : false;
-
   return (
     <StoreProvider count={0}>
       {
@@ -138,7 +137,7 @@ export default async function RootLayout({
                 </Link>
                 <BarMainSearch />
               </div>
-              <LayoutSettings user_id={user.user_id} isLoggedIn={isLoggedIn}/>
+              <LayoutSettings user_id={user.user_id} isLoggedIn={isLoggedIn} db_notifications={notifications}/>
               <div className="absolute top-0 left-0 w-[100%] h-[100%] bg-[#FFFAF0] opacity-[0.9] z-[-1]"></div>
             </div>
             

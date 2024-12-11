@@ -9,7 +9,15 @@ import React, { useEffect, useRef, useState } from "react";
 
 const GAP = 2;
 
-export default function TabList({owned_recipes, liked_recipes}:{owned_recipes: DisplayRecipe[], liked_recipes: DisplayRecipe[]}) {
+export default function TabList({
+  owned_recipes, 
+  liked_recipes,
+  curUser
+}:{
+  owned_recipes: DisplayRecipe[], 
+  liked_recipes: DisplayRecipe[],
+  curUser: boolean
+}) {
   const [recipes, setRecipes] = useState({
     owned_recipes: owned_recipes,
     owned_recipes_loading: false,
@@ -66,10 +74,12 @@ export default function TabList({owned_recipes, liked_recipes}:{owned_recipes: D
         <div className="tab-list p-4 w-full">
             <div className="flex items-center">
                 <button onClick={myRecipeActivate} className={`${state.active ? 'bg-[#5b5351] text-white' : 'bg-[#FFFAF0] text-[#5b5351]'} py-2 lg:py-4 lg:px-8 px-4 text-[10px] sm:text-xs font-bold rounded-tl`}>自分のレシピ</button>
-                <button onClick={likedRecipeActivate} className={`${!state.active ? 'bg-[#5b5351] text-white' : 'bg-[#FFFAF0] text-[#5b5351]'} flex items-center gap-1 lg:gap-2 py-2 lg:py-4 lg:px-8 px-4 text-[10px] sm:text-xs font-bold rounded-tr`}>
-                  <Heart size={16} color={`${state.active ? '#5b5351' : '#fff'}`}/>
-                  <span>したレシピ</span>
-                </button>
+                {curUser && (
+                  <button onClick={likedRecipeActivate} className={`${!state.active ? 'bg-[#5b5351] text-white' : 'bg-[#FFFAF0] text-[#5b5351]'} flex items-center gap-1 lg:gap-2 py-2 lg:py-4 lg:px-8 px-4 text-[10px] sm:text-xs font-bold rounded-tr`}>
+                    <Heart size={16} color={`${state.active ? '#5b5351' : '#fff'}`}/>
+                    <span>したレシピ</span>
+                  </button>
+                )}
             </div>
             <div ref={imgContainer} className={`${!state.active ? 'hidden' : ''} ${recipes.owned_recipes.length === 0 ? 'min-h-[50vh] lg:min-h-screen' : ''} recipe-list__container max-w-xl grid ${owned_recipes.length > 0 ? 'grid-cols-3 md:grid-cols-4 lg:grid-cols-5' : 'grid-cols-1'} masonry p-1 gap-0.5 bg-secondary-bg items-center relative`}>
                 {
@@ -88,21 +98,25 @@ export default function TabList({owned_recipes, liked_recipes}:{owned_recipes: D
                   )
                 }
             </div>
-            <div ref={imgContainer} className={`${state.active ? 'hidden' : ''} ${recipes.owned_recipes.length === 0 ? 'min-h-[50vh] lg:min-h-screen' : ''} recipe-list__container max-w-xl grid ${liked_recipes.length > 0 ? 'grid-cols-3 md:grid-cols-4 lg:grid-cols-5' : 'grid-cols-1'} masonry p-1 gap-0.5 bg-[#FFFAF0] items-center relative`}>
-                {recipes.liked_recipes.length > 0 ? (
-                  recipes.liked_recipes.map( (recipe, idx) => <div key={idx} className="relative pb-[100%] top-[0]" ref={ref => {imgRefs.current[idx] = ref}}>
-                    <Link href={`/recipe/show/` + recipe.recipe_id}>
-                      <RecipeElementV3  key={idx} recipe={recipe}/>
-                    </Link>
-                  </div>)
-                ) : (
-                  <div className="w-full h-full flex justify-center items-center">
-                    <span className="font-bold text-lg lg:text-2xl">
-                      お気に入りのレシピを見つけましょう。
-                    </span>
-                  </div>
-                )}
-            </div>
+            {
+              curUser && (
+                <div ref={imgContainer} className={`${state.active ? 'hidden' : ''} ${recipes.owned_recipes.length === 0 ? 'min-h-[50vh] lg:min-h-screen' : ''} recipe-list__container max-w-xl grid ${liked_recipes.length > 0 ? 'grid-cols-3 md:grid-cols-4 lg:grid-cols-5' : 'grid-cols-1'} masonry p-1 gap-0.5 bg-[#FFFAF0] items-center relative`}>
+                  {recipes.liked_recipes.length > 0 ? (
+                    recipes.liked_recipes.map( (recipe, idx) => <div key={idx} className="relative pb-[100%] top-[0]" ref={ref => {imgRefs.current[idx] = ref}}>
+                      <Link href={`/recipe/show/` + recipe.recipe_id}>
+                        <RecipeElementV3  key={idx} recipe={recipe}/>
+                      </Link>
+                    </div>)
+                  ) : (
+                    <div className="w-full h-full flex justify-center items-center">
+                      <span className="font-bold text-lg lg:text-2xl">
+                        お気に入りのレシピを見つけましょう。
+                      </span>
+                    </div>
+                  )}
+                </div>
+              )
+            }
             {
                 state.active ? (
                   (recipes.owned_recipes.length > 9 && recipes.owned_recipes_loading === false) && (

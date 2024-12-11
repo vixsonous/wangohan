@@ -11,6 +11,7 @@ import LoadingCircle from "@/app/components/IconComponents/LoadingCircle";
 import UpArrow from "@/app/components/IconComponents/UpArrow";
 import Link from "next/link";
 import { getSocket } from "@/action/socket";
+import InputLoading from "@/app/components/ElementComponents/InputLoading";
 
 const socket = getSocket();
 
@@ -97,7 +98,7 @@ export default memo(function CommentForm({
                   <button disabled={state.submitting} onClick={submitCommentFunc} className="absolute bg-[#7e594e] w-[50px] text-white rounded-[50px] right-[1%] top-[33px]" type="submit">
                       {
                           state.submitting ? (
-                              <LoadingCircle color="#FFFAF0" />
+                              <InputLoading />
                           ) : (
                               <UpArrow color="#FFFAF0" />
                           )
