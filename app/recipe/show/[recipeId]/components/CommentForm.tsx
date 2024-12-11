@@ -52,8 +52,8 @@ export default memo(function CommentForm({
         user_id: user_id,
         recipe_image: recipe_image,
         recipe_owner_id: recipe_owner_id,
-        message: `あなたのレシピに新規レビューがあります。`,
-        isRead: false,
+        notification_content: `あなたのレシピに新規レビューがあります。`,
+        is_read: false,
         created_at: new Date()
       }));
 

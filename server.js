@@ -137,13 +137,13 @@ app.prepare().then(() => {
       console.log(userSockets);
 
       for(let i = 0; i < conns.length; i++) {
-        io.to(conns[i]).emit('like recipe', message);
+        io.to(conns[i]).emit('like recipe', JSON.stringify({...data, inserted: true}));
       }
   
-      await fetch(`${be}/api/socket`, {
+      await fetch(`${be}/api/notification`, {
         method: 'POST',
-        body: JSON.stringify({message: 'This is a message'})
-      })
+        body: JSON.stringify({...data})
+      });
     });
 
     socket.on('review recipe',async (message) => {

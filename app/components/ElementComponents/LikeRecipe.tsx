@@ -58,9 +58,9 @@ export default memo(function LikeRecipe({
       user_id: user_id,
       recipe_image: recipe_image,
       recipe_owner_id: recipe_owner_id,
-      message: `${user_name}があなたのレシピにいいねしました。`,
+      notification_content: `${user_name}があなたのレシピにいいねしました。`,
       liked: !state.isLiked,
-      isRead: false,
+      is_read: false,
       created_at: new Date()
     }));
 

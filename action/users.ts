@@ -8,6 +8,7 @@ import { DogData } from "@/constants/interface";
 import { redirect } from "next/navigation";
 import { processRecipes } from "./recipe";
 import { emptyUser, nonUser } from "@/constants/objects";
+import { sql } from "kysely";
 
 const FRONT_PAGE_RECIPE_QUERY_LIMIT = 10;
 
@@ -274,18 +275,97 @@ export async function updateUserInfo(codenm: string, profPic: File, user_id: num
   }
 }
 
-export async function saveNotification(user_id: number, notification_content: string) {
+export async function uploadNotifications(
+  user_id: number, 
+  recipe_owner_id: number, 
+  notification_content: string,
+  is_read: boolean,
+  liked: boolean,
+  recipe_id: number,
+  recipe_image: string,
+  type: string
+) {
   try {
-    
-    const saveNotif = await db.insertInto("notifications_table").values({
+    const dt = {
       user_id: user_id,
+      recipe_owner_id: recipe_owner_id,
       notification_content: notification_content,
+      type: type,
+      recipe_image: recipe_image,
+      recipe_id: recipe_id,
+      liked: liked,
       updated_at: new Date(),
-      created_at: new Date()
-    }).execute();
+      created_at: new Date(),
+      is_read: is_read,
+    };
 
+    const conflictKeys = ['user_id', 'recipe_owner_id', 'type'];
+    const insert =  db.insertInto("notifications_table").values(dt).compile();
+    const conflictColumns = conflictKeys.map(key => `"${key}"`).join(', ');
+
+    const updateFields = Object.keys(dt)
+    .filter(key => !conflictKeys.includes(key))
+    .map(key => `"${key}" = EXCLUDED.${key}`)
+    .join(', ');
+
+    const upsertQuery = sql`
+    INSERT INTO notifications (
+      user_id, recipe_owner_id, notification_content, type,
+      recipe_image, recipe_id, liked, updated_at, created_at, is_read
+    ) VALUES (
+      ${dt.user_id}, ${dt.recipe_owner_id}, ${dt.notification_content}, ${dt.type},
+      ${dt.recipe_image}, ${dt.recipe_id}, ${dt.liked}, ${dt.updated_at}, ${dt.created_at}, ${dt.is_read}
+    )
+      ON CONFLICT (${sql.raw(conflictColumns)})
+      WHERE type = 'like'
+      DO UPDATE SET ${sql.raw(updateFields)}
+    `.compile(db);
+    
+    await db.executeQuery(upsertQuery);
+
+    console.log("[Success]: Successfully inserted notification!");
+    return true;
   } catch(e) {
-    let _e = (e as Error).message;
-    return {message: _e, body: undefined, status: 500};
+    console.error("[Error]: " + (e as Error).message);
+    return false;
   }
+}
+
+export async function updateNotifications(
+  user_id: number, 
+  recipe_owner_id: number, 
+  notification_content: string,
+  is_read: boolean,
+  liked: boolean,
+  recipe_id: number,
+  recipe_image: string,
+  type: string
+) {
+  try {
+
+    await db.updateTable("notifications_table").set({
+      user_id: user_id,
+      recipe_owner_id: recipe_owner_id,
+      notification_content: notification_content,
+      type: type,
+      recipe_image: recipe_image,
+      recipe_id: recipe_id,
+      liked: liked,
+      updated_at: new Date(),
+      is_read: is_read,
+    })
+    .where("recipe_owner_id","=",recipe_owner_id)
+    .where("user_id","=",user_id)
+    .execute();
+
+    console.log("[Success]: Successfully inserted notification!");
+    return true;
+  } catch(e) {
+    console.error("[Error]: " + (e as Error).message);
+    return false;
+  }
+}
+
+export async function getNotifications(user_id: number) {
+
 }

@@ -33,9 +33,41 @@ export const metadata:Metadata = {
     template: '%s | わんごはん | 愛犬のための手作りごはんレシピサイト',
     default: "わんごはん | 愛犬のための手作りごはんレシピサイト"
   },
-  keywords: ["愛犬のための手作りごはんレシピサイト","わんごはん","Wangohan", "Dog food", "Pet food", "Pets", "Inu"],
+  keywords: ["愛犬のための手作りごはんレシピサイト",
+    "わんごはん",
+    "犬用手作りごはん",
+    "わんちゃん健康レシピ",
+    "wangohan",
+    "homemade dog food",
+    "healthy pet food",
+    "dog recipe ideas",
+    "ペットレシピサイト"],
   creator: "Victor Chiong",
-  description: "Web for WanWan"
+  description: "わんちゃん専用投稿型レシピサイト。レシピ投稿や検索はもちろん、愛犬登録や誕生日月アナウンスなど盛りだくさん！皆さんの『わんごはん』レシピを投稿してみませんか？",
+  openGraph: {
+    title: 'わんごはん - 愛犬の健康を守るレシピサイト',
+    description: 'わんちゃん専用の投稿型レシピサイト！レシピ投稿や検索、愛犬の健康を守る情報満載！',
+    url: 'https://wangohanjp.com', // Your website URL
+    type: 'website',
+    images: [
+        { url: 'https://wangohanjp.com/logo-final.webp', width: 500, height: 500, alt: 'わんごはん' }
+    ]
+  },
+  twitter: {
+    card: 'summary_large_image',
+    site: '@your_twitter_handle',
+    title: 'わんごはん - 愛犬の健康を守るレシピサイト',
+    description: '愛犬のための簡単な手作りごはんレシピを投稿・検索！',
+    images: [
+      'https://wangohanjp.com/logo-final.webp'
+    ]
+  },
+  robots: {
+    index:true,
+    follow: true,
+    nocache: false,
+  },
+  
 }
 
 export default async function RootLayout({
@@ -43,6 +75,25 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "name": "わんちゃんの健康ごはん",
+    "description": "健康を守る簡単な犬用手作りごはんレシピ。",
+    "image": "https://wangohanjp.com/logo-final.webp",
+    "author": {
+      "@type": "Person",
+      "name": "Victor Chiong"
+    },
+    "keywords": "犬用レシピ, 手作りごはん, 愛犬の健康",
+    "recipeIngredient": ["鶏肉", "ごはん", "野菜"],
+    "recipeInstructions": [
+      "材料をすべて混ぜる。",
+      "15分煮込む。",
+      "冷ました後、愛犬に提供する。"
+    ]
+  };
 
   const decryptedSession = await getDecryptedSession();
   
@@ -71,6 +122,10 @@ export default async function RootLayout({
         <html lang="en">
           <head>
             <link rel="icon" href="/favicon.ico" sizes="any" />
+            <script
+              type="application/ld+json"
+              dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+            />
           </head>
           <GoogleAnalytics gaId="G-FG7VR2H1WJ"/>
           <body className={`${inter.className} bg-[#FFE9C9] h-full min-h-[100vh] flex flex-col text-[#523636]`}>
@@ -96,14 +151,14 @@ export default async function RootLayout({
               <div className="relative  bg-contain bg-no-repeat bg-bottom">
                 <div className="grid grid-cols-12 p-4 md:pt-16">
                   <div className="col-span-6 md:col-span-4 ">
-                    <Link href="https://www.instagram.com/rei_wangohan/profilecard/?igsh=bHZvb2hiYzdwa3p1" className="flex flex-col justify-center items-center w-full">
+                    <a target="_blank" href="https://www.instagram.com/rei_wangohan?igsh=MTRtcHIzaGQydTg0" className="flex flex-col justify-center items-center w-full">
                       <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" className="w-[40px] md:w-[60px] h-[40px] md:h-[60px]" viewBox="0 0 50 50">
                         <path d="M 16 3 C 8.8324839 3 3 8.8324839 3 16 L 3 34 C 3 41.167516 8.8324839 47 16 47 L 34 47 C 41.167516 47 47 41.167516 47 34 L 47 16 C 47 8.8324839 41.167516 3 34 3 L 16 3 z M 16 5 L 34 5 C 40.086484 5 45 9.9135161 45 16 L 45 34 C 45 40.086484 40.086484 45 34 45 L 16 45 C 9.9135161 45 5 40.086484 5 34 L 5 16 C 5 9.9135161 9.9135161 5 16 5 z M 37 11 A 2 2 0 0 0 35 13 A 2 2 0 0 0 37 15 A 2 2 0 0 0 39 13 A 2 2 0 0 0 37 11 z M 25 14 C 18.936712 14 14 18.936712 14 25 C 14 31.063288 18.936712 36 25 36 C 31.063288 36 36 31.063288 36 25 C 36 18.936712 31.063288 14 25 14 z M 25 16 C 29.982407 16 34 20.017593 34 25 C 34 29.982407 29.982407 34 25 34 C 20.017593 34 16 29.982407 16 25 C 16 20.017593 20.017593 16 25 16 z"></path>
                       </svg>
                       <h1 className="text-[13px] md:text-lg font-bold text-[#523636]">Instagramをフォロー</h1>
                       <span className="text-[10px] md:text-xs font-bold text-[#523636]">あなたのレシピがシェア</span>
                       <span className="text-[10px] md:text-xs font-bold text-[#523636]">されるかも？！</span>
-                    </Link>
+                    </a>
                   </div>
                   <div className="col-span-6 flex flex-wrap md:grid grid-cols-3 md:col-span-4 md:col-start-8 gap-2 gap-y-2 md:gap-4 justify-between items-center self-center w-[100%]">
                     <Link href="/inquiry/terms-of-service" className="text-[8px] md:text-xs self-center flex">利用規約</Link>

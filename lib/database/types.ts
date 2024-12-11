@@ -134,7 +134,13 @@ export interface LikesTable {
 export interface NotificationsTable {
   notification_id: Generated<number>;
   user_id: number;
+  recipe_owner_id: number;
   notification_content: string;
+  is_read: boolean;
+  type: string;
+  liked: boolean;
+  recipe_id: number;
+  recipe_image: string;
   updated_at: Date;
   created_at: Date;
 }

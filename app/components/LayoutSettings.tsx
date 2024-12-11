@@ -42,7 +42,7 @@ export default memo(function LayoutSettings({isLoggedIn, user_id} : {isLoggedIn:
           prev = parsedMessage.recipe_owner_id === user_id && (parsedMessage.liked || parsedMessage.type !== 'like') ? [...prev, message] : [...prev];
         }
 
-        setNotificationCount(prev.filter(x => !JSON.parse(x as string).isRead).length);
+        setNotificationCount(prev.filter(x => !JSON.parse(x as string).is_read).length);
         sessionStorage.setItem(String(user_id), JSON.stringify(prev));
         return [...prev];
       });
@@ -55,7 +55,7 @@ export default memo(function LayoutSettings({isLoggedIn, user_id} : {isLoggedIn:
         const parsedMessage = JSON.parse(message);
         prev = parsedMessage.recipe_owner_id === user_id ? [...prev, message] : [...prev];
 
-        setNotificationCount(prev.filter(x => !JSON.parse(x as string).isRead).length);
+        setNotificationCount(prev.filter(x => !JSON.parse(x as string).is_read).length);
         sessionStorage.setItem(String(user_id), JSON.stringify(prev));
         return [...prev];
       });
@@ -65,7 +65,7 @@ export default memo(function LayoutSettings({isLoggedIn, user_id} : {isLoggedIn:
       const sessionNotifications = sessionStorage.getItem(String(user_id));
       const notifArr = sessionNotifications ? (JSON.parse(sessionNotifications) as String[]) : [] as String[];
       setNotifications([...notifArr]);
-      setNotificationCount(notifArr.filter(x => !JSON.parse(x as string).isRead).length);
+      setNotificationCount(notifArr.filter(x => !JSON.parse(x as string).is_read).length);
     },[]);
 
     const fetchSession = useCallback(async () => {
@@ -97,7 +97,7 @@ export default memo(function LayoutSettings({isLoggedIn, user_id} : {isLoggedIn:
     const openNotificationOnClick = useCallback(() => {
       
       setNotifications(prev => {
-        prev = prev.map(x => JSON.stringify({...JSON.parse(x as string), isRead: true}))
+        prev = prev.map(x => JSON.stringify({...JSON.parse(x as string), is_read: true}))
         sessionStorage.setItem(String(user_id), JSON.stringify([...prev]));
         return [...prev];
       });
@@ -152,7 +152,7 @@ export default memo(function LayoutSettings({isLoggedIn, user_id} : {isLoggedIn:
                           {data.type === 'review' && <Star className='absolute -bottom-2 -right-2' size={16} weight="fill" color={textColor.warning}/>}
                         </div>
                         <span className=" w-full break-words max-w-full py-2">
-                          {data.message}
+                          {data.notification_content}
                         </span>
                       </div>
                     </Link>

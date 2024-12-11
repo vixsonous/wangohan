@@ -16,6 +16,7 @@ import CommentForm from "./components/CommentForm";
 import CommentSection from "./components/CommentSection";
 import LikeRecipe from "@/app/components/ElementComponents/LikeRecipe";
 import { getUserDetails } from "@/action/users";
+import Head from "next/head";
 
 type Props = {
     params: {recipeId: String},
@@ -45,7 +46,7 @@ export async function generateMetadata({params} : Props, parent: ResolvingMetada
         title: title,
         keywords: ["愛犬のための手作りごはんレシピサイト","わんごはん","Wangohan", "Dog food", "Pet food", "Pets", "Inu"],
         creator: "Victor Chiong",
-        description: "Web for WanWan"
+        description: "Web for WanWan",
     }
 }
 
@@ -73,9 +74,27 @@ export default async function ShowRecipe({params, searchParams}:{params: {recipe
     
     const isLoggedIn = decryptedSession ? true : false;
     const likeStatus = await isLikedExist(recipe_data.recipe_id,decryptedSession ? decryptedSession.user.user_id : -1);
+
+    const structuredData = {
+      "@context": "https://schema.org",
+      "@type": "Recipe",
+      "name": recipe_data.recipe_name,
+      "description": recipe_data.recipe_description,
+      "image": recipe_data.recipe_images[0].recipe_image,
+      "author": {
+        "@type": "Person",
+        "name": recipe_data.user.user_codename
+      },
+      "recipeIngredient": recipe_data.recipe_ingredients.map( i => `${i.recipe_ingredients_name} ${i.recipe_ingredients_amount}`),
+      "recipeInstructions": recipe_data.recipe_instructions.map(i => `${i.recipe_instructions_text}`)
+    };
     
     return (
         <section className="flex justify-center flex-col items-center">
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+          />
             <ViewUpdateCountdown recipe_id={recipe_data.recipe_id}/>
             <div style={{maxWidth: MAXWSIZE}} className="w-full relative">
                 <ImageSwiper loginSts={{isLoggedIn, user_id: decryptedSession ? decryptedSession.user.user_id : -1}} recipe_images={recipe_images} recipe_id={recipe_data.recipe_id} owner_id={recipe_data.user_id}/>
