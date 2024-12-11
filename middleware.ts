@@ -16,7 +16,7 @@ export async function middleware(request: NextRequest) {
     }
 
     if (currentUser && request.nextUrl.pathname.startsWith('/login')) {
-        return Response.redirect(new URL('/user', request.url));
+        return Response.redirect(new URL('/user/settings', request.url));
     }
 
     if(currentUser) {
