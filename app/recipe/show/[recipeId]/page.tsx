@@ -124,7 +124,7 @@ export default async function ShowRecipe({params, searchParams}:{params: {recipe
                     <h1 style={{fontSize: fontSize.l5}}>{recipe_data.recipe_name}</h1>
                 </div>
                 <div className="recipe-description w-full flex justify-start items-center self-center">
-                    <span className="leading-snug text-[13px]">
+                    <span className="leading-snug text-[13px] whitespace-pre-line">
                         {recipe_data.recipe_description}
                     </span>
                 </div>
