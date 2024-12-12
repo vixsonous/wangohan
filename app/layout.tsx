@@ -80,12 +80,6 @@ export default async function RootLayout({
       "name": "Victor Chiong"
     },
     "keywords": "犬用レシピ, 手作りごはん, 愛犬の健康",
-    "recipeIngredient": ["鶏肉", "ごはん", "野菜"],
-    "recipeInstructions": [
-      "材料をすべて混ぜる。",
-      "15分煮込む。",
-      "冷ました後、愛犬に提供する。"
-    ]
   };
 
   const decryptedSession = await getDecryptedSession();
