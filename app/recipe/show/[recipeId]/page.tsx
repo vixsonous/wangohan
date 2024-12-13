@@ -134,7 +134,7 @@ export default async function ShowRecipe({params, searchParams}:{params: {recipe
                     {
                         recipeIngredients.map((el, idx) => {
                             return <>
-                            <li key={idx} className={`${recipeIngredients.length > 5 ? 'basis-1/2' : 'basis-1'} text-left`}>{el}</li>
+                            <li key={idx} className={`${recipeIngredients.length > 5 ? 'basis-1/2' : 'basis-1'} whitespace-pre-line text-left`}>{el}</li>
                             </>
                         })
                     }
@@ -145,7 +145,7 @@ export default async function ShowRecipe({params, searchParams}:{params: {recipe
                     <ol className="list-decimal pl-[25px] flex flex-col gap-[10px]">
                         {
                             recipeInstructions.map((el, idx) => {
-                               return <li key={idx}>{el}</li> 
+                               return <li className="whitespace-pre-line" key={idx}>{el}</li> 
                             })
                         }
                     </ol>

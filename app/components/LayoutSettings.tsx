@@ -8,12 +8,13 @@ import OptImage from "./ElementComponents/Image";
 import Link from "next/link";
 import { Heart, Star } from "@phosphor-icons/react/dist/ssr";
 import { textColor } from "@/constants/constants";
-import { NotificationData } from "@/constants/interface";
+import { useRouter } from "next/navigation";
 
 const socket = getSocket(); 
 
 export default memo(function LayoutSettings({isLoggedIn, user_id, db_notifications} : {isLoggedIn: boolean, user_id: number,db_notifications: Array<String>}) {
 
+    const router = useRouter()
     const pathname = usePathname();
     const [user, setUser] = useState(isLoggedIn);
     const [notificationCount, setNotificationCount] = useState(0);
