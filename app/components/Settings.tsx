@@ -90,7 +90,7 @@ export default function Settings() {
                         <button onClick={() => {
                             openSettings();
                             dispatch(show());
-                        }} className={` w-[100%] rounded-md text-[12px] sm:text-[16px] relative active:scale-[1.075] md:hover:scale-[1.075] transition-all duration-500`} type="submit">
+                        }} className={` w-[100%] rounded-md text-base relative active:scale-[1.075] md:hover:scale-[1.075] transition-all duration-500`} type="submit">
                             <span className="absolute z-[1] w-full top-[50%] left-0 font-bold">レシピを作成する</span>
                             <img src={'/recipe-button.webp'} className="self-center rounded-md h-[auto] w-full relative top-0" width={100} height={100}  alt="website banner" />
                         </button>

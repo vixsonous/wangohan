@@ -38,7 +38,6 @@ export const metadata:Metadata = {
   keywords: ["愛犬のための手作りごはんレシピサイト",
     "わんごはん",
     "犬用手作りごはん",
-    "わんちゃん健康レシピ",
     "wangohan",
     "homemade dog food",
     "healthy pet food",
@@ -47,8 +46,8 @@ export const metadata:Metadata = {
   creator: "Victor Chiong",
   description: "わんちゃん専用投稿型レシピサイト。レシピ投稿や検索はもちろん、愛犬登録や誕生日月アナウンスなど盛りだくさん！皆さんの『わんごはん』レシピを投稿してみませんか？",
   openGraph: {
-    title: 'わんごはん - 愛犬の健康を守るレシピサイト',
-    description: 'わんちゃん専用の投稿型レシピサイト！レシピ投稿や検索、愛犬の健康を守る情報満載！',
+    title: 'わんごはん - 愛犬のための手作りごはんレシピサイト',
+    description: 'わんちゃん専用投稿型レシピサイト。レシピ投稿や検索はもちろん、愛犬登録や誕生日月アナウンスなど盛りだくさん！皆さんの『わんごはん』レシピを投稿してみませんか？',
     url: 'https://wangohanjp.com', // Your website URL
     type: 'website',
     images: [
@@ -72,14 +71,14 @@ export default async function RootLayout({
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "Recipe",
-    "name": "わんちゃんの健康ごはん",
-    "description": "健康を守る簡単な犬用手作りごはんレシピ。",
+    "name": "愛犬のための手作りごはんレシピサイト",
+    "description": "わんちゃん専用投稿型レシピサイト。レシピ投稿や検索はもちろん、愛犬登録や誕生日月アナウンスなど盛りだくさん！皆さんの『わんごはん』レシピを投稿してみませんか？",
     "image": "https://wangohanjp.com/logo-final.webp",
     "author": {
       "@type": "Person",
       "name": "Victor Chiong"
     },
-    "keywords": "犬用レシピ, 手作りごはん, 愛犬の健康",
+    "keywords": "犬用レシピ, 手作りごはん",
   };
 
   const decryptedSession = await getDecryptedSession();

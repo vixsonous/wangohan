@@ -291,6 +291,7 @@ export default function PetAddForm() {
                                     <span>愛犬の名前</span>
                                     <label htmlFor="petName" className="h-10 flex items-center justify-center relative w-[100%] px-[10px] py-[5px] border-[2px] rounded-md border-[#ffcd92]">
                                         <input 
+                                            maxLength={6}
                                             id="pet-name" 
                                             className="w-[100%] focus:outline-none text-[1em] bg-[transparent] text-left font-bold text-[#5b5351]" 
                                             onClick={inputPetOnClick} 

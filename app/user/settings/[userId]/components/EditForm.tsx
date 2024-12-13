@@ -161,7 +161,7 @@ export default function EditForm({userDetails, pets} : Props) {
                     {!state.submitState ? (
                         <><FontAwesomeIcon icon={faSave}/> 保存する</>
                     ): (
-                        <FontAwesomeIcon icon={faCircleNotch} spin size="lg"/>
+                        <InputLoading />
                     )}
                 </button>
                 <ErrorSpan>
