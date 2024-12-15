@@ -12,7 +12,7 @@ import { ArrowLeft, CircleNotch, Plus } from "@phosphor-icons/react/dist/ssr";
 import { AnimatePresence, motion } from "framer-motion";
 import heic2any from "heic2any";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function PetAddForm() {
 
@@ -242,10 +242,18 @@ export default function PetAddForm() {
         return true;
     }
 
+    const btnRef = useRef<HTMLButtonElement>(null);
+
+    useEffect(() => {
+      if(window.location.href.includes("?=#register-pet") && btnRef.current) {
+        btnRef.current.click();
+      }
+    },[]);
+
     return (
         <>
         <div className="p-[20px] flex flex-wrap justify-between items-center">
-            <button onClick={showAddPetOnClick}><FontAwesomeIcon icon={faPlus}/> 家族を追加</button>
+            <button ref={btnRef} onClick={showAddPetOnClick}><FontAwesomeIcon icon={faPlus}/> 家族を追加</button>
             <Link href={`/user/${user.user_id}`} className="flex items-center gap-2"><ArrowLeft size={20}/>  戻る</Link>
         </div>
 

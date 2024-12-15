@@ -109,6 +109,13 @@ export default function Settings() {
                                 マイページ
                             </div>
                           </Link>
+
+                          <Link onClick={openSettings} className={`hover:opacity-75 w-full px-4 py-1 rounded-full`} href={`/user/settings/${user.user_id}?=#register-pet`}>
+                            <div className="w-full text-sm flex justify-between items-center">
+                                <PawPrint size={20}/>
+                                愛犬を登録する
+                            </div>
+                          </Link>
           
                           <Link onClick={openSettings} className={`${active.list ? 'bg-primary-text text-secondary-bg py-2' : 'hover:opacity-75 py-1'} w-full px-4 py-1 rounded-full`} href="/recipe/list/1">
                             <div className="w-full text-sm flex justify-between items-center">

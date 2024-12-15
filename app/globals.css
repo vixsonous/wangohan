@@ -59,3 +59,21 @@ input[type="radio"]:checked+label>span{
   font-size: .5em;
   margin-left: 5px;
 }
+
+/* Target only buttons with the swiper-button-disabled class */
+.custom-nav.swiper-button-disabled {
+  opacity: 1; /* Reduce opacity */
+  cursor: not-allowed; /* Change cursor to indicate disabled */
+  pointer-events: none; /* Disable interaction */
+}
+
+/* Target the <img> inside disabled button */
+.custom-nav.swiper-button-disabled img {
+  filter: grayscale(100%); /* Make the image look inactive */
+  opacity: 0.6; /* Dim the image */
+}
+
+/* Target the <svg> inside disabled button */
+.custom-nav.swiper-button-disabled svg {
+  opacity: 0.5; /* Reduce SVG opacity */
+}

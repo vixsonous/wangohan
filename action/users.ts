@@ -9,6 +9,7 @@ import { redirect } from "next/navigation";
 import { processRecipes } from "./recipe";
 import { emptyUser, nonUser } from "@/constants/objects";
 import { sql } from "kysely";
+import { logError } from "./common";
 
 const FRONT_PAGE_RECIPE_QUERY_LIMIT = 12;
 
@@ -135,6 +136,7 @@ export async function registerUserDetails(formData: FormData) {
 
       return true;
   } catch(e) {
+    logError((e as Error).message);
     return false;
   }
 }

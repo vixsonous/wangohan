@@ -42,7 +42,7 @@ export default async function User({params} : {params: {userId: String}}) {
     logEnd(st);
 
     const st1 = logStart("Retrieving Liked Recipes");
-    const liked_recipes = userDetails.user_id === decryptedSession.user.user_id ? await retrieveLikedRecipes(userDetails.user_id, 1) : undefined;
+    const liked_recipes = decryptedSession && userDetails.user_id === decryptedSession.user.user_id ? await retrieveLikedRecipes(userDetails.user_id, 1) : undefined;
     logEnd(st1);
 
     const recipes_data = recipes.body || [];
@@ -51,8 +51,9 @@ export default async function User({params} : {params: {userId: String}}) {
     return (
         <Suspense fallback={<IndexLoading />}>
             <div className="flex flex-col justify-center items-center ">
-                <div className="relative pb-[100px] max-w-xl w-full">
-                    <div className="user-image relative flex flex-col justify-center items-center mt-[30px]">
+                <div className="relative flex flex-col pb-[100px] max-w-xl w-full">
+                  <div className="lg:flex gap-8 justify-between lg:mb-16">
+                    <div className="user-image relative flex flex-col justify-center lg:justify-start items-center mt-[30px]">
                         <div className="hidden md:block">
                           <OptImage src={image_url} centered className=" rounded-full object-cover relative" square width={350} height={350}  alt="website banner"/>
                         </div>
@@ -61,22 +62,24 @@ export default async function User({params} : {params: {userId: String}}) {
                         </div>
                         <h1 className="text-[36px] font-bold text-[#5b5351]">{userDetails.user_codename === '' ? `Wanuser` + userDetails.user_id : userDetails.user_codename}</h1>
                     </div>
-                    <div className="flex justify-center items-center relative mt-12 mb-4">
-                        <h1 className="absolute text-sm md:text-lg top-2 md:top-4 font-semibold text-[#523636]">うちのわん</h1>
-                        <img loading="lazy" src={'/icons/ribbon.webp'} className="h-[auto] w-[200px] sm:w-[300px] max-w-none" width={100} height={100}  alt="website banner" />
+                    <div className="flex flex-col items-center justify-center pr-4">
+                      <div className="flex justify-center items-center relative mt-12 mb-4 lg:mb-16">
+                          <h1 className="absolute text-sm md:text-lg top-2 md:top-4 font-semibold text-[#523636]">うちのわん</h1>
+                          <img loading="lazy" src={'/icons/ribbon.webp'} className="h-[auto] w-[200px] sm:w-[300px] max-w-none" width={100} height={100}  alt="website banner" />
+                      </div>
+                      <PetList pets={pets}/>
                     </div>
-                    <PetList pets={pets}/>
-                    <TabList curUser={userDetails.user_id === decryptedSession.user.user_id} owned_recipes={recipes_data} liked_recipes={liked_recipes_data}/>
-                    {
-                      userDetails.user_id === decryptedSession.user.user_id && (
-                        <div className="fixed bottom-8 z-[9999] right-8">
-                          <Link className="relative" href={`/user/settings/${userDetails.user_id}`}>
-                              <img loading="lazy" src={'/Setting/settingpaw.webp'} className="h-[auto] w-[100px] md:w-[140px]  max-w-none" width={100} height={100}  alt="website banner" />
-                              <span className="absolute w-full text-center bottom-4 md:bottom-6 text-[13px] md:text-xl text-white right-10 md:right-12">設定</span>
-                          </Link>
-                        </div>
-                      )
-                    }
+                  </div>
+                  <TabList curUser={decryptedSession && userDetails.user_id === decryptedSession.user.user_id} owned_recipes={recipes_data} liked_recipes={liked_recipes_data}/>
+                  {
+                    (decryptedSession && userDetails.user_id === decryptedSession.user.user_id) && (
+                      <div className="fixed bottom-8 z-[99] right-8">
+                        <Link className="relative" href={`/user/settings/${userDetails.user_id}`}>
+                            <img loading="lazy" src={'/Setting/newsetting.webp'} className="h-[auto] w-[100px] md:w-[140px]  max-w-none" width={100} height={100}  alt="website banner" />
+                        </Link>
+                      </div>
+                    )
+                  }
                 </div>
             </div>
         </Suspense>

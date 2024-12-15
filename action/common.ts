@@ -18,3 +18,11 @@ export const getNextId = async (tableName: TableExpression<Database, never>, col
 export const padStartIds = (id: string) => {
     return String(id).padStart(8, '0');
 }
+
+export const logError = (error: string) => {
+  console.error('[Error]: ' + error + ' ' + new Date().toISOString());
+}
+
+export const logSuccess = (error: string) => {
+  console.log('[Success]: ' + error + ' ' + new Date().toISOString());
+}

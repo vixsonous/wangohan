@@ -100,7 +100,7 @@ export default function TabList({
             </div>
             {
               curUser && (
-                <div ref={imgContainer} className={`${state.active ? 'hidden' : ''} ${recipes.owned_recipes.length === 0 ? 'min-h-[50vh] lg:min-h-screen' : ''} recipe-list__container max-w-xl grid ${liked_recipes.length > 0 ? 'grid-cols-3 md:grid-cols-4 lg:grid-cols-6' : 'grid-cols-1'} masonry p-1 gap-0.5 bg-[#FFFAF0] items-center relative`}>
+                <div ref={imgContainer} className={`${state.active ? 'hidden' : ''} ${recipes.liked_recipes.length === 0 ? 'min-h-[50vh] lg:min-h-screen' : ''} recipe-list__container max-w-xl grid ${liked_recipes.length > 0 ? 'grid-cols-3 md:grid-cols-4 lg:grid-cols-6' : 'grid-cols-1'} masonry p-1 gap-0.5 bg-[#FFFAF0] items-center relative`}>
                   {recipes.liked_recipes.length > 0 ? (
                     recipes.liked_recipes.map( (recipe, idx) => <div key={idx} className="relative pb-[100%] top-[0]" ref={ref => {imgRefs.current[idx] = ref}}>
                       <Link href={`/recipe/show/` + recipe.recipe_id}>
