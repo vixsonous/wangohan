@@ -6,7 +6,18 @@ import path from "node:path";
 import sharp from "sharp";
 import fs from 'fs/promises';
 import nodemailer from 'nodemailer';
+import NodeCache from "node-cache";
 
+export const logError = (error, fn) => {
+  console.error(`[${fn ? `Error - ${fn}`:'Error'}]: ` + error + ' ' + new Date().toISOString());
+}
+
+export const logSuccess = (error, fn) => {
+  console.log(`[${fn ? `Success - ${fn}`:'Success'}]: ` + error + ' ' + new Date().toISOString());
+}
+
+
+const imageCacheData = new NodeCache({stdTTL: 300});
 
 const dev = process.env.NODE_ENV !== "production";
 const hostname = "localhost";
@@ -40,6 +51,18 @@ app.prepare().then(() => {
       return res.status(400).json({error: "Image source is required"});
     }
 
+    const cacheKey = `${src}?h=${h}&w=${w}&fit=${fit}&quality=${quality}&format=${format}&upscale=${upscale}&upscaleMethod=${upscaleMethod}`;
+    const cacheData = imageCacheData.get(cacheKey);
+
+    if(cacheData) {
+      logSuccess(`Image Cache - ${cacheKey} Cache Hit!`, 'ImageOptimizer');
+      const contentType = cacheData.contentType;
+      res.set('Content-type', contentType);
+      return res.status(200).send(cacheData.processedImage);
+    }
+
+    logSuccess(`Image Cache - ${cacheKey} Cache Miss!`, 'ImageOptimizer');
+
     if(src.startsWith("/")) {
       const filePath = path.join(publicFolder, src);
       try {
@@ -54,6 +77,14 @@ app.prepare().then(() => {
         const contentType = `image/${metadata.format === 'jpg' ? 'jpeg' : metadata.format}`;
 
         res.set('Content-type', contentType);
+
+        const img = {
+          contentType: contentType,
+          processedImage: processedImage
+        }
+
+        imageCacheData.set(cacheKey, img);
+
         return res.status(200).send(processedImage);
         
         
@@ -86,6 +117,13 @@ app.prepare().then(() => {
       const metadata = await sharp(processedImage).metadata();
       const contentType = `image/${metadata.format === 'jpg' ? 'jpeg' : metadata.format}`;
 
+      const img = {
+        contentType: contentType,
+        processedImage: processedImage
+      }
+
+      imageCacheData.set(cacheKey, img);
+      
       res.set('Content-type', contentType);
       return res.status(200).send(processedImage);
     }

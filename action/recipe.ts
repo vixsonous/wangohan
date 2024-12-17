@@ -3,14 +3,15 @@ import { DBRecipeData, DisplayRecipe, ingredients, instructions, recipe } from "
 import { db } from "@/lib/database/db";
 import { cookies } from "next/headers";
 import { decrypt, getDecryptedSession } from "./lib";
-import { padStartIds } from "./common";
+import { logSuccess, padStartIds } from "./common";
 import { getComments } from "./comments";
 import { s3DeleteFilesInFolder } from "./file-lib";
 import NodeCache from 'node-cache';
+import { highDynamicData, lowDynamicData } from "./caching";
 
 const FRONT_PAGE_RECIPE_QUERY_LIMIT = 10;
 const SEARCH_PAGE_RECIPE_QUERY_LIMIT = 50;
-const recipe_cache = new NodeCache({stdTTL: 300});
+
 
 export const postRecipe = async (recipe:recipe) => {
     try {
@@ -159,12 +160,19 @@ export const postInstructions = async (recipeInstructions: Array<instructions>, 
 
 export const getRecipeTitle = async (recipeId:number) => {
     try {
+        const cacheKey = `recipe-title-${recipeId}`;
+        const cachedData = lowDynamicData.get(cacheKey) as {recipe_name: string};
+        if(cachedData) {
+          logSuccess(`Recipe ${recipeId} - Recipe Title Cache Hit!`, 'getRecipeTitle');
+          return {message: '完了',body: cachedData, status: 200};
+        } 
         const recipe_title = await db.selectFrom("recipes_table").select(["recipe_name"])
             .where("recipe_id","=", recipeId)
             .executeTakeFirst();
 
         if(recipe_title === undefined) throw new Error("Recipe is not found!");
 
+        lowDynamicData.set(cacheKey, recipe_title);
         return {message: '完了',body: recipe_title, status: 200};
     } catch(e) {
         let _e = (e as Error).message;
@@ -243,11 +251,13 @@ export const processRecipes = async (recipes: Array<DBRecipeData>) => {
 export const getWeeklyRecipes = async (page: number = 0, limit: number = 10) => {
     try {
       const cacheKey = `weekly-recipes`;
-      const cachedData = recipe_cache.get(cacheKey) as DisplayRecipe[];
+      const cachedData = highDynamicData.get(cacheKey) as DisplayRecipe[];
       if(cachedData) {
+        logSuccess('Weekly Recipe Cache Hit!', 'getWeeklyRecipes');
         return {message: '完了',body: cachedData, status: 200};
       }
 
+        logSuccess('Weekly Recipe Cache Miss!', 'getWeeklyRecipes');
         const OFFSET = page * FRONT_PAGE_RECIPE_QUERY_LIMIT;
         const recipes = await db.selectFrom("recipes_table").select(["recipe_name", "recipe_id", "recipe_age_tag", 
             "recipe_event_tag","recipe_size_tag", "recipe_description","user_id", "created_at", "total_likes", "total_views"
@@ -259,7 +269,7 @@ export const getWeeklyRecipes = async (page: number = 0, limit: number = 10) => 
             .execute();
 
         const updated_recipes = await processRecipes(recipes);
-        recipe_cache.set(cacheKey, updated_recipes);
+        highDynamicData.set(cacheKey, updated_recipes);
 
         return {message: '完了',body: updated_recipes, status: 200};
     } catch(e) {
@@ -272,7 +282,7 @@ export const getPopularRecipes = async (page: number = 0) => {
 
     try {
       const cacheKey = `popular-recipes`;
-      const cachedData = recipe_cache.get(cacheKey) as DisplayRecipe[];
+      const cachedData = highDynamicData.get(cacheKey) as DisplayRecipe[];
 
       if(cachedData) {
         return {message: '完了',body: cachedData, status: 200};
@@ -287,7 +297,7 @@ export const getPopularRecipes = async (page: number = 0) => {
             .execute();
 
         const updated_recipes = await processRecipes(recipes);
-        recipe_cache.set(cacheKey, updated_recipes);
+        highDynamicData.set(cacheKey, updated_recipes);
 
         return {message: '完了',body: updated_recipes, status: 200};
     } catch(e) {
@@ -312,7 +322,7 @@ export const getAllRecipes = async (page: number = 0, limit: number = 10) => {
 
   try {
     const cacheKey = `recipes-${page}-${limit}`;
-    const cachedData = recipe_cache.get(cacheKey) as DisplayRecipe[];
+    const cachedData = highDynamicData.get(cacheKey) as DisplayRecipe[];
 
     if(cachedData) {
       return {message: '完了',body: cachedData, status: 200};
@@ -329,7 +339,7 @@ export const getAllRecipes = async (page: number = 0, limit: number = 10) => {
 
       const updated_recipes = await processRecipes(recipes);
 
-      recipe_cache.set(cacheKey, updated_recipes);
+      highDynamicData.set(cacheKey, updated_recipes);
 
       return {message: '完了',body: updated_recipes, status: 200};
   } catch(e) {
@@ -393,6 +403,12 @@ export const deleteRecipe = async (recipe_id: number) => {
 
 export const searchRecipes = async (searchString: string) => {
     try {
+        const cacheKey = `search-recipes-${searchString}`;
+        const cachedData = highDynamicData.get(cacheKey) as DisplayRecipe[];
+        if(cachedData) {
+          logSuccess(`Search ${searchString} - Recipe Search Cache Hit!`, 'searchRecipes');
+          return {message: '完了',body: cachedData, status: 200};
+        } 
         const recipes = await db.selectFrom("recipes_table").select(["recipe_name", "recipe_id", "recipe_age_tag", 
             "recipe_event_tag","recipe_size_tag", "recipe_description","user_id", "created_at", "total_likes", "total_views"
         ])
@@ -423,6 +439,8 @@ export const searchRecipes = async (searchString: string) => {
             .execute();
 
         const updated_recipes = await processRecipes(recipes);
+
+        highDynamicData.set(cacheKey, updated_recipes);
 
         return {message: '完了',body: updated_recipes, status: 200};
     } catch(e) {
@@ -500,10 +518,11 @@ export const updateLike = async (recipe_id: number, user_id: number, liked: bool
 export const getRemainingCreatedRecipe = async (offset: number, page: number, limit: number = 0, user_id: number) => {
   try {
     const off = offset * page;
-    const cacheKey = `recipes-created-${off}`;
-    const cachedData = recipe_cache.get(cacheKey) as DisplayRecipe[];
+    const cacheKey = `recipes-created-${off}-${user_id}`;
+    const cachedData = highDynamicData.get(cacheKey) as DisplayRecipe[];
 
     if(cachedData) {
+      logSuccess('Remaining Created Recipe Cache Hit!', 'getRemainingCreatedRecipe');
       return {message: '完了',body: cachedData, status: 200};
     }
 
@@ -517,7 +536,7 @@ export const getRemainingCreatedRecipe = async (offset: number, page: number, li
 
       const updated_recipes = await processRecipes(recipes);
 
-      recipe_cache.set(cacheKey, updated_recipes);
+      highDynamicData.set(cacheKey, updated_recipes);
 
       return {message: '完了',body: updated_recipes, status: 200};
   } catch(e) {
@@ -529,10 +548,11 @@ export const getRemainingCreatedRecipe = async (offset: number, page: number, li
 export const getRemainingLikedRecipe = async (offset: number, page: number, limit: number = 0, user_id: number) => {
   try {
     const off = offset * page;
-    const cacheKey = `recipes-liked-${off}`;
-    const cachedData = recipe_cache.get(cacheKey) as DisplayRecipe[];
+    const cacheKey = `recipes-liked-${off}-${user_id}`;
+    const cachedData = highDynamicData.get(cacheKey) as DisplayRecipe[];
 
     if(cachedData) {
+      logSuccess('Remaining Liked Recipe Cache Hit!', 'getRemainingLikedRecipe');
       return {message: '完了',body: cachedData, status: 200};
     }
 
@@ -547,7 +567,7 @@ export const getRemainingLikedRecipe = async (offset: number, page: number, limi
     
       const updated_recipes = await processRecipes(recipes);
 
-      recipe_cache.set(cacheKey, updated_recipes);
+      highDynamicData.set(cacheKey, updated_recipes);
 
       return {message: '完了',body: updated_recipes, status: 200};
   } catch(e) {

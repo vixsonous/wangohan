@@ -118,7 +118,7 @@ export default async function RootLayout({
               type="application/ld+json"
               dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
             />
-            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7792092835796451"
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9990388374961956"
               crossOrigin="anonymous"></script>
           </head>
           <GoogleAnalytics gaId="G-FG7VR2H1WJ"/>

@@ -75,7 +75,7 @@ export default async function User({params} : {params: {userId: String}}) {
                     (decryptedSession && userDetails.user_id === decryptedSession.user.user_id) && (
                       <div className="fixed bottom-8 z-[99] right-8">
                         <Link className="relative" href={`/user/settings/${userDetails.user_id}`}>
-                            <img loading="lazy" src={'/Setting/newsetting.webp'} className="h-[auto] w-[100px] md:w-[140px]  max-w-none" width={100} height={100}  alt="website banner" />
+                            <img loading="lazy" src={'/Setting/newsetting.webp'} className="h-[auto] w-[100px] md:w-[120px]  max-w-none" width={100} height={100}  alt="website banner" />
                         </Link>
                       </div>
                     )

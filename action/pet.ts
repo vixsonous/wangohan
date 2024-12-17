@@ -1,10 +1,11 @@
 import { db } from "@/lib/database/db"
 import { getUser, getUserId } from "./users"
-import { padStartIds } from "./common";
+import { logSuccess, padStartIds } from "./common";
 import { s3DeleteFilesInFolder, s3UploadFile } from "./file-lib";
 import { DogData } from "@/constants/interface";
 import { ERR_MSG } from "@/constants/constants";
 import { sql } from "kysely";
+import { lowDynamicData } from "./caching";
 
 export const postPet = async (petName: string, petBday: Date, petBreed: string, uploadedPetPic: string) => {
 
@@ -112,6 +113,25 @@ export const getBdayPets = async () => {
   try {
     const curMonth = new Date().getMonth() + 1;
     
+    const cacheKey = `bday-pets-${curMonth}`;
+    const cachedData = lowDynamicData.get(cacheKey) as {
+      pet_id: number;
+      pet_name: string;
+      pet_birthdate: Date;
+      pet_breed: string;
+      pet_image: string;
+      user_id: number;
+      updated_at: Date;
+      created_at: Date;
+    }[];
+
+    if(cachedData) {
+      logSuccess('Get Birthday Pets Cache Hit!', 'getBdayPets');
+      return cachedData;
+    }
+
+    logSuccess('Get Birthday Pets Cache Miss!', 'getBdayPets');
+
     const bdayPets = await db
     .selectFrom("pets_table as p")
     .selectAll()
@@ -121,7 +141,8 @@ export const getBdayPets = async () => {
         curMonth
     )
     .execute()
-    console.log("[Success]: Successfully retrieved birthday pets");
+    logSuccess('Successfully retrieved birthday pets', 'getBdayPets');
+    lowDynamicData.set(cacheKey, bdayPets);
     return bdayPets;
   } catch (e) {
     console.error("[Error]:" + (e as Error).message);

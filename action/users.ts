@@ -9,7 +9,7 @@ import { redirect } from "next/navigation";
 import { processRecipes } from "./recipe";
 import { emptyUser, nonUser } from "@/constants/objects";
 import { sql } from "kysely";
-import { logError } from "./common";
+import { logError, logSuccess } from "./common";
 
 const FRONT_PAGE_RECIPE_QUERY_LIMIT = 12;
 
@@ -29,6 +29,7 @@ export async function getUser(email: string, password: string) {
         const match = await bcrypt.compare(password, user.password);
 
         if(match) {
+          logSuccess("Successful user login!");
           return {user_id: user.user_id};
         } else {
           throw new Error(ERR_MSG['ERR9']);
@@ -36,7 +37,8 @@ export async function getUser(email: string, password: string) {
         
     } catch(e) {
         let _e = (e as Error).message;
-        throw _e;
+        logError(_e);
+        return {user_id: -1}
     }
 }
 
@@ -61,6 +63,8 @@ export async function getUserDetails(user_id: number) {
 
       const updated_pets = pets.map( pet => ({...pet, pet_birthdate: pet.pet_birthdate.toISOString()}));
       const combinedRes = {...user, pets: updated_pets as DogData[]}
+
+      logSuccess('Successful user detail fetch!');
       return combinedRes;
   } catch(e) {
       return emptyUser();
@@ -150,8 +154,10 @@ export async function findGoogleUser(google_id: string) {
             .where("users.google_id","=", google_id)
             .executeTakeFirst();
     
+    logSuccess("Successful google user lookup!");
     return user_id ? user_id.user_id : -1;
   } catch(e) {
+    logError((e as Error).message);
     return -2;
   } 
 }

@@ -19,10 +19,10 @@ export const padStartIds = (id: string) => {
     return String(id).padStart(8, '0');
 }
 
-export const logError = (error: string) => {
-  console.error('[Error]: ' + error + ' ' + new Date().toISOString());
+export const logError = (error: string, fn?: string) => {
+  console.error(`[${fn ? `Error - ${fn}`:'Error'}]: ` + error + ' ' + new Date().toISOString());
 }
 
-export const logSuccess = (error: string) => {
-  console.log('[Success]: ' + error + ' ' + new Date().toISOString());
+export const logSuccess = (error: string, fn?: string) => {
+  console.log(`[${fn ? `Success - ${fn}`:'Success'}]: ` + error + ' ' + new Date().toISOString());
 }
