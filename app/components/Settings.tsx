@@ -113,7 +113,7 @@ export default function Settings() {
                           <Link onClick={openSettings} className={`hover:opacity-75 w-full px-4 py-1 rounded-full`} href={`/user/settings/${user.user_id}?=#register-pet`}>
                             <div className="w-full text-sm flex justify-between items-center">
                                 <PawPrint size={20}/>
-                                愛犬を登録する
+                                愛犬登録
                             </div>
                           </Link>
           
