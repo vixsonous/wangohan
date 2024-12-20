@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { CircleNotch } from "@phosphor-icons/react/dist/ssr";
 import InputLoading from "@/app/components/ElementComponents/InputLoading";
+import heic2any from "heic2any";
 const OptImage = React.lazy(() => import("@/app/components/ElementComponents/Image"));
 const PetEditForm = React.lazy(() => import("./PetEditForm"));
 const PetAddForm = dynamic(() => import("./PetAddForm"), { ssr: false, loading: () => <InputLoading />});
@@ -22,6 +23,8 @@ interface Props {
 }
 export default function EditForm({userDetails, pets} : Props) {
     const dispatch = useAppDispatch();
+    const [upload, setUpload] = useState(false);
+    const [fileUp, setFileUp] = useState(false);
     const petState = useAppSelector(state => state.pet.pets);
     const isSet = useAppSelector(state => state.pet.isSet);
 
@@ -56,12 +59,37 @@ export default function EditForm({userDetails, pets} : Props) {
 
     const profPicOnChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if(e.target.files && e.target.files[0]) {
-            const tempPath = URL.createObjectURL(e.target.files[0]);
-            const file = e.target.files[0];
+          const file = e.target.files[0];
+          const fileName = e.target.files[0].name;
+          const fileNameExt = fileName.substring(fileName.lastIndexOf('.') + 1);
+          
+          setUpload(true);
+          setFileUp(true);
+          if(typeof window !== 'undefined' && (fileNameExt.toLowerCase() === "heic" || fileNameExt.toLowerCase() === "heif")) {
+            const image = await heic2any({
+              blob: e.target.files[0],
+              toType: 'image/webp',
+              quality: 0.8
+            });
+    
+            const img = !Array.isArray(image) ? [image] : image;
+            const f = new File(img, fileName);
+    
+            const tempPath = URL.createObjectURL(f);
             setState(prev => ({...prev, profilePic: {
-                thumbnail:tempPath, 
-                picture: file
+              thumbnail:tempPath, 
+              picture: f
             }}))
+          } else {
+    
+            const tempPath = URL.createObjectURL(e.target.files[0]);
+            setState(prev => ({...prev, profilePic: {
+              thumbnail:tempPath, 
+              picture: file
+            }}))
+          }
+          setUpload(false);
+          setFileUp(false);
         }
     }
 
@@ -113,6 +141,14 @@ export default function EditForm({userDetails, pets} : Props) {
         <form action="" className="relative max-w-xl w-full">
             <div className="user-image flex flex-col justify-center items-center mt-[30px]">
                 <label htmlFor="profile-image" className="relative group">
+                    {
+                      fileUp && (
+                        <div className="absolute z-10 w-full h-full flex justify-center gap-2 items-center">
+                          <CircleNotch size={20} className="animate-spin"/>
+                          <span>アップロード中...</span>
+                        </div>
+                      )
+                    }
                     <OptImage src={state.profilePic.thumbnail} containerClass="hidden md:flex" square={true} width={350} height={350} className="hidden md:block border border-primary-text rounded-full object-cover" alt={state.dispUsrnm}/>
                     <OptImage src={state.profilePic.thumbnail} containerClass="flex md:hidden" square={true} width={150} height={150} className="block md:hidden border border-primary-text rounded-full object-cover" alt={state.dispUsrnm}/>
                     <input onChange={profPicOnChange} className="w-[100%] hidden" type="file" name="profile-image" id="profile-image" />

@@ -12,11 +12,13 @@ import { ArrowLeft, CircleNotch, Plus } from "@phosphor-icons/react/dist/ssr";
 import { AnimatePresence, motion } from "framer-motion";
 import heic2any from "heic2any";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 export default function PetAddForm() {
 
     const dispatch = useAppDispatch();
+    const router = useRouter();
     // Pet add
     const [state, setState] = useState({
         modalDisp: false,
@@ -204,6 +206,8 @@ export default function PetAddForm() {
                   submitState: false,
                   error: ''
                 });
+
+                router.push('/user/settings/' + user.user_id);
             }
         }).catch( err => {
 

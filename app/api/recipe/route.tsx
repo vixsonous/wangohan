@@ -108,12 +108,12 @@ export const GET = async (req: NextRequest) => {
         const getUserData = await getUserId();
  
         if(String(params.get('category')) === 'created') {
-          const recipes = await getRemainingCreatedRecipe(10, 1, 0, getUserData);
+          const recipes = await getRemainingCreatedRecipe(12, 1, 0, getUserData);
           if(recipes.status === 500) return NextResponse.json({message: "Error getting recipes", body: []}, {status: 500});
           
           return NextResponse.json({message: SUCC_MSG.SUCCESS1, body: recipes.body}, {status: 200});
         } else {
-          const recipes = await getRemainingLikedRecipe(10, 1, 0, getUserData);
+          const recipes = await getRemainingLikedRecipe(12, 1, 0, getUserData);
           if(recipes.status === 500) return NextResponse.json({message: "Error getting recipes", body: []}, {status: 500});
           
           return NextResponse.json({message: SUCC_MSG.SUCCESS1, body: recipes.body}, {status: 200});

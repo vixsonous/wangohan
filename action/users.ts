@@ -378,7 +378,8 @@ export async function getNotifications(user_id: number) {
   try {
     const notifs = await db.selectFrom("notifications_table")
         .selectAll()
-        .where("user_id", "=", user_id)
+        .where("recipe_owner_id", "=", user_id)
+        .where("created_at", ">=", new Date(Date.now() - 7 * 24 * 60 * 60 * 1000))
         .orderBy("created_at desc")
         .execute();
 

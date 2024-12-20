@@ -52,10 +52,10 @@ export default async function User({params} : {params: {userId: String}}) {
         <Suspense fallback={<IndexLoading />}>
             <div className="flex flex-col justify-center items-center ">
                 <div className="relative flex flex-col pb-[100px] max-w-xl w-full">
-                  <div className="lg:flex gap-8 justify-between lg:mb-16">
-                    <div className="user-image relative flex flex-col justify-center lg:justify-start items-center mt-[30px]">
+                  <div className="lg:flex gap-8 justify-center lg:mb-16">
+                    <div className="user-image relative flex flex-col justify-center lg:justify-start items-center mt-12">
                         <div className="hidden md:block">
-                          <OptImage src={image_url} centered className=" rounded-full object-cover relative" square width={350} height={350}  alt="website banner"/>
+                          <OptImage src={image_url} centered className=" rounded-full object-cover relative" square width={300} height={300}  alt="website banner"/>
                         </div>
                         <div className="block md:hidden">
                           <OptImage src={image_url} centered className=" rounded-full object-cover relative" square width={150} height={150}  alt="website banner"/>
@@ -75,7 +75,7 @@ export default async function User({params} : {params: {userId: String}}) {
                     (decryptedSession && userDetails.user_id === decryptedSession.user.user_id) && (
                       <div className="fixed bottom-8 z-[99] right-8">
                         <Link className="relative" href={`/user/settings/${userDetails.user_id}`}>
-                            <img loading="lazy" src={'/Setting/newsetting.webp'} className="h-[auto] w-[100px] md:w-[120px]  max-w-none" width={100} height={100}  alt="website banner" />
+                            <img loading="lazy" src={'/Setting/newsetting.webp'} className="h-[auto] w-[80px] md:w-[100px]  max-w-none" width={100} height={100}  alt="website banner" />
                         </Link>
                       </div>
                     )
