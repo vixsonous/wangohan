@@ -246,6 +246,7 @@ export async function retrieveLikedRecipes(user_id: number, page: number) {
     const likedRecipes = await db.selectFrom("likes_table")
       .select("recipe_id")
       .where("user_id","=",user_id)
+      .where("is_liked", '=', true)
       .execute();
 
     const likedRecipesIds = likedRecipes.map( rec => rec.recipe_id);

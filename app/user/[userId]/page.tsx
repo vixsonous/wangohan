@@ -52,8 +52,8 @@ export default async function User({params} : {params: {userId: String}}) {
         <Suspense fallback={<IndexLoading />}>
             <div className="flex flex-col justify-center items-center ">
                 <div className="relative flex flex-col pb-[100px] max-w-xl w-full">
-                  <div className="lg:flex gap-8 justify-center lg:mb-16">
-                    <div className="user-image relative flex flex-col justify-center lg:justify-start items-center mt-12">
+                  <div className="lg:flex gap-8 justify-center lg:mb-16 mt-16">
+                    <div className="user-image w-full relative flex flex-col justify-center lg:justify-start items-center">
                         <div className="hidden md:block">
                           <OptImage src={image_url} centered className=" rounded-full object-cover relative" square width={300} height={300}  alt="website banner"/>
                         </div>
@@ -61,25 +61,25 @@ export default async function User({params} : {params: {userId: String}}) {
                           <OptImage src={image_url} centered className=" rounded-full object-cover relative" square width={150} height={150}  alt="website banner"/>
                         </div>
                         <h1 className="text-[36px] font-bold text-[#5b5351]">{userDetails.user_codename === '' ? `Wanuser` + userDetails.user_id : userDetails.user_codename}</h1>
-                    </div>
-                    <div className="flex flex-col items-center justify-center pr-4">
-                      <div className="flex justify-center items-center relative mt-12 mb-4 lg:mb-16">
+                        <div className="flex justify-center items-center relative mt-12 mb-4">
                           <h1 className="absolute text-sm md:text-lg top-2 md:top-4 font-semibold text-[#523636]">うちのわん</h1>
                           <img loading="lazy" src={'/icons/ribbon.webp'} className="h-[auto] w-[200px] sm:w-[300px] max-w-none" width={100} height={100}  alt="website banner" />
-                      </div>
-                      <PetList pets={pets}/>
+                        </div>
+                        <PetList pets={pets}/>
+                    </div>
+                    <div className="flex flex-col w-full items-center justify-start pr-4">
+                      <TabList curUser={decryptedSession && userDetails.user_id === decryptedSession.user.user_id} owned_recipes={recipes_data} liked_recipes={liked_recipes_data}/>
+                      {
+                        (decryptedSession && userDetails.user_id === decryptedSession.user.user_id) && (
+                          <div className="fixed bottom-8 z-[99] right-8">
+                            <Link className="relative" href={`/user/settings/${userDetails.user_id}`}>
+                                <img loading="lazy" src={'/Setting/newsetting.webp'} className="h-[auto] w-[80px] md:w-[100px]  max-w-none" width={100} height={100}  alt="website banner" />
+                            </Link>
+                          </div>
+                        )
+                      }
                     </div>
                   </div>
-                  <TabList curUser={decryptedSession && userDetails.user_id === decryptedSession.user.user_id} owned_recipes={recipes_data} liked_recipes={liked_recipes_data}/>
-                  {
-                    (decryptedSession && userDetails.user_id === decryptedSession.user.user_id) && (
-                      <div className="fixed bottom-8 z-[99] right-8">
-                        <Link className="relative" href={`/user/settings/${userDetails.user_id}`}>
-                            <img loading="lazy" src={'/Setting/newsetting.webp'} className="h-[auto] w-[80px] md:w-[100px]  max-w-none" width={100} height={100}  alt="website banner" />
-                        </Link>
-                      </div>
-                    )
-                  }
                 </div>
             </div>
         </Suspense>

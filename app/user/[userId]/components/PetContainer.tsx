@@ -19,7 +19,7 @@ export default memo(function PetContainer ({petData, className=''}: Props) {
   return (
       <div className={`flex md:flex-col flex-grow flex-shrink-0 justify-center items-center gap-2 ${className}`}>
           <div className="hidden md:block">
-              <OptImage src={petData.pet_image} centered className=" rounded-full object-cover relative" square width={150} height={150}  alt="website banner"/>
+              <OptImage src={petData.pet_image} centered className=" rounded-full object-cover relative" square width={100} height={100}  alt="website banner"/>
           </div>
           <div className="block md:hidden">
               <OptImage src={petData.pet_image} centered className=" rounded-full object-cover relative" square width={60} height={60}  alt="website banner"/>

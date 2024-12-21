@@ -71,7 +71,7 @@ export default function TabList({
       setState(prev => ({...prev, likedLoadingRecipes: false}));
     }
     return (
-        <div className="tab-list p-4 w-full">
+        <div className="tab-list px-4 w-full">
             <div className="flex items-center">
                 <button onClick={myRecipeActivate} className={`${state.active ? 'bg-[#5b5351] text-white' : 'bg-[#FFFAF0] text-[#5b5351]'} py-2 lg:py-4 lg:px-8 px-4 text-[10px] sm:text-xs font-bold rounded-tl`}>自分のレシピ</button>
                 {curUser && (
@@ -81,7 +81,7 @@ export default function TabList({
                   </button>
                 )}
             </div>
-            <div ref={imgContainer} className={`${!state.active ? 'hidden' : ''} ${recipes.owned_recipes.length === 0 ? 'min-h-[50vh] lg:min-h-screen' : ''} recipe-list__container max-w-xl grid ${owned_recipes.length > 0 ? 'grid-cols-3 md:grid-cols-4 lg:grid-cols-6' : 'grid-cols-1'} masonry p-1 gap-0.5 bg-secondary-bg items-center relative`}>
+            <div ref={imgContainer} className={`${!state.active ? 'hidden' : ''} min-h-[50vh] lg:min-h-screen recipe-list__container max-w-xl grid ${owned_recipes.length > 0 ? 'grid-cols-2 md:grid-cols-3' : 'grid-cols-1'} masonry p-1 gap-0.5 bg-secondary-bg items-start relative`}>
                 {
                   recipes.owned_recipes.length > 0 ? (
                     recipes.owned_recipes.map( (recipe, idx) => <div key={idx} className="relative pb-[100%] top-[0]" ref={ref => {imgRefs.current[idx] = ref}}>
@@ -100,7 +100,7 @@ export default function TabList({
             </div>
             {
               curUser && (
-                <div ref={imgContainer} className={`${state.active ? 'hidden' : ''} ${recipes.liked_recipes.length === 0 ? 'min-h-[50vh] lg:min-h-screen' : ''} recipe-list__container max-w-xl grid ${liked_recipes.length > 0 ? 'grid-cols-3 md:grid-cols-4 lg:grid-cols-6' : 'grid-cols-1'} masonry p-1 gap-0.5 bg-[#FFFAF0] items-center relative`}>
+                <div ref={imgContainer} className={`${state.active ? 'hidden' : ''} min-h-[50vh] lg:min-h-screen recipe-list__container max-w-xl grid ${liked_recipes.length > 0 ? 'grid-cols-2 md:grid-cols-3' : 'grid-cols-1'} masonry p-1 gap-0.5 bg-[#FFFAF0] items-start relative`}>
                   {recipes.liked_recipes.length > 0 ? (
                     recipes.liked_recipes.map( (recipe, idx) => <div key={idx} className="relative pb-[100%] top-[0]" ref={ref => {imgRefs.current[idx] = ref}}>
                       <Link href={`/recipe/show/` + recipe.recipe_id}>
@@ -119,7 +119,7 @@ export default function TabList({
             }
             {
                 state.active ? (
-                  (recipes.owned_recipes.length > 9 && recipes.owned_recipes_loading === false) && (
+                  (recipes.owned_recipes.length > 9 && recipes.owned_recipes_loading === false && curUser) && (
                         <div className="w-[100%] flex justify-center">
                             <button onClick={getAllCreatedRecipes} disabled={state.createdLoadingRecipes} className="flex items-center gap-2 text-sm md:text-base font-bold p-4">
                               {state.createdLoadingRecipes && <CircleNotch size={20} className="animate-spin"/>}
