@@ -133,12 +133,12 @@ export default memo(function LayoutSettings({isLoggedIn, user_id, db_notificatio
       <div className={'menu flex gap-6'}>
         <div className="self-center relative">
           <button ref={btn} onClick={openNotificationOnClick}>
-            <img src={'/icons/notification.webp'} className="self-center rounded-md h-[auto] z-10 w-16 md:w-10 relative" width={100} height={100}  alt="website banner" />
+            <OptImage src={'/icons/notification.webp'} className="self-center rounded-md h-[auto] z-10 w-16 md:w-10 relative" width={100} height={100}  alt="website banner" />
           </button>
           {notificationCount > 0 && <span className='absolute z-10 top-4 left-6 bg-red-600 text-white p-2 text-xs rounded-full flex justify-center items-center h-4 w-4'>{
             notificationCount  
           }</span>}
-          <div ref={settings} style={{scale: openNotification ? 1 : 0}} className={`transition-all duration-300 origin-top-right absolute bg-primary-bg border border-primary-text text-xs text-left w-64 max-w-64 p-4 ${openNotification ? '-right-2 -top-2' : 'right-0 top-0'} rounded-lg text-wrap`}>
+          <div ref={settings} style={{scale: openNotification ? 1 : 0}} className={`transition-all duration-300 origin-top-right absolute bg-primary-bg border border-primary-text text-xs text-left w-64 max-w-64 max-h-96 overflow-y-scroll p-4 ${openNotification ? '-right-2 -top-2' : 'right-0 top-0'} rounded-lg text-wrap`}>
             <div className='text-lg font-bold'>
               <span>お知らせ</span>
             </div>
