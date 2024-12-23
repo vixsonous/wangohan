@@ -9,10 +9,10 @@ import { hideError, hideSuccess, showError, showSuccess } from "@/lib/redux/stat
 import { setPets } from "@/lib/redux/states/petSlice";
 import { faCircleNotch, faClose, faEdit, faSave } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CircleNotch, FloppyDisk } from "@phosphor-icons/react/dist/ssr";
+import { CircleNotch, FloppyDisk, X } from "@phosphor-icons/react/dist/ssr";
 import { AnimatePresence, motion } from "framer-motion";
 import { redirect } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 interface Props {
     petData: DogData,
@@ -48,8 +48,15 @@ export default function PetEditForm({petData, className=''} : Props) {
         error: ''
     });
 
-    const showEditModal = () => setState(prev => ({...prev, modalDisp: true}));
-    const hideEditModal = () => setState(prev => ({...prev, modalDisp: false}));
+    const showEditModal = (e:React.MouseEvent<HTMLButtonElement>) => {
+      e.preventDefault();
+
+      setState(prev => ({...prev, modalDisp: true}))
+    };
+    const hideEditModal = (e:React.MouseEvent<HTMLButtonElement>) => {
+      e.preventDefault();
+      setState(prev => ({...prev, modalDisp: false}));
+    }
 
     const petPicOnChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if(e.target.files && e.target.files[0]) {
@@ -87,6 +94,25 @@ export default function PetEditForm({petData, className=''} : Props) {
     const petInputOnBlur = (e: React.FocusEvent<HTMLInputElement>) => {
         const name = `${e.currentTarget.name}Icn`;
         setState(prev => ({...prev, icns: {...prev.icns, [name]: faEdit}}));
+    }
+
+    const bdayRef = useRef<HTMLInputElement>(null);
+
+    const petBdayLabelClick = (e:React.MouseEvent<HTMLLabelElement>) => {
+      e.preventDefault();
+      
+      if(bdayRef && bdayRef.current) {
+        bdayRef.current.showPicker();
+        bdayRef.current.focus();
+        const name = `${bdayRef.current.name}Icn`;
+        setState(prev => ({
+            ...prev, 
+            icns: {
+                ...prev.icns,
+                [name]: faSave 
+            }
+        }));
+      }
     }
 
     const submitFunc = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -196,18 +222,17 @@ export default function PetEditForm({petData, className=''} : Props) {
 
     return (
         <>
-            <div onClick={showEditModal} className={"flex md:flex-col flex-grow flex-shrink-0 justify-center items-center gap-[10px]" + className}>
+            <button onClick={showEditModal} className={"flex md:flex-col flex-grow flex-shrink-0 justify-center items-center gap-[10px]" + className}>
                 <div>
-
                     <OptImage src={petData.pet_image} centered className="hidden md:block rounded-full object-cover" square width={150} height={150}  alt="website banner"/>
                     <OptImage src={petData.pet_image} centered className="block md:hidden rounded-full object-cover" square width={60} height={60}  alt="website banner"/>
                 </div>
-                <div className="flex flex-col gap-2 text-[#5b5351]">
+                <div className="flex flex-col justify-start items-start gap-2 text-[#5b5351]">
                     <p className="text-base md:text-xl font-bold text-ellipsis overflow-hidden max-w-max">{petData.pet_name}</p>
                     <p className="text-xs md:text-sm flex gap-2 flex-wrap"><span>{petData.pet_birthdate.split('T')[0]}</span><span>{`(${calculateAge(new Date(petData.pet_birthdate))}才) `}</span></p>
                     <p className="text-xs md:text-sm">{petData.pet_breed}</p>
                 </div> 
-            </div>
+            </button>
             <AnimatePresence>
             {
                 state.modalDisp && (
@@ -220,10 +245,12 @@ export default function PetEditForm({petData, className=''} : Props) {
                             initial={{opacity: 0, y: -100}}
                             animate={{opacity: 1, y: 0}}
                             exit={{opacity: 0, y: -100}}
-                            className="border-[2px] border-solid border-[#ffcd92]  rounded-md">
+                            className="border-[2px] border-solid border-[#ffcd92] rounded-md">
                             <div className="bg-[#FFE9C9] text-[#523636] flex justify-between items-center font-bold w-full py-[10px] px-[20px]">
                                 <h1>Edit Pet</h1>
-                                <FontAwesomeIcon onClick={hideEditModal} icon={faClose} size="sm" className="ml-[20px] cursor-pointer text-[15px]"/>
+                                <button onClick={hideEditModal}>
+                                  <X size={20}/>
+                                </button>
                             </div>
                             <div className="bg-[#FFFAF0] p-[30px] flex justify-center flex-wrap  items-center gap-[20px]">
                                 <div>
@@ -236,9 +263,9 @@ export default function PetEditForm({petData, className=''} : Props) {
                                     <input onChange={petPicOnChange} className="hidden" type="file" name="" id={`thumbnail-${petData.pet_id}`} />
                                 </div>
                                 <div className="flex flex-col gap-[5px] text-[#5b5351]">
-                                    <div>
-                                        <span>Pet Name</span>
-                                        <label htmlFor="petName" className="flex items-center justify-center relative w-[100%] px-[10px] py-[5px] border-[2px] rounded-md border-[#ffcd92]">
+                                    <label>
+                                        <span>愛犬の名前</span>
+                                        <label htmlFor="petName" className="h-10 flex items-center justify-center relative w-[100%] px-[10px] py-[5px] border-[2px] rounded-md border-[#ffcd92]">
                                             <input 
                                                 id="pet-name" 
                                                 className="w-[100%] focus:outline-none text-[1em] bg-[transparent] text-left font-bold text-[#5b5351]" 
@@ -250,11 +277,12 @@ export default function PetEditForm({petData, className=''} : Props) {
                                             />
                                             <FontAwesomeIcon icon={state.icns.petNameIcn} size="lg" className="absolute right-[5px]"/>
                                         </label>
-                                    </div>
-                                    <div>
-                                        <span>Pet Birthdate</span>
-                                        <div className="appearance-none w-full flex items-center justify-between relative flex-wrap px-[10px] py-[4px] border-[2px] rounded-md border-[#ffcd92]">
+                                    </label>
+                                    <label onClick={petBdayLabelClick}>
+                                        <span>誕生日</span>
+                                        <div className="h-10 appearance-none w-full flex items-center justify-between relative flex-wrap px-4 py-2 border-[2px] rounded-md border-[#ffcd92]">
                                             <input 
+                                                ref={bdayRef}
                                                 className="appearance-none focus:outline-none text-[1em] bg-[transparent] text-left font-bold text-[#5b5351]" 
                                                 value={state.pet.petBday && state.pet.petBday.valueOf() !== 0 ? 
                                                     state.pet.petBday.toISOString().split('T')[0] 
@@ -268,10 +296,10 @@ export default function PetEditForm({petData, className=''} : Props) {
                                             />
                                             <FontAwesomeIcon icon={state.icns.petBdayIcn} size="lg" className="absolute right-[5px]"/>
                                         </div>
-                                    </div>
-                                    <div>
-                                        <span>Pet Breed</span>
-                                        <div className="flex items-center justify-center relative w-[100%] px-[10px] py-[5px] border-[2px] rounded-md border-[#ffcd92]">
+                                    </label>
+                                    <label>
+                                        <span>犬種</span>
+                                        <div className="h-10 flex items-center justify-center relative w-[100%] px-[10px] py-[5px] border-[2px] rounded-md border-[#ffcd92]">
                                             <input 
                                                 value={state.pet.petBreed} 
                                                 className="w-[100%] focus:outline-none text-[1em] bg-[transparent] text-left font-bold text-[#5b5351]" 
@@ -282,7 +310,7 @@ export default function PetEditForm({petData, className=''} : Props) {
                                             />
                                             <FontAwesomeIcon icon={state.icns.petBreedIcn} size="lg" className="absolute right-[5px]"/>
                                         </div>
-                                    </div>
+                                    </label>
                                 </div> 
                                 <div className="w-full flex justify-center flex-col items-center gap-[5px]">
                                     <button type="submit" className="w-[100%] max-w-[190px] bg-[#ffb762] text-white py-[10px] rounded-md text-[12px] sm:text-[16px]" onClick={submitFunc}>

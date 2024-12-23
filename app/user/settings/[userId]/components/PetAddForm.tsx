@@ -247,12 +247,30 @@ export default function PetAddForm() {
     }
 
     const btnRef = useRef<HTMLButtonElement>(null);
+    const bdayRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
-      if(window.location.href.includes("?=#register-pet") && btnRef.current) {
+      if(window && window.location.href.includes("?=#register-pet") && btnRef.current) {
         btnRef.current.click();
       }
     },[]);
+
+    const petBdayLabelClick = (e:React.MouseEvent<HTMLLabelElement>) => {
+      e.preventDefault();
+      
+      if(bdayRef && bdayRef.current) {
+        bdayRef.current.showPicker();
+        bdayRef.current.focus();
+        const name = `${bdayRef.current.name}Icn`;
+        setState(prev => ({
+            ...prev, 
+            icns: {
+                ...prev.icns,
+                [name]: faSave 
+            }
+        }));
+      }
+    }
 
     return (
         <>
@@ -315,10 +333,11 @@ export default function PetAddForm() {
                                         <FontAwesomeIcon icon={state.icns.petNameIcn} size="lg" className="absolute right-[5px]"/>
                                     </label>
                                 </label>
-                                <label className="group">
+                                <label onClick={petBdayLabelClick} className="group">
                                     <span>誕生日</span>
                                     <label htmlFor="petBday" className="h-10 appearance-none w-full flex items-center justify-between relative flex-wrap px-4 py-2 border-[2px] rounded-md border-[#ffcd92]">
                                         <input 
+                                            ref={bdayRef}
                                             className="appearance-none focus:outline-none text-[1em] bg-[transparent] text-left font-bold text-[#5b5351]" 
                                             value={state.pet.petBday && state.pet.petBday.valueOf() !== 0 ? 
                                                 state.pet.petBday.toISOString().split('T')[0] 
@@ -335,7 +354,7 @@ export default function PetAddForm() {
                                 </label>
                                 <label className="group">
                                     <span>犬種</span>
-                                    <label htmlFor="petBreed" className="h-12 flex items-center justify-center relative w-[100%] px-[10px] py-[5px] border-[2px] rounded-md border-[#ffcd92]">
+                                    <label htmlFor="petBreed" className="h-10 flex items-center justify-center relative w-[100%] px-[10px] py-[5px] border-[2px] rounded-md border-[#ffcd92]">
                                         <input 
                                             value={state.pet.petBreed} 
                                             className="w-[100%] focus:outline-none text-[1em] bg-[transparent] text-left font-bold text-[#5b5351]" 

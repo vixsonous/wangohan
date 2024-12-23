@@ -10,6 +10,7 @@ import { memo } from "react";
 import BodyMainSearch from "./components/ElementComponents/BodyMainSearch";
 import MotionDiv from "./components/ElementComponents/MotionDiv";
 import { getBdayPets } from "@/action/pet";
+import OptImage from "./components/ElementComponents/Image";
 
 const gloria = Gloria_Hallelujah({
   weight: '400',
@@ -34,15 +35,15 @@ const DogCategoryMedCore = () => {
       <h1 className="text-[20px] text-primary-text font-semibold">年齢別で探す</h1>
       <div className="grid grid-cols-3 w-[100%]">
         <Link href="/recipe/search/子犬" className="flex gap-2 text-primary-text font-bold flex-col justify-center items-center">
-          <img src={'/LP/puppy-thumbnail.png'} height={70} loading="lazy" className="relative rounded-md"  alt="website banner" />
+          <OptImage src={'/LP/puppy-thumbnail.png'} height={70} loading="lazy" className="relative rounded-md"  alt="website banner" />
           <span className="relative text-xs">子犬用レシピ</span>
         </Link>
         <Link href="/recipe/search/成犬" className="flex gap-2 relative text-primary-text font-bold flex-col justify-center items-center">
-          <img src={'/LP/adult-thumbnail.png'} height={70} loading="lazy" className="relative rounded-md" alt="website banner" />
+          <OptImage src={'/LP/adult-thumbnail.png'} height={70} loading="lazy" className="relative rounded-md" alt="website banner" />
           <span className="relative text-xs">成犬用レシピ</span>
         </Link>
         <Link href="/recipe/search/シニア犬" className="flex gap-2 relative text-primary-text font-bold flex-col justify-center items-center">
-          <img src={'/LP/senior-thumbnail.png'} height={70} loading="lazy" className="relative rounded-md bottom-[0px]"  alt="website banner" />
+          <OptImage src={'/LP/senior-thumbnail.png'} height={70} loading="lazy" className="relative rounded-md bottom-[0px]"  alt="website banner" />
           <span className="relative text-xs">シニア犬用レシピ</span>
         </Link>
       </div>
@@ -52,15 +53,15 @@ const DogCategoryMedCore = () => {
       <h1 className="text-[20px] text-[#523636] font-semibold">サイズ別で探す</h1>
       <div className="grid grid-cols-3 w-[100%]">
         <Link href="/recipe/search/小型犬" className="flex gap-2 flex-col text-xs text-[#523636] font-bold justify-between items-center">
-          <img src={'/LP/smalldog-thumbnail.png'} loading="lazy" className="relative rounded-md" height={70}  alt="website banner" />
+          <OptImage src={'/LP/smalldog-thumbnail.png'} loading="lazy" className="relative rounded-md" height={70}  alt="website banner" />
           <span className="relative top-[0px]">小型犬用レシピ</span>
         </Link>
         <Link href="/recipe/search/中型犬" className="flex gap-2 flex-col text-xs text-[#523636] font-bold justify-between items-center">
-          <img src={'/LP/middledog-thumbnail.png'} loading="lazy" className="relative rounded-md" height={70}  alt="website banner" />
+          <OptImage src={'/LP/middledog-thumbnail.png'} loading="lazy" className="relative rounded-md" height={70}  alt="website banner" />
           <span className="relative top-[0px]">中型犬用レシピ</span>
         </Link>
         <Link href="/recipe/search/大型犬" className="flex gap-2 flex-col relative text-xs text-[#523636] font-bold justify-between items-center">
-          <img src={'/LP/bigdog-thumbnail.png'} loading="lazy" className="relative rounded-md" height={70}  alt="website banner" />
+          <OptImage src={'/LP/bigdog-thumbnail.png'} loading="lazy" className="relative rounded-md" height={70}  alt="website banner" />
           <span className="relative top-[0px]">大型犬用レシピ</span>
         </Link>
       </div>
@@ -76,15 +77,15 @@ const DogCategorySmCore = () => {
       <h1 className="text-[20px] text-primary-text font-semibold">年齢別で探す</h1>
       <div className="grid grid-cols-3 w-[100%]">
         <Link href="/recipe/search/子犬" className="flex gap-2 text-primary-text font-bold flex-col justify-center items-center">
-          <img src={'/LP/puppy-thumbnail.png'} height={70} loading="lazy" className="relative rounded-md"  alt="website banner" />
+          <OptImage src={'/LP/puppy-thumbnail.png'} height={70} loading="lazy" className="relative rounded-md"  alt="website banner" />
           <span className="relative text-xs">子犬用レシピ</span>
         </Link>
         <Link href="/recipe/search/成犬" className="flex gap-2 relative text-primary-text font-bold flex-col justify-center items-center">
-          <img src={'/LP/adult-thumbnail.png'} height={70} loading="lazy" className="relative rounded-md" alt="website banner" />
+          <OptImage src={'/LP/adult-thumbnail.png'} height={70} loading="lazy" className="relative rounded-md" alt="website banner" />
           <span className="relative text-xs">成犬用レシピ</span>
         </Link>
         <Link href="/recipe/search/シニア犬" className="flex gap-2 relative text-primary-text font-bold flex-col justify-center items-center">
-          <img src={'/LP/senior-thumbnail.png'} height={70} loading="lazy" className="relative rounded-md bottom-[0px]"  alt="website banner" />
+          <OptImage src={'/LP/senior-thumbnail.png'} height={70} loading="lazy" className="relative rounded-md bottom-[0px]"  alt="website banner" />
           <span className="relative text-xs">シニア犬用レシピ</span>
         </Link>
       </div>
@@ -94,15 +95,15 @@ const DogCategorySmCore = () => {
       <h1 className="text-[20px] text-[#523636] font-semibold">サイズ別で探す</h1>
       <div className="grid grid-cols-3 w-[100%]">
         <Link href="/recipe/search/小型犬" className="flex gap-2 flex-col text-xs text-[#523636] font-bold justify-between items-center">
-          <img src={'/LP/smalldog-thumbnail.png'} loading="lazy" className="relative rounded-md" height={70}  alt="website banner" />
+          <OptImage src={'/LP/smalldog-thumbnail.png'} loading="lazy" className="relative rounded-md" height={70}  alt="website banner" />
           <span className="relative top-[0px]">小型犬用レシピ</span>
         </Link>
         <Link href="/recipe/search/中型犬" className="flex gap-2 flex-col text-xs text-[#523636] font-bold justify-between items-center">
-          <img src={'/LP/middledog-thumbnail.png'} loading="lazy" className="relative rounded-md" height={70}  alt="website banner" />
+          <OptImage src={'/LP/middledog-thumbnail.png'} loading="lazy" className="relative rounded-md" height={70}  alt="website banner" />
           <span className="relative top-[0px]">中型犬用レシピ</span>
         </Link>
         <Link href="/recipe/search/大型犬" className="flex gap-2 flex-col relative text-xs text-[#523636] font-bold justify-between items-center">
-          <img src={'/LP/bigdog-thumbnail.png'} loading="lazy" className="relative rounded-md" height={70}  alt="website banner" />
+          <OptImage src={'/LP/bigdog-thumbnail.png'} loading="lazy" className="relative rounded-md" height={70}  alt="website banner" />
           <span className="relative top-[0px]">大型犬用レシピ</span>
         </Link>
       </div>

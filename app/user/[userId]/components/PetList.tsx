@@ -62,7 +62,7 @@ export default function PetList({pets} : {pets: Array<DogData>}) {
               {
                 petState.length > 0 && (
                   // <div className={`md:hidden pet-list py-16 p-4 grid grid-cols-2 ${petState.length <=3 ? state.mdStart:'md:grid-cols-3'} ${petState.length <=3 ? `lg:grid-cols-${petState.length}`:'lg:grid-cols-5'} gap-8 items-center`}>
-                  <div className={`pet-list py-8 md:py-16 p-4 grid ${petState.length === 1 ? 'grid-cols-1' : 'grid-cols-3'} gap-8 items-center`}>
+                  <div className={`pet-list py-8 md:py-16 p-4 grid ${petState.length === 1 ? 'grid-cols-1' : 'grid-cols-2 md:grid-cols-3'} gap-8 items-center`}>
                   { 
                     petState.map((pet, idx) => <React.Fragment key={idx}><PetContainer petData={pet} /></React.Fragment>)
                   }

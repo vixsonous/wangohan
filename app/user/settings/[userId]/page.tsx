@@ -1,9 +1,10 @@
 import { getDecryptedSession } from "@/action/lib";
-import EditForm from "./components/EditForm";
 import { getUserDetails } from "@/action/users";
 import { redirect } from "next/navigation";
-import { getFile } from "@/action/file-lib";
 import { DogData } from "@/constants/interface";
+import dynamic from "next/dynamic";
+import IndexLoading from "@/app/loading";
+const EditForm = dynamic(() => import("./components/EditForm"), { ssr: false, loading: () => <IndexLoading />});
 
 export default async function Settings() {
     const decryptedSession = await getDecryptedSession();

@@ -12,9 +12,10 @@ import dynamic from "next/dynamic";
 import { CircleNotch } from "@phosphor-icons/react/dist/ssr";
 import InputLoading from "@/app/components/ElementComponents/InputLoading";
 import heic2any from "heic2any";
+import IndexLoading from "@/app/loading";
 const OptImage = React.lazy(() => import("@/app/components/ElementComponents/Image"));
 const PetEditForm = React.lazy(() => import("./PetEditForm"));
-const PetAddForm = dynamic(() => import("./PetAddForm"), { ssr: false, loading: () => <InputLoading />});
+const PetAddForm = dynamic(() => import("./PetAddForm"), { ssr: false, loading: () => <IndexLoading />});
 const ErrorSpan = React.lazy(() => import("@/app/components/TextComponents/ErrorSpan"));
 
 interface Props {

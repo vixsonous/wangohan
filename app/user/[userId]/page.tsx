@@ -67,7 +67,7 @@ export default async function User({params} : {params: {userId: String}}) {
                         </div>
                         <PetList pets={pets}/>
                     </div>
-                    <div className="flex flex-col w-full items-center justify-start pr-4">
+                    <div className="flex flex-col w-full items-center justify-start">
                       <TabList curUser={decryptedSession && userDetails.user_id === decryptedSession.user.user_id} owned_recipes={recipes_data} liked_recipes={liked_recipes_data}/>
                       {
                         (decryptedSession && userDetails.user_id === decryptedSession.user.user_id) && (
