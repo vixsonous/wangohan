@@ -61,7 +61,7 @@ export default async function User({params} : {params: {userId: String}}) {
                           <OptImage src={image_url} centered className=" rounded-full object-cover relative" square width={150} height={150}  alt="website banner"/>
                         </div>
                         <h1 className="text-[36px] font-bold text-[#5b5351]">{userDetails.user_codename === '' ? `Wanuser` + userDetails.user_id : userDetails.user_codename}</h1>
-                        <div className="flex justify-center items-center relative mt-12 mb-4">
+                        <div className="flex justify-center items-center relative mt-12 mb-4 md:mb-0">
                           <h1 className="absolute text-sm md:text-lg top-2 md:top-4 font-semibold text-[#523636]">うちのわん</h1>
                           <img loading="lazy" src={'/icons/ribbon.webp'} className="h-[auto] w-[200px] sm:w-[300px] max-w-none" width={100} height={100}  alt="website banner" />
                         </div>

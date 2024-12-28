@@ -473,7 +473,7 @@ export default memo(function CreateRecipeForm() {
               </label>
               <div className="ml-[1px] flex flex-wrap" id="recipe-category">
                   <div className={` w-[45%] flex flex-col gap-[5px] flex-wrap `}>
-                      <span className="text-[13px] text-[grey]">年齢を選択</span>
+                      <span className="text-[13px] text-[grey]">年齢を選択</span> {/** TODO 複数可 after finish more than 1 selection */}
                       <div className="flex gap-[5px] flex-wrap items-center">
                           {
                               ['子犬', '成犬', 'シニア犬'].map((el, idx) => {
@@ -490,7 +490,7 @@ export default memo(function CreateRecipeForm() {
                           </div>
                   </div>
                   <div className={` w-[45%] flex flex-col gap-[5px] flex-wrap `}>
-                      <span className="text-[13px] text-[grey]">サイズを選択</span>
+                      <span className="text-[13px] text-[grey]">サイズを選択</span> {/** TODO 複数可 after finish more than 1 selection */}
                       <div className="flex gap-[5px] flex-wrap items-center">
                           {
                               ['小型犬','中型犬','大型犬'].map( (el, idx) => {
@@ -507,7 +507,7 @@ export default memo(function CreateRecipeForm() {
                       </div>
                   </div>
                   <div className={` mt-[10px] w-[100%] flex flex-col gap-[5px] flex-wrap `}>
-                      <span className="text-[13px] text-[grey]">イベントを選択</span>
+                      <span className="text-[13px] text-[grey]">イベントを選択</span> {/** TODO 最大3個 after finish more than 1 selection */}
                       <div className="flex gap-[5px] flex-wrap items-center">
                           {
                               ['お誕生日','おうち記念日','お正月','節分','ひな祭り',

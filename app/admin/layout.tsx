@@ -14,11 +14,11 @@ export default async function AdminLayout({
     return (
         <Suspense fallback={<IndexLoading />}>
             <div className="flex flex-col overflow-y-visible justify-center items-center ">
-                <div className="relative overflow-y-visible max-w-md w-full">
+                <div className="relative overflow-y-visible max-w-xl w-full">
                     <section className="md:hidden px-4 pt-2">
                         <div className="bg-secondary-bg p-2 rounded-full flex justify-between items-center">
                             <div className="flex gap-2 items-center">
-                                <OptImage className="w-8 h-8 rounded-full" src={'https://wangohan-public.s3.ap-northeast-1.amazonaws.com/00000003/profile/MlXG7GuTcRjVhQS2FB7VPtype_thumbnail.webp'}/>
+                                {/* <OptImage className="w-8 h-8 rounded-full" src={'https://wangohan-public.s3.ap-northeast-1.amazonaws.com/00000003/profile/MlXG7GuTcRjVhQS2FB7VPtype_thumbnail.webp'}/> */}
                                 <span className="text-sm font-bold">Victor Chiong</span>
                             </div>
                             <Dropdown>

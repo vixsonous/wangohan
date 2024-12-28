@@ -71,7 +71,7 @@ export default async function RootLayout({
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "Recipe",
-    "name": "愛犬のための手作りごはんレシピサイト",
+    "name": "わんごはん",
     "description": "わんちゃん専用投稿型レシピサイト。レシピ投稿や検索はもちろん、愛犬登録や誕生日月アナウンスなど盛りだくさん！皆さんの『わんごはん』レシピを投稿してみませんか？",
     "image": "https://wangohanjp.com/logo-final.webp",
     "author": {

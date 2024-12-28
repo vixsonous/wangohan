@@ -124,19 +124,19 @@ export default function Settings() {
                             </div>
                           </Link>
           
-                          <button disabled onClick={openSettings} className="w-full opacity-75 hover:opacity-75 px-4 py-1 rounded-full">
+                          {/* <button disabled onClick={openSettings} className="w-full opacity-75 hover:opacity-75 px-4 py-1 rounded-full">
                             <div className="w-full text-sm flex justify-between items-center">
                                 <Translate size={20}/>
                                 言語
                             </div>
-                          </button>
+                          </button> */}
           
-                          <button disabled onClick={openSettings} className="w-full opacity-75 hover:opacity-75 px-4 py-1 rounded-full">
+                          {/* <button disabled onClick={openSettings} className="w-full opacity-75 hover:opacity-75 px-4 py-1 rounded-full">
                             <div className="w-full text-sm flex justify-between items-center">
                                 <PawPrint size={20}/>
                                 コラム
                             </div>
-                          </button>
+                          </button> */}
           
                           <Button onClick={logout}>
                             <div  className="w-full hover:opacity-75 text-sm flex justify-between items-center px-4 py-1 rounded-full">
