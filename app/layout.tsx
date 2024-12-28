@@ -114,6 +114,7 @@ export default async function RootLayout({
         <html lang="en">
           <head>
             <link rel="icon" href="/favicon.ico" sizes="any" />
+            <meta name="google-adsense-account" content="ca-pub-9990388374961956"></meta>
             <script
               type="application/ld+json"
               dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
