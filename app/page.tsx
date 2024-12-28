@@ -11,6 +11,7 @@ import BodyMainSearch from "./components/ElementComponents/BodyMainSearch";
 import MotionDiv from "./components/ElementComponents/MotionDiv";
 import { getBdayPets } from "@/action/pet";
 import OptImage from "./components/ElementComponents/Image";
+import HomeNavigation from "./components/ElementComponents/HomeNavigation";
 
 const gloria = Gloria_Hallelujah({
   weight: '400',
@@ -174,12 +175,13 @@ export default async function Home() {
   return (
     <>
     <main className="relative flex px-6 py-6 lg:px-0 min-h-screen flex-col lg:items-center overflow-hidden pb-[50px] lg:pb-[200px]">
-      <div className=" flex max-w-xl h-full justify-center items-center flex-col gap-[15px]">
+      <div className=" flex max-w-xl h-full justify-center items-center flex-col">
         <div id="logo-banner" className="mt-8 lg:mt-0 relative flex flex-col justify-center items-center">
           <img src={'/icons/logo-new-v2.png'} className="rounded-md h-[auto] left-[15px] w-[130px] relative" width={130} height={130}  alt="website banner" />
           <h1 className={`text-[36px] text-[#6b4528] font-bold leading-tight ${mochi.className}`}>わんごはん</h1>
           <span className={`text-[10px] text-[#6b4528] ${gloria.className}`}>ALL RECIPES FOR YOUR DOG</span>
         </div>
+        <HomeNavigation />
         <div className="w-full h-full relative flex flex-col gap-[10px]">
           <div className="mt-8 search-form relative flex justify-end lg:hidden">
             <BodyMainSearch />

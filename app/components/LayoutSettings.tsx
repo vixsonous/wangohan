@@ -128,56 +128,58 @@ export default memo(function LayoutSettings({isLoggedIn, user_id, db_notificatio
 
   return (
     <>
-    {
-      user ? (
-      <div className={'menu flex gap-6'}>
-        <div className="self-center relative">
-          <button ref={btn} onClick={openNotificationOnClick}>
-            <OptImage src={'/icons/notification.webp'} loading="eager" className="self-center rounded-md h-[auto] z-10 w-16 md:w-10 relative" width={100} height={100}  alt="website banner" />
-          </button>
-          {notificationCount > 0 && <span className='absolute z-10 top-4 left-6 bg-red-600 text-white p-2 text-xs rounded-full flex justify-center items-center h-4 w-4'>{
-            notificationCount  
-          }</span>}
-          <div ref={settings} style={{scale: openNotification ? 1 : 0}} className={`transition-all duration-300 origin-top-right absolute bg-primary-bg border border-primary-text text-xs text-left w-64 max-w-64 max-h-96 overflow-y-scroll p-4 ${openNotification ? '-right-2 -top-2' : 'right-0 top-0'} rounded-lg text-wrap`}>
-            <div className='text-lg font-bold'>
-              <span>お知らせ</span>
-            </div>
-            <div>
-            {
-              notifications.length > 0 ? (
-                notifications.map( (n, i) => {
-                  const data = JSON.parse(n as string);
-                  return (
-                    <Link href={`/recipe/show/${data.recipe_id}`} key={i} className="flex flex-col">
-                      <div className='border-b border-primary-text pb-2'></div>
-                      <div className="flex py-1 gap-4 items-center ">
-                        <div className='relative'>
-                          <OptImage height={60} width={60} className="w-8 aspect-square object-cover rounded-sm" src={data.recipe_image}/>
-                          {data.type === 'like' && <Heart className='absolute -bottom-2 -right-2' size={16} weight="fill" color={textColor.error}/>}
-                          {data.type === 'review' && <Star className='absolute -bottom-2 -right-2' size={16} weight="fill" color={textColor.warning}/>}
+    <div className={'menu flex gap-4'}>
+      <div className="self-center relative">
+        {
+          user ? (
+            <>
+            <button ref={btn} onClick={openNotificationOnClick}>
+              <OptImage src={'/icons/notification.webp'} loading="eager" className="self-center rounded-md h-[auto] z-10 w-16 md:w-10 relative" width={100} height={100}  alt="website banner" />
+            </button>
+            {notificationCount > 0 && <span className='absolute z-10 top-4 left-6 bg-red-600 text-white p-2 text-xs rounded-full flex justify-center items-center h-4 w-4'>{
+              notificationCount  
+            }</span>}
+            <div ref={settings} style={{scale: openNotification ? 1 : 0}} className={`transition-all duration-300 origin-top-right absolute bg-primary-bg border border-primary-text text-xs text-left w-64 max-w-64 max-h-96 overflow-y-scroll p-4 ${openNotification ? '-right-2 -top-2' : 'right-0 top-0'} rounded-lg text-wrap`}>
+              <div className='text-lg font-bold'>
+                <span>お知らせ</span>
+              </div>
+              <div>
+              {
+                notifications.length > 0 ? (
+                  notifications.map( (n, i) => {
+                    const data = JSON.parse(n as string);
+                    return (
+                      <Link href={`/recipe/show/${data.recipe_id}`} key={i} className="flex flex-col">
+                        <div className='border-b border-primary-text pb-2'></div>
+                        <div className="flex py-1 gap-4 items-center ">
+                          <div className='relative'>
+                            <OptImage height={60} width={60} className="w-8 aspect-square object-cover rounded-sm" src={data.recipe_image}/>
+                            {data.type === 'like' && <Heart className='absolute -bottom-2 -right-2' size={16} weight="fill" color={textColor.error}/>}
+                            {data.type === 'review' && <Star className='absolute -bottom-2 -right-2' size={16} weight="fill" color={textColor.warning}/>}
+                          </div>
+                          <span className=" w-full break-words max-w-full py-2">
+                            {data.notification_content}
+                          </span>
                         </div>
-                        <span className=" w-full break-words max-w-full py-2">
-                          {data.notification_content}
-                        </span>
-                      </div>
-                    </Link>
-                  );
-                })
-              ) : (
-                <span>No notifications!</span>
-              )
-            }
+                      </Link>
+                    );
+                  })
+                ) : (
+                  <span>No notifications!</span>
+                )
+              }
+              </div>
             </div>
-          </div>
-        </div>
-        <div className="self-center flex">
-            <Settings />
-        </div>
+            </>
+          ) : (
+            <User />
+          )
+        }
       </div>
-      ):(
-        <User />
-      )
-    }
+      <div className="self-center flex">
+          <Settings />
+      </div>
+    </div>
     </>
   )
 });

@@ -9,14 +9,15 @@ import { useAppDispatch, useAppSelector, useAppStore } from "@/lib/redux/hooks";
 import { initializeCount } from "@/lib/redux/states/counterSlice";
 import { show } from "@/lib/redux/states/recipeSlice";
 import Button from "./Button";
-import { Book, House, PawPrint, SignOut, Translate, User } from "@phosphor-icons/react/dist/ssr";
-import { usePathname } from "next/navigation";
+import { Book, House, List, MagnifyingGlass, PawPrint, SignOut, Translate, User } from "@phosphor-icons/react/dist/ssr";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function Settings() {
     const settings = useRef<HTMLDivElement>(null);
     const btn = useRef<HTMLButtonElement>(null);
     const [showSettings, setShowSettings] = useState(false);
     const pathname = usePathname();
+    const router = useRouter();
 
     const [active, setActive] = useState({
       home: false,
@@ -76,7 +77,7 @@ export default function Settings() {
     return (
         <>
         <button ref={btn} onClick={() => {setShowSettings(true);}}>
-            <img src={'/icons/bone.webp'} className="self-center rounded-md h-[auto] w-16 md:w-10 relative" width={100} height={100}  alt="website banner" />
+            <List size={30}/>
         </button>
         <AnimatePresence>
             {showSettings && (
@@ -89,7 +90,11 @@ export default function Settings() {
                     <div className="px-8 flex flex-col w-full items-center justify-center text-[26px] gap-[20px]">
                         <button onClick={() => {
                             openSettings();
-                            dispatch(show());
+                            if(user.user_id !== 0) {
+                              dispatch(show());
+                            } else {
+                              router.push('/login');
+                            }
                         }} className={` w-[100%] rounded-md text-base relative active:scale-[1.075] md:hover:scale-[1.075] transition-all duration-500`} type="submit">
                             <span className="absolute z-[1] w-full top-[50%] left-0 font-bold">レシピを作成する</span>
                             <img src={'/recipe-button.webp'} className="self-center rounded-md h-[auto] w-full relative top-0" width={100} height={100}  alt="website banner" />
@@ -99,24 +104,28 @@ export default function Settings() {
                           <Link onClick={openSettings} className={`${active.home ? 'bg-primary-text text-secondary-bg py-2' : 'hover:opacity-75 py-1'}  px-4  rounded-full w-full`} href="/">
                             <div className="w-full text-sm flex justify-between items-center">
                                 <House size={20}/>
-                                ホーム
+                                トップページ
                             </div>
                           </Link>
           
-                          <Link onClick={openSettings} className={`${active.user ? 'bg-primary-text text-secondary-bg py-2' : 'hover:opacity-75 py-1'} w-full px-4 py-1 rounded-full`} href={`/user/${user.user_id}`}>
+                          {
+                            user.user_id !== 0 && (
+                              <Link onClick={openSettings} className={`${active.user ? 'bg-primary-text text-secondary-bg py-2' : 'hover:opacity-75 py-1'} w-full px-4 py-1 rounded-full`} href={`/user/${user.user_id}`}>
+                                <div className="w-full text-sm flex justify-between items-center">
+                                    <User size={20}/>
+                                    マイページ
+                                </div>
+                              </Link>
+                            )
+                          }
+
+                          <Link onClick={openSettings} className={`${active.list ? 'bg-primary-text text-secondary-bg py-2' : 'hover:opacity-75 py-1'} w-full px-4 py-1 rounded-full`} href="/recipe/list/1">
                             <div className="w-full text-sm flex justify-between items-center">
-                                <User size={20}/>
-                                マイページ
+                                <MagnifyingGlass size={20}/>
+                                レシピを探す
                             </div>
                           </Link>
 
-                          <Link onClick={openSettings} className={`hover:opacity-75 w-full px-4 py-1 rounded-full`} href={`/user/settings/${user.user_id}?=#register-pet`}>
-                            <div className="w-full text-sm flex justify-between items-center">
-                                <PawPrint size={20}/>
-                                愛犬登録
-                            </div>
-                          </Link>
-          
                           <Link onClick={openSettings} className={`${active.list ? 'bg-primary-text text-secondary-bg py-2' : 'hover:opacity-75 py-1'} w-full px-4 py-1 rounded-full`} href="/recipe/list/1">
                             <div className="w-full text-sm flex justify-between items-center">
                                 <Book size={20}/>
@@ -131,19 +140,30 @@ export default function Settings() {
                             </div>
                           </button> */}
           
-                          {/* <button disabled onClick={openSettings} className="w-full opacity-75 hover:opacity-75 px-4 py-1 rounded-full">
+                          <button disabled onClick={openSettings} className="w-full opacity-75 hover:opacity-75 px-4 py-1 rounded-full">
                             <div className="w-full text-sm flex justify-between items-center">
                                 <PawPrint size={20}/>
-                                コラム
+                                犬と食に関するコラム
                             </div>
-                          </button> */}
+                          </button>
+
+                          <Link onClick={openSettings} className={`hover:opacity-75 w-full px-4 py-1 rounded-full`} href={`/user/settings/${user.user_id}?=#register-pet`}>
+                            <div className="w-full text-sm flex justify-between items-center">
+                              <PawPrint size={20}/>
+                              愛犬登録
+                            </div>
+                          </Link>
           
-                          <Button onClick={logout}>
-                            <div  className="w-full hover:opacity-75 text-sm flex justify-between items-center px-4 py-1 rounded-full">
-                                <SignOut />
-                                ログアウト
-                            </div>
-                          </Button>
+                          {
+                            user.user_id !== 0 && (
+                              <Button onClick={logout}>
+                                <div  className="w-full hover:opacity-75 text-sm flex justify-between items-center px-4 py-1 rounded-full">
+                                  <SignOut />
+                                  ログアウト
+                                </div>
+                              </Button>
+                            )
+                          }
                         </div>
                     </div>
                 </motion.div>
