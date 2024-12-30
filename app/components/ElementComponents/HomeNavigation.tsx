@@ -13,7 +13,7 @@ export default function HomeNavigation() {
     doScrolling(defineScreenMode() >= 2 ? '#category-lg' : '#category-sm', 200);
   }
   return (
-    <div className="flex text-sm md:text-base gap-4 mt-10 flex-wrap justify-center">
+    <div className="flex text-sm md:text-base gap-2 sm:gap-4 mt-10 flex-wrap justify-center">
       <button onClick={gotoCategories} className="text-primary-text font-semibold hover:text-[#9ba3af]">レシピを探す</button>
       <span className="select-none">|</span>
       <Link href={isLoggedIn ? '': '/login'} className="text-primary-text font-semibold hover:text-[#9ba3af]">レシピを作成する</Link>
