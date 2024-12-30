@@ -12,6 +12,7 @@ import MotionDiv from "./components/ElementComponents/MotionDiv";
 import { getBdayPets } from "@/action/pet";
 import OptImage from "./components/ElementComponents/Image";
 import HomeNavigation from "./components/ElementComponents/HomeNavigation";
+import CategorySlider from "./components/ElementComponents/CategorySlider";
 
 const gloria = Gloria_Hallelujah({
   weight: '400',
@@ -25,11 +26,24 @@ const mochi = Mochiy_Pop_P_One({
   , display: 'swap', adjustFontFallback: false
 });
 
+const events = [
+  {text: 'お誕生日', img: '/LP/event/birthday.webp', url: '/recipe/search/お誕生日'},
+  {text: 'おうち記念日', img: '/LP/event/ouchianniversary.webp', url: '/recipe/search/おうち記念日'},
+  {text: 'お正月', img: '/LP/event/newyears.webp', url: '/recipe/search/お正月'},
+  {text: '節分', img: '/LP/event/setsubun.webp', url: '/recipe/search/節分'},
+  {text: 'ひな祭り', img: '/LP/event/hinamatsuri.webp', url: '/recipe/search/ひな祭り'},
+  {text: 'こどもの日', img: '/LP/event/kodomonohi.webp', url: '/recipe/search/こどもの日'},
+  {text: '七夕', img: '/LP/event/tanabata.webp', url: '/recipe/search/七夕'},
+  {text: 'ハロウィン', img: '/LP/event/halloween.webp', url: '/recipe/search/ハロウィン'},
+  {text: 'クリスマス', img: '/LP/event/christmas.webp', url: '/recipe/search/クリスマス'},
+  {text: 'おやつ', img: '/LP/event/snack.webp', url: '/recipe/search/おやつ'},
+]
+
 const DogCategoryMedCore = () => {
   return (
     <>
     <div className="title">
-      <h1 className="text-[26px] tracking-tighter font-bold text-[#523636] relative after:content-[''] z-[1] after:left-[-10px] after:w-[110%] after:h-[40px] after:top-[10px] after:z-[-1] after:flex after:absolute after:bg-[#FFE9C9]">レシピカテゴリ</h1>
+      <h1 className="text-[26px] tracking-tighter font-bold text-[#523636] relative after:content-[''] z-[1] after:left-[-10px] after:w-[110%] after:h-[40px] after:top-[10px] after:z-[-1] after:flex after:absolute after:bg-[#FFE9C9]">レシピを探す</h1>
       <div className="absolute z-[-1] left-[0px] w-full top-[17px] border-[1px] border-solid border-[#523636]"/>
     </div>
     <div className="first-row w-full flex gap-4 justify-center flex-col items-center  ">
@@ -67,46 +81,20 @@ const DogCategoryMedCore = () => {
         </Link>
       </div>
     </div>
-    </>
-  )
-}
-
-const DogCategorySmCore = () => {
-  return (
-    <>
-    <div className="first-row w-full flex gap-4 justify-center flex-col items-center  ">
-      <h1 className="text-[20px] text-primary-text font-semibold">年齢別で探す</h1>
-      <div className="grid grid-cols-3 w-[100%]">
-        <Link href="/recipe/search/子犬" className="flex gap-2 text-primary-text font-bold flex-col justify-center items-center">
-          <OptImage src={'/LP/puppy-thumbnail.png'} height={70} loading="lazy" className="relative rounded-md"  alt="website banner" />
-          <span className="relative text-xs">子犬用レシピ</span>
-        </Link>
-        <Link href="/recipe/search/成犬" className="flex gap-2 relative text-primary-text font-bold flex-col justify-center items-center">
-          <OptImage src={'/LP/adult-thumbnail.png'} height={70} loading="lazy" className="relative rounded-md" alt="website banner" />
-          <span className="relative text-xs">成犬用レシピ</span>
-        </Link>
-        <Link href="/recipe/search/シニア犬" className="flex gap-2 relative text-primary-text font-bold flex-col justify-center items-center">
-          <OptImage src={'/LP/senior-thumbnail.png'} height={70} loading="lazy" className="relative rounded-md bottom-[0px]"  alt="website banner" />
-          <span className="relative text-xs">シニア犬用レシピ</span>
-        </Link>
-      </div>
-    </div>
 
     <div className="first-row mt-4 gap-4 w-full flex justify-center flex-col items-center  ">
-      <h1 className="text-[20px] text-[#523636] font-semibold">サイズ別で探す</h1>
-      <div className="grid grid-cols-3 w-[100%]">
-        <Link href="/recipe/search/小型犬" className="flex gap-2 flex-col text-xs text-[#523636] font-bold justify-between items-center">
-          <OptImage src={'/LP/smalldog-thumbnail.png'} loading="lazy" className="relative rounded-md" height={70}  alt="website banner" />
-          <span className="relative top-[0px]">小型犬用レシピ</span>
-        </Link>
-        <Link href="/recipe/search/中型犬" className="flex gap-2 flex-col text-xs text-[#523636] font-bold justify-between items-center">
-          <OptImage src={'/LP/middledog-thumbnail.png'} loading="lazy" className="relative rounded-md" height={70}  alt="website banner" />
-          <span className="relative top-[0px]">中型犬用レシピ</span>
-        </Link>
-        <Link href="/recipe/search/大型犬" className="flex gap-2 flex-col relative text-xs text-[#523636] font-bold justify-between items-center">
-          <OptImage src={'/LP/bigdog-thumbnail.png'} loading="lazy" className="relative rounded-md" height={70}  alt="website banner" />
-          <span className="relative top-[0px]">大型犬用レシピ</span>
-        </Link>
+      <h1 className="text-[20px] text-[#523636] font-semibold">イベントで探す</h1>
+      <div className="grid grid-cols-2 gap-4 w-[100%]">
+        {
+          events.map( (ev, idx) => {
+            return (
+              <Link key={idx} href={ev.url} className="flex gap-2 flex-col text-xs text-[#523636] font-bold justify-between items-center">
+                <OptImage src={ev.img} loading="lazy" className="relative rounded-md" height={70}  alt="website banner" />
+                <span className="relative top-[0px]">{ev.text}</span>
+              </Link>
+            )
+          })
+        }
       </div>
     </div>
     </>
@@ -115,16 +103,8 @@ const DogCategorySmCore = () => {
 
 const DogCategoryMed = memo(() => {
   return (
-    <div className={`flex flex-col gap-[40px] justify-center items-center mt-[30px] lg:hidden relative`}>
+    <div id="category-sm" className={`flex flex-col gap-[40px] justify-center items-center mt-[30px] lg:hidden relative`}>
       <DogCategoryMedCore />
-    </div>
-  )
-});
-
-const DogCategorySm = memo(() => {
-  return (
-    <div className={`flex-col mt-4 justify-center w-[100%] items-start hidden lg:flex relative`}>
-      <DogCategorySmCore />
     </div>
   )
 });
@@ -159,19 +139,6 @@ export default async function Home() {
   const weeklyRecipes = weekly_result.body as Array<DisplayRecipe>;
   const popularRecipes = popular_result.body as Array<DisplayRecipe>;
 
-  const events = [
-    {text: 'お誕生日', img: '/LP/event/birthday.webp', url: '/recipe/search/お誕生日'},
-    {text: 'おうち記念日', img: '/LP/event/ouchianniversary.webp', url: '/recipe/search/おうち記念日'},
-    {text: 'お正月', img: '/LP/event/newyears.webp', url: '/recipe/search/お正月'},
-    {text: '節分', img: '/LP/event/setsubun.webp', url: '/recipe/search/節分'},
-    {text: 'ひな祭り', img: '/LP/event/hinamatsuri.webp', url: '/recipe/search/ひな祭り'},
-    {text: 'こどもの日', img: '/LP/event/kodomonohi.webp', url: '/recipe/search/こどもの日'},
-    {text: '七夕', img: '/LP/event/tanabata.webp', url: '/recipe/search/七夕'},
-    {text: 'ハロウィン', img: '/LP/event/halloween.webp', url: '/recipe/search/ハロウィン'},
-    {text: 'クリスマス', img: '/LP/event/christmas.webp', url: '/recipe/search/クリスマス'},
-    {text: 'おやつ', img: '/LP/event/snack.webp', url: '/recipe/search/おやつ'},
-  ]
-
   return (
     <>
     <main className="relative flex px-6 py-6 lg:px-0 min-h-screen flex-col lg:items-center overflow-hidden pb-[50px] lg:pb-[200px]">
@@ -194,9 +161,12 @@ export default async function Home() {
               <div className="search-form relative flex justify-end invisible lg:visible">
                 <BodyMainSearch />
               </div>
-              <DogCategorySm/>
+              <CategorySlider/>
             </div>
           </div>
+          <MotionDiv>
+            <DogCategoryMed/>
+          </MotionDiv>
           <MotionDiv>
             <RecipeSlider title={'今週のレシピ'} recipes={weeklyRecipes}/>
           </MotionDiv>
@@ -207,29 +177,6 @@ export default async function Home() {
           <MotionDiv>
             <BirthdayContainer bdayAvt={bday} />
           </MotionDiv>
-          <MotionDiv>
-            <DogCategoryMed/>
-          </MotionDiv>
-          <div className="flex flex-col gap-[40px] justify-center items-center mt-[30px] relative">
-            <div className="title">
-              <h1 className="text-[26px] font-bold text-[#523636] relative after:content-[''] z-[1] after:w-[125%] after:left-[-15px] after:h-[40px] after:top-[10px] after:z-[-1] after:flex after:absolute after:bg-[#FFE9C9]">イベント</h1>
-              <div className="absolute z-[-1] left-[0px] w-full top-[17px] border-[1px] border-solid border-[#523636]"/>
-            </div>
-            <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 md:gap-y-16">
-              {
-                events.map( (ev, idx) => {
-                  return (
-                    <MotionDiv>
-                      <div className="w-full text-white flex justify-center">
-                        <Link href={ev.url} className="flex gap-[10px] flex-col text-sm text-[#523636] font-bold justify-center items-center">
-                          <img src={ev.img} loading="lazy" className="rounded-md h-[auto] w-[100%]" width={250} height={150}  alt="website banner" />{ev.text}</Link>
-                      </div>
-                    </MotionDiv>
-                  )
-                })
-              }
-            </div>
-          </div>
         </div>
       </div>
     </main>

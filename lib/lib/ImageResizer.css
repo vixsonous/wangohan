@@ -10,6 +10,16 @@
     max-width: 100%;
     cursor: default;
   }
+
+  .editor-image.position-left {
+    float: left;
+    margin: 1em 1em 0 0;
+  }
+  
+  .editor-image.position-right {
+    float: right;
+    margin: 1em 0 0 1em;
+  }
   
   .editor-image img.focused {
     outline: 2px solid rgb(60, 132, 244);

@@ -32,5 +32,6 @@ export default {
       underline: 'editor-text-underline',
       underlineStrikethrough: 'editor-text-underlineStrikethrough',
     },
+    fontFamily: 'font-family'
   };
   

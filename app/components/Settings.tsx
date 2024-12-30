@@ -11,6 +11,8 @@ import { show } from "@/lib/redux/states/recipeSlice";
 import Button from "./Button";
 import { Book, House, List, MagnifyingGlass, PawPrint, SignOut, Translate, User } from "@phosphor-icons/react/dist/ssr";
 import { usePathname, useRouter } from "next/navigation";
+import { doScrolling } from "@/constants/functions";
+import { defineScreenMode } from "@/constants/constants";
 
 export default function Settings() {
     const settings = useRef<HTMLDivElement>(null);
@@ -119,12 +121,15 @@ export default function Settings() {
                             )
                           }
 
-                          <Link onClick={openSettings} className={`${active.list ? 'bg-primary-text text-secondary-bg py-2' : 'hover:opacity-75 py-1'} w-full px-4 py-1 rounded-full`} href="/recipe/list/1">
+                          <button onClick={() => {
+                            openSettings();
+                            doScrolling(defineScreenMode() >= 2 ? '#category-lg' : '#category-sm', 200);
+                          }} className={`hover:opacity-75 w-full px-4 py-1 rounded-full`}>
                             <div className="w-full text-sm flex justify-between items-center">
                                 <MagnifyingGlass size={20}/>
                                 レシピを探す
                             </div>
-                          </Link>
+                          </button>
 
                           <Link onClick={openSettings} className={`${active.list ? 'bg-primary-text text-secondary-bg py-2' : 'hover:opacity-75 py-1'} w-full px-4 py-1 rounded-full`} href="/recipe/list/1">
                             <div className="w-full text-sm flex justify-between items-center">

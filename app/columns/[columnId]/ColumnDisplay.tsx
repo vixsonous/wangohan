@@ -10,7 +10,10 @@ import { AlignmentNode } from "@/lib/nodes/AlignmentNode";
 import { IndentationNode } from "@/lib/nodes/IndentationNode";
 import { constructImportMap, exportMap } from "@/lib/rich-editor/Editor";
 import './columnDisplay.css';
-import Theme from "@/lib/rich-editor/Theme";
+import '@/lib/rich-editor/style.css';
+import '@/lib/nodes/ImageNode.css';
+import '@/lib/lib/ImageResizer.css';
+import ExampleTheme from "@/lib/rich-editor/Theme";
 
 
 const ColumnDisplay = ({ editorStateJson }: {editorStateJson: string}) => {
@@ -27,7 +30,10 @@ const ColumnDisplay = ({ editorStateJson }: {editorStateJson: string}) => {
         import: constructImportMap()
       },
       nodes: [ParagraphNode, TextNode, LinkNode, AutoLinkNode, ImageNode, YouTubeNode, HeadingNode, AlignmentNode, IndentationNode],
-      theme: Theme
+      onError(error: Error) {
+        throw error;
+      },
+      theme: ExampleTheme
     });
     
     

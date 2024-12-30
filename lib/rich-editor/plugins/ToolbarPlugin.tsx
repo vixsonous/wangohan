@@ -44,7 +44,7 @@ import {
   getDefaultCodeLanguage,
   getCodeLanguages
 } from "@lexical/code";
-import { $wrapNodes, $isAtNodeEnd } from "@lexical/selection";
+import { $wrapNodes, $isAtNodeEnd, $patchStyleText } from "@lexical/selection";
 import React, {memo, useCallback, useEffect, useRef, useState} from 'react';
 import Button from '@/app/components/Button';
 import { INSERT_IMAGE_COMMAND } from './ImagePlugin';
@@ -53,6 +53,7 @@ import { hideModal, showModal } from '@/lib/redux/states/messageSlice';
 import Modal from '@/app/components/ElementComponents/Modal';
 import { imageFileTypes } from '@/constants/constants';
 import { INSERT_YOUTUBE_COMMAND } from './YoutubePlugin';
+import { DEFAULT_SANS_SERIF_FONT } from 'next/dist/shared/lib/constants';
 
 const LowPriority = 1;
 const IconSize=20;

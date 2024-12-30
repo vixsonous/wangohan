@@ -127,7 +127,7 @@ export default async function RootLayout({
             <ErrorModal />
             <SuccessModal />
             <div className="fixed px-4 w-full z-[999] pt-[5px] flex items-center border-b-[1px] gap-2 shadow-md">
-              <div className='flex flex-row gap-4 w-full items-center'>
+              <div className='flex flex-row gap-2 w-full items-center'>
                 <Link href="/">
                   <img className='relative' src={'/logo-final.webp'} width={60} height={60} alt="website logo" />
                 </Link>
