@@ -123,7 +123,7 @@ export default function Settings() {
 
                           <button onClick={() => {
                             openSettings();
-                            doScrolling(defineScreenMode() >= 2 ? '#category-lg' : '#category-sm', 200);
+                            doScrolling('#category', 200);
                           }} className={`hover:opacity-75 w-full px-4 py-1 rounded-full`}>
                             <div className="w-full text-sm flex justify-between items-center">
                                 <MagnifyingGlass size={20}/>

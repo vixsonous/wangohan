@@ -49,7 +49,7 @@ const DogCategoryLgCore = () => {
 
 const DogCategoryLg = memo(() => {
   return (
-    <div id="category-lg" className={`flex-col mt-4 justify-center w-[100%] items-start hidden lg:flex relative`}>
+    <div id="category" className={`flex-col mt-4 justify-center w-[100%] items-start relative`}>
       <DogCategoryLgCore />
     </div>
   )
@@ -92,7 +92,7 @@ const EventCategoryLgCore = () => {
 
 const EventCategoryLg = memo(() => {
   return (
-    <div className={`flex-col mt-4 justify-center w-[100%] items-start hidden lg:flex relative`}>
+    <div className={`flex-col mt-4 justify-center w-[100%] items-start relative`}>
       <EventCategoryLgCore />
     </div>
   )
@@ -101,7 +101,9 @@ const EventCategoryLg = memo(() => {
 export default function CategorySlider() {
 
   return (
-    <Swiper id="category-lg" pagination className="w-full h-full" modules={[Pagination]} style={{
+    <Swiper id="category" pagination={{
+      clickable: true
+    }} className="w-full h-full" modules={[Pagination]} style={{
                         "--swiper-pagination-color": "#FFBA08",
                         "--swiper-pagination-bullet-inactive-color": "#999999",
                         "--swiper-pagination-bullet-inactive-opacity": "1",

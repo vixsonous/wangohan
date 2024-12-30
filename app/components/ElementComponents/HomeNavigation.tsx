@@ -10,7 +10,7 @@ export default function HomeNavigation() {
 
   const gotoCategories = (e:React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    doScrolling(defineScreenMode() >= 2 ? '#category-lg' : '#category-sm', 200);
+    doScrolling('#category', 200);
   }
   return (
     <div className="flex text-sm md:text-base gap-2 sm:gap-4 mt-10 flex-wrap justify-center">

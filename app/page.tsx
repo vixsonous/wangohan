@@ -157,16 +157,13 @@ export default async function Home() {
             <div className='lg:col-span-3 max-w-full h-full relative' >
               <TopRecipeSlider recipes={popularRecipes}/>
             </div>
-            <div className="lg:col-span-2 hidden lg:block invisible lg:visible w-full h-full relative">
+            <div className="lg:col-span-2 w-full h-full relative">
               <div className="search-form relative flex justify-end invisible lg:visible">
                 <BodyMainSearch />
               </div>
               <CategorySlider/>
             </div>
           </div>
-          <MotionDiv>
-            <DogCategoryMed/>
-          </MotionDiv>
           <MotionDiv>
             <RecipeSlider title={'今週のレシピ'} recipes={weeklyRecipes}/>
           </MotionDiv>
