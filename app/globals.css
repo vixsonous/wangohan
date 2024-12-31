@@ -45,6 +45,11 @@
   }
 }
 
+@font-face {
+  font-family: 'mitimasu';
+  src: url('/fonts/mitimasu.ttf');
+}
+
 input[type="radio"]:checked+label>span{ 
   background-color: white;
   color:#523636;

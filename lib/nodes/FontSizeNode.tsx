@@ -3,25 +3,25 @@ import { $addNodeStyle, $patchStyleText } from "@lexical/selection";
 import { $getSelection, $getTextContent, $insertNodes, $isRangeSelection, COMMAND_PRIORITY_HIGH, createCommand, EditorConfig, LexicalCommand, LexicalEditor, NodeKey, SerializedLexicalNode, SerializedTextNode, Spread, TextModeType, TextNode } from "lexical";
 import { DEFAULT_SERIF_FONT } from "next/dist/shared/lib/constants";
 
-export class FontNode extends TextNode {
-  __font: string;
+export class FontSizeNode extends TextNode {
+  __size: string;
 
-  constructor(text: string, font: string, key?: NodeKey) {
+  constructor(text: string, size: string, key?: NodeKey) {
     super(text, key);
-    this.__font = font;
+    this.__size = size;
   }
 
   static getType(): string {
-      return 'font';
+      return 'fontSize';
   }
 
-  static clone(node: FontNode): FontNode {
-    return new FontNode(node.__text, node.__font, node.__key);
+  static clone(node: FontSizeNode): FontSizeNode {
+    return new FontSizeNode(node.__text, node.__size, node.__key);
   }
 
   createDOM(config: EditorConfig, editor?: LexicalEditor): HTMLElement {
     const element = document.createElement("p");
-    element.style.fontFamily = config.theme.fontFamily;
+    element.style.fontSize = config.theme.fontSize;
     return element;
   }
 
@@ -29,17 +29,17 @@ export class FontNode extends TextNode {
     return false;
   }
 
-  exportJSON(): SerializedFontNode {
+  exportJSON(): SerializedFontSizeNode {
     return {
       ...super.exportJSON(),
-      font: this.__font,
-      type: "font",
+      size: this.__size,
+      type: "fontSize",
       version: 2,
     };
   }
 
-  static importJSON(serializedNode: SerializedFontNode): FontNode {
-    const node = $createFontNode(serializedNode.text, serializedNode.font);
+  static importJSON(serializedNode: SerializedFontSizeNode): FontSizeNode {
+    const node = $createFontSizeNode(serializedNode.text, serializedNode.size);
     node.setDetail(serializedNode.detail);
     node.setFormat(serializedNode.detail);
     node.setMode(serializedNode.mode);
@@ -49,32 +49,30 @@ export class FontNode extends TextNode {
   
 }
 
-export function $createFontNode(text: string, font: string): FontNode {
-  return new FontNode(text, font);
+export function $createFontSizeNode(text: string, size: string): FontSizeNode {
+  return new FontSizeNode(text, size);
 }
 
-export function $isFontNode(node: FontNode): node is FontNode {
-  return node instanceof FontNode;
+export function $isFontSizeNode(node: FontSizeNode): node is FontSizeNode {
+  return node instanceof FontSizeNode;
 }
 
-export const FORMAT_FONTFAMILY_COMMAND: LexicalCommand<string> = createCommand("changeFontFamily");
+export const FORMAT_FONTSIZE_COMMAND: LexicalCommand<string> = createCommand("changeFontSize");
 
-export function FontFamilyPlugin(): null {
+export function FontSizePlugin(): null {
   const [editor] = useLexicalComposerContext();
-  if(!editor.hasNodes([FontNode])) {
+  if(!editor.hasNodes([FontSizeNode])) {
     throw new Error(
-      "FontFamilyPlugin: FontNode not registered on the editor (initialConfig.nodes)"
+      "FontSizePlugin: FontSizeNode not registered on the editor (initialConfig.nodes)"
     );
   }
 
   editor.registerCommand(
-    FORMAT_FONTFAMILY_COMMAND,
-    (font: string) => {
+    FORMAT_FONTSIZE_COMMAND,
+    (size: string) => {
       const selection = $getSelection();
       if($isRangeSelection(selection)) {
-        const text = $getTextContent();
-        const node = $createFontNode(text, font);
-        $patchStyleText(selection, {"font-family": font || DEFAULT_SERIF_FONT.name})
+        $patchStyleText(selection, {"font-size": `${size}px` || '16px'})
       }
 
       return true;
@@ -85,11 +83,11 @@ export function FontFamilyPlugin(): null {
   return null;
 }
 
-export type SerializedFontNode = Spread<{
+export type SerializedFontSizeNode = Spread<{
   detail: number;
   format: number;
   mode: TextModeType;
   style: string;
   text: string;
-  font: string;
+  size: string;
 }, SerializedLexicalNode>;

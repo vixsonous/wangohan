@@ -53,7 +53,8 @@ import { hideModal, showModal } from '@/lib/redux/states/messageSlice';
 import Modal from '@/app/components/ElementComponents/Modal';
 import { imageFileTypes } from '@/constants/constants';
 import { INSERT_YOUTUBE_COMMAND } from './YoutubePlugin';
-import { DEFAULT_SANS_SERIF_FONT } from 'next/dist/shared/lib/constants';
+import { FORMAT_FONTFAMILY_COMMAND } from '@/lib/nodes/FontNode';
+import { FORMAT_FONTSIZE_COMMAND } from '@/lib/nodes/FontSizeNode';
 
 const LowPriority = 1;
 const IconSize=20;
@@ -70,6 +71,12 @@ const ParagraphButton = memo(() => <ButtonIcon><Paragraph size={IconSize}/><Butt
 const H1Button = memo(() => <ButtonIcon><TextHOne size={IconSize}/><ButtonText>H1</ButtonText></ButtonIcon>);
 const H2Button = memo(() => <ButtonIcon><TextHTwo size={IconSize}/><ButtonText>H2</ButtonText></ButtonIcon>);
 const H3Button = memo(() => <ButtonIcon><TextHThree size={IconSize}/><ButtonText>H3</ButtonText></ButtonIcon>);
+
+const SansSerif = memo(() => <ButtonIcon><ButtonText>Sans Serif</ButtonText><CaretDown size={IconSize}/></ButtonIcon>);
+const Sans = memo(() => <ButtonIcon><ButtonText>Sans</ButtonText><CaretDown size={IconSize}/></ButtonIcon>);
+const Mitimasu = memo(() => <ButtonIcon><ButtonText>Mitimasu</ButtonText><CaretDown size={IconSize}/></ButtonIcon>);
+
+const FontSize = memo(({size}:{size: string}) => <ButtonIcon><ButtonText>{size}</ButtonText><CaretDown size={IconSize}/></ButtonIcon>);
 
 const ButtonText = memo(function ButtonText({children}:{children: React.ReactNode}) {
   return <span className='text-sm tracking-tighter'>{children}</span>
@@ -97,7 +104,6 @@ export default function ToolbarPlugin() {
   const [isCode, setIsCode] = useState(false);
 
   const [blockType, setBlockType] = useState("paragraph");
-  const [activeTextButton, setActiveTextButton] = useState(<ParagraphButton />);
   const [selectedElementKey, setSelectedElementKey] = useState<string>('');
   const [showBlockOptionsDropDown, setShowBlockOptionsDropDown] = useState(
     false
@@ -109,6 +115,15 @@ export default function ToolbarPlugin() {
     justifyOpen: false,
     justify: <LeftAlign />,
     justifyIdx: 0,
+
+    fontFamily: <SansSerif />,
+    fontFamilyIdx: 0,
+
+    textType: <ParagraphButton />,
+    textTypeIdx: 0,
+
+    fontSize: <FontSize size={'15'}/>,
+    fontSizeVal: 15,
   })
 
   const $updateToolbar = useCallback(() => {
@@ -141,12 +156,30 @@ export default function ToolbarPlugin() {
             ? element.getTag()
             : element.getType();
           setBlockType(type);
-          
-          setActiveTextButton(type === "paragraph" ? <ParagraphButton /> : 
-            type === "h1" ? <H1Button /> :
-            type === "h2" ? <H2Button /> :
-            type === "h3" ? <H3Button /> : <ParagraphButton />
-          );
+          const computedStyle = window.getComputedStyle(elementDOM);
+          const fontSize = computedStyle.fontSize;
+          setIcons(prev => ({...prev, 
+            textType: type === "paragraph" ? <ParagraphButton /> : 
+              type === "h1" ? <H1Button /> :
+              type === "h2" ? <H2Button /> :
+              type === "h3" ? <H3Button /> : <ParagraphButton />,
+            textTypeIdx: type === "paragraph" ? 0 : 
+              type === "h1" ? 1 :
+              type === "h2" ? 2 :
+              type === "h3" ? 3 : 0,
+            fontFamily: selection.style.includes("sans-serif") ? <SansSerif /> : 
+              selection.style.includes("mitimasu") ? <Mitimasu /> :
+              <Sans />,
+            fontFamilyIdx: selection.style.includes("sans-serif") ? 0 : 
+              selection.style.includes("mitimasu") ? 2 :
+              1,
+            fontSize: <FontSize size={
+              selection.style.includes("font-size:") ? selection.style.split("font-size: ")[1].replace("px;","") : 
+              fontSize.replace("px","")
+            }/>,
+            fontSizeVal: selection.style.includes("font-size:") ? Number(selection.style.split("font-size: ")[1].replace("px;","")) : 
+              Number(String(fontSize).replace("px;",""))
+          }))
           if ($isCodeNode(element)) {
             setCodeLanguage(element.getLanguage() || getDefaultCodeLanguage());
           }
@@ -280,7 +313,11 @@ export default function ToolbarPlugin() {
   },[]);
 
   const formatHeading = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const name = e.currentTarget.name;
+    const nameDetail = e.currentTarget.name;
+    const idx = nameDetail.split("-")[1];
+    const name = nameDetail.split("-")[0];
+    setIcons(prev => ({...prev, textTypeIdx: Number(idx)}));
+
     if (blockType !== "paragraph" || blockType !== name) {
       
       editor.update(() => {
@@ -347,42 +384,42 @@ export default function ToolbarPlugin() {
         <ArrowCounterClockwise size={IconSize} />
       </Button>
       <Divider />
-      <Dropdown openIcon={activeTextButton} closeIcon={activeTextButton}>
+      <Dropdown openIcon={icons.textType} closeIcon={icons.textType}>
         <ul className=" flex flex-col gap-2 bg-secondary-bg items-center rounded-md border border-primary-text">
-          <li className={`flex items-center justify-between w-full px-2 ${icons.justifyIdx === 0 ? 'bg-primary-bg' : ''} rounded-t-md`}>
+          <li className={`flex items-center justify-between w-full px-2 ${icons.textTypeIdx === 0 ? 'bg-primary-bg' : ''} rounded-t-md`}>
             <Button
               onClick={formatHeading}
-              name="paragraph"
+              name="paragraph-0"
               className="toolbar-item spaced flex gap-4"
               aria-label="Image Insert">
               <Paragraph size={IconSize}/>
               <ButtonText>Paragraph</ButtonText>
             </Button>
           </li>
-          <li className={`flex items-center justify-between w-full px-2 ${icons.justifyIdx === 0 ? 'bg-primary-bg' : ''} rounded-t-md`}>
+          <li className={`flex items-center justify-between w-full px-2 ${icons.textTypeIdx === 1 ? 'bg-primary-bg' : ''} rounded-t-md`}>
             <Button
               onClick={formatHeading}
-              name="h1"
+              name="h1-1"
               className="toolbar-item spaced flex gap-4"
               aria-label="Image Insert">
               <TextHOne size={IconSize}/>
               <ButtonText>H1 Heading</ButtonText>
             </Button>
           </li>
-          <li className={`flex items-center justify-between w-full px-2 ${icons.justifyIdx === 0 ? 'bg-primary-bg' : ''} rounded-t-md`}>
+          <li className={`flex items-center justify-between w-full px-2 ${icons.textTypeIdx === 2 ? 'bg-primary-bg' : ''} rounded-t-md`}>
             <Button
               onClick={formatHeading}
-              name="h2"
+              name="h2-2"
               className="toolbar-item spaced flex gap-4"
               aria-label="Image Insert">
               <TextHTwo size={IconSize}/>
               <ButtonText>H2 Heading</ButtonText>
             </Button>
           </li>
-          <li className={`flex items-center justify-between w-full px-2 ${icons.justifyIdx === 0 ? 'bg-primary-bg' : ''} rounded-t-md`}>
+          <li className={`flex items-center justify-between w-full px-2 ${icons.textTypeIdx === 3 ? 'bg-primary-bg' : ''} rounded-t-md`}>
             <Button
               onClick={formatHeading}
-              name="h3"
+              name="h3-3"
               className="toolbar-item spaced flex gap-4"
               aria-label="Image Insert">
               <TextHThree size={IconSize}/>
@@ -426,6 +463,70 @@ export default function ToolbarPlugin() {
               <ButtonText>Justify Align</ButtonText>
             </Button>
           </li>
+        </ul>
+      </Dropdown>
+      <Divider />
+      <Dropdown openIcon={icons.fontFamily} closeIcon={icons.fontFamily}>
+        <ul className=" flex flex-col gap-2 bg-secondary-bg items-center rounded-md border border-primary-text">
+          <li className={`flex items-center justify-between w-full px-2 ${icons.fontFamilyIdx === 0 ? 'bg-primary-bg' : ''} rounded-t-md`}>
+            <Button
+              onClick={() => {
+                editor.dispatchCommand(FORMAT_FONTFAMILY_COMMAND, 'sans-serif');
+                setIcons(prev => ({...prev, fontFamily: <SansSerif />, fontFamilyIdx: 0}))
+              }}
+              name="paragraph"
+              className="toolbar-item spaced flex gap-4"
+              aria-label="Image Insert">
+              <ButtonText>Sans Serif</ButtonText>
+            </Button>
+          </li>
+          <li className={`flex items-center justify-between w-full px-2 ${icons.fontFamilyIdx === 1 ? 'bg-primary-bg' : ''} rounded-t-md`}>
+            <Button
+              onClick={() => {
+                editor.dispatchCommand(FORMAT_FONTFAMILY_COMMAND, 'sans');
+                setIcons(prev => ({...prev, fontFamily: <Sans />, fontFamilyIdx: 1}))
+              }}
+              name="paragraph"
+              className="toolbar-item spaced flex gap-4"
+              aria-label="Image Insert">
+              <ButtonText>Sans</ButtonText>
+            </Button>
+          </li>
+          <li className={`flex items-center justify-between w-full px-2 ${icons.fontFamilyIdx === 2 ? 'bg-primary-bg' : ''} rounded-t-md`}>
+            <Button
+              onClick={() => {
+                editor.dispatchCommand(FORMAT_FONTFAMILY_COMMAND, 'mitimasu');
+                setIcons(prev => ({...prev, fontFamily: <Mitimasu />, fontFamilyIdx: 2}))
+              }}
+              name="paragraph"
+              className="toolbar-item spaced flex gap-4"
+              aria-label="Image Insert">
+              <ButtonText>Mitimasu</ButtonText>
+            </Button>
+          </li>
+        </ul>
+      </Dropdown>
+      <Divider />
+      <Dropdown openIcon={icons.fontSize} closeIcon={icons.fontSize}>
+        <ul className=" flex flex-col gap-1 bg-secondary-bg items-center rounded-md border border-primary-text">
+          {
+            [8,9,10,11,12,14,16,18,20,22,24,26,28,36,48,72].map( (s, i) => {
+              return (
+                <li key={i} className={`flex items-center justify-between w-full px-2 ${icons.fontSizeVal === s ? 'bg-primary-bg' : ''} rounded-md`}>
+                  <Button
+                    onClick={() => {
+                      editor.dispatchCommand(FORMAT_FONTSIZE_COMMAND, String(s));
+                      setIcons(prev => ({...prev, fontSize: <FontSize size={String(s)}/>, fontSizeVal: s}))
+                    }}
+                    name="paragraph"
+                    className="flex px-2 rounded-md"
+                    aria-label="Image Insert">
+                    <ButtonText>{s}</ButtonText>
+                  </Button>
+                </li>
+              )
+            })
+          }
         </ul>
       </Dropdown>
       <Divider />

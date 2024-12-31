@@ -36,6 +36,8 @@ import { ImageNode } from '@/lib/nodes/ImageNode';
 import { YouTubeNode } from '@/lib/nodes/YoutubeNode';
 import { AlignmentNode } from '@/lib/nodes/AlignmentNode';
 import { IndentationNode } from '@/lib/nodes/IndentationNode';
+import { FontFamilyPlugin, FontNode } from '../nodes/FontNode';
+import { FontSizeNode, FontSizePlugin } from '../nodes/FontSizeNode';
 
 const placeholder = 'Enter some rich text...';
 
@@ -164,7 +166,19 @@ export const editorConfig = {
     import: constructImportMap(),
   },
   namespace: 'React.js Demo',
-  nodes: [ParagraphNode, TextNode, LinkNode, AutoLinkNode, ImageNode, YouTubeNode, HeadingNode, AlignmentNode, IndentationNode],
+  nodes: [
+    FontNode,
+    ParagraphNode, 
+    TextNode, 
+    LinkNode, 
+    AutoLinkNode, 
+    ImageNode, 
+    YouTubeNode, 
+    HeadingNode, 
+    AlignmentNode, 
+    IndentationNode,
+    FontSizeNode
+  ],
   onError(error: Error) {
     throw error;
   },
@@ -263,6 +277,8 @@ const MATCHERS = [
             <ImagesPlugin />
             <OnChangePlugin/>
             <YouTubePlugin />
+            <FontSizePlugin />
+            <FontFamilyPlugin />
             {/* <TreeViewPlugin /> */}
           </div>
         </div>

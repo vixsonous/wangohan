@@ -19,6 +19,7 @@ import BarMainSearch from "./components/ElementComponents/BarMainSearch";
 import { GoogleAnalytics  } from '@next/third-parties/google'
 import { getComments } from "@/action/comments";
 import { NotificationData } from "@/constants/interface";
+import { inter, mitimasu } from "@/constants/fonts";
 
 const ErrorModal = React.lazy(() => import("./components/ElementComponents/ErrorModal"));
 const SuccessModal = React.lazy(() => import("./components/ElementComponents/SuccessModal"));
@@ -27,8 +28,6 @@ const UserSetter = React.lazy(() => import("./components/UserSetter"));
 const LayoutSettings = React.lazy(() => import("./components/LayoutSettings"));
 
 config.autoAddCss = false;
-const inter = Inter({ subsets: ["latin"], display: 'swap', adjustFontFallback: false });
-const myFont = localFont({src: "./mitimasu.ttf"});
 
 export const metadata:Metadata = {
   title: {
@@ -138,7 +137,7 @@ export default async function RootLayout({
             </div>
             
             {isLoggedIn && <CreateRecipeComponent />}
-            <div className={`pt-[65.68px] min-h-screen ${myFont.className} flex grow justify-center`}>
+            <div className={`pt-[65.68px] min-h-screen ${mitimasu.className} flex grow justify-center`}>
               <div className='w-screen max-w-xl'>{children}</div>
             </div>
             <div className="footer mt-[100px]">

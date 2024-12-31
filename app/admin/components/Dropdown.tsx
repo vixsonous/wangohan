@@ -28,7 +28,7 @@ export default memo(function Dropdown({children, openIcon= <Button><List size={I
           <span className="flex" onClick={triggerOnClick}>
             {state.open ? closeIcon : openIcon}
           </span>
-          <motion.section ref={dropdown} onClick={closeActionOnClick} className={`absolute w-96 max-w-max bg-secondary-bg top-[100%] ${state.overflow ? 'left-0': 'right-0'} origin-top`} initial={{scaleY: 0}} animate={{scaleY: state.open ? 1 : 0}}>
+          <motion.section ref={dropdown} onClick={closeActionOnClick} className={`rounded-md absolute w-96 max-w-max bg-secondary-bg top-[100%] ${state.overflow ? 'left-0': 'right-0'} origin-top`} initial={{scaleY: 0}} animate={{scaleY: state.open ? 1 : 0}}>
               {children}
           </motion.section>
       </nav>

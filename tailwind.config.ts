@@ -7,6 +7,12 @@ const config: Config = {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+    fontFamily: {
+      mitimasu: [
+        "mitimasu",
+        "sans",
+      ]
+    },
     extend: {
       animation:{
         'shake': 'shake 0.82s cubic-bezier(.36,.07,.19,.97) both',

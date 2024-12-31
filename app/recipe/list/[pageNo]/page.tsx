@@ -28,11 +28,11 @@ export default async function RecipeList({params, searchParams}:{params: {pageNo
   const [recipes, count] = await Promise.all([await getAllRecipes(parseInt(pageNo) - 1, 20), await totalRecipes()]);
   const cnt = Math.ceil(count / 20);
   const r = new Array(cnt).fill(0).map((_,i) => i );
-  console.log(r);
+
     return (
         <div className="flex flex-col mt-[30px] gap-[30px]">
             <div className="flex flex-col justify-center items-center relative p-2 lg:p-0">
-                <h1 className="absolute top-[26px] lg:top-[15px] text-[18px] font-semibold text-[#523636]">わんごはん図鑑</h1>
+                <h1 className="absolute top-[26px] lg:top-[15px] text-[18px] font-semibold text-[#523636]">レシピ図鑑</h1>
                 <img src={'/icons/ribbon.webp'} className="h-[auto] w-[270px] sm:w-[300px] max-w-none mb-[30px]" width={10000} height={10000}  alt="website banner" />
                 <RecipeListElement recipes={recipes.body as DisplayRecipe[]}/>
                 <div className="p-[20px]">
