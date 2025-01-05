@@ -88,8 +88,6 @@ export default async function ShowRecipe({params, searchParams}:{params: {recipe
       "recipeIngredient": recipe_data.recipe_ingredients.map( i => `${i.recipe_ingredients_name} ${i.recipe_ingredients_amount}`),
       "recipeInstructions": recipe_data.recipe_instructions.map(i => `${i.recipe_instructions_text}`)
     };
-
-    console.log(recipe_data);
     
     return (
         <section className="flex justify-center flex-col items-center">
