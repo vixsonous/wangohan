@@ -1,10 +1,11 @@
 'use client';
-import { sm } from "@/constants/constants";
+import { sm, textColor } from "@/constants/constants";
 import { DisplayRecipe } from "@/constants/interface";
 import Image from "next/image";
 import Link from "next/link";
 import StarReviews from "./ElementComponents/StarReviews";
 import OptImage from "./ElementComponents/Image";
+import { Heart } from "@phosphor-icons/react/dist/ssr";
 
 interface Props {
     recipe: DisplayRecipe
@@ -16,7 +17,11 @@ export default function RecipeElementV1 ({recipe}:Props) {
 
     return (
     <Link href={`/recipe/show/${recipe.recipe_id}`}>
-        <div className="flex flex-col gap-[8px]">
+        <div className="relative flex flex-col gap-[8px]">
+            <div className="absolute flex items-center gap-2 px-2 py-1 bg-white rounded-full top-2 right-2 z-50">
+              <Heart color={textColor.error} weight="fill" size={16}/>
+              <span className="text-xs font-bold">{recipe.total_likes > 1000 ? `${recipe.total_likes / 1000}k` : recipe.total_likes}</span>
+            </div>
             <OptImage fit="cover" resize src={recipe.recipe_image} loading="lazy" className="will-change-transform object-cover rounded-md w-full h-[100px] sm:h-[130px] lg:h-[170px] max-w-[100%] block" height={300} width={500} />
             <h1 className={`text-[${CardFontSize}] overflow-hidden text-ellipsis font-bold line-clamp-2`}>{recipe.recipe_name}</h1>
             <div className="flex justify-between mt-[-4px]">

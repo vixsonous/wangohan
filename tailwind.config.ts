@@ -62,7 +62,11 @@ const config: Config = {
       colors: {
         'primary-bg': '#FFE9C9',
         'secondary-bg': '#FFFAF0',
-        'primary-text': '#523636'
+        'primary-text': '#523636',
+        'error': '#E53935',
+        'success': '#8dc225',
+        'warning': '#fecb37'
+
       },
       maxWidth: {
         'md': '768px',

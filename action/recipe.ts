@@ -8,6 +8,7 @@ import { getComments } from "./comments";
 import { s3DeleteFilesInFolder } from "./file-lib";
 import NodeCache from 'node-cache';
 import { highDynamicData, lowDynamicData } from "./caching";
+import { sql } from "kysely";
 
 const FRONT_PAGE_RECIPE_QUERY_LIMIT = 10;
 const SEARCH_PAGE_RECIPE_QUERY_LIMIT = 50;
@@ -486,13 +487,23 @@ export const isLikedExist = async (recipe_id: number, user_id: number) => {
 
 export const postLike = async (recipe_id: number, user_id: number) => {
     try {
-        const liked = await db.insertInto("likes_table").values({
-            is_liked: true,
-            recipe_id: recipe_id,
-            user_id: user_id,
-            created_at: new Date(),
-            updated_at: new Date()
-        }).executeTakeFirstOrThrow();
+
+          await db.transaction().execute(async trx => {
+            await trx.insertInto("likes_table").values({
+              is_liked: true,
+              recipe_id: recipe_id,
+              user_id: user_id,
+              created_at: new Date(),
+              updated_at: new Date()
+            }).executeTakeFirstOrThrow();
+
+            await trx.updateTable("recipes_table").set(eb => ({
+              total_likes: sql`total_likes + 1`,
+              updated_at: new Date()
+            }))
+            .where('recipe_id', '=', recipe_id)
+            .executeTakeFirstOrThrow();
+        });
 
         return {message: '完了',body: true, status: 200};
     } catch(e) {
@@ -502,12 +513,21 @@ export const postLike = async (recipe_id: number, user_id: number) => {
 
 export const updateLike = async (recipe_id: number, user_id: number, liked: boolean) => {
     try {
-        const res = await db.updateTable("likes_table").set({
+        await db.transaction().execute(async trx => {
+          await trx.updateTable("likes_table").set({
             is_liked: liked,
             updated_at: new Date()
-        }).where("recipe_id", "=", recipe_id)
-        .where("user_id", "=", user_id)
-        .execute()
+          }).where("recipe_id", "=", recipe_id)
+          .where("user_id", "=", user_id)
+          .execute()
+
+          await trx.updateTable("recipes_table").set(eb => ({
+            total_likes: liked ? sql`total_likes + 1` : sql`total_likes - 1`,
+            updated_at: new Date()
+          }))
+          .where('recipe_id', '=', recipe_id)
+          .executeTakeFirstOrThrow();
+        });
 
         return {message: '完了',body: liked, status: 200};
     } catch(e) {

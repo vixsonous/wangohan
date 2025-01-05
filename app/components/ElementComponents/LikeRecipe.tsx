@@ -15,6 +15,7 @@ export default memo(function LikeRecipe({
   recipe_id, 
   recipe_image, 
   recipe_owner_id,
+  total_likes,
   user_id, 
   user_name, 
   style={}, 
@@ -24,6 +25,7 @@ export default memo(function LikeRecipe({
   recipe_image: string, 
   recipe_owner_id: number,
   user_id:number, 
+  total_likes: number,
   user_name: string, 
   style?:object, 
   likeStatus?: {isLikedExist: boolean, liked: boolean}
@@ -34,7 +36,8 @@ export default memo(function LikeRecipe({
   const [state, setState] = useState({
       isLiked: likeStatus.liked,
       processing: false,
-      bounce: false
+      bounce: false,
+      totalLikes: total_likes
   });
 
   const messageRecieve = useCallback(async (message:string) => {
@@ -64,7 +67,7 @@ export default memo(function LikeRecipe({
       created_at: new Date()
     }));
 
-    setState(prev => ({...prev, isLiked: !prev.isLiked, processing: true, bounce: true}));
+    setState(prev => ({...prev, isLiked: !prev.isLiked, processing: true, bounce: true, totalLikes: prev.isLiked ? prev.totalLikes - 1 : prev.totalLikes + 1}));
 
     await fetch('/api/recipe-like', {
         method: likeStatus.isLikedExist ? 'PATCH' : 'POST',
@@ -84,8 +87,11 @@ export default memo(function LikeRecipe({
 },[state.isLiked]);
 
   return (
-      <button disabled={state.processing} onClick={likeFunc}>
-          <Heart color={state.isLiked ? textColor.error : ''} weight={state.isLiked ? "fill" : "regular"} size={28}/>
+      <button className="flex w-20 py-1 px-2 justify-between bg-white rounded-full" disabled={state.processing} onClick={likeFunc}>
+          <Heart color={state.isLiked ? textColor.error : ''} weight={state.isLiked ? "fill" : "regular"} size={24}/>
+          <span className="font-semibold">
+            {state.totalLikes >= 1000 ? `${state.totalLikes / 1000}k` : state.totalLikes}
+          </span>
       </button>
   )
 })

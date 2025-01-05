@@ -79,7 +79,7 @@ const EventCategoryLgCore = () => {
             return (
               <Link key={idx} href={ev.url} className="flex gap-2 text-primary-text font-bold flex-col justify-center items-center">
                 <OptImage src={ev.img} height={70} loading="lazy" className="relative rounded-md"  alt="website banner" />
-                <span className="relative text-xs">{ev.text}</span>
+                <span className="relative text-[.7rem] sm:text-xs">{ev.text}</span>
               </Link>
             )
           })
