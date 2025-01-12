@@ -62,38 +62,66 @@ const events = [
   {text: '節分', img: '/LP/event/setsubun.webp', url: '/recipe/search/節分'},
   {text: 'ひな祭り', img: '/LP/event/hinamatsuri.webp', url: '/recipe/search/ひな祭り'},
   {text: 'こどもの日', img: '/LP/event/kodomonohi.webp', url: '/recipe/search/こどもの日'},
+]
+
+const events2 = [
   {text: '七夕', img: '/LP/event/tanabata.webp', url: '/recipe/search/七夕'},
   {text: 'ハロウィン', img: '/LP/event/halloween.webp', url: '/recipe/search/ハロウィン'},
   {text: 'クリスマス', img: '/LP/event/christmas.webp', url: '/recipe/search/クリスマス'},
   {text: 'おやつ', img: '/LP/event/snack.webp', url: '/recipe/search/おやつ'},
 ]
 
-const EventCategoryLgCore = () => {
+const EventCategoryLgCore = ({children}: {children: React.ReactElement}) => {
   return (
     <>
     <div className="first-row w-full flex gap-4 justify-center flex-col items-center">
       <h1 className="text-[20px] text-primary-text font-semibold">イベント別で探す</h1>
-      <div className="grid grid-cols-5 gap-y-12 w-[100%]">
-        {
-          events.map( (ev, idx) => {
-            return (
-              <Link key={idx} href={ev.url} className="flex gap-2 text-primary-text font-bold flex-col justify-center items-center">
-                <OptImage src={ev.img} height={70} loading="lazy" className="relative rounded-md"  alt="website banner" />
-                <span className="relative text-[.7rem] sm:text-xs">{ev.text}</span>
-              </Link>
-            )
-          })
-        }
+      <div className="grid grid-cols-3 gap-y-12 w-[100%]">
+        {children}
       </div>
     </div>
     </>
   )
 }
 
-const EventCategoryLg = memo(() => {
+const EventCategoryLg1 = memo(() => {
   return (
     <div className={`flex-col mt-4 justify-center w-[100%] items-start relative`}>
-      <EventCategoryLgCore />
+      <EventCategoryLgCore>
+        <>
+        {
+          events.map( (ev, idx) => {
+            return (
+              <Link key={idx} href={ev.url} className="flex gap-2 text-primary-text font-bold flex-col justify-center items-center">
+                <OptImage src={ev.img} height={70} loading="lazy" className="relative rounded-md"  alt="website banner" />
+                <span className="relative text-xs">{ev.text}</span>
+              </Link>
+            )
+          })
+        }
+        </>
+      </EventCategoryLgCore>
+    </div>
+  )
+});
+
+const EventCategoryLg2 = memo(() => {
+  return (
+    <div className={`flex-col mt-4 justify-center w-[100%] items-start relative`}>
+      <EventCategoryLgCore>
+        <>
+        {
+          events2.map( (ev, idx) => {
+            return (
+              <Link key={idx} href={ev.url} className="flex gap-2 text-primary-text font-bold flex-col justify-center items-center">
+                <OptImage src={ev.img} height={70} loading="lazy" className="relative rounded-md"  alt="website banner" />
+                <span className="relative text-xs">{ev.text}</span>
+              </Link>
+            )
+          })
+        }
+        </>
+      </EventCategoryLgCore>
     </div>
   )
 });
@@ -114,7 +142,10 @@ export default function CategorySlider() {
         <DogCategoryLg />
       </SwiperSlide>
       <SwiperSlide>
-        <EventCategoryLg />
+        <EventCategoryLg1 />
+      </SwiperSlide>
+      <SwiperSlide>
+        <EventCategoryLg2 />
       </SwiperSlide>
     </Swiper>
   )

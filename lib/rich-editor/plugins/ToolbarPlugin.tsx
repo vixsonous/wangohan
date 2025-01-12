@@ -4,7 +4,7 @@ import { faAlignCenter, faAlignJustify, faAlignLeft, faAlignRight, faArrowRotate
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {useLexicalComposerContext} from '@lexical/react/LexicalComposerContext';
 import {$getNearestNodeOfType, $wrapNodeInElement, mergeRegister} from '@lexical/utils';
-import { ArrowClockwise, ArrowCounterClockwise, BracketsAngle, CaretDown, Image, Paragraph, Plus, TextAlignCenter, TextAlignJustify, TextAlignLeft, TextAlignRight, TextBolder, TextHOne, TextHThree, TextHTwo, TextIndent, TextItalic, TextOutdent, TextStrikethrough, TextSubscript, TextSuperscript, TextUnderline, X, YoutubeLogo } from '@phosphor-icons/react/dist/ssr';
+import { ArrowClockwise, ArrowCounterClockwise, BracketsAngle, CaretDown, Image, PaintBrush, PaintBucket, Paragraph, Plus, TextAa, TextAlignCenter, TextAlignJustify, TextAlignLeft, TextAlignRight, TextBolder, TextHOne, TextHThree, TextHTwo, TextIndent, TextItalic, TextOutdent, TextStrikethrough, TextSubscript, TextSuperscript, TextUnderline, X, YoutubeLogo } from '@phosphor-icons/react/dist/ssr';
 import {
   $createParagraphNode,
   $createTextNode,
@@ -55,6 +55,8 @@ import { imageFileTypes } from '@/constants/constants';
 import { INSERT_YOUTUBE_COMMAND } from './YoutubePlugin';
 import { FORMAT_FONTFAMILY_COMMAND } from '@/lib/nodes/FontNode';
 import { FORMAT_FONTSIZE_COMMAND } from '@/lib/nodes/FontSizeNode';
+import { FORMAT_FONTCOLOR_COMMAND } from '@/lib/nodes/FontColorNode';
+import { FORMAT_FONTBACKGROUNDCOLOR_COMMAND } from '@/lib/nodes/FontBackgroundColorNode';
 
 const LowPriority = 1;
 const IconSize=20;
@@ -102,6 +104,8 @@ export default function ToolbarPlugin() {
   const [isSubscript, setIsSubScript] = useState(false);
   const [isSuperscript, setIsSuperScript] = useState(false);
   const [isCode, setIsCode] = useState(false);
+  const [fontColor, setFontColor] = useState("#523636");
+  const [fontBackgroundColor, setFontBackgroundColor] = useState("#FFE9C9");
 
   const [blockType, setBlockType] = useState("paragraph");
   const [selectedElementKey, setSelectedElementKey] = useState<string>('');
@@ -125,6 +129,15 @@ export default function ToolbarPlugin() {
     fontSize: <FontSize size={'15'}/>,
     fontSizeVal: 15,
   })
+
+  function rgbToHex(rgb: string): string {
+    const match = rgb.match(/\d+/g);
+    if (!match || match.length < 3) return rgb; // Return as is if conversion is not possible
+    return `#${match
+      .slice(0, 3)
+      .map((x) => parseInt(x, 10).toString(16).padStart(2, '0'))
+      .join('')}`;
+  }
 
   const $updateToolbar = useCallback(() => {
     const selection = $getSelection();
@@ -158,6 +171,11 @@ export default function ToolbarPlugin() {
           setBlockType(type);
           const computedStyle = window.getComputedStyle(elementDOM);
           const fontSize = computedStyle.fontSize;
+
+          setFontColor(selection.style.includes("color:") ? selection.style.split("color: ")[1].split(";")[0] : 
+          "#523636")
+          setFontBackgroundColor(selection.style.includes("background-color:") ? selection.style.split("background-color: ")[1].split(";")[0] : 
+          "#FFE9C9")
           setIcons(prev => ({...prev, 
             textType: type === "paragraph" ? <ParagraphButton /> : 
               type === "h1" ? <H1Button /> :
@@ -364,6 +382,18 @@ export default function ToolbarPlugin() {
     }
   }
 
+  const fontColorOnChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+    const t = e.currentTarget;
+    editor.dispatchCommand(FORMAT_FONTCOLOR_COMMAND, String(t.value));
+    setFontColor(t.value);
+  }
+
+  const fontBackgroundColorOnChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+    const t = e.currentTarget;
+    editor.dispatchCommand(FORMAT_FONTBACKGROUNDCOLOR_COMMAND, String(t.value));
+    setFontBackgroundColor(t.value);
+  }
+
   return (
     <div className="toolbar flex flex-wrap" ref={toolbarRef}>
       <Button disabled={!canUndo}
@@ -529,6 +559,26 @@ export default function ToolbarPlugin() {
           }
         </ul>
       </Dropdown>
+      <Divider />
+      <Button
+        // onClick={() => alert(5)}
+        className={'toolbar-item spaced cursor-pointer ' + (isBold ? 'active' : '')}
+        aria-label="Format Bold">
+        <label htmlFor="text-color" className='flex gap-1 items-center cursor-pointer'>
+          <TextAa size={IconSize} className='cursor-pointer'/>
+          <input onChange={fontColorOnChange} type="color" id="text-color" value={fontColor} className='bg-none p-0 cursor-pointer w-2'/>
+        </label>
+      </Button>
+      <Divider />
+      <Button
+        // onClick={() => alert(5)}
+        className={'toolbar-item spaced cursor-pointer ' + (isBold ? 'active' : '')}
+        aria-label="Format Bold">
+        <label htmlFor="text-background-color" className='flex gap-1 items-center cursor-pointer'>
+          <PaintBucket size={IconSize} className='cursor-pointer'/>
+          <input onChange={fontBackgroundColorOnChange} type="color" id="text-background-color" value={fontBackgroundColor} className='bg-none p-0 cursor-pointer w-2'/>
+        </label>
+      </Button>
       <Divider />
       <Button
         onClick={() => {

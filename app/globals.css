@@ -82,3 +82,20 @@ input[type="radio"]:checked+label>span{
 .custom-nav.swiper-button-disabled svg {
   opacity: 0.5; /* Reduce SVG opacity */
 }
+
+input[type='color']{
+  margin:0;
+  padding:0;
+  border:0;
+  width:1rem;
+  height: 1rem;
+  aspect-ratio: 1;
+}
+input[type='color']::-webkit-color-swatch-wrapper {
+padding: 0;
+  margin:0;
+  background:none;
+}
+input[type='color']::-webkit-color-swatch {
+border: none;
+}

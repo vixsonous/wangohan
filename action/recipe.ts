@@ -514,19 +514,37 @@ export const postLike = async (recipe_id: number, user_id: number) => {
 export const updateLike = async (recipe_id: number, user_id: number, liked: boolean) => {
     try {
         await db.transaction().execute(async trx => {
+
+          // const transaction = await Promise.all([
+            
+          // ])
+
           await trx.updateTable("likes_table").set({
             is_liked: liked,
             updated_at: new Date()
           }).where("recipe_id", "=", recipe_id)
           .where("user_id", "=", user_id)
-          .execute()
+          .execute();
 
-          await trx.updateTable("recipes_table").set(eb => ({
+          const total_likes = await trx.updateTable("recipes_table").set(eb => ({
             total_likes: liked ? sql`total_likes + 1` : sql`total_likes - 1`,
             updated_at: new Date()
           }))
           .where('recipe_id', '=', recipe_id)
-          .executeTakeFirstOrThrow();
+          .returning("total_likes")
+          .executeTakeFirstOrThrow()
+
+          if(total_likes.total_likes < 0) {
+            await trx.updateTable("recipes_table").set(eb => ({
+              total_likes: 0,
+              updated_at: new Date()
+            }))
+            .where('recipe_id', '=', recipe_id)
+            .executeTakeFirstOrThrow();
+          }
+
+          highDynamicData.del('weekly-recipes');
+          highDynamicData.del('popular-recipes');
         });
 
         return {message: '完了',body: liked, status: 200};

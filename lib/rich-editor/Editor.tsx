@@ -38,6 +38,8 @@ import { AlignmentNode } from '@/lib/nodes/AlignmentNode';
 import { IndentationNode } from '@/lib/nodes/IndentationNode';
 import { FontFamilyPlugin, FontNode } from '../nodes/FontNode';
 import { FontSizeNode, FontSizePlugin } from '../nodes/FontSizeNode';
+import { FontColorNode, FontColorPlugin } from '../nodes/FontColorNode';
+import { FontBackgroundColorNode, FontBackgroundColorNodePlugin } from '../nodes/FontBackgroundColorNode';
 
 const placeholder = 'Enter some rich text...';
 
@@ -177,7 +179,9 @@ export const editorConfig = {
     HeadingNode, 
     AlignmentNode, 
     IndentationNode,
-    FontSizeNode
+    FontSizeNode,
+    FontColorNode,
+    FontBackgroundColorNode
   ],
   onError(error: Error) {
     throw error;
@@ -278,6 +282,8 @@ const MATCHERS = [
             <OnChangePlugin/>
             <YouTubePlugin />
             <FontSizePlugin />
+            <FontColorPlugin />
+            <FontBackgroundColorNodePlugin />
             <FontFamilyPlugin />
             {/* <TreeViewPlugin /> */}
           </div>

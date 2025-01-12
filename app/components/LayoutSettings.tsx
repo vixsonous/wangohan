@@ -64,8 +64,13 @@ export default memo(function LayoutSettings({isLoggedIn, user_id, db_notificatio
     },[]);
 
     useEffect(() => {
-      setNotifications([...db_notifications]);
-      setNotificationCount(db_notifications.filter(x => !JSON.parse(x as string).is_read).length);
+      console.log();
+      const displayNotifications = db_notifications.filter(x => {
+        const n = JSON.parse(x as string);
+        return n.type !== 'like' || (n.type === 'like' && n.liked);
+      })
+      setNotifications([...displayNotifications]);
+      setNotificationCount(displayNotifications.filter(x => !JSON.parse(x as string).is_read).length);
     },[]);
 
     const fetchSession = useCallback(async () => {
