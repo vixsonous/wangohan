@@ -316,7 +316,7 @@ export default function ToolbarPlugin() {
     }
   },[]);
 
-  const uploadFile = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+  const uploadFile = useCallback(async (e: React.MouseEvent<HTMLButtonElement>) => {
     if(imageFileRef.current) {
       const t = imageFileRef.current;
       if(!t.files || !t.files[0]) return;
@@ -325,6 +325,14 @@ export default function ToolbarPlugin() {
         altText: t.files[0].name,
         src: URL.createObjectURL(t.files[0])
       });
+
+      const fd = new FormData();
+      fd.append('file',t.files[0]);
+
+      const res = await fetch("/api/blog-files", {
+        method: 'POST',
+        body: fd
+      })
       dispatch(hideModal());
       setFileName('No image uploaded');
     }

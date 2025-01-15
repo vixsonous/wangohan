@@ -14,10 +14,10 @@ const s3 = new S3Client({
     }
 });
 
-export async function s3UploadFile(file: File, folder: string) {
+export async function s3UploadFile(file: File, folder: string, filename?:string) {
     try {
-        const filename = nanoid();
-        const path = `${folder}/${filename}.webp`
+        const filenameId = nanoid();
+        const path = `${folder}/${filename ? filename : filenameId}.webp`
         const or = await sharp(await file.arrayBuffer())
             .resize(1024, null, { withoutEnlargement: true, fit: "inside"})
             .withMetadata()

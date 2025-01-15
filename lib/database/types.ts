@@ -13,6 +13,7 @@ export interface Database {
   favourites_table: FavouritesTable;
   likes_table: LikesTable;
   notifications_table: NotificationsTable;
+  blog_images_upload: BlogImagesUpload;
 }
 
 export interface UserTable {
@@ -141,6 +142,14 @@ export interface NotificationsTable {
   liked: boolean;
   recipe_id: number;
   recipe_image: string;
+  updated_at: Date;
+  created_at: Date;
+}
+
+export interface BlogImagesUpload {
+  blog_image_id: Generated<number>;
+  blog_image_title: string;
+  blog_image_url: string;
   updated_at: Date;
   created_at: Date;
 }

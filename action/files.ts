@@ -37,23 +37,6 @@ export const updateProfilePic = async (file: File) => {
     
 }
 
-export const getUserProfilePic = async (user_id: number) => {
-
-    try{
-        if(!user_id) throw new Error(ERR_MSG['ERR3']);
-
-        const user_image = await db.selectFrom("user_details_table as user_details")
-                .select(['user_details.user_image'])
-                .where('user_details.user_id','=', user_id)
-                .executeTakeFirst();
-
-        return user_image;
-    } catch (e) {
-        let _e = (e as Error).message;
-        throw _e;
-    }
-}
-
 export const uploadRecipeFiles = async (file: File, recipe_id: number, folder:string) => {
     try {
         const docCookies = cookies();
