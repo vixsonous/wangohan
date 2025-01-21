@@ -1,16 +1,12 @@
 "use client";
 import Dropdown from '@/app/admin/components/Dropdown';
-import { faAlignCenter, faAlignJustify, faAlignLeft, faAlignRight, faArrowRotateLeft, faArrowRotateRight, faBold, faItalic, faStrikethrough, faUnderline } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {useLexicalComposerContext} from '@lexical/react/LexicalComposerContext';
-import {$getNearestNodeOfType, $wrapNodeInElement, mergeRegister} from '@lexical/utils';
-import { ArrowClockwise, ArrowCounterClockwise, BracketsAngle, CaretDown, Image, PaintBrush, PaintBucket, Paragraph, Plus, TextAa, TextAlignCenter, TextAlignJustify, TextAlignLeft, TextAlignRight, TextBolder, TextHOne, TextHThree, TextHTwo, TextIndent, TextItalic, TextOutdent, TextStrikethrough, TextSubscript, TextSuperscript, TextUnderline, X, YoutubeLogo } from '@phosphor-icons/react/dist/ssr';
+import {$getNearestNodeOfType, mergeRegister} from '@lexical/utils';
+import { ArrowClockwise, ArrowCounterClockwise, BracketsAngle, CaretDown, CircleNotch, Image, PaintBrush, PaintBucket, Paragraph, Plus, TextAa, TextAlignCenter, TextAlignJustify, TextAlignLeft, TextAlignRight, TextBolder, TextHOne, TextHThree, TextHTwo, TextIndent, TextItalic, TextOutdent, TextStrikethrough, TextSubscript, TextSuperscript, TextUnderline, X, YoutubeLogo } from '@phosphor-icons/react/dist/ssr';
 import {
   $createParagraphNode,
-  $createTextNode,
   $getSelection,
   $isRangeSelection,
-  $isTextNode,
   CAN_REDO_COMMAND,
   CAN_UNDO_COMMAND,
   COMMAND_PRIORITY_EDITOR,
@@ -24,39 +20,36 @@ import {
   SELECTION_CHANGE_COMMAND,
   UNDO_COMMAND,
 } from 'lexical';
-import { $isLinkNode, TOGGLE_LINK_COMMAND } from "@lexical/link";
+import { $isLinkNode } from "@lexical/link";
 import {
   $createHeadingNode,
-  $createQuoteNode,
   $isHeadingNode,
   HeadingTagType
 } from "@lexical/rich-text";
 import {
-  INSERT_ORDERED_LIST_COMMAND,
-  INSERT_UNORDERED_LIST_COMMAND,
-  REMOVE_LIST_COMMAND,
   $isListNode,
   ListNode
 } from "@lexical/list";
 import {
-  $createCodeNode,
   $isCodeNode,
   getDefaultCodeLanguage,
-  getCodeLanguages
 } from "@lexical/code";
-import { $wrapNodes, $isAtNodeEnd, $patchStyleText } from "@lexical/selection";
+import { $wrapNodes, $isAtNodeEnd } from "@lexical/selection";
 import React, {memo, useCallback, useEffect, useRef, useState} from 'react';
 import Button from '@/app/components/Button';
 import { INSERT_IMAGE_COMMAND } from './ImagePlugin';
 import { useDispatch } from 'react-redux';
-import { hideModal, showModal } from '@/lib/redux/states/messageSlice';
+import { hideError, hideModal, showError, showModal } from '@/lib/redux/states/messageSlice';
 import Modal from '@/app/components/ElementComponents/Modal';
-import { imageFileTypes } from '@/constants/constants';
+import { imageFileTypes, POPUPTIME } from '@/constants/constants';
 import { INSERT_YOUTUBE_COMMAND } from './YoutubePlugin';
 import { FORMAT_FONTFAMILY_COMMAND } from '@/lib/nodes/FontNode';
 import { FORMAT_FONTSIZE_COMMAND } from '@/lib/nodes/FontSizeNode';
 import { FORMAT_FONTCOLOR_COMMAND } from '@/lib/nodes/FontColorNode';
 import { FORMAT_FONTBACKGROUNDCOLOR_COMMAND } from '@/lib/nodes/FontBackgroundColorNode';
+import LoadingCircle from '@/app/components/IconComponents/LoadingCircle';
+import OptImage from '@/app/components/ElementComponents/Image';
+import heic2any from 'heic2any';
 
 const LowPriority = 1;
 const IconSize=20;
@@ -92,6 +85,11 @@ const Divider = memo(function Divider() {
   return <div className="divider" />;
 });
 
+type ImageMetadata = {
+  blog_image_title: string;
+  blog_image_url: string;
+}
+
 export default function ToolbarPlugin() {
   const [editor] = useLexicalComposerContext();
   const toolbarRef = useRef(null);
@@ -106,6 +104,11 @@ export default function ToolbarPlugin() {
   const [isCode, setIsCode] = useState(false);
   const [fontColor, setFontColor] = useState("#523636");
   const [fontBackgroundColor, setFontBackgroundColor] = useState("#FFE9C9");
+  const [modalMode, setModalMode] = useState('image-upload');
+  const [imageListPage, setImageListPage] = useState(0);
+  const [imageList, setImageList] = useState<Array<ImageMetadata>>([]);
+  const [imageFetch, setImageFetch] = useState(false);
+  const [imageUpload, setImageUpload] = useState(false);
 
   const [blockType, setBlockType] = useState("paragraph");
   const [selectedElementKey, setSelectedElementKey] = useState<string>('');
@@ -172,9 +175,9 @@ export default function ToolbarPlugin() {
           const computedStyle = window.getComputedStyle(elementDOM);
           const fontSize = computedStyle.fontSize;
 
-          setFontColor(selection.style.includes("color:") ? selection.style.split("color: ")[1].split(";")[0] : 
+          setFontColor(selection.style.includes("color:") ? selection.style.split("color: ")[1].split(";")[0] || "#523636": 
           "#523636")
-          setFontBackgroundColor(selection.style.includes("background-color:") ? selection.style.split("background-color: ")[1].split(";")[0] : 
+          setFontBackgroundColor(selection.style.includes("background:") ? selection.style.split("background: ")[1].split(";")[0] || "#FFE9C9": 
           "#FFE9C9")
           setIcons(prev => ({...prev, 
             textType: type === "paragraph" ? <ParagraphButton /> : 
@@ -302,17 +305,18 @@ export default function ToolbarPlugin() {
     return '';
   }
 
-  const uploadPreviewFile = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+  const uploadPreviewFile = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
     if(imageFileRef.current) {
       const t = imageFileRef.current;
       if(!t.files || !t.files[0]) return;
-        if(!imageFileTypes.includes(t.files[0].type) && t.files[0].type !== "") {
-          return;
-        }
-        if(t.files[0].type === "" && !imageFileTypes.includes(t.files[0].name.split(".")[1].toLowerCase())) {
-          return
-        }
-        setFileName(t.files[0].name);
+      if(!imageFileTypes.includes(t.files[0].type) && t.files[0].type !== "") {
+        return;
+      }
+      if(t.files[0].type === "" && !imageFileTypes.includes(t.files[0].name.split(".")[1].toLowerCase())) {
+        return
+      }
+
+      setFileName(t.files[0].name);
     }
   },[]);
 
@@ -321,22 +325,65 @@ export default function ToolbarPlugin() {
       const t = imageFileRef.current;
       if(!t.files || !t.files[0]) return;
 
-      editor.dispatchCommand(INSERT_IMAGE_COMMAND, {
-        altText: t.files[0].name,
-        src: URL.createObjectURL(t.files[0])
-      });
+      const fileName = t.files[0].name;
+      const fileNameExt = fileName.substring(fileName.lastIndexOf('.') + 1);
 
       const fd = new FormData();
-      fd.append('file',t.files[0]);
 
-      const res = await fetch("/api/blog-files", {
+      if(typeof window !== 'undefined' && (fileNameExt.toLowerCase() === "heic" || fileNameExt.toLowerCase() === "heif")) {
+        const image = await heic2any({
+          blob: t.files[0],
+          toType: 'image/webp',
+          quality: 0.8
+        });
+
+        const img = !Array.isArray(image) ? [image] : image;
+        const f = new File(img, fileName);
+
+        fd.append('file', f);
+      } else {
+        fd.append('file',t.files[0]);
+      }
+
+      setImageUpload(true);
+      const res = await fetch("/api/blog-images", {
         method: 'POST',
         body: fd
-      })
+      });
+      setImageUpload(false);
+
+      const body = await res.json();
+
+      if(!res.ok) {
+        showError(body.message);
+        setTimeout(() => hideError(),5000);
+      }
+
+      editor.dispatchCommand(INSERT_IMAGE_COMMAND, {
+        altText: t.files[0].name,
+        src: body.body.fileUrl,
+        width: 500
+      });
+      
       dispatch(hideModal());
       setFileName('No image uploaded');
     }
   },[]);
+
+  const insertImageFromList = (e:React.MouseEvent<HTMLButtonElement>) => {
+    const t = e.currentTarget;
+    
+    const src = t.id;
+    const name = t.name;
+
+    editor.dispatchCommand(INSERT_IMAGE_COMMAND, {
+      altText: name,
+      src: src,
+      width: 500
+    });
+
+    hideModal();
+  }
 
   const formatHeading = (e: React.MouseEvent<HTMLButtonElement>) => {
     const nameDetail = e.currentTarget.name;
@@ -400,6 +447,16 @@ export default function ToolbarPlugin() {
     const t = e.currentTarget;
     editor.dispatchCommand(FORMAT_FONTBACKGROUNDCOLOR_COMMAND, String(t.value));
     setFontBackgroundColor(t.value);
+  }
+
+  const resetFontBackgroundColor = (e:React.MouseEvent<HTMLButtonElement>) => {
+    editor.dispatchCommand(FORMAT_FONTBACKGROUNDCOLOR_COMMAND, String(""));
+    setFontBackgroundColor("#FFE9C9");
+  }
+
+  const resetFontColor = (e:React.MouseEvent<HTMLButtonElement>) => {
+    editor.dispatchCommand(FORMAT_FONTCOLOR_COMMAND, String("#523636"));
+    setFontBackgroundColor("#523636");
   }
 
   return (
@@ -468,6 +525,7 @@ export default function ToolbarPlugin() {
               <Button
                 onClick={() => {
                   const url = prompt("Enter the URL of the YouTube video:", "");
+                  
                   editor.dispatchCommand(INSERT_YOUTUBE_COMMAND, fillUrl(url || ''));
                   setIcons(prev => ({...prev, justify: <CenterAlign />, justifyIdx: 1}))
                 }}
@@ -577,6 +635,13 @@ export default function ToolbarPlugin() {
           <input onChange={fontColorOnChange} type="color" id="text-color" value={fontColor} className='bg-none p-0 cursor-pointer w-2'/>
         </label>
       </Button>
+      <Button 
+        className={'toolbar-item flex justify-center items-center spaced cursor-pointer ' + (isBold ? 'active' : '')}
+        aria-label="Format Bold"
+        onClick={resetFontColor}
+      >
+          <ArrowClockwise size={IconSize - 4}/>
+      </Button>
       <Divider />
       <Button
         // onClick={() => alert(5)}
@@ -586,6 +651,13 @@ export default function ToolbarPlugin() {
           <PaintBucket size={IconSize} className='cursor-pointer'/>
           <input onChange={fontBackgroundColorOnChange} type="color" id="text-background-color" value={fontBackgroundColor} className='bg-none p-0 cursor-pointer w-2'/>
         </label>
+      </Button>
+      <Button 
+        className={'toolbar-item flex justify-center items-center spaced cursor-pointer ' + (isBold ? 'active' : '')}
+        aria-label="Format Bold"
+        onClick={resetFontBackgroundColor}
+      >
+          <ArrowClockwise size={IconSize - 4}/>
       </Button>
       <Divider />
       <Button
@@ -662,7 +734,11 @@ export default function ToolbarPlugin() {
         <ul className=" flex flex-col gap-2 bg-secondary-bg items-center rounded-md border border-primary-text">
           <li className={`flex items-center justify-between w-full px-2 ${icons.justifyIdx === 0 ? 'bg-primary-bg' : ''} rounded-t-md`}>
             <Button
-              onClick={() => dispatch(showModal())}
+              onClick={() => {
+                dispatch(showModal());
+                setModalMode('image-upload');
+                setImageListPage(0);
+              }}
               className="toolbar-item spaced flex gap-4"
               aria-label="Image Insert">
               <Image size={IconSize}/>
@@ -681,30 +757,6 @@ export default function ToolbarPlugin() {
                 <YoutubeLogo size={IconSize}/>
                 <ButtonText>Youtube Video</ButtonText>
               </Button>
-          </li>
-          <li className={`flex items-center justify-between w-full px-2 ${icons.justifyIdx === 2 ? 'bg-primary-bg' : ''}`}>
-              <Button
-                onClick={() => {
-                  editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'right');
-                  setIcons(prev => ({...prev, justify: <RightAlign />, justifyIdx: 2}))
-                }}
-                className="toolbar-item spaced flex gap-4"
-                aria-label="Right Align">
-                <TextAlignRight size={IconSize}/>
-                <ButtonText>Right Align</ButtonText>
-              </Button>
-          </li>
-          <li className={`flex items-center justify-between w-full px-2 ${icons.justifyIdx === 3 ? 'bg-primary-bg' : ''} rounded-b-md`}>
-            <Button
-              onClick={() => {
-                editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'justify');
-                setIcons(prev => ({...prev, justify: <JustifyAlign />, justifyIdx: 3}))
-              }}
-              className="toolbar-item flex gap-4"
-              aria-label="Justify Align">
-              <TextAlignJustify size={IconSize}/>
-              <ButtonText>Justify Align</ButtonText>
-            </Button>
           </li>
         </ul>
       </Dropdown>
@@ -809,54 +861,109 @@ export default function ToolbarPlugin() {
         </ul>
       </Dropdown>
       <Modal>
-        <div className='bg-primary-bg p-4 flex flex-col gap-2'>
-          <div className='flex justify-between items-center'>
-            <span className='text-lg'>Insert Image</span>
-            <Button className='group relative p-2' onClick={closeModalOnClick}>
-              <X size={IconSize}/>
-              <div className='absolute w-full h-full bg-black top-0 left-0 opacity-0 group-hover:opacity-[0.2] transition-all rounded-full'></div>
-            </Button>
-          </div>
-          <hr className='border-b-[1px] border-black w-full'/>
-          <Button onClick={() => {
-            editor.dispatchCommand(INSERT_IMAGE_COMMAND, {
-              altText: "Pink flowers",
-              src:
-                "https://images.pexels.com/photos/5656637/pexels-photo-5656637.jpeg?auto=compress&cs=tinysrgb&w=200"
-            });
-            dispatch(hideModal());
-          }} className={`w-[100%] bg-[#ffb762] border-[1px] border-primary-text text-primary-text px-32 py-2 rounded-md text-sm font-semibold`}>
-            <span>Sample</span>
-          </Button>
-          <Dropdown className='w-full' closeOnClick={false} openIcon={<UrlButton />} closeIcon={<UrlButton />}>
-            <div className='p-2 flex flex-col gap-2 items-center'>
-              <input ref={urlRef} className="w-[100%] text-sm px-4 py-2 border-[2px] rounded-md border-[#ffcd92]" type="text" name="url" placeholder="URLを入力" id="url" />
-              <div className='flex gap-2'>
-                <input ref={imageAltRef} className="w-[100%] text-sm px-4 py-2 border-[2px] rounded-md border-[#ffcd92]" type="text" name="url" placeholder="Image Altを入力" id="url" />
-                <Button onClick={uploadFileUrl} className='p-2 relative group'>
-                  <Plus size={IconSize}/>
-                  <div className='w-full h-full bg-black absolute top-0 left-0 rounded-full opacity-0 group-hover:opacity-[0.2] transition-all'></div>
+        {
+          modalMode === 'image-upload' ? (
+            <div className='fixed top-0 left-0 justify-center items-center flex w-screen h-screen px-4'>
+              <div className='max-w-screen-lg w-full bg-primary-bg p-4 flex flex-col gap-2 '>
+                <div className='flex justify-between items-center'>
+                  <span className='text-lg'>Insert Image</span>
+                  <Button className='group relative p-2' onClick={closeModalOnClick}>
+                    <X size={IconSize}/>
+                    <div className='absolute w-full h-full bg-black top-0 left-0 opacity-0 group-hover:opacity-[0.2] transition-all rounded-full'></div>
+                  </Button>
+                </div>
+                <hr className='border-b-[1px] border-black w-full'/>
+                <Button onClick={async () => {
+                  setModalMode('image-list');
+                  setImageListPage(0);
+
+                  setImageFetch(true);
+                  const res = await fetch("/api/blog-images");
+                  setImageFetch(false);
+
+                  const parsed = await res.json();
+
+                  if(!res.ok) {
+                    hideModal();
+                    showError("Error loading files!");
+                    setTimeout(() => hideError(), POPUPTIME);
+                    return;
+                  }
+
+                  setImageList(parsed.body);
+                }} className={`w-[100%] bg-[#ffb762] border-[1px] border-primary-text text-primary-text py-2 rounded-md text-sm font-semibold`}>
+                  <span>Uploaded Images</span>
                 </Button>
+                <Dropdown className='w-full' closeOnClick={false} openIcon={<UrlButton />} closeIcon={<UrlButton />}>
+                  <div className='p-2 flex flex-col gap-2 items-center'>
+                    <input ref={urlRef} className="w-[100%] text-sm px-4 py-2 border-[2px] rounded-md border-[#ffcd92]" type="text" name="url" placeholder="URLを入力" id="url" />
+                    <div className='flex gap-2'>
+                      <input ref={imageAltRef} className="w-[100%] text-sm px-4 py-2 border-[2px] rounded-md border-[#ffcd92]" type="text" name="url" placeholder="Image Altを入力" id="url" />
+                      <Button onClick={uploadFileUrl} className='p-2 relative group'>
+                        {!imageUpload ? <Plus size={IconSize}/> : <CircleNotch rotate={0}/>}
+                        <div className='w-full h-full bg-black absolute top-0 left-0 rounded-full opacity-0 group-hover:opacity-[0.2] transition-all'></div>
+                      </Button>
+                    </div>
+                  </div>
+                </Dropdown>
+                <Dropdown className='w-full' closeOnClick={false} openIcon={<FileButton />} closeIcon={<FileButton />}>
+                  <div className='p-2 flex gap-2 items-center'>
+                    <Button aria-label='file' name="file" >
+                      <label htmlFor="file">
+                        <input onChange={uploadPreviewFile} ref={imageFileRef} type="file" hidden name="file" id="file" />
+                        <span className={`w-[100%] bg-[#ffb762] border-[1px] border-primary-text text-primary-text px-4 py-2 rounded-md text-sm font-semibold`}>{fileName}</span>
+                      </label>
+                    </Button>
+                    
+                    <Button onClick={uploadFile} className='p-2 relative group'>
+                      {!imageUpload ? <Plus size={IconSize}/> : <CircleNotch rotate={0}/>}
+                      <div className='w-full h-full bg-black absolute top-0 left-0 rounded-full opacity-0 group-hover:opacity-[0.2] transition-all'></div>
+                    </Button>
+                  </div>
+                </Dropdown>
               </div>
             </div>
-          </Dropdown>
-          <Dropdown className='w-full' closeOnClick={false} openIcon={<FileButton />} closeIcon={<FileButton />}>
-            <div className='p-2 flex gap-2 items-center'>
-              <Button aria-label='file' name="file" >
-                <label htmlFor="file">
-                  <input onChange={uploadPreviewFile} ref={imageFileRef} type="file" hidden name="file" id="file" />
-                  <span className={`w-[100%] bg-[#ffb762] border-[1px] border-primary-text text-primary-text px-4 py-2 rounded-md text-sm font-semibold`}>{fileName}</span>
-                </label>
-              </Button>
-              
-              <Button onClick={uploadFile} className='p-2 relative group'>
-                <Plus size={IconSize}/>
-                <div className='w-full h-full bg-black absolute top-0 left-0 rounded-full opacity-0 group-hover:opacity-[0.2] transition-all'></div>
-              </Button>
+          ) : (
+            <div className='fixed top-0 left-0 justify-center items-center flex w-full h-full'>
+              <div className='bg-primary-bg p-4 max-w-screen-lg w-full flex flex-col gap-2'>
+                <div className='flex justify-between items-center'>
+                  <span className='text-lg'>Uploaded Images</span>
+                  <Button className='group relative p-2' onClick={closeModalOnClick}>
+                    <X size={IconSize}/>
+                    <div className='absolute w-full h-full bg-black top-0 left-0 opacity-0 group-hover:opacity-[0.2] transition-all rounded-full'></div>
+                  </Button>
+                </div>
+                <hr className='border-b-[1px] border-black w-full'/>
+                <div>
+                  {
+                    imageFetch ? (
+                      <div className='w-full mx-auto'>
+                        <CircleNotch className='animate-spin'/>
+                      </div>
+                    ) : 
+                    <div>
+                      {
+                        imageList.length > 0 ? (
+                          <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2'>
+                            {
+                              imageList.map( (i, idx) => {
+                                return <Button onClick={insertImageFromList} name={i.blog_image_title} id={i.blog_image_url} className=''>
+                                  <OptImage className='w-full' fit='cover' width={250} height={250} centered resize square src={i.blog_image_url}/>
+                                </Button>
+                              })
+                            }
+                          </div>
+                        ) : (
+                          <span>Empty Files</span>
+                        )
+                      }
+                    </div>
+                  }
+                </div>
+              </div>
             </div>
-          </Dropdown>
-          
-        </div>
+          )
+        }
       </Modal>
     </div>
   );

@@ -5,6 +5,7 @@ const config: Config = {
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./lib/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     fontFamily: {
@@ -14,6 +15,20 @@ const config: Config = {
       ]
     },
     extend: {
+      maxWidth: {
+        'md': '768px',
+        'lg': '1024px',
+        'sm': '640px',
+        'xl': '1280px',
+        '2xl': '1536px'
+      },
+      width: {
+        'md': '768px',
+        'lg': '1024px',
+        'sm': '640px',
+        'xl': '1280px',
+        '2xl': '1536px'
+      },
       animation:{
         'shake': 'shake 0.82s cubic-bezier(.36,.07,.19,.97) both',
         'spin': 'spin 1s linear infinite',
@@ -67,13 +82,6 @@ const config: Config = {
         'success': '#8dc225',
         'warning': '#fecb37'
 
-      },
-      maxWidth: {
-        'md': '768px',
-        'lg': '1024px',
-        'sm': '640px',
-        'xl': '1280px',
-        '2xl': '1536px'
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

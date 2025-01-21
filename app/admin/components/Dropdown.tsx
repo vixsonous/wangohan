@@ -1,6 +1,6 @@
 'use client';
 
-import React, { memo, useCallback, useRef, useState } from "react";
+import React, { memo, useCallback, useEffect, useRef, useState } from "react";
 import {motion} from 'framer-motion';
 import { List, X } from "@phosphor-icons/react/dist/ssr";
 import Button from "@/app/components/Button";
@@ -13,6 +13,7 @@ export default memo(function Dropdown({children, openIcon= <Button><List size={I
   });
 
   const dropdown = useRef<HTMLDivElement>(null);
+  const nav = useRef<HTMLDivElement>(null);
 
   const triggerOnClick = useCallback((e: React.MouseEvent<HTMLElement>) => {
     setState(prev => ({...state, open: !state.open}));
@@ -23,8 +24,21 @@ export default memo(function Dropdown({children, openIcon= <Button><List size={I
   },[state.open]);
   const closeActionOnClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => closeOnClick ? setState(prev => ({...state, open: false})) : null,[state.open])
 
+  useEffect(() => {
+    function outsideClick(e:MouseEvent) {
+      if(nav.current && !nav.current.contains(e.target as Node)) 
+        setState(prev => ({...prev, open: false}));
+    }
+
+    document.addEventListener("click", outsideClick);
+    // Cleanup function
+    return () => {
+        document.removeEventListener("click", outsideClick);
+    };
+  },[nav]);
+  
   return (
-      <nav className={`relative ${state.open ? 'z-[999]':'z-50'} self-center ${className}`}>
+      <nav ref={nav} className={`relative ${state.open ? 'z-[999]':'z-50'} self-center ${className}`}>
           <span className="flex" onClick={triggerOnClick}>
             {state.open ? closeIcon : openIcon}
           </span>

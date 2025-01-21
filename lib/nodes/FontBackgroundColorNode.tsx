@@ -72,7 +72,7 @@ export function FontBackgroundColorNodePlugin(): null {
     (backgroundColor: string) => {
       const selection = $getSelection();
       if($isRangeSelection(selection)) {
-        $patchStyleText(selection, {"background-color": `${backgroundColor}` || '#fffffff'})
+        $patchStyleText(selection, {"background": `${backgroundColor}` || ''})
       }
 
       return true;
