@@ -69,7 +69,7 @@ import {
   showModal,
 } from "@/lib/redux/states/messageSlice";
 import Modal from "@/app/components/ElementComponents/Modal";
-import { imageFileTypes, POPUPTIME } from "@/constants/constants";
+import { imageFileTypes, modalIds, POPUPTIME } from "@/constants/constants";
 import { INSERT_YOUTUBE_COMMAND } from "./YoutubePlugin";
 import { FORMAT_FONTFAMILY_COMMAND } from "@/lib/nodes/FontNode";
 import { FORMAT_FONTSIZE_COMMAND } from "@/lib/nodes/FontSizeNode";
@@ -224,8 +224,6 @@ export default function ToolbarPlugin() {
 
   const [blockType, setBlockType] = useState("paragraph");
   const [selectedElementKey, setSelectedElementKey] = useState<string>("");
-  const [showBlockOptionsDropDown, setShowBlockOptionsDropDown] =
-    useState(false);
   const [codeLanguage, setCodeLanguage] = useState("");
   const [isLink, setIsLink] = useState(false);
   // icons
@@ -1077,7 +1075,7 @@ export default function ToolbarPlugin() {
           >
             <Button
               onClick={() => {
-                dispatch(showModal());
+                dispatch(showModal(modalIds.toolbarpluginModal));
                 setModalMode("image-upload");
                 setImageListPage(0);
               }}
@@ -1271,7 +1269,7 @@ export default function ToolbarPlugin() {
           </li>
         </ul>
       </Dropdown>
-      <Modal>
+      <Modal modalIdProps={modalIds.toolbarpluginModal}>
         {modalMode === "image-upload" ? (
           <div className="fixed top-0 left-0 justify-center items-center flex w-screen h-screen px-4">
             <div className="max-w-screen-lg w-full bg-primary-bg p-4 flex flex-col gap-2 ">

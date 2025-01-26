@@ -72,14 +72,12 @@ const ColumnDisplay = ({ blogData }: { blogData: BlogData }) => {
 
   return (
     <div className="mt-6 bg-secondary-bg min-h-96 p-4">
-      <h1 className="md:text-6xl text-4xl mb-8">{state.title}</h1>
-      <OptImage
-        src="https://wangohan-public.s3.ap-northeast-1.amazonaws.com/00000001/recipes/00000006/PbGVOBp7aA5EFGSuOP9Qk.webp"
-        width={1280}
-        height={800}
-        fit="cover"
+      <h1 className="md:text-4xl text-4xl mb-8">{state.title}</h1>
+      <OptImage src={state.blog_image} width={1280} height={800} fit="cover" />
+      <div
+        className="my-8 break-all"
+        dangerouslySetInnerHTML={{ __html: htmlString }}
       />
-      <div className="my-8" dangerouslySetInnerHTML={{ __html: htmlString }} />
       <h2 className="text-lg md:text-xl">{state.blog_category}</h2>
     </div>
   );

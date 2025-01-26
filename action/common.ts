@@ -62,11 +62,11 @@ export const get = <T extends keyof Database, Data>(
       this.fields = fields;
     }
 
-    public execute = async (): Promise<Data> => {
+    public findAll = async (): Promise<Data[]> => {
       return (await db
         .selectFrom(this.table_name)
         .selectAll()
-        .execute()) as Data;
+        .execute()) as Data[];
     };
 
     public findEqualOne = async (

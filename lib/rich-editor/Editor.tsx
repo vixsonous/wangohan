@@ -33,7 +33,7 @@ import Button from "@/app/components/Button";
 import ImagesPlugin from "./plugins/ImagePlugin";
 import YouTubePlugin from "./plugins/YoutubePlugin";
 import { HeadingNode } from "@lexical/rich-text";
-import { CircleNotch } from "@phosphor-icons/react/dist/ssr";
+import { CircleNotch, Plus, X } from "@phosphor-icons/react/dist/ssr";
 import { customGenerateHtmlFromNodes } from "@/lib/lib/GenerateHtml";
 import { ImageNode } from "@/lib/nodes/ImageNode";
 import { YouTubeNode } from "@/lib/nodes/YoutubeNode";
@@ -47,37 +47,34 @@ import {
 } from "../nodes/FontBackgroundColorNode";
 import {
   hideError,
+  hideModal,
   hideSuccess,
   showError,
+  showModal,
   showSuccess,
 } from "../redux/states/messageSlice";
-import { POPUPTIME } from "@/constants/constants";
+import { modalIds, POPUPTIME } from "@/constants/constants";
 import { useAppDispatch } from "../redux/hooks";
 import ErrorSpan from "@/app/components/TextComponents/ErrorSpan";
+import Modal from "@/app/components/ElementComponents/Modal";
+import Dropdown from "@/app/admin/components/Dropdown";
+import heic2any from "heic2any";
+import OptImage from "@/app/components/ElementComponents/Image";
 
 const placeholder = "Enter some rich text...";
+const IconSize = 20;
 
-const removeStylesExportDOM = (
-  editor: LexicalEditor,
-  target: LexicalNode
-): DOMExportOutput => {
-  const output = target.exportDOM(editor);
-  if (output && output.element instanceof HTMLElement) {
-    // Remove all inline styles and classes if the element is an HTMLElement
-    // Children are checked as well since TextNode can be nested
-    // in i, b, and strong tags.
-    for (const el of [
-      output.element,
-      ...output.element.querySelectorAll('[style],[class],[dir="ltr"]'),
-    ]) {
-      el.removeAttribute("class");
-      el.removeAttribute("style");
-      if (el.getAttribute("dir") === "ltr") {
-        el.removeAttribute("dir");
-      }
-    }
-  }
-  return output;
+const FileButton = memo(() => (
+  <Button
+    className={`w-[100%] bg-[#ffb762] border-[1px] border-primary-text text-primary-text px-32 py-2 rounded-md text-sm font-semibold`}
+  >
+    <span>File</span>
+  </Button>
+));
+
+type ImageMetadata = {
+  blog_image_title: string;
+  blog_image_url: string;
 };
 
 const exportDOM = (
@@ -215,6 +212,12 @@ export default memo(function App({
   const [isMounted, setIsMounted] = useState(false);
   const [editorState, setEditorState] = useState<string | null>(content);
   const [titleFocus, setTitleFocus] = useState<boolean>(false);
+  const [modalMode, setModalMode] = useState("image-upload");
+  const [imageListPage, setImageListPage] = useState(0);
+  const [fileName, setFileName] = useState("No image uploaded!");
+  const [imageUpload, setImageUpload] = useState(false);
+  const [imageList, setImageList] = useState<Array<ImageMetadata>>([]);
+  const [imageFetch, setImageFetch] = useState(false);
   const [formErrors, setFormErrors] = useState<{
     blog_title: string;
     file: string;
@@ -226,16 +229,19 @@ export default memo(function App({
     blog_title: string;
     blog_category: string;
     filename: string;
-    file: File | string | null;
+    file: string;
   }>({
     blog_title: "",
     blog_category: "レシピ特集",
     filename: "No file selected!",
-    file: null,
+    file: "",
   });
   const [submit, setSubmit] = useState(false);
 
   const dispatch = useAppDispatch();
+  const closeModalOnClick = useCallback(() => dispatch(hideModal()), []);
+
+  const imageFileRef = useRef<HTMLInputElement>(null);
 
   const OnChangePlugin = memo(function OnChangePlugin() {
     const [editor] = useLexicalComposerContext();
@@ -253,6 +259,70 @@ export default memo(function App({
     }, [editor]);
     return null;
   });
+
+  const uploadFile = useCallback(
+    async (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (imageFileRef.current) {
+        const t = imageFileRef.current;
+        if (!t.files || !t.files[0]) return;
+
+        const fileName = t.files[0].name;
+        const fileNameExt = fileName.substring(fileName.lastIndexOf(".") + 1);
+
+        const fd = new FormData();
+
+        setImageUpload(true);
+        setFileName(t.files[0].name);
+
+        if (
+          typeof window !== "undefined" &&
+          (fileNameExt.toLowerCase() === "heic" ||
+            fileNameExt.toLowerCase() === "heif")
+        ) {
+          const image = await heic2any({
+            blob: t.files[0],
+            toType: "image/webp",
+            quality: 0.8,
+          });
+
+          const img = !Array.isArray(image) ? [image] : image;
+          const f = new File(img, fileName);
+
+          fd.append("file", f);
+        } else {
+          fd.append("file", t.files[0]);
+        }
+
+        const res = await fetch("/api/blog-images", {
+          method: "POST",
+          body: fd,
+        });
+        setImageUpload(false);
+
+        const body = await res.json();
+
+        if (!res.ok) {
+          showError(body.message);
+          setTimeout(() => hideError(), 5000);
+        }
+
+        dispatch(hideModal());
+        setFileName("No image uploaded");
+      }
+    },
+    []
+  );
+
+  const insertImageFromList = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const t = e.currentTarget;
+
+    const src = t.id;
+    const name = t.name;
+
+    setForm((prev) => ({ ...prev, filename: name, file: src }));
+
+    dispatch(hideModal());
+  };
 
   useEffect(() => {
     const c = sessionStorage.getItem("editor");
@@ -275,7 +345,7 @@ export default memo(function App({
         return;
       }
 
-      if (form.file === null) {
+      if (form.file === "") {
         setFormErrors((prev) => ({ ...prev, file: "Please choose a file!" }));
         return;
       }
@@ -286,7 +356,7 @@ export default memo(function App({
         body: JSON.stringify({
           user_id: userId,
           editorState: state,
-          blog_image: form.filename,
+          blog_image: form.file,
           blog_category: form.blog_category,
           title: form.blog_title,
         }),
@@ -331,105 +401,241 @@ export default memo(function App({
 
   return (
     isMounted && (
-      <section className="mt-6">
-        <label htmlFor="blog_title" className="flex flex-col gap-2 mb-4">
-          <span className="text-lg">Title: </span>
-          <input
-            value={form.blog_title}
-            type="text"
-            className="py-1 px-4 focus:outline-primary-text rounded-md"
-            name="blog_title"
-            id="blog_title"
-            onChange={formOnChange}
-            onFocus={() => setTitleFocus(true)}
-            onBlur={() => setTitleFocus(false)}
-          />
-          <ErrorSpan>{formErrors.blog_title}</ErrorSpan>
-        </label>
-        <div className="flex gap-4">
-          <label htmlFor="blog-category" className="mt-4 flex flex-col gap-2">
-            <span>Category:</span>
-            <select
-              value={form.blog_category}
-              className="py-2 px-4 rounded-md"
-              name="blog_category"
-              id="blog_category"
+      <React.Fragment>
+        <section className="mt-6">
+          <label htmlFor="blog_title" className="flex flex-col gap-2 mb-4">
+            <span className="text-lg">Title: </span>
+            <input
+              value={form.blog_title}
+              type="text"
+              className="py-1 px-4 focus:outline-primary-text rounded-md"
+              name="blog_title"
+              id="blog_title"
               onChange={formOnChange}
-            >
-              <option value="レシピ特集">レシピ特集</option>
-              <option value="基礎知識">基礎知識</option>
-              <option value="その他">その他</option>
-            </select>
+              onFocus={() => setTitleFocus(true)}
+              onBlur={() => setTitleFocus(false)}
+            />
+            <ErrorSpan>{formErrors.blog_title}</ErrorSpan>
           </label>
-          <label htmlFor="blog_image" className="mt-4 flex flex-col gap-2">
-            <span>Thumbnail:</span>
-            <div>
-              <span>{form.filename}</span>
-              <input
-                type="file"
-                hidden
-                name=""
+          <div className="flex gap-4">
+            <label htmlFor="blog-category" className="mt-4 flex flex-col gap-2">
+              <span>Category:</span>
+              <select
+                value={form.blog_category}
                 className="py-2 px-4 rounded-md"
-                id="blog_image"
-              />
-            </div>
-            <ErrorSpan>{formErrors.file}</ErrorSpan>
-          </label>
-        </div>
-        <LexicalComposer
-          initialConfig={{ ...editorConfig, editorState: editorState }}
-        >
-          <div
-            className="editor-container"
-            style={{ margin: "0", marginTop: "1em", maxWidth: "none" }}
-          >
-            <ToolbarPlugin />
-            <div className="editor-inner">
-              <RichTextPlugin
-                contentEditable={
-                  <ContentEditable
-                    className="editor-input"
-                    aria-placeholder={placeholder}
-                    placeholder={
-                      <div className="editor-placeholder">{placeholder}</div>
-                    }
-                  />
-                }
-                ErrorBoundary={LexicalErrorBoundary}
-              />
-              <HistoryPlugin />
-              {/* <AutoFocusPlugin /> */}
-              <LinkPlugin />
-              {!titleFocus && <AutoLinkPlugin matchers={MATCHERS} />}
-              <ImagesPlugin />
-              <OnChangePlugin />
-              <YouTubePlugin />
-              <FontSizePlugin />
-              <FontColorPlugin />
-              <FontBackgroundColorNodePlugin />
-              <FontFamilyPlugin />
-            </div>
+                name="blog_category"
+                id="blog_category"
+                onChange={formOnChange}
+              >
+                <option value="レシピ特集">レシピ特集</option>
+                <option value="基礎知識">基礎知識</option>
+                <option value="その他">その他</option>
+              </select>
+            </label>
+            <label htmlFor="blog_image" className="mt-4 flex flex-col gap-2">
+              <span>Thumbnail:</span>
+              <div>
+                <Button
+                  onClick={() => {
+                    dispatch(showModal(modalIds.editorModal));
+                    setModalMode("image-upload");
+                    setImageListPage(0);
+                  }}
+                >
+                  {form.filename}
+                </Button>
+              </div>
+              <ErrorSpan>{formErrors.file}</ErrorSpan>
+            </label>
           </div>
-          <Button
-            onClick={createBlog}
-            aria-label="create-recipe-button"
-            disabled={submit}
-            className={`bg-[#ffb762] text-white py-[10px] rounded-md text-[13px] px-[20px] font-bold self-center ${
-              submit ? "opacity-50" : ""
-            }`}
-            type="submit"
+          <LexicalComposer
+            initialConfig={{ ...editorConfig, editorState: editorState }}
           >
-            {!submit ? (
-              "作成する"
-            ) : (
-              <span className="flex justify-center items-center">
-                <CircleNotch size={20} className="animate-spin" /> 作成する
-              </span>
-            )}
-          </Button>
-          <div dangerouslySetInnerHTML={{ __html: htmlString }}></div>
-        </LexicalComposer>
-      </section>
+            <div
+              className="editor-container"
+              style={{ margin: "0", marginTop: "1em", maxWidth: "none" }}
+            >
+              <ToolbarPlugin />
+              <div className="editor-inner">
+                <RichTextPlugin
+                  contentEditable={
+                    <ContentEditable
+                      className="editor-input"
+                      aria-placeholder={placeholder}
+                      placeholder={
+                        <div className="editor-placeholder">{placeholder}</div>
+                      }
+                    />
+                  }
+                  ErrorBoundary={LexicalErrorBoundary}
+                />
+                <HistoryPlugin />
+                {/* <AutoFocusPlugin /> */}
+                <LinkPlugin />
+                {!titleFocus && <AutoLinkPlugin matchers={MATCHERS} />}
+                <ImagesPlugin />
+                <OnChangePlugin />
+                <YouTubePlugin />
+                <FontSizePlugin />
+                <FontColorPlugin />
+                <FontBackgroundColorNodePlugin />
+                <FontFamilyPlugin />
+              </div>
+            </div>
+            <Button
+              onClick={createBlog}
+              aria-label="create-recipe-button"
+              disabled={submit}
+              className={`bg-[#ffb762] text-white py-[10px] rounded-md text-[13px] px-[20px] font-bold self-center ${
+                submit ? "opacity-50" : ""
+              }`}
+              type="submit"
+            >
+              {!submit ? (
+                "作成する"
+              ) : (
+                <span className="flex justify-center items-center">
+                  <CircleNotch size={20} className="animate-spin" /> 作成する
+                </span>
+              )}
+            </Button>
+            <div dangerouslySetInnerHTML={{ __html: htmlString }}></div>
+          </LexicalComposer>
+        </section>
+        <Modal modalIdProps={modalIds.editorModal}>
+          {modalMode === "image-upload" ? (
+            <div className="fixed top-0 left-0 justify-center items-center flex w-screen h-screen px-4">
+              <div className="max-w-screen-lg w-full bg-primary-bg p-4 flex flex-col gap-2 ">
+                <div className="flex justify-between items-center">
+                  <span className="text-lg">Insert Image</span>
+                  <Button
+                    className="group relative p-2"
+                    onClick={closeModalOnClick}
+                  >
+                    <X size={IconSize} />
+                    <div className="absolute w-full h-full bg-black top-0 left-0 opacity-0 group-hover:opacity-[0.2] transition-all rounded-full"></div>
+                  </Button>
+                </div>
+                <hr className="border-b-[1px] border-black w-full" />
+                <Button
+                  onClick={async () => {
+                    setModalMode("image-list");
+                    setImageListPage(0);
+
+                    setImageFetch(true);
+                    const res = await fetch("/api/blog-images");
+                    setImageFetch(false);
+
+                    const parsed = await res.json();
+
+                    if (!res.ok) {
+                      dispatch(hideModal());
+                      showError("Error loading files!");
+                      setTimeout(() => dispatch(hideError()), POPUPTIME);
+                      return;
+                    }
+
+                    setImageList(parsed.body);
+                  }}
+                  className={`w-[100%] bg-[#ffb762] border-[1px] border-primary-text text-primary-text py-2 rounded-md text-sm font-semibold`}
+                >
+                  <span>Uploaded Images</span>
+                </Button>
+                <Dropdown
+                  className="w-full"
+                  closeOnClick={false}
+                  openIcon={<FileButton />}
+                  closeIcon={<FileButton />}
+                >
+                  <div className="p-2 flex gap-2 items-center">
+                    <Button aria-label="file" name="file">
+                      <label htmlFor="file">
+                        <input
+                          disabled={imageUpload}
+                          onChange={uploadFile}
+                          ref={imageFileRef}
+                          type="file"
+                          hidden
+                          name="file"
+                          id="file"
+                        />
+                        <span
+                          className={`w-[100%] cursor-pointer bg-[#ffb762] border-[1px] border-primary-text text-primary-text px-4 py-2 rounded-md text-sm font-semibold`}
+                        >
+                          {fileName}
+                        </span>
+                      </label>
+                    </Button>
+
+                    <Button disabled className="p-2 relative group">
+                      {!imageUpload ? (
+                        <Plus size={IconSize} />
+                      ) : (
+                        <CircleNotch className="animate-spin" />
+                      )}
+                      <div className="w-full h-full bg-black absolute top-0 left-0 rounded-full opacity-0 group-hover:opacity-[0.2] transition-all"></div>
+                    </Button>
+                  </div>
+                </Dropdown>
+              </div>
+            </div>
+          ) : (
+            <div className="fixed top-0 left-0 justify-center items-center flex w-full h-full">
+              <div className="bg-primary-bg p-4 max-w-screen-lg w-full flex flex-col gap-2">
+                <div className="flex justify-between items-center">
+                  <span className="text-lg">Uploaded Images</span>
+                  <Button
+                    className="group relative p-2"
+                    onClick={closeModalOnClick}
+                  >
+                    <X size={IconSize} />
+                    <div className="absolute w-full h-full bg-black top-0 left-0 opacity-0 group-hover:opacity-[0.2] transition-all rounded-full"></div>
+                  </Button>
+                </div>
+                <hr className="border-b-[1px] border-black w-full" />
+                <div className="overflow-y-scroll max-h-96">
+                  {imageFetch ? (
+                    <div className="w-full mx-auto">
+                      <CircleNotch className="animate-spin" />
+                    </div>
+                  ) : (
+                    <div>
+                      {imageList.length > 0 ? (
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+                          {imageList.map((i, idx) => {
+                            return (
+                              <Button
+                                onClick={insertImageFromList}
+                                name={i.blog_image_title}
+                                id={i.blog_image_url}
+                                key={idx}
+                                className=""
+                              >
+                                <OptImage
+                                  className="w-full"
+                                  fit="cover"
+                                  width={250}
+                                  height={250}
+                                  centered
+                                  resize
+                                  square
+                                  src={i.blog_image_url}
+                                />
+                              </Button>
+                            );
+                          })}
+                        </div>
+                      ) : (
+                        <span>Empty Files</span>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+        </Modal>
+      </React.Fragment>
     )
   );
 });
