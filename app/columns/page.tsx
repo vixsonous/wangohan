@@ -1,11 +1,14 @@
 import { get } from "@/action/common";
 import { BlogData } from "@/constants/interface";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 
 export default async function Columns() {
-  // const blogData: BlogData[] = await get<"blog_columns_table", BlogData>(
-  //   "blog_columns_table"
-  // ).findAll();
+  const blogData: BlogData[] = await get<"blog_columns_table", BlogData>(
+    "blog_columns_table"
+  ).findAll();
+
+  if (!blogData) return { notFound: true };
 
   return (
     <section className="mt-6">
