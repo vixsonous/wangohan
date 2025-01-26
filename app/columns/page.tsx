@@ -1,6 +1,11 @@
 import { get } from "@/action/common";
 import { BlogData } from "@/constants/interface";
+import { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Columns",
+};
 
 export default async function Columns() {
   const blogData: BlogData = await get<"blog_columns_table", BlogData>(
