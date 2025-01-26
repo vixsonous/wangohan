@@ -1,6 +1,22 @@
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { $addNodeStyle, $patchStyleText } from "@lexical/selection";
-import { $getSelection, $getTextContent, $insertNodes, $isRangeSelection, COMMAND_PRIORITY_HIGH, createCommand, EditorConfig, LexicalCommand, LexicalEditor, NodeKey, SerializedLexicalNode, SerializedTextNode, Spread, TextModeType, TextNode } from "lexical";
+import {
+  $getSelection,
+  $getTextContent,
+  $insertNodes,
+  $isRangeSelection,
+  COMMAND_PRIORITY_HIGH,
+  createCommand,
+  EditorConfig,
+  LexicalCommand,
+  LexicalEditor,
+  NodeKey,
+  SerializedLexicalNode,
+  SerializedTextNode,
+  Spread,
+  TextModeType,
+  TextNode,
+} from "lexical";
 import { DEFAULT_SERIF_FONT } from "next/dist/shared/lib/constants";
 
 export class FontColorNode extends TextNode {
@@ -12,7 +28,7 @@ export class FontColorNode extends TextNode {
   }
 
   static getType(): string {
-      return 'fontColor';
+    return "fontColor";
   }
 
   static clone(node: FontColorNode): FontColorNode {
@@ -25,7 +41,11 @@ export class FontColorNode extends TextNode {
     return element;
   }
 
-  updateDOM(prevNode: TextNode, dom: HTMLElement, config: EditorConfig): boolean {
+  updateDOM(
+    prevNode: TextNode,
+    dom: HTMLElement,
+    config: EditorConfig
+  ): boolean {
     return false;
   }
 
@@ -39,17 +59,22 @@ export class FontColorNode extends TextNode {
   }
 
   static importJSON(serializedNode: SerializedFontColorNode): FontColorNode {
-    const node = $createFontColorNode(serializedNode.text, serializedNode.color);
+    const node = $createFontColorNode(
+      serializedNode.text,
+      serializedNode.color
+    );
     node.setDetail(serializedNode.detail);
     node.setFormat(serializedNode.detail);
     node.setMode(serializedNode.mode);
     node.setStyle(serializedNode.style);
     return node;
   }
-  
 }
 
-export function $createFontColorNode(text: string, color: string): FontColorNode {
+export function $createFontColorNode(
+  text: string,
+  color: string
+): FontColorNode {
   return new FontColorNode(text, color);
 }
 
@@ -57,11 +82,12 @@ export function $isFontColorNode(node: FontColorNode): node is FontColorNode {
   return node instanceof FontColorNode;
 }
 
-export const FORMAT_FONTCOLOR_COMMAND: LexicalCommand<string> = createCommand("changeFontColor");
+export const FORMAT_FONTCOLOR_COMMAND: LexicalCommand<string> =
+  createCommand("changeFontColor");
 
 export function FontColorPlugin(): null {
   const [editor] = useLexicalComposerContext();
-  if(!editor.hasNodes([FontColorNode])) {
+  if (!editor.hasNodes([FontColorNode])) {
     throw new Error(
       "FontColorPlugin: FontColorNode not registered on the editor (initialConfig.nodes)"
     );
@@ -71,8 +97,8 @@ export function FontColorPlugin(): null {
     FORMAT_FONTCOLOR_COMMAND,
     (color: string) => {
       const selection = $getSelection();
-      if($isRangeSelection(selection)) {
-        $patchStyleText(selection, {"color": `${color}` || '#0000000'})
+      if ($isRangeSelection(selection)) {
+        $patchStyleText(selection, { color: `${color}` || "#0000000" });
       }
 
       return true;
@@ -83,11 +109,14 @@ export function FontColorPlugin(): null {
   return null;
 }
 
-export type SerializedFontColorNode = Spread<{
-  detail: number;
-  format: number;
-  mode: TextModeType;
-  style: string;
-  text: string;
-  color: string;
-}, SerializedLexicalNode>;
+export type SerializedFontColorNode = Spread<
+  {
+    detail: number;
+    format: number;
+    mode: TextModeType;
+    style: string;
+    text: string;
+    color: string;
+  },
+  SerializedLexicalNode
+>;

@@ -1,6 +1,22 @@
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { $addNodeStyle, $patchStyleText } from "@lexical/selection";
-import { $getSelection, $getTextContent, $insertNodes, $isRangeSelection, COMMAND_PRIORITY_HIGH, createCommand, EditorConfig, LexicalCommand, LexicalEditor, NodeKey, SerializedLexicalNode, SerializedTextNode, Spread, TextModeType, TextNode } from "lexical";
+import {
+  $getSelection,
+  $getTextContent,
+  $insertNodes,
+  $isRangeSelection,
+  COMMAND_PRIORITY_HIGH,
+  createCommand,
+  EditorConfig,
+  LexicalCommand,
+  LexicalEditor,
+  NodeKey,
+  SerializedLexicalNode,
+  SerializedTextNode,
+  Spread,
+  TextModeType,
+  TextNode,
+} from "lexical";
 import { DEFAULT_SERIF_FONT } from "next/dist/shared/lib/constants";
 
 export class FontBackgroundColorNode extends TextNode {
@@ -12,11 +28,15 @@ export class FontBackgroundColorNode extends TextNode {
   }
 
   static getType(): string {
-      return 'fontBackgroundColor';
+    return "fontBackgroundColor";
   }
 
   static clone(node: FontBackgroundColorNode): FontBackgroundColorNode {
-    return new FontBackgroundColorNode(node.__text, node.__backgroundColor, node.__key);
+    return new FontBackgroundColorNode(
+      node.__text,
+      node.__backgroundColor,
+      node.__key
+    );
   }
 
   createDOM(config: EditorConfig, editor?: LexicalEditor): HTMLElement {
@@ -25,7 +45,11 @@ export class FontBackgroundColorNode extends TextNode {
     return element;
   }
 
-  updateDOM(prevNode: TextNode, dom: HTMLElement, config: EditorConfig): boolean {
+  updateDOM(
+    prevNode: TextNode,
+    dom: HTMLElement,
+    config: EditorConfig
+  ): boolean {
     return false;
   }
 
@@ -38,30 +62,40 @@ export class FontBackgroundColorNode extends TextNode {
     };
   }
 
-  static importJSON(serializedNode: SerializedFontBackgroundColorNode): FontBackgroundColorNode {
-    const node = $createFontBackgroundColorNode(serializedNode.text, serializedNode.backgroundColor);
+  static importJSON(
+    serializedNode: SerializedFontBackgroundColorNode
+  ): FontBackgroundColorNode {
+    const node = $createFontBackgroundColorNode(
+      serializedNode.text,
+      serializedNode.backgroundColor
+    );
     node.setDetail(serializedNode.detail);
     node.setFormat(serializedNode.format);
     node.setMode(serializedNode.mode);
     node.setStyle(serializedNode.style);
     return node;
   }
-  
 }
 
-export function $createFontBackgroundColorNode(text: string, backgroundColor: string): FontBackgroundColorNode {
+export function $createFontBackgroundColorNode(
+  text: string,
+  backgroundColor: string
+): FontBackgroundColorNode {
   return new FontBackgroundColorNode(text, backgroundColor);
 }
 
-export function $isFontColorNode(node: FontBackgroundColorNode): node is FontBackgroundColorNode {
+export function $isFontColorNode(
+  node: FontBackgroundColorNode
+): node is FontBackgroundColorNode {
   return node instanceof FontBackgroundColorNode;
 }
 
-export const FORMAT_FONTBACKGROUNDCOLOR_COMMAND: LexicalCommand<string> = createCommand("changeFontBackgroundColor");
+export const FORMAT_FONTBACKGROUNDCOLOR_COMMAND: LexicalCommand<string> =
+  createCommand("changeFontBackgroundColor");
 
 export function FontBackgroundColorNodePlugin(): null {
   const [editor] = useLexicalComposerContext();
-  if(!editor.hasNodes([FontBackgroundColorNode])) {
+  if (!editor.hasNodes([FontBackgroundColorNode])) {
     throw new Error(
       "FontBackgroundColorNodePlugin: FontBackgroundColorNode not registered on the editor (initialConfig.nodes)"
     );
@@ -71,8 +105,8 @@ export function FontBackgroundColorNodePlugin(): null {
     FORMAT_FONTBACKGROUNDCOLOR_COMMAND,
     (backgroundColor: string) => {
       const selection = $getSelection();
-      if($isRangeSelection(selection)) {
-        $patchStyleText(selection, {"background": `${backgroundColor}` || ''})
+      if ($isRangeSelection(selection)) {
+        $patchStyleText(selection, { background: `${backgroundColor}` || "" });
       }
 
       return true;
@@ -83,11 +117,14 @@ export function FontBackgroundColorNodePlugin(): null {
   return null;
 }
 
-export type SerializedFontBackgroundColorNode = Spread<{
-  detail: number;
-  format: number;
-  mode: TextModeType;
-  style: string;
-  text: string;
-  backgroundColor: string;
-}, SerializedLexicalNode>;
+export type SerializedFontBackgroundColorNode = Spread<
+  {
+    detail: number;
+    format: number;
+    mode: TextModeType;
+    style: string;
+    text: string;
+    backgroundColor: string;
+  },
+  SerializedLexicalNode
+>;

@@ -6,52 +6,81 @@ import { AutoLinkNode, LinkNode } from "@lexical/link";
 import { ImageNode } from "@/lib/nodes/ImageNode";
 import { YouTubeNode } from "@/lib/nodes/YoutubeNode";
 import { HeadingNode } from "@lexical/rich-text";
-import { AlignmentNode } from "@/lib/nodes/AlignmentNode";
 import { IndentationNode } from "@/lib/nodes/IndentationNode";
 import { constructImportMap, exportMap } from "@/lib/rich-editor/Editor";
-import './columnDisplay.css';
-import '@/lib/rich-editor/style.css';
-import '@/lib/nodes/ImageNode.css';
-import '@/lib/lib/ImageResizer.css';
+import "./columnDisplay.css";
+import "@/lib/rich-editor/style.css";
+import "@/lib/nodes/ImageNode.css";
+import "@/lib/lib/ImageResizer.css";
 import ExampleTheme from "@/lib/rich-editor/Theme";
+import { useRouter } from "next/navigation";
+import OptImage from "@/app/components/ElementComponents/Image";
+interface BlogData {
+  blog_id: number;
+  user_id: number;
+  title: string;
+  editor_state: JSON;
+  blog_image: string;
+  blog_category: string;
+}
 
-
-const ColumnDisplay = ({ editorStateJson }: {editorStateJson: string}) => {
+const ColumnDisplay = ({ blogData }: { blogData: BlogData }) => {
   const [htmlString, setHtmlString] = useState("");
+  const [state, setState] = useState<BlogData>({ ...blogData });
+  const router = useRouter();
 
   useEffect(() => {
     // Create a new Lexical editor instance
-    const ss = sessionStorage.getItem('editor');
-    if(!ss) return;
+    if (!blogData) {
+      router.push("/");
+      return;
+    }
+
     const editor = createEditor({
-      namespace: 'Display',
+      namespace: "Display",
       html: {
         export: exportMap,
-        import: constructImportMap()
+        import: constructImportMap(),
       },
-      nodes: [ParagraphNode, TextNode, LinkNode, AutoLinkNode, ImageNode, YouTubeNode, HeadingNode, AlignmentNode, IndentationNode],
+      nodes: [
+        ParagraphNode,
+        TextNode,
+        LinkNode,
+        AutoLinkNode,
+        ImageNode,
+        YouTubeNode,
+        HeadingNode,
+        IndentationNode,
+      ],
       onError(error: Error) {
         throw error;
       },
-      theme: ExampleTheme
+      theme: ExampleTheme,
     });
-    
-    
+
     // Parse the JSON and set it as the editor state
-    const parsedEditorState = editor.parseEditorState(ss);
+    const parsedEditorState = editor.parseEditorState(
+      JSON.stringify(blogData.editor_state)
+    );
     editor.setEditorState(parsedEditorState);
     editor.read(() => {
       // Convert the editor state to HTML
       const html = customGenerateHtmlFromNodes(editor);
       setHtmlString(html);
     });
-    
   }, []);
 
   return (
-    <div>
-      <h2>Rendered HTML:</h2>
-      <div dangerouslySetInnerHTML={{ __html: htmlString }} />
+    <div className="mt-6 bg-secondary-bg min-h-96 p-4">
+      <h1 className="md:text-6xl text-4xl mb-8">{state.title}</h1>
+      <OptImage
+        src="https://wangohan-public.s3.ap-northeast-1.amazonaws.com/00000001/recipes/00000006/PbGVOBp7aA5EFGSuOP9Qk.webp"
+        width={1280}
+        height={800}
+        fit="cover"
+      />
+      <div className="my-8" dangerouslySetInnerHTML={{ __html: htmlString }} />
+      <h2 className="text-lg md:text-xl">{state.blog_category}</h2>
     </div>
   );
 };

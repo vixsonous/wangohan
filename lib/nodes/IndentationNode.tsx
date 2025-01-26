@@ -1,7 +1,11 @@
-import { ElementNode,SerializedElementNode, SerializedLexicalNode } from 'lexical';
+import {
+  ElementNode,
+  SerializedElementNode,
+  SerializedLexicalNode,
+} from "lexical";
 
 export interface SerializedIndentationNode extends SerializedElementNode {
-  type: 'indentation';
+  type: "indentation";
   version: 1;
   level: number;
 }
@@ -15,7 +19,7 @@ export class IndentationNode extends ElementNode {
   }
 
   static getType(): string {
-    return 'indentation';
+    return "indentation";
   }
 
   static clone(node: IndentationNode): IndentationNode {
@@ -23,7 +27,7 @@ export class IndentationNode extends ElementNode {
   }
 
   createDOM(): HTMLElement {
-    const dom = document.createElement('div');
+    const dom = document.createElement("div");
     dom.style.paddingLeft = `${this.level * 20}px`; // 20px per level
     return dom;
   }
@@ -38,13 +42,15 @@ export class IndentationNode extends ElementNode {
   exportJSON(): SerializedIndentationNode {
     return {
       ...super.exportJSON(), // Include properties from SerializedElementNode
-      type: 'indentation',
+      type: "indentation",
       version: 1,
       level: this.level,
     };
   }
 
-  static importJSON(serializedNode: SerializedIndentationNode): IndentationNode {
+  static importJSON(
+    serializedNode: SerializedIndentationNode
+  ): IndentationNode {
     return new IndentationNode(serializedNode.level);
   }
 

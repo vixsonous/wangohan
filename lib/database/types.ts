@@ -1,5 +1,21 @@
 import { Generated } from "kysely";
 
+export interface DatabaseTableName {
+  users_table: "users_table";
+  user_details_table: "user_details_table";
+  pets_table: "pets_table";
+  allergies_table: "allergies_table";
+  recipes_table: "recipes_table";
+  recipe_comments_table: "recipe_comments_table";
+  recipe_images_table: "recipe_images_table";
+  recipe_ingredients_table: "recipe_ingredients_table";
+  recipe_instructions_table: "recipe_instructions_table";
+  favourites_table: "favourites_table";
+  likes_table: "likes_table";
+  notifications_table: "notifications_table";
+  blog_columns_table: "blog_columns_table";
+  blog_images_upload: "blog_images_upload";
+}
 export interface Database {
   users_table: UserTable;
   user_details_table: UserDetailTable;
@@ -13,6 +29,7 @@ export interface Database {
   favourites_table: FavouritesTable;
   likes_table: LikesTable;
   notifications_table: NotificationsTable;
+  blog_columns_table: BlogColumnsTable;
   blog_images_upload: BlogImagesUpload;
 }
 
@@ -142,6 +159,16 @@ export interface NotificationsTable {
   liked: boolean;
   recipe_id: number;
   recipe_image: string;
+  updated_at: Date;
+  created_at: Date;
+}
+export interface BlogColumnsTable {
+  blog_id: Generated<number>;
+  user_id: number;
+  title: string;
+  blog_image: string;
+  blog_category: string;
+  editor_state: JSON;
   updated_at: Date;
   created_at: Date;
 }

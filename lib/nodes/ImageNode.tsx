@@ -8,7 +8,7 @@ import type {
   NodeKey,
   SerializedEditor,
   SerializedLexicalNode,
-  Spread
+  Spread,
 } from "lexical";
 
 import { createEditor, DecoratorNode } from "lexical";
@@ -86,22 +86,15 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
   }
 
   static importJSON(serializedNode: SerializedImageNode): ImageNode {
-    const {
-      altText,
-      height,
-      width,
-      maxWidth,
-      caption,
-      src,
-      showCaption
-    } = serializedNode;
+    const { altText, height, width, maxWidth, caption, src, showCaption } =
+      serializedNode;
     const node = $createImageNode({
       altText,
       height,
       maxWidth,
       showCaption,
       src,
-      width
+      width,
     });
     const nestedEditor = node.__caption;
     const editorState = nestedEditor.parseEditorState(caption.editorState);
@@ -117,7 +110,10 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
     element.setAttribute("alt", this.__altText);
     element.setAttribute("height", String(this.__height));
     element.setAttribute("width", String(this.__width));
-    element.setAttribute("style",`height: ${this.__height}px;width:${this.__width}px`);
+    element.setAttribute(
+      "style",
+      `height: ${this.__height}px;width:${this.__width}px`
+    );
     element.setAttribute("max-width", String(this.__maxWidth));
     return { element };
   }
@@ -126,8 +122,8 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
     return {
       img: (node: Node) => ({
         conversion: convertImageElement,
-        priority: 0
-      })
+        priority: 0,
+      }),
     };
   }
 
@@ -163,7 +159,7 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
       src: this.getSrc(),
       type: "image",
       version: 1,
-      width: this.__width === "inherit" ? 0 : this.__width
+      width: this.__width === "inherit" ? 0 : this.__width,
     };
   }
 
@@ -216,7 +212,9 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
           maxWidth={this.__maxWidth}
           nodeKey={this.getKey()}
           showCaption={this.__showCaption}
-          caption={{current: this.__caption.getRootElement() as HTMLDivElement}}
+          caption={{
+            current: this.__caption.getRootElement() as HTMLDivElement,
+          }}
           captionsEnabled={this.__captionsEnabled}
           resizable={true}
         />
@@ -234,7 +232,7 @@ export function $createImageNode({
   width,
   showCaption,
   caption,
-  key
+  key,
 }: ImagePayload): ImageNode {
   return new ImageNode(
     src,

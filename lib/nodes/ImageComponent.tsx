@@ -109,7 +109,8 @@ export default function ImageComponent({
 }: ImageComponentProps): JSX.Element {
   const imageRef = useRef<HTMLImageElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
-  const [isSelected, setSelected, clearSelection] = useLexicalNodeSelection(nodeKey);
+  const [isSelected, setSelected, clearSelection] =
+    useLexicalNodeSelection(nodeKey);
   const [isResizing, setIsResizing] = useState<boolean>(false);
   const { isCollabActive } = useCollaborationContext();
   const [editor] = useLexicalComposerContext();
@@ -285,7 +286,8 @@ export default function ImageComponent({
     setIsResizing(true);
   };
 
-  const draggable: boolean = isSelected && $isNodeSelection(selection) && !isResizing;
+  const draggable: boolean =
+    isSelected && $isNodeSelection(selection) && !isResizing;
   const isFocused: boolean = isSelected || isResizing;
   return (
     <Suspense fallback={null}>
@@ -313,7 +315,7 @@ export default function ImageComponent({
             editor={editor}
             buttonRef={buttonRef}
             imageRef={imageRef}
-            maxWidth={(maxWidth as number)}
+            maxWidth={maxWidth as number}
             onResizeStart={onResizeStart}
             onResizeEnd={onResizeEnd}
             captionsEnabled={captionsEnabled}

@@ -20,7 +20,7 @@ export const POST = async (req: NextRequest) => {
         return NextResponse.json({message: 'There is no file!', body: {fileUrl: ''}}, {status: 200});
     }
   } catch(e) {
-    console.error(e);
+    logError((e as Error).message);
     return NextResponse.json({message: (e as Error).message, body: {fileUrl: 'url'}}, {status: 400});
   }
 }
@@ -28,7 +28,6 @@ export const POST = async (req: NextRequest) => {
 export const GET = async (req: NextRequest) => {
   try {
     const p = req.nextUrl.searchParams;
-    console.log(p);
     const files = await db.selectFrom("blog_images_upload")
       .select(["blog_image_title", "blog_image_url"])
       .execute();

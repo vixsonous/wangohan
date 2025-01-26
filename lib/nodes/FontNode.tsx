@@ -1,6 +1,22 @@
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { $addNodeStyle, $patchStyleText } from "@lexical/selection";
-import { $getSelection, $getTextContent, $insertNodes, $isRangeSelection, COMMAND_PRIORITY_HIGH, createCommand, EditorConfig, LexicalCommand, LexicalEditor, NodeKey, SerializedLexicalNode, SerializedTextNode, Spread, TextModeType, TextNode } from "lexical";
+import {
+  $getSelection,
+  $getTextContent,
+  $insertNodes,
+  $isRangeSelection,
+  COMMAND_PRIORITY_HIGH,
+  createCommand,
+  EditorConfig,
+  LexicalCommand,
+  LexicalEditor,
+  NodeKey,
+  SerializedLexicalNode,
+  SerializedTextNode,
+  Spread,
+  TextModeType,
+  TextNode,
+} from "lexical";
 import { DEFAULT_SERIF_FONT } from "next/dist/shared/lib/constants";
 
 export class FontNode extends TextNode {
@@ -12,7 +28,7 @@ export class FontNode extends TextNode {
   }
 
   static getType(): string {
-      return 'font';
+    return "font";
   }
 
   static clone(node: FontNode): FontNode {
@@ -25,7 +41,11 @@ export class FontNode extends TextNode {
     return element;
   }
 
-  updateDOM(prevNode: TextNode, dom: HTMLElement, config: EditorConfig): boolean {
+  updateDOM(
+    prevNode: TextNode,
+    dom: HTMLElement,
+    config: EditorConfig
+  ): boolean {
     return false;
   }
 
@@ -46,7 +66,6 @@ export class FontNode extends TextNode {
     node.setStyle(serializedNode.style);
     return node;
   }
-  
 }
 
 export function $createFontNode(text: string, font: string): FontNode {
@@ -57,11 +76,12 @@ export function $isFontNode(node: FontNode): node is FontNode {
   return node instanceof FontNode;
 }
 
-export const FORMAT_FONTFAMILY_COMMAND: LexicalCommand<string> = createCommand("changeFontFamily");
+export const FORMAT_FONTFAMILY_COMMAND: LexicalCommand<string> =
+  createCommand("changeFontFamily");
 
 export function FontFamilyPlugin(): null {
   const [editor] = useLexicalComposerContext();
-  if(!editor.hasNodes([FontNode])) {
+  if (!editor.hasNodes([FontNode])) {
     throw new Error(
       "FontFamilyPlugin: FontNode not registered on the editor (initialConfig.nodes)"
     );
@@ -71,10 +91,12 @@ export function FontFamilyPlugin(): null {
     FORMAT_FONTFAMILY_COMMAND,
     (font: string) => {
       const selection = $getSelection();
-      if($isRangeSelection(selection)) {
+      if ($isRangeSelection(selection)) {
         const text = $getTextContent();
         const node = $createFontNode(text, font);
-        $patchStyleText(selection, {"font-family": font || DEFAULT_SERIF_FONT.name})
+        $patchStyleText(selection, {
+          "font-family": font || DEFAULT_SERIF_FONT.name,
+        });
       }
 
       return true;
@@ -85,11 +107,14 @@ export function FontFamilyPlugin(): null {
   return null;
 }
 
-export type SerializedFontNode = Spread<{
-  detail: number;
-  format: number;
-  mode: TextModeType;
-  style: string;
-  text: string;
-  font: string;
-}, SerializedLexicalNode>;
+export type SerializedFontNode = Spread<
+  {
+    detail: number;
+    format: number;
+    mode: TextModeType;
+    style: string;
+    text: string;
+    font: string;
+  },
+  SerializedLexicalNode
+>;

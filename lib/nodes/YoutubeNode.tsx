@@ -5,13 +5,13 @@ import type {
   LexicalEditor,
   LexicalNode,
   NodeKey,
-  Spread
+  Spread,
 } from "lexical";
 
 import { BlockWithAlignableContents } from "@lexical/react/LexicalBlockWithAlignableContents";
 import {
   DecoratorBlockNode,
-  SerializedDecoratorBlockNode
+  SerializedDecoratorBlockNode,
 } from "@lexical/react/LexicalDecoratorBlockNode";
 import * as React from "react";
 
@@ -29,7 +29,7 @@ function YouTubeComponent({
   className,
   format,
   nodeKey,
-  videoID
+  videoID,
 }: YouTubeComponentProps) {
   return (
     <BlockWithAlignableContents
@@ -81,7 +81,7 @@ export class YouTubeNode extends DecoratorBlockNode {
       ...super.exportJSON(),
       type: "youtube",
       version: 1,
-      videoID: this.__id
+      videoID: this.__id,
     };
   }
 
@@ -91,17 +91,18 @@ export class YouTubeNode extends DecoratorBlockNode {
   }
 
   exportDOM(editor: LexicalEditor): DOMExportOutput {
-    const iframe = document.createElement('iframe');
+    const iframe = document.createElement("iframe");
     iframe.setAttribute("src", `https://www.youtube.com/embed/${this.__id}`);
     iframe.setAttribute("width", "420");
     iframe.setAttribute("height", "320");
     iframe.setAttribute("frameBorder", "0");
-    iframe.setAttribute("allow", "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture");
+    iframe.setAttribute(
+      "allow",
+      "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    );
     iframe.setAttribute("allowFullScreen", "true");
     iframe.setAttribute("title", "YouTube video");
-    return (
-      {element: iframe}
-    );
+    return { element: iframe };
   }
 
   updateDOM(): false {
@@ -123,7 +124,7 @@ export class YouTubeNode extends DecoratorBlockNode {
     const embedBlockTheme = config.theme.embedBlock || {};
     const className = {
       base: embedBlockTheme.base || "",
-      focus: embedBlockTheme.focus || ""
+      focus: embedBlockTheme.focus || "",
     };
     return (
       <YouTubeComponent
