@@ -4,7 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 export default async function Columns() {
-  const blogData: BlogData[] = await get<"blog_columns_table", BlogData>(
+  const blogData: BlogData = await get<"blog_columns_table", BlogData>(
     "blog_columns_table"
   ).findAll();
 
