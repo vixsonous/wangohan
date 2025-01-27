@@ -51,7 +51,6 @@ export const getBlogs = async (): Promise<BlogData[]> => {
     const data: BlogData[] = await get<"blog_columns_table", BlogData[]>(
       "blog_columns_table"
     ).findAll();
-    console.log(data);
     return data || [];
   } catch (e) {
     return [];
