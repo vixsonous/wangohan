@@ -1,5 +1,6 @@
 import { db } from "@/lib/database/db";
-import { insert, logError } from "./common";
+import { get, insert, logError } from "./common";
+import { BlogData } from "@/constants/interface";
 
 export const uploadBlogImage = async (url: string, fileName: string) => {
   try {
@@ -42,5 +43,17 @@ export const uploadBlogEditorState = async (
   } catch (e) {
     logError((e as Error).message);
     return false;
+  }
+};
+
+export const getBlogs = async (): Promise<BlogData[]> => {
+  try {
+    const data: BlogData[] = await get<"blog_columns_table", BlogData[]>(
+      "blog_columns_table"
+    ).findAll();
+    console.log(data);
+    return data || [];
+  } catch (e) {
+    return [];
   }
 };
