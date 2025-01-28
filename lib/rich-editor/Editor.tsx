@@ -60,6 +60,7 @@ import Modal from "@/app/components/ElementComponents/Modal";
 import Dropdown from "@/app/admin/components/Dropdown";
 import heic2any from "heic2any";
 import OptImage from "@/app/components/ElementComponents/Image";
+import GeneralButton from "@/app/components/ElementComponents/GeneralButton";
 
 const placeholder = "Enter some rich text...";
 const IconSize = 20;
@@ -337,10 +338,18 @@ export default memo(function App({
     async (e: React.MouseEvent<HTMLButtonElement>) => {
       e.preventDefault();
 
-      if (form.blog_title.length < 35) {
+      if (form.blog_title.length > 40) {
         setFormErrors((prev) => ({
           ...prev,
-          blog_title: "The title must be 35 characters or more!",
+          blog_title: "The title must be less than 40 characters!",
+        }));
+        return;
+      }
+
+      if (form.blog_title === "") {
+        setFormErrors((prev) => ({
+          ...prev,
+          blog_title: "Please input a title of the blog!",
         }));
         return;
       }
@@ -435,7 +444,7 @@ export default memo(function App({
             <label htmlFor="blog_image" className="mt-4 flex flex-col gap-2">
               <span>Thumbnail:</span>
               <div>
-                <Button
+                <GeneralButton
                   onClick={() => {
                     dispatch(showModal(modalIds.editorModal));
                     setModalMode("image-upload");
@@ -443,7 +452,7 @@ export default memo(function App({
                   }}
                 >
                   {form.filename}
-                </Button>
+                </GeneralButton>
               </div>
               <ErrorSpan>{formErrors.file}</ErrorSpan>
             </label>
@@ -482,13 +491,10 @@ export default memo(function App({
                 <FontFamilyPlugin />
               </div>
             </div>
-            <Button
+            <GeneralButton
               onClick={createBlog}
               aria-label="create-recipe-button"
               disabled={submit}
-              className={`bg-[#ffb762] text-white py-[10px] rounded-md text-[13px] px-[20px] font-bold self-center ${
-                submit ? "opacity-50" : ""
-              }`}
               type="submit"
             >
               {!submit ? (
@@ -498,13 +504,13 @@ export default memo(function App({
                   <CircleNotch size={20} className="animate-spin" /> 作成する
                 </span>
               )}
-            </Button>
+            </GeneralButton>
             <div dangerouslySetInnerHTML={{ __html: htmlString }}></div>
           </LexicalComposer>
         </section>
         <Modal modalIdProps={modalIds.editorModal}>
           {modalMode === "image-upload" ? (
-            <div className="fixed top-0 left-0 justify-center items-center flex w-screen h-screen px-4">
+            <div className="absolute justify-center items-center flex px-4">
               <div className="max-w-screen-lg w-full bg-primary-bg p-4 flex flex-col gap-2 ">
                 <div className="flex justify-between items-center">
                   <span className="text-lg">Insert Image</span>
