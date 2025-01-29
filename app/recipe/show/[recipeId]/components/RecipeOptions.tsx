@@ -123,7 +123,7 @@ export default function RecipeOptions({ recipe_id }: { recipe_id: number }) {
         </motion.div>
       </div>
       <Modal modalIdProps={modalIds.recipeoptionsModal}>
-        <div className="bg-secondary-bg flex flex-col gap-4 z-[999] py-4 px-8 rounded-lg">
+        <div className="relative bg-secondary-bg flex flex-col gap-4 z-[999] py-4 px-8 rounded-lg">
           <h1 className="text-xl font-semibold">本当に削除しますか？</h1>
           <hr />
           <div className="flex justify-end gap-2">

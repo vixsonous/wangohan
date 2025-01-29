@@ -61,6 +61,8 @@ import Dropdown from "@/app/admin/components/Dropdown";
 import heic2any from "heic2any";
 import OptImage from "@/app/components/ElementComponents/Image";
 import GeneralButton from "@/app/components/ElementComponents/GeneralButton";
+import IndexLoading from "@/app/loading";
+import CenteredLoading from "@/app/components/ElementComponents/CenteredLoading";
 
 const placeholder = "Enter some rich text...";
 const IconSize = 20;
@@ -412,8 +414,8 @@ export default memo(function App({
     isMounted && (
       <React.Fragment>
         <section className="mt-6">
-          <label htmlFor="blog_title" className="flex flex-col gap-2 mb-4">
-            <span className="text-lg">Title: </span>
+          <label htmlFor="blog_title" className="flex flex-col gap-2">
+            <span className="text-lg font-bold">Title: </span>
             <input
               value={form.blog_title}
               type="text"
@@ -428,7 +430,7 @@ export default memo(function App({
           </label>
           <div className="flex gap-4">
             <label htmlFor="blog-category" className="mt-4 flex flex-col gap-2">
-              <span>Category:</span>
+              <span className="text-lg font-bold">Category:</span>
               <select
                 value={form.blog_category}
                 className="py-2 px-4 rounded-md"
@@ -442,7 +444,7 @@ export default memo(function App({
               </select>
             </label>
             <label htmlFor="blog_image" className="mt-4 flex flex-col gap-2">
-              <span>Thumbnail:</span>
+              <span className="text-lg font-bold">Thumbnail:</span>
               <div>
                 <GeneralButton
                   onClick={() => {
@@ -491,26 +493,31 @@ export default memo(function App({
                 <FontFamilyPlugin />
               </div>
             </div>
-            <GeneralButton
-              onClick={createBlog}
-              aria-label="create-recipe-button"
-              disabled={submit}
-              type="submit"
-            >
-              {!submit ? (
-                "作成する"
-              ) : (
-                <span className="flex justify-center items-center">
-                  <CircleNotch size={20} className="animate-spin" /> 作成する
-                </span>
-              )}
-            </GeneralButton>
-            <div dangerouslySetInnerHTML={{ __html: htmlString }}></div>
+            <div className="w-full flex justify-center items-center mt-8">
+              <GeneralButton
+                onClick={createBlog}
+                aria-label="create-recipe-button"
+                disabled={submit}
+                type="submit"
+              >
+                {!submit ? (
+                  "作成する"
+                ) : (
+                  <span className="flex justify-center items-center">
+                    <CircleNotch size={20} className="animate-spin" /> 作成する
+                  </span>
+                )}
+              </GeneralButton>
+            </div>
+            <div
+              className="mt-8"
+              dangerouslySetInnerHTML={{ __html: htmlString }}
+            ></div>
           </LexicalComposer>
         </section>
         <Modal modalIdProps={modalIds.editorModal}>
           {modalMode === "image-upload" ? (
-            <div className="absolute justify-center items-center flex px-4">
+            <div className="relative justify-center items-center flex px-4">
               <div className="max-w-screen-lg w-full bg-primary-bg p-4 flex flex-col gap-2 ">
                 <div className="flex justify-between items-center">
                   <span className="text-lg">Insert Image</span>
@@ -586,7 +593,7 @@ export default memo(function App({
               </div>
             </div>
           ) : (
-            <div className="fixed top-0 left-0 justify-center items-center flex w-full h-full">
+            <div className="relative top-0 left-0 justify-center items-center flex w-full h-full">
               <div className="bg-primary-bg p-4 max-w-screen-lg w-full flex flex-col gap-2">
                 <div className="flex justify-between items-center">
                   <span className="text-lg">Uploaded Images</span>
@@ -595,15 +602,17 @@ export default memo(function App({
                     onClick={closeModalOnClick}
                   >
                     <X size={IconSize} />
-                    <div className="absolute w-full h-full bg-black top-0 left-0 opacity-0 group-hover:opacity-[0.2] transition-all rounded-full"></div>
+                    <div className="absolute w-full h-full bg-black top-0 left-0 opacity-0 group-hover:opacity-20 transition-all rounded-full"></div>
                   </Button>
                 </div>
                 <hr className="border-b-[1px] border-black w-full" />
-                <div className="overflow-y-scroll max-h-96">
+                <div
+                  className={`${
+                    !imageFetch && "overflow-y-scroll"
+                  } max-h-96 min-w-96`}
+                >
                   {imageFetch ? (
-                    <div className="w-full mx-auto">
-                      <CircleNotch className="animate-spin" />
-                    </div>
+                    <CenteredLoading size={IconSize} />
                   ) : (
                     <div>
                       {imageList.length > 0 ? (

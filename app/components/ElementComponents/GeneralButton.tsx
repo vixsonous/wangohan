@@ -8,8 +8,8 @@ export default memo(function Button({
     <button
       {...props}
       className={`bg-button text-white py-2 rounded-md text-sm px-4 font-semibold self-center ${
-        props.disabled ? "opacity-50" : ""
-      }`}
+        props.className
+      } ${props.disabled ? "opacity-50" : ""}`}
     >
       {children}
     </button>

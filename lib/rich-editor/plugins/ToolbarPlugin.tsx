@@ -78,6 +78,7 @@ import { FORMAT_FONTBACKGROUNDCOLOR_COMMAND } from "@/lib/nodes/FontBackgroundCo
 import LoadingCircle from "@/app/components/IconComponents/LoadingCircle";
 import OptImage from "@/app/components/ElementComponents/Image";
 import heic2any from "heic2any";
+import CenteredLoading from "@/app/components/ElementComponents/CenteredLoading";
 
 const LowPriority = 1;
 const IconSize = 20;
@@ -1271,7 +1272,7 @@ export default function ToolbarPlugin() {
       </Dropdown>
       <Modal modalIdProps={modalIds.toolbarpluginModal}>
         {modalMode === "image-upload" ? (
-          <div className="fixed top-0 left-0 justify-center items-center flex w-screen h-screen px-4">
+          <div className="relative top-0 left-0 justify-center items-center flex w-full h-full px-4">
             <div className="max-w-screen-lg w-full bg-primary-bg p-4 flex flex-col gap-2 ">
               <div className="flex justify-between items-center">
                 <span className="text-lg">Insert Image</span>
@@ -1385,7 +1386,7 @@ export default function ToolbarPlugin() {
             </div>
           </div>
         ) : (
-          <div className="fixed top-0 left-0 justify-center items-center flex w-full h-full">
+          <div className="relative top-0 left-0 justify-center items-center flex w-full h-full">
             <div className="bg-primary-bg p-4 max-w-screen-lg w-full flex flex-col gap-2">
               <div className="flex justify-between items-center">
                 <span className="text-lg">Uploaded Images</span>
@@ -1398,11 +1399,13 @@ export default function ToolbarPlugin() {
                 </Button>
               </div>
               <hr className="border-b-[1px] border-black w-full" />
-              <div>
+              <div
+                className={`${
+                  !imageFetch && "overflow-y-scroll"
+                } max-h-96 min-w-96`}
+              >
                 {imageFetch ? (
-                  <div className="w-full mx-auto">
-                    <CircleNotch className="animate-spin" />
-                  </div>
+                  <CenteredLoading size={IconSize} />
                 ) : (
                   <div>
                     {imageList.length > 0 ? (

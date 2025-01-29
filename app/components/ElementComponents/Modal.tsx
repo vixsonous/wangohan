@@ -16,10 +16,7 @@ export default function Modal({
 }) {
   const { show, modalId } = useAppSelector((state) => state.message.modal);
   const dispatch = useAppDispatch();
-  const hide = (e: React.MouseEvent<HTMLDivElement>) => {
-    alert(5);
-    dispatch(hideModal());
-  };
+  const hide = (e: React.MouseEvent<HTMLDivElement>) => dispatch(hideModal());
 
   return (
     <AnimatePresence>
@@ -29,7 +26,7 @@ export default function Modal({
             onClick={hide}
             className="fixed z-0 w-full h-full top-0 bg-black opacity-[0.5]"
           ></div>
-          <div className="z-10 bg-black relative mx-auto">{children}</div>
+          <div className="z-10 relative mx-auto">{children}</div>
         </ModalCore>
       )}
     </AnimatePresence>
