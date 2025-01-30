@@ -23,7 +23,6 @@ export default async function Columns() {
           alt="website banner"
         />
       </div>
-      <h1>Columns</h1>
       <div className="flex gap-6 flex-wrap justify-between p-4">
         {blogData.length > 0 ? (
           blogData.map((blog, idx) => {
