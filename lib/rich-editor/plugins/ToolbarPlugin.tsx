@@ -105,6 +105,7 @@ import useToolbarStates from "./toolbar-states";
 import useEditorHelper from "../editor-helper";
 import useDisplayMessage from "@/lib/hooks/dispatch-hooks";
 import FetchedImageList from "../fetched-image-list";
+import ImageUploadSelection from "../image-upload-selection";
 
 const LowPriority = 1;
 const IconSize = 20;
@@ -1138,119 +1139,12 @@ export default function ToolbarPlugin() {
       </Dropdown>
       <Modal modalIdProps={modalIds.toolbarpluginModal}>
         {states.modalMode === "image-upload" ? (
-          <div className="relative top-0 left-0 justify-center items-center flex w-full h-full px-4">
-            <div className="max-w-screen-lg w-full bg-primary-bg p-4 flex flex-col gap-2 ">
-              <div className="flex justify-between items-center">
-                <span className="text-lg">Insert Image</span>
-                <Button
-                  className="group relative p-2"
-                  onClick={closeModalOnClick}
-                >
-                  <X size={IconSize} />
-                  <div className="absolute w-full h-full bg-black top-0 left-0 opacity-0 group-hover:opacity-[0.2] transition-all rounded-full"></div>
-                </Button>
-              </div>
-              <hr className="border-b-[1px] border-black w-full" />
-              <Button
-                onClick={async () => {
-                  states.setModalMode("image-list");
-                  states.setImageListPage(0);
-
-                  states.setImageFetch(true);
-                  const res = await fetch("/api/blog-images");
-                  states.setImageFetch(false);
-
-                  const parsed = await res.json();
-
-                  if (!res.ok) {
-                    hideModal();
-                    showError("Error loading files!");
-                    setTimeout(() => hideError(), POPUPTIME);
-                    return;
-                  }
-
-                  states.setImageList(parsed.body);
-                }}
-                className={`w-[100%] bg-[#ffb762] border-[1px] border-primary-text text-primary-text py-2 rounded-md text-sm font-semibold`}
-              >
-                <span>Uploaded Images</span>
-              </Button>
-              <Dropdown
-                className="w-full"
-                closeOnClick={false}
-                openIcon={<UrlButton />}
-                closeIcon={<UrlButton />}
-              >
-                <div className="p-2 flex flex-col gap-2 items-center">
-                  <input
-                    ref={urlRef}
-                    className="w-[100%] text-sm px-4 py-2 border-[2px] rounded-md border-[#ffcd92]"
-                    type="text"
-                    name="url"
-                    placeholder="URLを入力"
-                    id="url"
-                  />
-                  <div className="flex gap-2">
-                    <input
-                      ref={imageAltRef}
-                      className="w-[100%] text-sm px-4 py-2 border-[2px] rounded-md border-[#ffcd92]"
-                      type="text"
-                      name="url"
-                      placeholder="Image Altを入力"
-                      id="url"
-                    />
-                    <Button
-                      onClick={uploadFileUrl}
-                      className="p-2 relative group"
-                    >
-                      {!states.imageUpload ? (
-                        <Plus size={IconSize} />
-                      ) : (
-                        <CircleNotch rotate={0} />
-                      )}
-                      <div className="w-full h-full bg-black absolute top-0 left-0 rounded-full opacity-0 group-hover:opacity-[0.2] transition-all"></div>
-                    </Button>
-                  </div>
-                </div>
-              </Dropdown>
-              <Dropdown
-                className="w-full"
-                closeOnClick={false}
-                openIcon={<FileButton />}
-                closeIcon={<FileButton />}
-              >
-                <div className="p-2 flex gap-2 items-center">
-                  <Button aria-label="file" name="file">
-                    <label htmlFor="file">
-                      <input
-                        disabled={states.imageUpload}
-                        onChange={uploadFile}
-                        ref={imageFileRef}
-                        type="file"
-                        hidden
-                        name="file"
-                        id="file"
-                      />
-                      <span
-                        className={`w-[100%] cursor-pointer bg-[#ffb762] border-[1px] border-primary-text text-primary-text px-4 py-2 rounded-md text-sm font-semibold`}
-                      >
-                        {states.fileName}
-                      </span>
-                    </label>
-                  </Button>
-
-                  <Button disabled className="p-2 relative group">
-                    {!states.imageUpload ? (
-                      <Plus size={IconSize} />
-                    ) : (
-                      <CircleNotch className="animate-spin" />
-                    )}
-                    <div className="w-full h-full bg-black absolute top-0 left-0 rounded-full opacity-0 group-hover:opacity-[0.2] transition-all"></div>
-                  </Button>
-                </div>
-              </Dropdown>
-            </div>
-          </div>
+          <ImageUploadSelection
+            states={states}
+            dispatch={dispatch}
+            helper={editorHelper}
+            editor={editor}
+          />
         ) : (
           <FetchedImageList
             states={states}

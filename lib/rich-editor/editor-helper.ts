@@ -3,6 +3,9 @@ import useEditorStates from "./editor-states";
 import useDisplayMessage from "../hooks/dispatch-hooks";
 import heic2any from "heic2any";
 import { content } from "@/constants/constants";
+import useToolbarStates from "./plugins/toolbar-states";
+import { LexicalEditor } from "lexical";
+import { INSERT_IMAGE_COMMAND } from "./plugins/ImagePlugin";
 
 const useEditorHelper = () => {
   const customDispatch = useDisplayMessage();
@@ -77,7 +80,8 @@ const useEditorHelper = () => {
       async uploadFile(
         e: React.ChangeEvent<HTMLInputElement>,
         imageFileRef: React.RefObject<HTMLInputElement>,
-        states: ReturnType<typeof useEditorStates>
+        states: ReturnType<typeof useEditorStates | typeof useToolbarStates>,
+        editor?: LexicalEditor | undefined
       ) {
         if (imageFileRef.current) {
           const t = imageFileRef.current;
@@ -122,12 +126,27 @@ const useEditorHelper = () => {
 
           customDispatch.hideModal();
           states.setFileName("No image uploaded");
+
+          if ("form" in states) {
+            states.setForm((prev) => ({
+              ...prev,
+              filename: fileName,
+              file: body.body.fileUrl,
+            }));
+          }
+
+          if (!editor) return;
+          editor.dispatchCommand(INSERT_IMAGE_COMMAND, {
+            altText: fileName,
+            src: body.body.fileUrl,
+            width: 500,
+          });
         }
       },
 
       async fetchImageUploads(
         e: React.MouseEvent<HTMLButtonElement>,
-        states: ReturnType<typeof useEditorStates>
+        states: ReturnType<typeof useEditorStates | typeof useToolbarStates>
       ) {
         states.setModalMode("image-list");
         states.setImageListPage(0);

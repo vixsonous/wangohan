@@ -6,20 +6,24 @@ import useEditorStates from "./editor-states";
 import useEditorHelper from "./editor-helper";
 import useDisplayMessage from "../hooks/dispatch-hooks";
 import { useRef } from "react";
+import useToolbarStates from "./plugins/toolbar-states";
+import { LexicalEditor } from "lexical";
 
 const ImageUploadSelection = ({
   states,
   helper,
   dispatch,
+  editor,
 }: {
-  states: ReturnType<typeof useEditorStates>;
+  states: ReturnType<typeof useEditorStates | typeof useToolbarStates>;
   helper: ReturnType<typeof useEditorHelper>;
   dispatch: ReturnType<typeof useDisplayMessage>;
+  editor?: LexicalEditor;
 }) => {
   const imageFileRef = useRef<HTMLInputElement>(null);
 
   const handleFetchImageUploads = (
-    states: ReturnType<typeof useEditorStates>
+    states: ReturnType<typeof useEditorStates | typeof useToolbarStates>
   ) => {
     return (e: React.MouseEvent<HTMLButtonElement>) =>
       helper.fetchImageUploads(e, states);
@@ -27,10 +31,10 @@ const ImageUploadSelection = ({
 
   const handleUploadFile = (
     imageFileRef: React.RefObject<HTMLInputElement>,
-    states: ReturnType<typeof useEditorStates>
+    states: ReturnType<typeof useEditorStates | typeof useToolbarStates>
   ) => {
     return (e: React.ChangeEvent<HTMLInputElement>) =>
-      helper.uploadFile(e, imageFileRef, states);
+      helper.uploadFile(e, imageFileRef, states, editor);
   };
 
   const closeModalOnClick = () => dispatch.hideModal();
