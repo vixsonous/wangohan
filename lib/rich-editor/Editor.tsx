@@ -126,6 +126,13 @@ export default memo(function Editor({ userId }: { userId: number }) {
     states.setForm((prev) => ({ ...prev, [name]: t.value }));
   };
 
+  const handleFetchImageUploads = (
+    states: ReturnType<typeof useEditorStates>
+  ) => {
+    return (e: React.MouseEvent<HTMLButtonElement>) =>
+      helper.fetchImageUploads(e, states);
+  };
+
   return (
     states.isMounted && (
       <React.Fragment>
@@ -247,25 +254,7 @@ export default memo(function Editor({ userId }: { userId: number }) {
                 </div>
                 <hr className="border-b-[1px] border-black w-full" />
                 <Button
-                  onClick={async () => {
-                    states.setModalMode("image-list");
-                    states.setImageListPage(0);
-
-                    states.setImageFetch(true);
-                    const res = await fetch("/api/blog-images");
-                    states.setImageFetch(false);
-
-                    const parsed = await res.json();
-
-                    if (!res.ok) {
-                      customDispatch.hideModal();
-                      customDispatch.displayError("Error loading files!");
-
-                      return;
-                    }
-
-                    states.setImageList(parsed.body);
-                  }}
+                  onClick={handleFetchImageUploads(states)}
                   className={`w-[100%] bg-[#ffb762] border-[1px] border-primary-text text-primary-text py-2 rounded-md text-sm font-semibold`}
                 >
                   <span>Uploaded Images</span>

@@ -7,7 +7,6 @@ import { ImageNode } from "@/lib/nodes/ImageNode";
 import { YouTubeNode } from "@/lib/nodes/YoutubeNode";
 import { HeadingNode } from "@lexical/rich-text";
 import { IndentationNode } from "@/lib/nodes/IndentationNode";
-import { constructImportMap, exportMap } from "@/lib/rich-editor/Editor";
 import "./columnDisplay.css";
 import "@/lib/rich-editor/style.css";
 import "@/lib/nodes/ImageNode.css";
@@ -15,6 +14,7 @@ import "@/lib/lib/ImageResizer.css";
 import ExampleTheme from "@/lib/rich-editor/Theme";
 import { useRouter } from "next/navigation";
 import OptImage from "@/app/components/ElementComponents/Image";
+import { constructImportMap, exportMap } from "@/lib/rich-editor/editor-config";
 interface BlogData {
   blog_id: number;
   user_id: number;

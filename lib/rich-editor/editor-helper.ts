@@ -124,6 +124,29 @@ const useEditorHelper = () => {
           states.setFileName("No image uploaded");
         }
       },
+
+      async fetchImageUploads(
+        e: React.MouseEvent<HTMLButtonElement>,
+        states: ReturnType<typeof useEditorStates>
+      ) {
+        states.setModalMode("image-list");
+        states.setImageListPage(0);
+
+        states.setImageFetch(true);
+        const res = await fetch("/api/blog-images");
+        states.setImageFetch(false);
+
+        const parsed = await res.json();
+
+        if (!res.ok) {
+          customDispatch.hideModal();
+          customDispatch.displayError("Error loading files!");
+
+          return;
+        }
+
+        states.setImageList(parsed.body);
+      },
     }),
     [customDispatch]
   );
