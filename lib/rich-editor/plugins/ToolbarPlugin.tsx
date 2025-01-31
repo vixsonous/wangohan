@@ -107,6 +107,7 @@ import useDisplayMessage from "@/lib/hooks/dispatch-hooks";
 import FetchedImageList from "../fetched-image-list";
 import ImageUploadSelection from "../image-upload-selection";
 import JustifyGroup from "./toolbar-groups/justify-group";
+import ImageYoutube from "./toolbar-groups/image-youtube";
 
 const LowPriority = 1;
 const IconSize = 20;
@@ -315,21 +316,6 @@ export default function ToolbarPlugin() {
     },
     []
   );
-
-  function fillUrl(url: string) {
-    const match =
-      /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/.exec(
-        url || ""
-      );
-
-    const id = match ? (match?.[2].length === 11 ? match[2] : null) : null;
-
-    if (id != null) {
-      return id;
-    }
-
-    return "";
-  }
 
   const uploadFile = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -568,28 +554,6 @@ export default function ToolbarPlugin() {
             >
               <TextHThree size={IconSize} />
               <ButtonText>H3 Heading</ButtonText>
-            </Button>
-          </li>
-          <li className={`flex items-center justify-between w-full px-2`}>
-            <Button
-              onClick={() => {
-                const url = prompt("Enter the URL of the YouTube video:", "");
-
-                editor.dispatchCommand(
-                  INSERT_YOUTUBE_COMMAND,
-                  fillUrl(url || "")
-                );
-                states.setIcons((prev) => ({
-                  ...prev,
-                  justify: <CenterAlign />,
-                  justifyIdx: 1,
-                }));
-              }}
-              className="toolbar-item spaced flex gap-4"
-              aria-label="Youtube Video"
-            >
-              <YoutubeLogo size={IconSize} />
-              <ButtonText>Youtube Video</ButtonText>
             </Button>
           </li>
           <li
@@ -917,64 +881,7 @@ export default function ToolbarPlugin() {
         </ul>
       </Dropdown>
       <Divider />
-      <Dropdown
-        openIcon={
-          <ButtonIcon>
-            <Plus />
-            <ButtonText>Insert</ButtonText>
-            <CaretDown size={IconSize} />
-          </ButtonIcon>
-        }
-        closeIcon={
-          <ButtonIcon>
-            <Plus />
-            <ButtonText>Insert</ButtonText>
-            <CaretDown size={IconSize} />
-          </ButtonIcon>
-        }
-      >
-        <ul className=" flex flex-col gap-2 bg-secondary-bg items-center rounded-md border border-primary-text">
-          <li
-            className={`flex items-center justify-between w-full px-2 ${
-              states.icons.justifyIdx === 0 ? "bg-primary-bg" : ""
-            } rounded-t-md`}
-          >
-            <Button
-              onClick={() => {
-                dispatch.displayModal(modalIds.toolbarpluginModal);
-                states.setModalMode("image-upload");
-                states.setImageListPage(0);
-              }}
-              className="toolbar-item spaced flex gap-4"
-              aria-label="Image Insert"
-            >
-              <Image size={IconSize} />
-              <ButtonText>Image</ButtonText>
-            </Button>
-          </li>
-          <li className={`flex items-center justify-between w-full px-2`}>
-            <Button
-              onClick={() => {
-                const url = prompt("Enter the URL of the YouTube video:", "");
-                editor.dispatchCommand(
-                  INSERT_YOUTUBE_COMMAND,
-                  fillUrl(url || "")
-                );
-                states.setIcons((prev) => ({
-                  ...prev,
-                  justify: <CenterAlign />,
-                  justifyIdx: 1,
-                }));
-              }}
-              className="toolbar-item spaced flex gap-4"
-              aria-label="Youtube Video"
-            >
-              <YoutubeLogo size={IconSize} />
-              <ButtonText>Youtube Video</ButtonText>
-            </Button>
-          </li>
-        </ul>
-      </Dropdown>
+      <ImageYoutube states={states} dispatch={dispatch} editor={editor} />
       <Divider />
       <JustifyGroup states={states} editor={editor} />
       <Modal modalIdProps={modalIds.toolbarpluginModal}>
