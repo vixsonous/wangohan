@@ -21,7 +21,6 @@ export default memo(function Editor({ userId }: { userId: number }) {
   const customDispatch = useDisplayMessage();
   const helper = useEditorHelper();
   const states = useEditorStates();
-  const closeModalOnClick = useCallback(() => customDispatch.hideModal(), []);
 
   useEffect(() => {
     const c = sessionStorage.getItem("editor");

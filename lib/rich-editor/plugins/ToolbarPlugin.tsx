@@ -69,7 +69,12 @@ import {
   showModal,
 } from "@/lib/redux/states/messageSlice";
 import Modal from "@/app/components/ElementComponents/Modal";
-import { imageFileTypes, modalIds, POPUPTIME } from "@/constants/constants";
+import {
+  FileButton,
+  imageFileTypes,
+  modalIds,
+  POPUPTIME,
+} from "@/constants/constants";
 import { INSERT_YOUTUBE_COMMAND } from "./YoutubePlugin";
 import { FORMAT_FONTFAMILY_COMMAND } from "@/lib/nodes/FontNode";
 import { FORMAT_FONTSIZE_COMMAND } from "@/lib/nodes/FontSizeNode";
@@ -79,120 +84,30 @@ import LoadingCircle from "@/app/components/IconComponents/LoadingCircle";
 import OptImage from "@/app/components/ElementComponents/Image";
 import heic2any from "heic2any";
 import CenteredLoading from "@/app/components/ElementComponents/CenteredLoading";
+import {
+  ButtonIcon,
+  ButtonText,
+  CenterAlign,
+  FontSize,
+  H1Button,
+  H2Button,
+  H3Button,
+  JustifyAlign,
+  LeftAlign,
+  Mitimasu,
+  ParagraphButton,
+  RightAlign,
+  Sans,
+  SansSerif,
+  UrlButton,
+} from "@/app/components/ElementComponents/MemoizedButtons";
+import useToolbarStates from "./toolbar-states";
+import useEditorHelper from "../editor-helper";
+import useDisplayMessage from "@/lib/hooks/dispatch-hooks";
+import FetchedImageList from "../fetched-image-list";
 
 const LowPriority = 1;
 const IconSize = 20;
-
-const LeftAlign = memo(() => (
-  <ButtonIcon>
-    <TextAlignLeft size={IconSize} />
-    <ButtonText>Left Align</ButtonText>
-    <CaretDown size={IconSize} />
-  </ButtonIcon>
-));
-const RightAlign = memo(() => (
-  <ButtonIcon>
-    <TextAlignRight size={IconSize} />
-    <ButtonText>Right Align</ButtonText>
-    <CaretDown size={IconSize} />
-  </ButtonIcon>
-));
-const CenterAlign = memo(() => (
-  <ButtonIcon>
-    <TextAlignCenter size={IconSize} />
-    <ButtonText>Center Align</ButtonText>
-    <CaretDown size={IconSize} />
-  </ButtonIcon>
-));
-const JustifyAlign = memo(() => (
-  <ButtonIcon>
-    <TextAlignJustify size={IconSize} />
-    <ButtonText>Justify Align</ButtonText>
-    <CaretDown size={IconSize} />
-  </ButtonIcon>
-));
-
-const UrlButton = memo(() => (
-  <Button
-    className={`w-[100%] bg-[#ffb762] border-[1px] border-primary-text text-primary-text px-32 py-2 rounded-md text-sm font-semibold`}
-  >
-    <span>URL</span>
-  </Button>
-));
-const FileButton = memo(() => (
-  <Button
-    className={`w-[100%] bg-[#ffb762] border-[1px] border-primary-text text-primary-text px-32 py-2 rounded-md text-sm font-semibold`}
-  >
-    <span>File</span>
-  </Button>
-));
-
-const ParagraphButton = memo(() => (
-  <ButtonIcon>
-    <Paragraph size={IconSize} />
-    <ButtonText>Paragraph</ButtonText>
-  </ButtonIcon>
-));
-const H1Button = memo(() => (
-  <ButtonIcon>
-    <TextHOne size={IconSize} />
-    <ButtonText>H1</ButtonText>
-  </ButtonIcon>
-));
-const H2Button = memo(() => (
-  <ButtonIcon>
-    <TextHTwo size={IconSize} />
-    <ButtonText>H2</ButtonText>
-  </ButtonIcon>
-));
-const H3Button = memo(() => (
-  <ButtonIcon>
-    <TextHThree size={IconSize} />
-    <ButtonText>H3</ButtonText>
-  </ButtonIcon>
-));
-
-const SansSerif = memo(() => (
-  <ButtonIcon>
-    <ButtonText>Sans Serif</ButtonText>
-    <CaretDown size={IconSize} />
-  </ButtonIcon>
-));
-const Sans = memo(() => (
-  <ButtonIcon>
-    <ButtonText>Sans</ButtonText>
-    <CaretDown size={IconSize} />
-  </ButtonIcon>
-));
-const Mitimasu = memo(() => (
-  <ButtonIcon>
-    <ButtonText>Mitimasu</ButtonText>
-    <CaretDown size={IconSize} />
-  </ButtonIcon>
-));
-
-const FontSize = memo(({ size }: { size: string }) => (
-  <ButtonIcon>
-    <ButtonText>{size}</ButtonText>
-    <CaretDown size={IconSize} />
-  </ButtonIcon>
-));
-
-const ButtonText = memo(function ButtonText({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return <span className="text-sm tracking-tighter">{children}</span>;
-});
-
-const ButtonIcon = memo(function ButtonIcon({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return <Button className="toolbar-item flex gap-4">{children}</Button>;
-});
 
 const Divider = memo(function Divider() {
   return <div className="divider" />;
@@ -206,63 +121,21 @@ type ImageMetadata = {
 export default function ToolbarPlugin() {
   const [editor] = useLexicalComposerContext();
   const toolbarRef = useRef(null);
-  const [canUndo, setCanUndo] = useState(false);
-  const [canRedo, setCanRedo] = useState(false);
-  const [isBold, setIsBold] = useState(false);
-  const [isItalic, setIsItalic] = useState(false);
-  const [isUnderline, setIsUnderline] = useState(false);
-  const [isStrikethrough, setIsStrikethrough] = useState(false);
-  const [isSubscript, setIsSubScript] = useState(false);
-  const [isSuperscript, setIsSuperScript] = useState(false);
-  const [isCode, setIsCode] = useState(false);
-  const [fontColor, setFontColor] = useState("#523636");
-  const [fontBackgroundColor, setFontBackgroundColor] = useState("#FFE9C9");
-  const [modalMode, setModalMode] = useState("image-upload");
-  const [imageListPage, setImageListPage] = useState(0);
-  const [imageList, setImageList] = useState<Array<ImageMetadata>>([]);
-  const [imageFetch, setImageFetch] = useState(false);
-  const [imageUpload, setImageUpload] = useState(false);
-
-  const [blockType, setBlockType] = useState("paragraph");
-  const [selectedElementKey, setSelectedElementKey] = useState<string>("");
-  const [codeLanguage, setCodeLanguage] = useState("");
-  const [isLink, setIsLink] = useState(false);
-  // icons
-  const [icons, setIcons] = useState({
-    justifyOpen: false,
-    justify: <LeftAlign />,
-    justifyIdx: 0,
-
-    fontFamily: <SansSerif />,
-    fontFamilyIdx: 0,
-
-    textType: <ParagraphButton />,
-    textTypeIdx: 0,
-
-    fontSize: <FontSize size={"15"} />,
-    fontSizeVal: 15,
-  });
-
-  function rgbToHex(rgb: string): string {
-    const match = rgb.match(/\d+/g);
-    if (!match || match.length < 3) return rgb; // Return as is if conversion is not possible
-    return `#${match
-      .slice(0, 3)
-      .map((x) => parseInt(x, 10).toString(16).padStart(2, "0"))
-      .join("")}`;
-  }
+  const states = useToolbarStates();
+  const editorHelper = useEditorHelper();
+  const dispatch = useDisplayMessage();
 
   const $updateToolbar = useCallback(() => {
     const selection = $getSelection();
     if ($isRangeSelection(selection)) {
       // Update text format
-      setIsBold(selection.hasFormat("bold"));
-      setIsItalic(selection.hasFormat("italic"));
-      setIsUnderline(selection.hasFormat("underline"));
-      setIsStrikethrough(selection.hasFormat("strikethrough"));
-      setIsSubScript(selection.hasFormat("subscript"));
-      setIsSuperScript(selection.hasFormat("superscript"));
-      setIsCode(selection.hasFormat("code"));
+      states.setIsBold(selection.hasFormat("bold"));
+      states.setIsItalic(selection.hasFormat("italic"));
+      states.setIsUnderline(selection.hasFormat("underline"));
+      states.setIsStrikethrough(selection.hasFormat("strikethrough"));
+      states.setIsSubScript(selection.hasFormat("subscript"));
+      states.setIsSuperScript(selection.hasFormat("superscript"));
+      states.setIsCode(selection.hasFormat("code"));
 
       const anchorNode = selection.anchor.getNode();
       const element =
@@ -272,31 +145,31 @@ export default function ToolbarPlugin() {
       const elementKey = element.getKey();
       const elementDOM = editor.getElementByKey(elementKey);
       if (elementDOM !== null) {
-        setSelectedElementKey(elementKey);
+        states.setSelectedElementKey(elementKey);
         if ($isListNode(element)) {
           const parentList = $getNearestNodeOfType(anchorNode, ListNode);
           const type = parentList ? parentList.getTag() : element.getTag();
-          setBlockType(type);
+          states.setBlockType(type);
         } else {
           const type = $isHeadingNode(element)
             ? element.getTag()
             : element.getType();
-          setBlockType(type);
+          states.setBlockType(type);
           const computedStyle = window.getComputedStyle(elementDOM);
           const fontSize = computedStyle.fontSize;
 
-          setFontColor(
+          states.setFontColor(
             selection.style.includes("color:")
               ? selection.style.split("color: ")[1].split(";")[0] || "#523636"
               : "#523636"
           );
-          setFontBackgroundColor(
+          states.setFontBackgroundColor(
             selection.style.includes("background:")
               ? selection.style.split("background: ")[1].split(";")[0] ||
                   "#FFE9C9"
               : "#FFE9C9"
           );
-          setIcons((prev) => ({
+          states.setIcons((prev) => ({
             ...prev,
             textType:
               type === "paragraph" ? (
@@ -348,24 +221,26 @@ export default function ToolbarPlugin() {
               : Number(String(fontSize).replace("px;", "")),
           }));
           if ($isCodeNode(element)) {
-            setCodeLanguage(element.getLanguage() || getDefaultCodeLanguage());
+            states.setCodeLanguage(
+              element.getLanguage() || getDefaultCodeLanguage()
+            );
           }
         }
       }
       // Update text format
-      setIsBold(selection.hasFormat("bold"));
-      setIsItalic(selection.hasFormat("italic"));
-      setIsUnderline(selection.hasFormat("underline"));
-      setIsStrikethrough(selection.hasFormat("strikethrough"));
-      setIsCode(selection.hasFormat("code"));
+      states.setIsBold(selection.hasFormat("bold"));
+      states.setIsItalic(selection.hasFormat("italic"));
+      states.setIsUnderline(selection.hasFormat("underline"));
+      states.setIsStrikethrough(selection.hasFormat("strikethrough"));
+      states.setIsCode(selection.hasFormat("code"));
 
       // Update links
       const node = getSelectedNode(selection);
       const parent = node.getParent();
       if ($isLinkNode(parent) || $isLinkNode(node)) {
-        setIsLink(true);
+        states.setIsLink(true);
       } else {
-        setIsLink(false);
+        states.setIsLink(false);
       }
     }
   }, []);
@@ -388,7 +263,7 @@ export default function ToolbarPlugin() {
       editor.registerCommand(
         CAN_UNDO_COMMAND,
         (payload) => {
-          setCanUndo(payload);
+          states.setCanUndo(payload);
           return false;
         },
         LowPriority
@@ -396,7 +271,7 @@ export default function ToolbarPlugin() {
       editor.registerCommand(
         CAN_REDO_COMMAND,
         (payload) => {
-          setCanRedo(payload);
+          states.setCanRedo(payload);
           return false;
         },
         LowPriority
@@ -420,10 +295,7 @@ export default function ToolbarPlugin() {
   const imageAltRef = useRef<HTMLInputElement>(null);
   const imageFileRef = useRef<HTMLInputElement>(null);
 
-  const [fileName, setFileName] = useState("No image uploaded!");
-
-  const dispatch = useDispatch();
-  const closeModalOnClick = useCallback(() => dispatch(hideModal()), []);
+  const closeModalOnClick = useCallback(() => dispatch.hideModal(), []);
   const uploadFileUrl = useCallback(
     (e: React.MouseEvent<HTMLButtonElement>) => {
       const t = e.currentTarget;
@@ -436,7 +308,7 @@ export default function ToolbarPlugin() {
           altText: alt,
           src: val,
         });
-        dispatch(hideModal());
+        dispatch.hideModal();
       }
     },
     []
@@ -457,30 +329,6 @@ export default function ToolbarPlugin() {
     return "";
   }
 
-  const uploadPreviewFile = useCallback(
-    async (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (imageFileRef.current) {
-        const t = imageFileRef.current;
-        if (!t.files || !t.files[0]) return;
-        if (
-          !imageFileTypes.includes(t.files[0].type) &&
-          t.files[0].type !== ""
-        ) {
-          return;
-        }
-        if (
-          t.files[0].type === "" &&
-          !imageFileTypes.includes(t.files[0].name.split(".")[1].toLowerCase())
-        ) {
-          return;
-        }
-
-        setFileName(t.files[0].name);
-      }
-    },
-    []
-  );
-
   const uploadFile = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement>) => {
       if (imageFileRef.current) {
@@ -492,8 +340,8 @@ export default function ToolbarPlugin() {
 
         const fd = new FormData();
 
-        setImageUpload(true);
-        setFileName(t.files[0].name);
+        states.setImageUpload(true);
+        states.setFileName(t.files[0].name);
 
         if (
           typeof window !== "undefined" &&
@@ -518,7 +366,7 @@ export default function ToolbarPlugin() {
           method: "POST",
           body: fd,
         });
-        setImageUpload(false);
+        states.setImageUpload(false);
 
         const body = await res.json();
 
@@ -533,8 +381,8 @@ export default function ToolbarPlugin() {
           width: 500,
         });
 
-        dispatch(hideModal());
-        setFileName("No image uploaded");
+        dispatch.hideModal();
+        states.setFileName("No image uploaded");
       }
     },
     []
@@ -559,9 +407,9 @@ export default function ToolbarPlugin() {
     const nameDetail = e.currentTarget.name;
     const idx = nameDetail.split("-")[1];
     const name = nameDetail.split("-")[0];
-    setIcons((prev) => ({ ...prev, textTypeIdx: Number(idx) }));
+    states.setIcons((prev) => ({ ...prev, textTypeIdx: Number(idx) }));
 
-    if (blockType !== "paragraph" || blockType !== name) {
+    if (states.blockType !== "paragraph" || states.blockType !== name) {
       editor.update(() => {
         const selection = $getSelection();
 
@@ -572,7 +420,7 @@ export default function ToolbarPlugin() {
             $wrapNodes(selection, () =>
               $createHeadingNode(name as HeadingTagType)
             );
-            setBlockType(name);
+            states.setBlockType(name);
           }
         }
       });
@@ -585,7 +433,7 @@ export default function ToolbarPlugin() {
 
           if ($isRangeSelection(selection)) {
             $wrapNodes(selection, () => $createParagraphNode());
-            setBlockType("paragraph");
+            states.setBlockType("paragraph");
           }
         }
       });
@@ -611,7 +459,7 @@ export default function ToolbarPlugin() {
   const fontColorOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const t = e.currentTarget;
     editor.dispatchCommand(FORMAT_FONTCOLOR_COMMAND, String(t.value));
-    setFontColor(t.value);
+    states.setFontColor(t.value);
   };
 
   const fontBackgroundColorOnChange = (
@@ -619,23 +467,23 @@ export default function ToolbarPlugin() {
   ) => {
     const t = e.currentTarget;
     editor.dispatchCommand(FORMAT_FONTBACKGROUNDCOLOR_COMMAND, String(t.value));
-    setFontBackgroundColor(t.value);
+    states.setFontBackgroundColor(t.value);
   };
 
   const resetFontBackgroundColor = (e: React.MouseEvent<HTMLButtonElement>) => {
     editor.dispatchCommand(FORMAT_FONTBACKGROUNDCOLOR_COMMAND, String(""));
-    setFontBackgroundColor("#FFE9C9");
+    states.setFontBackgroundColor("#FFE9C9");
   };
 
   const resetFontColor = (e: React.MouseEvent<HTMLButtonElement>) => {
     editor.dispatchCommand(FORMAT_FONTCOLOR_COMMAND, String("#523636"));
-    setFontBackgroundColor("#523636");
+    states.setFontBackgroundColor("#523636");
   };
 
   return (
     <div className="toolbar flex flex-wrap" ref={toolbarRef}>
       <Button
-        disabled={!canUndo}
+        disabled={!states.canUndo}
         onClick={() => {
           editor.dispatchCommand(UNDO_COMMAND, undefined);
         }}
@@ -645,7 +493,7 @@ export default function ToolbarPlugin() {
         <ArrowClockwise size={IconSize} />
       </Button>
       <Button
-        disabled={!canRedo}
+        disabled={!states.canRedo}
         onClick={() => {
           editor.dispatchCommand(REDO_COMMAND, undefined);
         }}
@@ -655,11 +503,14 @@ export default function ToolbarPlugin() {
         <ArrowCounterClockwise size={IconSize} />
       </Button>
       <Divider />
-      <Dropdown openIcon={icons.textType} closeIcon={icons.textType}>
+      <Dropdown
+        openIcon={states.icons.textType}
+        closeIcon={states.icons.textType}
+      >
         <ul className=" flex flex-col gap-2 bg-secondary-bg items-center rounded-md border border-primary-text">
           <li
             className={`flex items-center justify-between w-full px-2 ${
-              icons.textTypeIdx === 0 ? "bg-primary-bg" : ""
+              states.icons.textTypeIdx === 0 ? "bg-primary-bg" : ""
             } rounded-t-md`}
           >
             <Button
@@ -674,7 +525,7 @@ export default function ToolbarPlugin() {
           </li>
           <li
             className={`flex items-center justify-between w-full px-2 ${
-              icons.textTypeIdx === 1 ? "bg-primary-bg" : ""
+              states.icons.textTypeIdx === 1 ? "bg-primary-bg" : ""
             } rounded-t-md`}
           >
             <Button
@@ -689,7 +540,7 @@ export default function ToolbarPlugin() {
           </li>
           <li
             className={`flex items-center justify-between w-full px-2 ${
-              icons.textTypeIdx === 2 ? "bg-primary-bg" : ""
+              states.icons.textTypeIdx === 2 ? "bg-primary-bg" : ""
             } rounded-t-md`}
           >
             <Button
@@ -704,7 +555,7 @@ export default function ToolbarPlugin() {
           </li>
           <li
             className={`flex items-center justify-between w-full px-2 ${
-              icons.textTypeIdx === 3 ? "bg-primary-bg" : ""
+              states.icons.textTypeIdx === 3 ? "bg-primary-bg" : ""
             } rounded-t-md`}
           >
             <Button
@@ -726,7 +577,7 @@ export default function ToolbarPlugin() {
                   INSERT_YOUTUBE_COMMAND,
                   fillUrl(url || "")
                 );
-                setIcons((prev) => ({
+                states.setIcons((prev) => ({
                   ...prev,
                   justify: <CenterAlign />,
                   justifyIdx: 1,
@@ -741,13 +592,13 @@ export default function ToolbarPlugin() {
           </li>
           <li
             className={`flex items-center justify-between w-full px-2 ${
-              icons.justifyIdx === 2 ? "bg-primary-bg" : ""
+              states.icons.justifyIdx === 2 ? "bg-primary-bg" : ""
             }`}
           >
             <Button
               onClick={() => {
                 editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "right");
-                setIcons((prev) => ({
+                states.setIcons((prev) => ({
                   ...prev,
                   justify: <RightAlign />,
                   justifyIdx: 2,
@@ -762,13 +613,13 @@ export default function ToolbarPlugin() {
           </li>
           <li
             className={`flex items-center justify-between w-full px-2 ${
-              icons.justifyIdx === 3 ? "bg-primary-bg" : ""
+              states.icons.justifyIdx === 3 ? "bg-primary-bg" : ""
             } rounded-b-md`}
           >
             <Button
               onClick={() => {
                 editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "justify");
-                setIcons((prev) => ({
+                states.setIcons((prev) => ({
                   ...prev,
                   justify: <JustifyAlign />,
                   justifyIdx: 3,
@@ -784,17 +635,20 @@ export default function ToolbarPlugin() {
         </ul>
       </Dropdown>
       <Divider />
-      <Dropdown openIcon={icons.fontFamily} closeIcon={icons.fontFamily}>
+      <Dropdown
+        openIcon={states.icons.fontFamily}
+        closeIcon={states.icons.fontFamily}
+      >
         <ul className=" flex flex-col gap-2 bg-secondary-bg items-center rounded-md border border-primary-text">
           <li
             className={`flex items-center justify-between w-full px-2 ${
-              icons.fontFamilyIdx === 0 ? "bg-primary-bg" : ""
+              states.icons.fontFamilyIdx === 0 ? "bg-primary-bg" : ""
             } rounded-t-md`}
           >
             <Button
               onClick={() => {
                 editor.dispatchCommand(FORMAT_FONTFAMILY_COMMAND, "sans-serif");
-                setIcons((prev) => ({
+                states.setIcons((prev) => ({
                   ...prev,
                   fontFamily: <SansSerif />,
                   fontFamilyIdx: 0,
@@ -809,13 +663,13 @@ export default function ToolbarPlugin() {
           </li>
           <li
             className={`flex items-center justify-between w-full px-2 ${
-              icons.fontFamilyIdx === 1 ? "bg-primary-bg" : ""
+              states.icons.fontFamilyIdx === 1 ? "bg-primary-bg" : ""
             } rounded-t-md`}
           >
             <Button
               onClick={() => {
                 editor.dispatchCommand(FORMAT_FONTFAMILY_COMMAND, "sans");
-                setIcons((prev) => ({
+                states.setIcons((prev) => ({
                   ...prev,
                   fontFamily: <Sans />,
                   fontFamilyIdx: 1,
@@ -830,13 +684,13 @@ export default function ToolbarPlugin() {
           </li>
           <li
             className={`flex items-center justify-between w-full px-2 ${
-              icons.fontFamilyIdx === 2 ? "bg-primary-bg" : ""
+              states.icons.fontFamilyIdx === 2 ? "bg-primary-bg" : ""
             } rounded-t-md`}
           >
             <Button
               onClick={() => {
                 editor.dispatchCommand(FORMAT_FONTFAMILY_COMMAND, "mitimasu");
-                setIcons((prev) => ({
+                states.setIcons((prev) => ({
                   ...prev,
                   fontFamily: <Mitimasu />,
                   fontFamilyIdx: 2,
@@ -852,7 +706,10 @@ export default function ToolbarPlugin() {
         </ul>
       </Dropdown>
       <Divider />
-      <Dropdown openIcon={icons.fontSize} closeIcon={icons.fontSize}>
+      <Dropdown
+        openIcon={states.icons.fontSize}
+        closeIcon={states.icons.fontSize}
+      >
         <ul className=" flex flex-col gap-1 bg-secondary-bg items-center rounded-md border border-primary-text">
           {[8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72].map(
             (s, i) => {
@@ -860,7 +717,7 @@ export default function ToolbarPlugin() {
                 <li
                   key={i}
                   className={`flex items-center justify-between w-full px-2 ${
-                    icons.fontSizeVal === s ? "bg-primary-bg" : ""
+                    states.icons.fontSizeVal === s ? "bg-primary-bg" : ""
                   } rounded-md`}
                 >
                   <Button
@@ -869,7 +726,7 @@ export default function ToolbarPlugin() {
                         FORMAT_FONTSIZE_COMMAND,
                         String(s)
                       );
-                      setIcons((prev) => ({
+                      states.setIcons((prev) => ({
                         ...prev,
                         fontSize: <FontSize size={String(s)} />,
                         fontSizeVal: s,
@@ -891,7 +748,8 @@ export default function ToolbarPlugin() {
       <Button
         // onClick={() => alert(5)}
         className={
-          "toolbar-item spaced cursor-pointer " + (isBold ? "active" : "")
+          "toolbar-item spaced cursor-pointer " +
+          (states.isBold ? "active" : "")
         }
         aria-label="Format Bold"
       >
@@ -904,7 +762,7 @@ export default function ToolbarPlugin() {
             onChange={fontColorOnChange}
             type="color"
             id="text-color"
-            value={fontColor}
+            value={states.fontColor}
             className="bg-none p-0 cursor-pointer w-2"
           />
         </label>
@@ -912,7 +770,7 @@ export default function ToolbarPlugin() {
       <Button
         className={
           "toolbar-item flex justify-center items-center spaced cursor-pointer " +
-          (isBold ? "active" : "")
+          (states.isBold ? "active" : "")
         }
         aria-label="Format Bold"
         onClick={resetFontColor}
@@ -923,7 +781,8 @@ export default function ToolbarPlugin() {
       <Button
         // onClick={() => alert(5)}
         className={
-          "toolbar-item spaced cursor-pointer " + (isBold ? "active" : "")
+          "toolbar-item spaced cursor-pointer " +
+          (states.isBold ? "active" : "")
         }
         aria-label="Format Bold"
       >
@@ -936,7 +795,7 @@ export default function ToolbarPlugin() {
             onChange={fontBackgroundColorOnChange}
             type="color"
             id="text-background-color"
-            value={fontBackgroundColor}
+            value={states.fontBackgroundColor}
             className="bg-none p-0 cursor-pointer w-2"
           />
         </label>
@@ -944,7 +803,7 @@ export default function ToolbarPlugin() {
       <Button
         className={
           "toolbar-item flex justify-center items-center spaced cursor-pointer " +
-          (isBold ? "active" : "")
+          (states.isBold ? "active" : "")
         }
         aria-label="Format Bold"
         onClick={resetFontBackgroundColor}
@@ -956,7 +815,7 @@ export default function ToolbarPlugin() {
         onClick={() => {
           editor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold");
         }}
-        className={"toolbar-item spaced " + (isBold ? "active" : "")}
+        className={"toolbar-item spaced " + (states.isBold ? "active" : "")}
         aria-label="Format Bold"
       >
         <TextBolder size={IconSize} />
@@ -965,7 +824,7 @@ export default function ToolbarPlugin() {
         onClick={() => {
           editor.dispatchCommand(FORMAT_TEXT_COMMAND, "italic");
         }}
-        className={"toolbar-item spaced " + (isItalic ? "active" : "")}
+        className={"toolbar-item spaced " + (states.isItalic ? "active" : "")}
         aria-label="Format Italics"
       >
         <TextItalic size={IconSize} />
@@ -974,7 +833,9 @@ export default function ToolbarPlugin() {
         onClick={() => {
           editor.dispatchCommand(FORMAT_TEXT_COMMAND, "underline");
         }}
-        className={"toolbar-item spaced " + (isUnderline ? "active" : "")}
+        className={
+          "toolbar-item spaced " + (states.isUnderline ? "active" : "")
+        }
         aria-label="Format Underline"
       >
         <TextUnderline size={IconSize} />
@@ -983,7 +844,9 @@ export default function ToolbarPlugin() {
         onClick={() => {
           editor.dispatchCommand(FORMAT_TEXT_COMMAND, "code");
         }}
-        className={"toolbar-item spaced " + (isUnderline ? "active" : "")}
+        className={
+          "toolbar-item spaced " + (states.isUnderline ? "active" : "")
+        }
         aria-label="Format Code"
       >
         <BracketsAngle size={IconSize} />
@@ -1003,7 +866,7 @@ export default function ToolbarPlugin() {
         <ul className=" flex flex-col gap-2 bg-secondary-bg items-center rounded-md border border-primary-text">
           <li
             className={`flex items-center justify-between w-full px-2 ${
-              isStrikethrough ? "bg-primary-bg" : ""
+              states.isStrikethrough ? "bg-primary-bg" : ""
             } rounded-t-md`}
           >
             <Button
@@ -1019,7 +882,7 @@ export default function ToolbarPlugin() {
           </li>
           <li
             className={`flex items-center justify-between w-full px-2 ${
-              isSubscript ? "bg-primary-bg" : ""
+              states.isSubscript ? "bg-primary-bg" : ""
             } rounded-t-md`}
           >
             <Button
@@ -1035,7 +898,7 @@ export default function ToolbarPlugin() {
           </li>
           <li
             className={`flex items-center justify-between w-full px-2 ${
-              isSuperscript ? "bg-primary-bg" : ""
+              states.isSuperscript ? "bg-primary-bg" : ""
             } rounded-t-md`}
           >
             <Button
@@ -1071,14 +934,14 @@ export default function ToolbarPlugin() {
         <ul className=" flex flex-col gap-2 bg-secondary-bg items-center rounded-md border border-primary-text">
           <li
             className={`flex items-center justify-between w-full px-2 ${
-              icons.justifyIdx === 0 ? "bg-primary-bg" : ""
+              states.icons.justifyIdx === 0 ? "bg-primary-bg" : ""
             } rounded-t-md`}
           >
             <Button
               onClick={() => {
-                dispatch(showModal(modalIds.toolbarpluginModal));
-                setModalMode("image-upload");
-                setImageListPage(0);
+                dispatch.displayModal(modalIds.toolbarpluginModal);
+                states.setModalMode("image-upload");
+                states.setImageListPage(0);
               }}
               className="toolbar-item spaced flex gap-4"
               aria-label="Image Insert"
@@ -1095,7 +958,7 @@ export default function ToolbarPlugin() {
                   INSERT_YOUTUBE_COMMAND,
                   fillUrl(url || "")
                 );
-                setIcons((prev) => ({
+                states.setIcons((prev) => ({
                   ...prev,
                   justify: <CenterAlign />,
                   justifyIdx: 1,
@@ -1111,17 +974,20 @@ export default function ToolbarPlugin() {
         </ul>
       </Dropdown>
       <Divider />
-      <Dropdown openIcon={icons.justify} closeIcon={icons.justify}>
+      <Dropdown
+        openIcon={states.icons.justify}
+        closeIcon={states.icons.justify}
+      >
         <ul className=" flex flex-col gap-2 bg-secondary-bg items-center rounded-md border border-primary-text">
           <li
             className={`flex items-center justify-between w-full px-2 ${
-              icons.justifyIdx === 0 ? "bg-primary-bg" : ""
+              states.icons.justifyIdx === 0 ? "bg-primary-bg" : ""
             } rounded-t-md`}
           >
             <Button
               onClick={() => {
                 editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "left");
-                setIcons((prev) => ({
+                states.setIcons((prev) => ({
                   ...prev,
                   justify: <LeftAlign />,
                   justifyIdx: 0,
@@ -1136,13 +1002,13 @@ export default function ToolbarPlugin() {
           </li>
           <li
             className={`flex items-center justify-between w-full px-2 ${
-              icons.justifyIdx === 1 ? "bg-primary-bg" : ""
+              states.icons.justifyIdx === 1 ? "bg-primary-bg" : ""
             }`}
           >
             <Button
               onClick={() => {
                 editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "center");
-                setIcons((prev) => ({
+                states.setIcons((prev) => ({
                   ...prev,
                   justify: <CenterAlign />,
                   justifyIdx: 1,
@@ -1157,13 +1023,13 @@ export default function ToolbarPlugin() {
           </li>
           <li
             className={`flex items-center justify-between w-full px-2 ${
-              icons.justifyIdx === 2 ? "bg-primary-bg" : ""
+              states.icons.justifyIdx === 2 ? "bg-primary-bg" : ""
             }`}
           >
             <Button
               onClick={() => {
                 editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "right");
-                setIcons((prev) => ({
+                states.setIcons((prev) => ({
                   ...prev,
                   justify: <RightAlign />,
                   justifyIdx: 2,
@@ -1178,13 +1044,13 @@ export default function ToolbarPlugin() {
           </li>
           <li
             className={`flex items-center justify-between w-full px-2 ${
-              icons.justifyIdx === 3 ? "bg-primary-bg" : ""
+              states.icons.justifyIdx === 3 ? "bg-primary-bg" : ""
             } rounded-b-md`}
           >
             <Button
               onClick={() => {
                 editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "justify");
-                setIcons((prev) => ({
+                states.setIcons((prev) => ({
                   ...prev,
                   justify: <JustifyAlign />,
                   justifyIdx: 3,
@@ -1199,13 +1065,13 @@ export default function ToolbarPlugin() {
           </li>
           <li
             className={`flex items-center justify-between w-full px-2 ${
-              icons.justifyIdx === 4 ? "bg-primary-bg" : ""
+              states.icons.justifyIdx === 4 ? "bg-primary-bg" : ""
             } rounded-b-md`}
           >
             <Button
               onClick={() => {
                 editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "start");
-                setIcons((prev) => ({
+                states.setIcons((prev) => ({
                   ...prev,
                   justify: <JustifyAlign />,
                   justifyIdx: 4,
@@ -1220,13 +1086,13 @@ export default function ToolbarPlugin() {
           </li>
           <li
             className={`flex items-center justify-between w-full px-2 ${
-              icons.justifyIdx === 5 ? "bg-primary-bg" : ""
+              states.icons.justifyIdx === 5 ? "bg-primary-bg" : ""
             } rounded-b-md`}
           >
             <Button
               onClick={() => {
                 editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "end");
-                setIcons((prev) => ({
+                states.setIcons((prev) => ({
                   ...prev,
                   justify: <JustifyAlign />,
                   justifyIdx: 5,
@@ -1271,7 +1137,7 @@ export default function ToolbarPlugin() {
         </ul>
       </Dropdown>
       <Modal modalIdProps={modalIds.toolbarpluginModal}>
-        {modalMode === "image-upload" ? (
+        {states.modalMode === "image-upload" ? (
           <div className="relative top-0 left-0 justify-center items-center flex w-full h-full px-4">
             <div className="max-w-screen-lg w-full bg-primary-bg p-4 flex flex-col gap-2 ">
               <div className="flex justify-between items-center">
@@ -1287,12 +1153,12 @@ export default function ToolbarPlugin() {
               <hr className="border-b-[1px] border-black w-full" />
               <Button
                 onClick={async () => {
-                  setModalMode("image-list");
-                  setImageListPage(0);
+                  states.setModalMode("image-list");
+                  states.setImageListPage(0);
 
-                  setImageFetch(true);
+                  states.setImageFetch(true);
                   const res = await fetch("/api/blog-images");
-                  setImageFetch(false);
+                  states.setImageFetch(false);
 
                   const parsed = await res.json();
 
@@ -1303,7 +1169,7 @@ export default function ToolbarPlugin() {
                     return;
                   }
 
-                  setImageList(parsed.body);
+                  states.setImageList(parsed.body);
                 }}
                 className={`w-[100%] bg-[#ffb762] border-[1px] border-primary-text text-primary-text py-2 rounded-md text-sm font-semibold`}
               >
@@ -1337,7 +1203,7 @@ export default function ToolbarPlugin() {
                       onClick={uploadFileUrl}
                       className="p-2 relative group"
                     >
-                      {!imageUpload ? (
+                      {!states.imageUpload ? (
                         <Plus size={IconSize} />
                       ) : (
                         <CircleNotch rotate={0} />
@@ -1357,7 +1223,7 @@ export default function ToolbarPlugin() {
                   <Button aria-label="file" name="file">
                     <label htmlFor="file">
                       <input
-                        disabled={imageUpload}
+                        disabled={states.imageUpload}
                         onChange={uploadFile}
                         ref={imageFileRef}
                         type="file"
@@ -1368,13 +1234,13 @@ export default function ToolbarPlugin() {
                       <span
                         className={`w-[100%] cursor-pointer bg-[#ffb762] border-[1px] border-primary-text text-primary-text px-4 py-2 rounded-md text-sm font-semibold`}
                       >
-                        {fileName}
+                        {states.fileName}
                       </span>
                     </label>
                   </Button>
 
                   <Button disabled className="p-2 relative group">
-                    {!imageUpload ? (
+                    {!states.imageUpload ? (
                       <Plus size={IconSize} />
                     ) : (
                       <CircleNotch className="animate-spin" />
@@ -1386,60 +1252,12 @@ export default function ToolbarPlugin() {
             </div>
           </div>
         ) : (
-          <div className="relative top-0 left-0 justify-center items-center flex w-full h-full">
-            <div className="bg-primary-bg p-4 max-w-screen-lg w-full flex flex-col gap-2">
-              <div className="flex justify-between items-center">
-                <span className="text-lg">Uploaded Images</span>
-                <Button
-                  className="group relative p-2"
-                  onClick={closeModalOnClick}
-                >
-                  <X size={IconSize} />
-                  <div className="absolute w-full h-full bg-black top-0 left-0 opacity-0 group-hover:opacity-[0.2] transition-all rounded-full"></div>
-                </Button>
-              </div>
-              <hr className="border-b-[1px] border-black w-full" />
-              <div
-                className={`${
-                  !imageFetch && "overflow-y-scroll"
-                } max-h-96 min-w-96`}
-              >
-                {imageFetch ? (
-                  <CenteredLoading size={IconSize} />
-                ) : (
-                  <div>
-                    {imageList.length > 0 ? (
-                      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-                        {imageList.map((i, idx) => {
-                          return (
-                            <Button
-                              onClick={insertImageFromList}
-                              name={i.blog_image_title}
-                              id={i.blog_image_url}
-                              className=""
-                            >
-                              <OptImage
-                                className="w-full"
-                                fit="cover"
-                                width={250}
-                                height={250}
-                                centered
-                                resize
-                                square
-                                src={i.blog_image_url}
-                              />
-                            </Button>
-                          );
-                        })}
-                      </div>
-                    ) : (
-                      <span>Empty Files</span>
-                    )}
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
+          <FetchedImageList
+            states={states}
+            dispatch={dispatch}
+            helper={editorHelper}
+            editor={editor}
+          />
         )}
       </Modal>
     </div>

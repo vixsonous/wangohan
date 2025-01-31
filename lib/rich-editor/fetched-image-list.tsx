@@ -6,25 +6,42 @@ import useEditorHelper from "./editor-helper";
 import useDisplayMessage from "../hooks/dispatch-hooks";
 import { X } from "@phosphor-icons/react/dist/ssr";
 import OptImage from "@/app/components/ElementComponents/Image";
+import { LexicalEditor } from "lexical";
+import { INSERT_IMAGE_COMMAND } from "./plugins/ImagePlugin";
+import useToolbarStates from "./plugins/toolbar-states";
 
 const FetchedImageList = ({
   states,
   dispatch,
   helper,
+  editor,
 }: {
-  states: ReturnType<typeof useEditorStates>;
+  states: ReturnType<typeof useEditorStates | typeof useToolbarStates>;
   dispatch: ReturnType<typeof useDisplayMessage>;
   helper: ReturnType<typeof useEditorHelper>;
+  editor?: LexicalEditor | undefined;
 }) => {
   const closeModalOnClick = () => dispatch.hideModal();
 
   const handleInsertImageFromList = (
     src: string,
     filename: string,
-    states: ReturnType<typeof useEditorStates>
+    states: ReturnType<typeof useEditorStates | typeof useToolbarStates>,
+    editor?: LexicalEditor | undefined
   ) => {
-    return (e: React.MouseEvent<HTMLButtonElement>) =>
-      helper.insertImageFromList(e, src, filename, states);
+    return (e: React.MouseEvent<HTMLButtonElement>) => {
+      if ("form" in states)
+        helper.insertImageFromList(e, src, filename, states);
+
+      if (!editor) return;
+      editor.dispatchCommand(INSERT_IMAGE_COMMAND, {
+        altText: filename,
+        src: src,
+        width: 500,
+      });
+
+      dispatch.hideModal();
+    };
   };
 
   return (
@@ -55,7 +72,8 @@ const FetchedImageList = ({
                         onClick={handleInsertImageFromList(
                           i.blog_image_url,
                           i.blog_image_title,
-                          states
+                          states,
+                          editor
                         )}
                         name={i.blog_image_title}
                         id={i.blog_image_url}

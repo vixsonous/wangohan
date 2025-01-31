@@ -178,3 +178,8 @@ export interface BlogData {
   blog_image: string;
   blog_category: string;
 }
+
+export interface ImageMetadata {
+  blog_image_title: string;
+  blog_image_url: string;
+}

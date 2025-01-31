@@ -1,10 +1,6 @@
 import { content } from "@/constants/constants";
+import { ImageMetadata } from "@/constants/interface";
 import { useState } from "react";
-
-type ImageMetadata = {
-  blog_image_title: string;
-  blog_image_url: string;
-};
 
 export const useEditorStates = () => {
   const [state, setState] = useState<String>();
