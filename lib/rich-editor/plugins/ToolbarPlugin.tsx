@@ -30,7 +30,7 @@ import { $isLinkNode } from "@lexical/link";
 import { $isHeadingNode } from "@lexical/rich-text";
 import { $isListNode, ListNode } from "@lexical/list";
 import { $isCodeNode, getDefaultCodeLanguage } from "@lexical/code";
-import { $isAtNodeEnd } from "@lexical/selection";
+
 import React, { memo, useCallback, useEffect, useRef } from "react";
 import Button from "@/app/components/Button";
 import Modal from "@/app/components/ElementComponents/Modal";
@@ -58,6 +58,7 @@ import TextMod from "./toolbar-groups/text-mod";
 import FontSizeDropdown from "./toolbar-groups/font-size";
 import TextHeading from "./toolbar-groups/text-heading";
 import FontFamily from "./toolbar-groups/font-family";
+import useToolbarHelper from "./toolbar-helper";
 
 const LowPriority = 1;
 const IconSize = 20;
@@ -72,6 +73,7 @@ export default function ToolbarPlugin() {
   const states = useToolbarStates();
   const editorHelper = useEditorHelper();
   const dispatch = useDisplayMessage();
+  const tbHelper = useToolbarHelper(editor, states);
 
   const $updateToolbar = useCallback(() => {
     const selection = $getSelection();
@@ -183,7 +185,7 @@ export default function ToolbarPlugin() {
       states.setIsCode(selection.hasFormat("code"));
 
       // Update links
-      const node = getSelectedNode(selection);
+      const node = tbHelper.getSelectedNode(selection);
       const parent = node.getParent();
       if ($isLinkNode(parent) || $isLinkNode(node)) {
         states.setIsLink(true);
@@ -239,46 +241,6 @@ export default function ToolbarPlugin() {
     );
   }, [editor, $updateToolbar]);
 
-  function getSelectedNode(selection: RangeSelection) {
-    const anchor = selection.anchor;
-    const focus = selection.focus;
-    const anchorNode = selection.anchor.getNode();
-    const focusNode = selection.focus.getNode();
-    if (anchorNode === focusNode) {
-      return anchorNode;
-    }
-    const isBackward = selection.isBackward();
-    if (isBackward) {
-      return $isAtNodeEnd(focus) ? anchorNode : focusNode;
-    } else {
-      return $isAtNodeEnd(anchor) ? focusNode : anchorNode;
-    }
-  }
-
-  const fontColorOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const t = e.currentTarget;
-    editor.dispatchCommand(FORMAT_FONTCOLOR_COMMAND, String(t.value));
-    states.setFontColor(t.value);
-  };
-
-  const fontBackgroundColorOnChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const t = e.currentTarget;
-    editor.dispatchCommand(FORMAT_FONTBACKGROUNDCOLOR_COMMAND, String(t.value));
-    states.setFontBackgroundColor(t.value);
-  };
-
-  const resetFontBackgroundColor = (e: React.MouseEvent<HTMLButtonElement>) => {
-    editor.dispatchCommand(FORMAT_FONTBACKGROUNDCOLOR_COMMAND, String(""));
-    states.setFontBackgroundColor("#FFE9C9");
-  };
-
-  const resetFontColor = (e: React.MouseEvent<HTMLButtonElement>) => {
-    editor.dispatchCommand(FORMAT_FONTCOLOR_COMMAND, String("#523636"));
-    states.setFontBackgroundColor("#523636");
-  };
-
   return (
     <div className="toolbar flex flex-wrap" ref={toolbarRef}>
       <Button
@@ -321,7 +283,7 @@ export default function ToolbarPlugin() {
         >
           <TextAa size={IconSize} className="cursor-pointer" />
           <input
-            onChange={fontColorOnChange}
+            onChange={tbHelper.fontColorOnChange}
             type="color"
             id="text-color"
             value={states.fontColor}
@@ -335,7 +297,7 @@ export default function ToolbarPlugin() {
           (states.isBold ? "active" : "")
         }
         aria-label="Format Bold"
-        onClick={resetFontColor}
+        onClick={tbHelper.resetFontColor}
       >
         <ArrowClockwise size={IconSize - 4} />
       </Button>
@@ -353,7 +315,7 @@ export default function ToolbarPlugin() {
         >
           <PaintBucket size={IconSize} className="cursor-pointer" />
           <input
-            onChange={fontBackgroundColorOnChange}
+            onChange={tbHelper.fontBackgroundColorOnChange}
             type="color"
             id="text-background-color"
             value={states.fontBackgroundColor}
@@ -367,7 +329,7 @@ export default function ToolbarPlugin() {
           (states.isBold ? "active" : "")
         }
         aria-label="Format Bold"
-        onClick={resetFontBackgroundColor}
+        onClick={tbHelper.resetFontBackgroundColor}
       >
         <ArrowClockwise size={IconSize - 4} />
       </Button>
