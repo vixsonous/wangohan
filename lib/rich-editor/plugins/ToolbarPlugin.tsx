@@ -1,45 +1,22 @@
 "use client";
-import Dropdown from "@/app/admin/components/Dropdown";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { $getNearestNodeOfType, mergeRegister } from "@lexical/utils";
 import {
   ArrowClockwise,
   ArrowCounterClockwise,
   BracketsAngle,
-  CaretDown,
-  CircleNotch,
-  Image,
-  PaintBrush,
   PaintBucket,
-  Paragraph,
-  Plus,
   TextAa,
-  TextAlignCenter,
-  TextAlignJustify,
-  TextAlignLeft,
-  TextAlignRight,
   TextBolder,
-  TextHOne,
-  TextHThree,
-  TextHTwo,
-  TextIndent,
   TextItalic,
-  TextOutdent,
-  TextStrikethrough,
-  TextSubscript,
-  TextSuperscript,
   TextUnderline,
-  X,
-  YoutubeLogo,
 } from "@phosphor-icons/react/dist/ssr";
 import {
-  $createParagraphNode,
   $getSelection,
   $isRangeSelection,
   CAN_REDO_COMMAND,
   CAN_UNDO_COMMAND,
   COMMAND_PRIORITY_EDITOR,
-  FORMAT_ELEMENT_COMMAND,
   FORMAT_TEXT_COMMAND,
   INDENT_CONTENT_COMMAND,
   KEY_TAB_COMMAND,
@@ -50,56 +27,25 @@ import {
   UNDO_COMMAND,
 } from "lexical";
 import { $isLinkNode } from "@lexical/link";
-import {
-  $createHeadingNode,
-  $isHeadingNode,
-  HeadingTagType,
-} from "@lexical/rich-text";
+import { $isHeadingNode } from "@lexical/rich-text";
 import { $isListNode, ListNode } from "@lexical/list";
 import { $isCodeNode, getDefaultCodeLanguage } from "@lexical/code";
-import { $wrapNodes, $isAtNodeEnd } from "@lexical/selection";
-import React, { memo, useCallback, useEffect, useRef, useState } from "react";
+import { $isAtNodeEnd } from "@lexical/selection";
+import React, { memo, useCallback, useEffect, useRef } from "react";
 import Button from "@/app/components/Button";
-import { INSERT_IMAGE_COMMAND } from "./ImagePlugin";
-import { useDispatch } from "react-redux";
-import {
-  hideError,
-  hideModal,
-  showError,
-  showModal,
-} from "@/lib/redux/states/messageSlice";
 import Modal from "@/app/components/ElementComponents/Modal";
-import {
-  FileButton,
-  imageFileTypes,
-  modalIds,
-  POPUPTIME,
-} from "@/constants/constants";
-import { INSERT_YOUTUBE_COMMAND } from "./YoutubePlugin";
-import { FORMAT_FONTFAMILY_COMMAND } from "@/lib/nodes/FontNode";
-import { FORMAT_FONTSIZE_COMMAND } from "@/lib/nodes/FontSizeNode";
+import { modalIds } from "@/constants/constants";
 import { FORMAT_FONTCOLOR_COMMAND } from "@/lib/nodes/FontColorNode";
 import { FORMAT_FONTBACKGROUNDCOLOR_COMMAND } from "@/lib/nodes/FontBackgroundColorNode";
-import LoadingCircle from "@/app/components/IconComponents/LoadingCircle";
-import OptImage from "@/app/components/ElementComponents/Image";
-import heic2any from "heic2any";
-import CenteredLoading from "@/app/components/ElementComponents/CenteredLoading";
 import {
-  ButtonIcon,
-  ButtonText,
-  CenterAlign,
   FontSize,
   H1Button,
   H2Button,
   H3Button,
-  JustifyAlign,
-  LeftAlign,
   Mitimasu,
   ParagraphButton,
-  RightAlign,
   Sans,
   SansSerif,
-  UrlButton,
 } from "@/app/components/ElementComponents/MemoizedButtons";
 import useToolbarStates from "./toolbar-states";
 import useEditorHelper from "../editor-helper";
@@ -111,6 +57,7 @@ import ImageYoutube from "./toolbar-groups/image-youtube";
 import TextMod from "./toolbar-groups/text-mod";
 import FontSizeDropdown from "./toolbar-groups/font-size";
 import TextHeading from "./toolbar-groups/text-heading";
+import FontFamily from "./toolbar-groups/font-family";
 
 const LowPriority = 1;
 const IconSize = 20;
@@ -118,11 +65,6 @@ const IconSize = 20;
 const Divider = memo(function Divider() {
   return <div className="divider" />;
 });
-
-type ImageMetadata = {
-  blog_image_title: string;
-  blog_image_url: string;
-};
 
 export default function ToolbarPlugin() {
   const [editor] = useLexicalComposerContext();
@@ -297,103 +239,6 @@ export default function ToolbarPlugin() {
     );
   }, [editor, $updateToolbar]);
 
-  const urlRef = useRef<HTMLInputElement>(null);
-  const imageAltRef = useRef<HTMLInputElement>(null);
-  const imageFileRef = useRef<HTMLInputElement>(null);
-
-  const closeModalOnClick = useCallback(() => dispatch.hideModal(), []);
-  const uploadFileUrl = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement>) => {
-      const t = e.currentTarget;
-
-      if (urlRef.current && imageAltRef.current) {
-        const val = urlRef.current.value;
-        const alt = imageAltRef.current.value;
-
-        editor.dispatchCommand(INSERT_IMAGE_COMMAND, {
-          altText: alt,
-          src: val,
-        });
-        dispatch.hideModal();
-      }
-    },
-    []
-  );
-
-  const uploadFile = useCallback(
-    async (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (imageFileRef.current) {
-        const t = imageFileRef.current;
-        if (!t.files || !t.files[0]) return;
-
-        const fileName = t.files[0].name;
-        const fileNameExt = fileName.substring(fileName.lastIndexOf(".") + 1);
-
-        const fd = new FormData();
-
-        states.setImageUpload(true);
-        states.setFileName(t.files[0].name);
-
-        if (
-          typeof window !== "undefined" &&
-          (fileNameExt.toLowerCase() === "heic" ||
-            fileNameExt.toLowerCase() === "heif")
-        ) {
-          const image = await heic2any({
-            blob: t.files[0],
-            toType: "image/webp",
-            quality: 0.8,
-          });
-
-          const img = !Array.isArray(image) ? [image] : image;
-          const f = new File(img, fileName);
-
-          fd.append("file", f);
-        } else {
-          fd.append("file", t.files[0]);
-        }
-
-        const res = await fetch("/api/blog-images", {
-          method: "POST",
-          body: fd,
-        });
-        states.setImageUpload(false);
-
-        const body = await res.json();
-
-        if (!res.ok) {
-          showError(body.message);
-          setTimeout(() => hideError(), 5000);
-        }
-
-        editor.dispatchCommand(INSERT_IMAGE_COMMAND, {
-          altText: t.files[0].name,
-          src: body.body.fileUrl,
-          width: 500,
-        });
-
-        dispatch.hideModal();
-        states.setFileName("No image uploaded");
-      }
-    },
-    []
-  );
-
-  const insertImageFromList = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const t = e.currentTarget;
-
-    const src = t.id;
-    const name = t.name;
-
-    editor.dispatchCommand(INSERT_IMAGE_COMMAND, {
-      altText: name,
-      src: src,
-      width: 500,
-    });
-
-    hideModal();
-  };
-
   function getSelectedNode(selection: RangeSelection) {
     const anchor = selection.anchor;
     const focus = selection.focus;
@@ -457,79 +302,9 @@ export default function ToolbarPlugin() {
         <ArrowCounterClockwise size={IconSize} />
       </Button>
       <Divider />
-      {/* Heading */}
       <TextHeading states={states} editor={editor} />
       <Divider />
-      <Dropdown
-        openIcon={states.icons.fontFamily}
-        closeIcon={states.icons.fontFamily}
-      >
-        <ul className=" flex flex-col gap-2 bg-secondary-bg items-center rounded-md border border-primary-text">
-          <li
-            className={`flex items-center justify-between w-full px-2 ${
-              states.icons.fontFamilyIdx === 0 ? "bg-primary-bg" : ""
-            } rounded-t-md`}
-          >
-            <Button
-              onClick={() => {
-                editor.dispatchCommand(FORMAT_FONTFAMILY_COMMAND, "sans-serif");
-                states.setIcons((prev) => ({
-                  ...prev,
-                  fontFamily: <SansSerif />,
-                  fontFamilyIdx: 0,
-                }));
-              }}
-              name="paragraph"
-              className="toolbar-item spaced flex gap-4"
-              aria-label="Image Insert"
-            >
-              <ButtonText>Sans Serif</ButtonText>
-            </Button>
-          </li>
-          <li
-            className={`flex items-center justify-between w-full px-2 ${
-              states.icons.fontFamilyIdx === 1 ? "bg-primary-bg" : ""
-            } rounded-t-md`}
-          >
-            <Button
-              onClick={() => {
-                editor.dispatchCommand(FORMAT_FONTFAMILY_COMMAND, "sans");
-                states.setIcons((prev) => ({
-                  ...prev,
-                  fontFamily: <Sans />,
-                  fontFamilyIdx: 1,
-                }));
-              }}
-              name="paragraph"
-              className="toolbar-item spaced flex gap-4"
-              aria-label="Image Insert"
-            >
-              <ButtonText>Sans</ButtonText>
-            </Button>
-          </li>
-          <li
-            className={`flex items-center justify-between w-full px-2 ${
-              states.icons.fontFamilyIdx === 2 ? "bg-primary-bg" : ""
-            } rounded-t-md`}
-          >
-            <Button
-              onClick={() => {
-                editor.dispatchCommand(FORMAT_FONTFAMILY_COMMAND, "mitimasu");
-                states.setIcons((prev) => ({
-                  ...prev,
-                  fontFamily: <Mitimasu />,
-                  fontFamilyIdx: 2,
-                }));
-              }}
-              name="paragraph"
-              className="toolbar-item spaced flex gap-4"
-              aria-label="Image Insert"
-            >
-              <ButtonText>Mitimasu</ButtonText>
-            </Button>
-          </li>
-        </ul>
-      </Dropdown>
+      <FontFamily states={states} editor={editor} />
       <Divider />
       <FontSizeDropdown states={states} editor={editor} />
       <Divider />
