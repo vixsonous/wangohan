@@ -1,3 +1,6 @@
+import Button from "@/app/components/Button";
+import { memo } from "react";
+
 export const ERR_MSG = {
   ERR1: "ユーザーが見つかりません。", // User not found!
   ERR2: "メールアドレスまたはパスワードを入力してください。", //Please input email or password!
@@ -129,3 +132,13 @@ export const URL_REGEX =
 
 export const EMAIL_REGEX =
   /(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/;
+
+export const FileButton = memo(() => (
+  <Button
+    className={`w-[100%] bg-[#ffb762] border-[1px] border-primary-text text-primary-text px-32 py-2 rounded-md text-sm font-semibold`}
+  >
+    <span>File</span>
+  </Button>
+));
+
+export const REGICONSIZE = 20;

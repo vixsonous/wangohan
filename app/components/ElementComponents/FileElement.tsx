@@ -21,13 +21,13 @@ export default function FileElement({ blog }: { blog: BlogData }) {
       >
         <img
           src={blog.blog_image}
-          className="absolute w-full h-full top-0 object-cover z-10 left-1 rounded-t-lg"
+          className="absolute w-full h-full top-0 object-cover z-10 left-0 rounded-t-lg"
           alt=""
         />
       </div>
-      <div className="bg-gray-400 absolute top-2 rounded-lg -right-2 w-1/2 h-full -z-10"></div>
+      <div className="bg-shadow absolute top-2 rounded-lg -right-1 md:-right-2 w-1/2 h-full -z-10"></div>
       <div className="file-body bg-white p-2 px-4 rounded-b-lg relative">
-        <div className="absolute top-2 left-2 bg-gray-400 w-full h-full rounded-b-lg -z-10"></div>
+        <div className="absolute top-2 -right-1 md:-right-2 bg-shadow w-full h-full rounded-b-lg -z-10"></div>
         <h1 className="text-xs font-bold md:text-sm line-clamp-2 h-[2lh]">
           {blog.title}
         </h1>

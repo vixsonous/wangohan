@@ -86,6 +86,7 @@ const config: Config = {
         success: "#8dc225",
         warning: "#fecb37",
         button: "#ffb762",
+        shadow: "#cdc6bc",
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
