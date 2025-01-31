@@ -108,6 +108,8 @@ import FetchedImageList from "../fetched-image-list";
 import ImageUploadSelection from "../image-upload-selection";
 import JustifyGroup from "./toolbar-groups/justify-group";
 import ImageYoutube from "./toolbar-groups/image-youtube";
+import TextMod from "./toolbar-groups/text-mod";
+import FontSizeDropdown from "./toolbar-groups/font-size";
 
 const LowPriority = 1;
 const IconSize = 20;
@@ -672,44 +674,8 @@ export default function ToolbarPlugin() {
         </ul>
       </Dropdown>
       <Divider />
-      <Dropdown
-        openIcon={states.icons.fontSize}
-        closeIcon={states.icons.fontSize}
-      >
-        <ul className=" flex flex-col gap-1 bg-secondary-bg items-center rounded-md border border-primary-text">
-          {[8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72].map(
-            (s, i) => {
-              return (
-                <li
-                  key={i}
-                  className={`flex items-center justify-between w-full px-2 ${
-                    states.icons.fontSizeVal === s ? "bg-primary-bg" : ""
-                  } rounded-md`}
-                >
-                  <Button
-                    onClick={() => {
-                      editor.dispatchCommand(
-                        FORMAT_FONTSIZE_COMMAND,
-                        String(s)
-                      );
-                      states.setIcons((prev) => ({
-                        ...prev,
-                        fontSize: <FontSize size={String(s)} />,
-                        fontSizeVal: s,
-                      }));
-                    }}
-                    name="paragraph"
-                    className="flex px-2 rounded-md"
-                    aria-label="Image Insert"
-                  >
-                    <ButtonText>{s}</ButtonText>
-                  </Button>
-                </li>
-              );
-            }
-          )}
-        </ul>
-      </Dropdown>
+      {/* font size */}
+      <FontSizeDropdown states={states} editor={editor} />
       <Divider />
       <Button
         // onClick={() => alert(5)}
@@ -745,7 +711,6 @@ export default function ToolbarPlugin() {
       </Button>
       <Divider />
       <Button
-        // onClick={() => alert(5)}
         className={
           "toolbar-item spaced cursor-pointer " +
           (states.isBold ? "active" : "")
@@ -817,69 +782,7 @@ export default function ToolbarPlugin() {
       >
         <BracketsAngle size={IconSize} />
       </Button>
-      <Dropdown
-        openIcon={
-          <ButtonIcon>
-            Aa <CaretDown size={IconSize} />
-          </ButtonIcon>
-        }
-        closeIcon={
-          <ButtonIcon>
-            Aa <CaretDown size={IconSize} />
-          </ButtonIcon>
-        }
-      >
-        <ul className=" flex flex-col gap-2 bg-secondary-bg items-center rounded-md border border-primary-text">
-          <li
-            className={`flex items-center justify-between w-full px-2 ${
-              states.isStrikethrough ? "bg-primary-bg" : ""
-            } rounded-t-md`}
-          >
-            <Button
-              onClick={() => {
-                editor.dispatchCommand(FORMAT_TEXT_COMMAND, "strikethrough");
-              }}
-              className={"toolbar-item spaced flex gap-4 "}
-              aria-label="Format Strikethrough"
-            >
-              <TextStrikethrough size={IconSize} />
-              <ButtonText>Strikethrough</ButtonText>
-            </Button>
-          </li>
-          <li
-            className={`flex items-center justify-between w-full px-2 ${
-              states.isSubscript ? "bg-primary-bg" : ""
-            } rounded-t-md`}
-          >
-            <Button
-              onClick={() => {
-                editor.dispatchCommand(FORMAT_TEXT_COMMAND, "subscript");
-              }}
-              className={"toolbar-item spaced flex gap-4 "}
-              aria-label="Format Subscript"
-            >
-              <TextSubscript size={IconSize} />
-              <ButtonText>Subscript</ButtonText>
-            </Button>
-          </li>
-          <li
-            className={`flex items-center justify-between w-full px-2 ${
-              states.isSuperscript ? "bg-primary-bg" : ""
-            } rounded-t-md`}
-          >
-            <Button
-              onClick={() => {
-                editor.dispatchCommand(FORMAT_TEXT_COMMAND, "superscript");
-              }}
-              className={"toolbar-item spaced flex gap-4"}
-              aria-label="Format Superscript"
-            >
-              <TextSuperscript size={IconSize} />
-              <ButtonText>Superscript</ButtonText>
-            </Button>
-          </li>
-        </ul>
-      </Dropdown>
+      <TextMod states={states} editor={editor} />
       <Divider />
       <ImageYoutube states={states} dispatch={dispatch} editor={editor} />
       <Divider />
