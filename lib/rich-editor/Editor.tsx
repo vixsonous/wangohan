@@ -15,22 +15,13 @@ import useEditorHelper from "./editor-helper";
 import EditorLexicalComposer from "./editor-lexical-composer";
 import FetchedImageList from "./fetched-image-list";
 import Label from "@/app/components/ElementComponents/Label";
+import ImageUploadSelection from "./image-upload-selection";
 
 export default memo(function Editor({ userId }: { userId: number }) {
   const customDispatch = useDisplayMessage();
   const helper = useEditorHelper();
   const states = useEditorStates();
   const closeModalOnClick = useCallback(() => customDispatch.hideModal(), []);
-
-  const imageFileRef = useRef<HTMLInputElement>(null);
-
-  const handleUploadFile = (
-    imageFileRef: React.RefObject<HTMLInputElement>,
-    states: ReturnType<typeof useEditorStates>
-  ) => {
-    return (e: React.ChangeEvent<HTMLInputElement>) =>
-      helper.uploadFile(e, imageFileRef, states);
-  };
 
   useEffect(() => {
     const c = sessionStorage.getItem("editor");
@@ -48,13 +39,6 @@ export default memo(function Editor({ userId }: { userId: number }) {
     const name = t.name;
 
     states.setForm((prev) => ({ ...prev, [name]: t.value }));
-  };
-
-  const handleFetchImageUploads = (
-    states: ReturnType<typeof useEditorStates>
-  ) => {
-    return (e: React.MouseEvent<HTMLButtonElement>) =>
-      helper.fetchImageUploads(e, states);
   };
 
   return (
@@ -113,63 +97,11 @@ export default memo(function Editor({ userId }: { userId: number }) {
         </section>
         <Modal modalIdProps={modalIds.editorModal}>
           {states.modalMode === "image-upload" ? (
-            <div className="relative justify-center items-center flex px-4">
-              <div className="max-w-screen-lg w-full bg-primary-bg p-4 flex flex-col gap-2 ">
-                <div className="flex justify-between items-center">
-                  <span className="text-lg">Insert Image</span>
-                  <Button
-                    className="group relative p-2"
-                    onClick={closeModalOnClick}
-                  >
-                    <X size={REGICONSIZE} />
-                    <div className="absolute w-full h-full bg-black top-0 left-0 opacity-0 group-hover:opacity-[0.2] transition-all rounded-full"></div>
-                  </Button>
-                </div>
-                <hr className="border-b-[1px] border-black w-full" />
-                <Button
-                  onClick={handleFetchImageUploads(states)}
-                  className={`w-[100%] bg-[#ffb762] border-[1px] border-primary-text text-primary-text py-2 rounded-md text-sm font-semibold`}
-                >
-                  <span>Uploaded Images</span>
-                </Button>
-                <Dropdown
-                  className="w-full"
-                  closeOnClick={false}
-                  openIcon={<FileButton />}
-                  closeIcon={<FileButton />}
-                >
-                  <div className="p-2 flex gap-2 items-center">
-                    <Button aria-label="file" name="file">
-                      <label htmlFor="file">
-                        <input
-                          disabled={states.imageUpload}
-                          onChange={handleUploadFile(imageFileRef, states)}
-                          ref={imageFileRef}
-                          type="file"
-                          hidden
-                          name="file"
-                          id="file"
-                        />
-                        <span
-                          className={`w-[100%] cursor-pointer bg-[#ffb762] border-[1px] border-primary-text text-primary-text px-4 py-2 rounded-md text-sm font-semibold`}
-                        >
-                          {states.fileName}
-                        </span>
-                      </label>
-                    </Button>
-
-                    <Button disabled className="p-2 relative group">
-                      {!states.imageUpload ? (
-                        <Plus size={REGICONSIZE} />
-                      ) : (
-                        <CircleNotch className="animate-spin" />
-                      )}
-                      <div className="w-full h-full bg-black absolute top-0 left-0 rounded-full opacity-0 group-hover:opacity-[0.2] transition-all"></div>
-                    </Button>
-                  </div>
-                </Dropdown>
-              </div>
-            </div>
+            <ImageUploadSelection
+              states={states}
+              helper={helper}
+              dispatch={customDispatch}
+            />
           ) : (
             <FetchedImageList
               states={states}
