@@ -1,10 +1,6 @@
 import { getBlogs } from "@/action/blog";
-import { get } from "@/action/common";
-import { BlogData } from "@/constants/interface";
-import Link from "next/link";
-import { notFound } from "next/navigation";
-import FileElement from "../components/ElementComponents/FileElement";
 import React from "react";
+import BlogList from "./BlogList";
 
 export default async function Columns() {
   const blogData = await getBlogs();
@@ -23,19 +19,7 @@ export default async function Columns() {
           alt="website banner"
         />
       </div>
-      <div className="flex gap-6 flex-wrap justify-between p-4">
-        {blogData.length > 0 ? (
-          blogData.map((blog, idx) => {
-            return (
-              <Link href={`/columns/` + blog.blog_id} className="self-start">
-                <FileElement blog={blog} />
-              </Link>
-            );
-          })
-        ) : (
-          <div>No blogs!</div>
-        )}
-      </div>
+      <BlogList blogData={blogData} />
     </section>
   );
 }
