@@ -110,6 +110,7 @@ import JustifyGroup from "./toolbar-groups/justify-group";
 import ImageYoutube from "./toolbar-groups/image-youtube";
 import TextMod from "./toolbar-groups/text-mod";
 import FontSizeDropdown from "./toolbar-groups/font-size";
+import TextHeading from "./toolbar-groups/text-heading";
 
 const LowPriority = 1;
 const IconSize = 20;
@@ -393,43 +394,6 @@ export default function ToolbarPlugin() {
     hideModal();
   };
 
-  const formatHeading = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const nameDetail = e.currentTarget.name;
-    const idx = nameDetail.split("-")[1];
-    const name = nameDetail.split("-")[0];
-    states.setIcons((prev) => ({ ...prev, textTypeIdx: Number(idx) }));
-
-    if (states.blockType !== "paragraph" || states.blockType !== name) {
-      editor.update(() => {
-        const selection = $getSelection();
-
-        if ($isRangeSelection(selection)) {
-          const selection = $getSelection();
-
-          if ($isRangeSelection(selection)) {
-            $wrapNodes(selection, () =>
-              $createHeadingNode(name as HeadingTagType)
-            );
-            states.setBlockType(name);
-          }
-        }
-      });
-    } else {
-      editor.update(() => {
-        const selection = $getSelection();
-
-        if ($isRangeSelection(selection)) {
-          const selection = $getSelection();
-
-          if ($isRangeSelection(selection)) {
-            $wrapNodes(selection, () => $createParagraphNode());
-            states.setBlockType("paragraph");
-          }
-        }
-      });
-    }
-  };
-
   function getSelectedNode(selection: RangeSelection) {
     const anchor = selection.anchor;
     const focus = selection.focus;
@@ -493,115 +457,8 @@ export default function ToolbarPlugin() {
         <ArrowCounterClockwise size={IconSize} />
       </Button>
       <Divider />
-      <Dropdown
-        openIcon={states.icons.textType}
-        closeIcon={states.icons.textType}
-      >
-        <ul className=" flex flex-col gap-2 bg-secondary-bg items-center rounded-md border border-primary-text">
-          <li
-            className={`flex items-center justify-between w-full px-2 ${
-              states.icons.textTypeIdx === 0 ? "bg-primary-bg" : ""
-            } rounded-t-md`}
-          >
-            <Button
-              onClick={formatHeading}
-              name="paragraph-0"
-              className="toolbar-item spaced flex gap-4"
-              aria-label="Image Insert"
-            >
-              <Paragraph size={IconSize} />
-              <ButtonText>Paragraph</ButtonText>
-            </Button>
-          </li>
-          <li
-            className={`flex items-center justify-between w-full px-2 ${
-              states.icons.textTypeIdx === 1 ? "bg-primary-bg" : ""
-            } rounded-t-md`}
-          >
-            <Button
-              onClick={formatHeading}
-              name="h1-1"
-              className="toolbar-item spaced flex gap-4"
-              aria-label="Image Insert"
-            >
-              <TextHOne size={IconSize} />
-              <ButtonText>H1 Heading</ButtonText>
-            </Button>
-          </li>
-          <li
-            className={`flex items-center justify-between w-full px-2 ${
-              states.icons.textTypeIdx === 2 ? "bg-primary-bg" : ""
-            } rounded-t-md`}
-          >
-            <Button
-              onClick={formatHeading}
-              name="h2-2"
-              className="toolbar-item spaced flex gap-4"
-              aria-label="Image Insert"
-            >
-              <TextHTwo size={IconSize} />
-              <ButtonText>H2 Heading</ButtonText>
-            </Button>
-          </li>
-          <li
-            className={`flex items-center justify-between w-full px-2 ${
-              states.icons.textTypeIdx === 3 ? "bg-primary-bg" : ""
-            } rounded-t-md`}
-          >
-            <Button
-              onClick={formatHeading}
-              name="h3-3"
-              className="toolbar-item spaced flex gap-4"
-              aria-label="Image Insert"
-            >
-              <TextHThree size={IconSize} />
-              <ButtonText>H3 Heading</ButtonText>
-            </Button>
-          </li>
-          <li
-            className={`flex items-center justify-between w-full px-2 ${
-              states.icons.justifyIdx === 2 ? "bg-primary-bg" : ""
-            }`}
-          >
-            <Button
-              onClick={() => {
-                editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "right");
-                states.setIcons((prev) => ({
-                  ...prev,
-                  justify: <RightAlign />,
-                  justifyIdx: 2,
-                }));
-              }}
-              className="toolbar-item spaced flex gap-4"
-              aria-label="Right Align"
-            >
-              <TextAlignRight size={IconSize} />
-              <ButtonText>Right Align</ButtonText>
-            </Button>
-          </li>
-          <li
-            className={`flex items-center justify-between w-full px-2 ${
-              states.icons.justifyIdx === 3 ? "bg-primary-bg" : ""
-            } rounded-b-md`}
-          >
-            <Button
-              onClick={() => {
-                editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "justify");
-                states.setIcons((prev) => ({
-                  ...prev,
-                  justify: <JustifyAlign />,
-                  justifyIdx: 3,
-                }));
-              }}
-              className="toolbar-item flex gap-4"
-              aria-label="Justify Align"
-            >
-              <TextAlignJustify size={IconSize} />
-              <ButtonText>Justify Align</ButtonText>
-            </Button>
-          </li>
-        </ul>
-      </Dropdown>
+      {/* Heading */}
+      <TextHeading states={states} editor={editor} />
       <Divider />
       <Dropdown
         openIcon={states.icons.fontFamily}
@@ -674,11 +531,9 @@ export default function ToolbarPlugin() {
         </ul>
       </Dropdown>
       <Divider />
-      {/* font size */}
       <FontSizeDropdown states={states} editor={editor} />
       <Divider />
       <Button
-        // onClick={() => alert(5)}
         className={
           "toolbar-item spaced cursor-pointer " +
           (states.isBold ? "active" : "")
