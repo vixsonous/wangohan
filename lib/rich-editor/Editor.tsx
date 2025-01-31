@@ -1,35 +1,17 @@
 "use client";
 import "./style.css";
-
-import {
-  AutoLinkPlugin,
-  createLinkMatcherWithRegExp,
-} from "@lexical/react/LexicalAutoLinkPlugin";
-
 import React, { memo, useCallback, useEffect, useRef, useState } from "react";
-import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import Button from "@/app/components/Button";
 
 import { CircleNotch, Plus, X } from "@phosphor-icons/react/dist/ssr";
-import { customGenerateHtmlFromNodes } from "@/lib/lib/GenerateHtml";
-
-import {
-  EMAIL_REGEX,
-  FileButton,
-  modalIds,
-  REGICONSIZE,
-  URL_REGEX,
-} from "@/constants/constants";
+import { FileButton, modalIds, REGICONSIZE } from "@/constants/constants";
 import ErrorSpan from "@/app/components/TextComponents/ErrorSpan";
 import Modal from "@/app/components/ElementComponents/Modal";
 import Dropdown from "@/app/admin/components/Dropdown";
-import OptImage from "@/app/components/ElementComponents/Image";
 import GeneralButton from "@/app/components/ElementComponents/GeneralButton";
-import CenteredLoading from "@/app/components/ElementComponents/CenteredLoading";
 import useDisplayMessage from "../hooks/dispatch-hooks";
 import useEditorStates from "./editor-states";
 import useEditorHelper from "./editor-helper";
-import { editorConfig } from "./editor-config";
 import EditorLexicalComposer from "./editor-lexical-composer";
 import FetchedImageList from "./fetched-image-list";
 import Label from "@/app/components/ElementComponents/Label";
