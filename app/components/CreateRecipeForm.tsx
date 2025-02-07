@@ -808,6 +808,7 @@ export default memo(function CreateRecipeForm() {
                   "ハロウィン",
                   "クリスマス",
                   "おやつ",
+                  "ダイエット",
                   "その他",
                 ].map((el, idx) => {
                   return (

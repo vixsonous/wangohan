@@ -21,7 +21,7 @@ export async function generateMetadata(
   };
 }
 
-const ColumnDisplay = dynamic(() => import("./ColumnDisplay"), {
+const ColumnDisplay = dynamic(() => import("./components/ColumnDisplay"), {
   ssr: false,
   loading: () => <IndexLoading />,
 });
