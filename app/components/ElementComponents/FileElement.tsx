@@ -36,9 +36,9 @@ export default function FileElement({ blog }: { blog: BlogData }) {
           </h1>
         </div>
       </section>
-      <section className="flex gap-4 items-center mt-8">
+      <section className="w-44 md:w-96 flex gap-4 items-center mt-8">
         <ColumnLine />
-        <p className="font-bold px-6 py-2 text-xs md:text-sm bg-white rounded-full w-full line-clamp-1 text-center">
+        <p className="font-bold min-w-24 md:px-6 py-2 text-xs md:text-sm bg-white rounded-full w-full line-clamp-1 text-center">
           {blog.blog_category}
         </p>
         <ColumnLine />

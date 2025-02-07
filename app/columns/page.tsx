@@ -1,6 +1,6 @@
 import { getBlogs } from "@/action/blog";
 import React from "react";
-import BlogList from "./BlogList";
+import BlogList from "./components/BlogList";
 
 export default async function Columns() {
   const blogData = await getBlogs();
