@@ -7,11 +7,12 @@ export default function OptImage({
   src,
   className = "",
   width,
-  height = 100,
+  height,
   alt = "",
   loading = "lazy",
   centered = false,
   square = false,
+  rectangle = false,
   containerClass = "",
   fit = "contain",
   resize = false,
@@ -26,6 +27,7 @@ export default function OptImage({
   loading?: LoadingType;
   centered?: boolean;
   square?: boolean;
+  rectangle?: boolean;
   containerClass?: string;
   fit?: "contain" | "cover" | "fill" | "inside" | "outside";
   resize?: boolean;
@@ -47,8 +49,8 @@ export default function OptImage({
           backgroundRepeat: "no-repeat",
         }}
         className={
-          `relative ${
-            square ? "aspect-square" : ""
+          `relative ${square && "aspect-square"} ${
+            rectangle && "aspect-video"
           } h-[${height}px] w-[${width}px] relative top-0  ` + className
         }
       >
@@ -79,8 +81,8 @@ export default function OptImage({
               src={`/api/image?src=${src}&w=${width}&h=${height}&fit=${fit}`}
               loading={loading}
               className={
-                `${
-                  square ? "aspect-square" : ""
+                `${square ? "aspect-square" : ""} ${
+                  rectangle && "aspect-video"
                 } h-[${height}px] w-[${width}px] relative top-0  ` + className
               }
               width={width}
@@ -92,8 +94,8 @@ export default function OptImage({
           <>
             <img
               className={
-                `${
-                  square ? "aspect-square" : ""
+                `${square ? "aspect-square" : ""} ${
+                  rectangle && "aspect-video"
                 } h-[${height}px] w-[${width}px] relative top-0  ` + className
               }
               style={style}

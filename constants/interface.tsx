@@ -177,6 +177,7 @@ export interface BlogData {
   editor_state: JSON;
   blog_image: string;
   blog_category: string;
+  created_at: Date;
 }
 
 export interface ImageMetadata {
