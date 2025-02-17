@@ -1,4 +1,4 @@
-import { ERR_MSG, getExpireDate, SUCC_MSG } from "@/constants/constants";
+import { ERR_MSG, SUCC_MSG } from "@/constants/constants";
 import {
   DBRecipeData,
   DisplayRecipe,
@@ -290,6 +290,7 @@ export const getRecipeData = async (recipeId: number) => {
         "recipe_image_subtext",
       ])
       .where("recipe_id", "=", recipeId)
+      .orderBy("created_at desc")
       .execute();
 
     const recipe_comments = await getComments(0, recipeId);
@@ -331,7 +332,7 @@ export const processRecipes = async (recipes: Array<DBRecipeData>) => {
             "recipe_image_subtext",
           ])
           .where("recipe_id", "=", recipe.recipe_id)
-          .orderBy("created_at asc")
+          .orderBy("created_at desc")
           .executeTakeFirst(),
         recipe_rating_data: await getRecipeRatingData(recipe.recipe_id),
       };
