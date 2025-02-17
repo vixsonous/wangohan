@@ -331,7 +331,7 @@ export const processRecipes = async (recipes: Array<DBRecipeData>) => {
             "recipe_image_subtext",
           ])
           .where("recipe_id", "=", recipe.recipe_id)
-          .orderBy("created_at desc")
+          .orderBy("created_at asc")
           .executeTakeFirst(),
         recipe_rating_data: await getRecipeRatingData(recipe.recipe_id),
       };
