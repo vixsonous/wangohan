@@ -1,16 +1,387 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
 
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-   <url>
-      <loc>https://www.wangohanjp.com/</loc>
-      <changefreq>weekly</changefreq>
-   </url>
-   <url>
-      <loc>https://www.wangohanjp.com/login</loc>
-      <changefreq>weekly</changefreq>
-   </url>
-   <url>
-      <loc>https://www.wangohanjp.com/signup</loc>
-      <changefreq>weekly</changefreq>
-   </url>
-</urlset> 
+
+<url>
+  <loc>https://wangohanjp.com/</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>1.00</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/login</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/signup</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/list/1</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/columns</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/show/6</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/show/7</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/show/17</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/show/1</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/show/5</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/show/2</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/show/12</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/show/11</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/show/15</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/show/4</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/search/%E5%AD%90%E7%8A%AC</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/search/%E6%88%90%E7%8A%AC</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/search/%E3%82%B7%E3%83%8B%E3%82%A2%E7%8A%AC</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/search/%E5%B0%8F%E5%9E%8B%E7%8A%AC</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/search/%E4%B8%AD%E5%9E%8B%E7%8A%AC</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/search/%E5%A4%A7%E5%9E%8B%E7%8A%AC</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/search/%E3%81%8A%E8%AA%95%E7%94%9F%E6%97%A5</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/search/%E3%81%8A%E3%81%86%E3%81%A1%E8%A8%98%E5%BF%B5%E6%97%A5</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/search/%E3%81%8A%E6%AD%A3%E6%9C%88</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/search/%E7%AF%80%E5%88%86</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/search/%E3%81%B2%E3%81%AA%E7%A5%AD%E3%82%8A</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/search/%E3%81%93%E3%81%A9%E3%82%82%E3%81%AE%E6%97%A5</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/search/%E4%B8%83%E5%A4%95</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/search/%E3%83%8F%E3%83%AD%E3%82%A6%E3%82%A3%E3%83%B3</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/search/%E3%82%AF%E3%83%AA%E3%82%B9%E3%83%9E%E3%82%B9</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/search/%E3%81%8A%E3%82%84%E3%81%A4</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/search/%E3%83%80%E3%82%A4%E3%82%A8%E3%83%83%E3%83%88</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/show/45</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/show/44</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/inquiry/terms-of-service</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/inquiry/disclaimer</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/inquiry/privacy-policy</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/inquiry/send-inquiry</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/show/43</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/show/42</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/show/41</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/show/40</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/show/39</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/show/38</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/show/37</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/show/36</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/show/35</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/show/34</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/show/33</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/show/32</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/show/31</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/show/30</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/show/29</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/show/28</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/show/27</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/show/26</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/list/2</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/list/3</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/user/3</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/show/20</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/show/25</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/show/24</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/show/23</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/show/22</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/show/21</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/show/19</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/show/18</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/show/16</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/show/13</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/show/10</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/show/9</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/show/3</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/user/12</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/show/14</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://wangohanjp.com/recipe/show/8</loc>
+  <lastmod>2025-02-17T16:55:00+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+
+
+</urlset>
