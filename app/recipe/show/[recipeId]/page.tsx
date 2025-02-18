@@ -81,8 +81,6 @@ export default async function ShowRecipe({
     (img) => img.recipe_image
   );
 
-  console.log(recipe_data.recipe_images);
-
   const user_image =
     recipe_data.user.user_image === ""
       ? "/LP/bday-dogs/puppy1.jpg"
