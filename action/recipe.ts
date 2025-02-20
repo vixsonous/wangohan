@@ -13,7 +13,16 @@ import { logSuccess, padStartIds } from "./common";
 import { getComments } from "./comments";
 import { s3DeleteFilesInFolder } from "./file-lib";
 import NodeCache from "node-cache";
-import { highDynamicData, lowDynamicData } from "./caching";
+import {
+  highDynamicData,
+  lowDynamicData,
+  paginatedReicpesCacheKey,
+  popularRecipesCacheKey,
+  recipeCreatedWithOffsetCacheKey,
+  recipeLikesWithOffsetCacheKey,
+  searchRecipeCacheKey,
+  weeklyRecipesCacheKey,
+} from "./caching";
 import { sql } from "kysely";
 
 const FRONT_PAGE_RECIPE_QUERY_LIMIT = 10;
@@ -47,6 +56,9 @@ export const postRecipe = async (recipe: recipe) => {
       })
       .returning(["recipe_id"])
       .executeTakeFirstOrThrow();
+
+    highDynamicData.del(weeklyRecipesCacheKey);
+    highDynamicData.del(popularRecipesCacheKey);
 
     return { message: "完了", body: recipe_id, status: 200 };
   } catch (e) {
@@ -354,7 +366,7 @@ export const getWeeklyRecipes = async (
   limit: number = 10
 ) => {
   try {
-    const cacheKey = `weekly-recipes`;
+    const cacheKey = weeklyRecipesCacheKey;
     const cachedData = highDynamicData.get(cacheKey) as DisplayRecipe[];
     if (cachedData) {
       logSuccess("Weekly Recipe Cache Hit!", "getWeeklyRecipes");
@@ -395,7 +407,7 @@ export const getWeeklyRecipes = async (
 
 export const getPopularRecipes = async (page: number = 0) => {
   try {
-    const cacheKey = `popular-recipes`;
+    const cacheKey = popularRecipesCacheKey;
     const cachedData = highDynamicData.get(cacheKey) as DisplayRecipe[];
 
     if (cachedData) {
@@ -448,7 +460,7 @@ export const totalRecipes = async () => {
 
 export const getAllRecipes = async (page: number = 0, limit: number = 10) => {
   try {
-    const cacheKey = `recipes-${page}-${limit}`;
+    const cacheKey = paginatedReicpesCacheKey(page, limit);
     const cachedData = highDynamicData.get(cacheKey) as DisplayRecipe[];
 
     if (cachedData) {
@@ -550,7 +562,7 @@ export const deleteRecipe = async (recipe_id: number) => {
 
 export const searchRecipes = async (searchString: string) => {
   try {
-    const cacheKey = `search-recipes-${searchString}`;
+    const cacheKey = searchRecipeCacheKey(searchString);
     const cachedData = highDynamicData.get(cacheKey) as DisplayRecipe[];
     if (cachedData) {
       logSuccess(
@@ -761,8 +773,8 @@ export const updateLike = async (
           .executeTakeFirstOrThrow();
       }
 
-      highDynamicData.del("weekly-recipes");
-      highDynamicData.del("popular-recipes");
+      highDynamicData.del(weeklyRecipesCacheKey);
+      highDynamicData.del(popularRecipesCacheKey);
     });
 
     return { message: "完了", body: liked, status: 200 };
@@ -779,7 +791,7 @@ export const getRemainingCreatedRecipe = async (
 ) => {
   try {
     const off = offset * page;
-    const cacheKey = `recipes-created-${off}-${user_id}`;
+    const cacheKey = recipeCreatedWithOffsetCacheKey(off, user_id);
     const cachedData = highDynamicData.get(cacheKey) as DisplayRecipe[];
 
     if (cachedData) {
@@ -828,7 +840,7 @@ export const getRemainingLikedRecipe = async (
 ) => {
   try {
     const off = offset * page;
-    const cacheKey = `recipes-liked-${off}-${user_id}`;
+    const cacheKey = recipeLikesWithOffsetCacheKey(off, user_id);
     const cachedData = highDynamicData.get(cacheKey) as DisplayRecipe[];
 
     if (cachedData) {

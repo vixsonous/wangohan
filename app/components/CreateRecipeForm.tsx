@@ -171,25 +171,21 @@ export default memo(function CreateRecipeForm() {
           return f;
         });
 
-        const requests = await Promise.all(
-          file_upload.map(async (file) => {
-            const response = await fetch("/api/upload-recipe-files", {
-              method: "POST",
-              body: file,
+        for (let i = 0; i < file_upload.length; i++) {
+          const response = await fetch("/api/upload-recipe-files", {
+            method: "POST",
+            body: file_upload[i],
+          });
+
+          if (!response.ok) {
+            await fetch("/api/recipe", {
+              method: "DELETE",
+              body: JSON.stringify({ recipe_id: recipe_res.body }),
             });
 
-            if (!response.ok) {
-              await fetch("/api/recipe", {
-                method: "DELETE",
-                body: JSON.stringify({ recipe_id: recipe_res.body }),
-              });
-
-              throw new Error("file_upload_error");
-            }
-
-            return response;
-          })
-        );
+            throw new Error("file_upload_error");
+          }
+        }
 
         setRecipeInfo(initRecipeState);
         setRecipeIngredients([{ id: 0, name: "", amount: "" }]);
@@ -294,11 +290,12 @@ export default memo(function CreateRecipeForm() {
 
   const appendFiles = useCallback(
     (file: File, tempPath: string) => {
-      const rFiles = [...files];
-      const fileTn = [...fileThumbnails];
+      const rFiles = files.slice();
+      const fileTn = fileThumbnails.slice();
 
       rFiles.push(file);
       fileTn.push(tempPath);
+
       setFiles([...rFiles]);
       setFileThumbnails([...fileTn]);
     },
@@ -419,43 +416,6 @@ export default memo(function CreateRecipeForm() {
     [recipeInfo]
   );
 
-  const onKeyEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      // const d = e.currentTarget;
-      // if(d.name === "recipeTitle") {
-      //   const t = (document.querySelector('textarea[name="recipeDescr"]') as HTMLTextAreaElement);
-      //   t.focus();
-      // }else if(d.name.includes("recipe-ingredient-name")) {
-      //   e.preventDefault();
-      //   const x = d.name.split("-")[3];
-      //   (document.querySelector(`input[name="recipe-ingredient-amt-${x}"]`) as HTMLInputElement).focus();
-      // }else if(d.name.includes("recipe-ingredient-amt")) {
-      //   e.preventDefault();
-      //   const x = d.name.split("-")[3];
-      //   if(document.querySelector(`input[name="recipe-ingredient-amt-${parseInt(x) + 1}"]`)) {
-      //     (document.querySelector(`input[name="recipe-ingredient-name-${parseInt(x) + 1}"]`) as HTMLInputElement).focus();
-      //   } else {
-      //     (document.querySelector("button[name='ingredients']") as HTMLButtonElement).click();
-      //     setTimeout(() => {
-      //       (document.querySelector(`input[name="recipe-ingredient-name-${parseInt(x) + 1}"]`) as HTMLInputElement).focus();
-      //     },5);
-      //   }
-      // }else if(d.name.includes("recipe-instructions")) {
-      //   e.preventDefault();
-      //   const x = d.name.split("-")[2];
-      //   if(document.querySelector(`input[name="recipe-instructions-${parseInt(x) + 1}"]`)) {
-      //     (document.querySelector(`input[name="recipe-instructions-${parseInt(x) + 1}"]`) as HTMLInputElement).focus();
-      //   } else {
-      //     (document.querySelector("button[name='instructions']") as HTMLButtonElement).click();
-      //     setTimeout(() => {
-      //       (document.querySelector(`input[name="recipe-instructions-${parseInt(x) + 1}"]`) as HTMLInputElement).focus();
-      //     },5);
-      //   }
-      // }
-    }
-  };
-
   return (
     <div className="w-full flex justify-center items-center h-full max-w-screen">
       <form
@@ -492,7 +452,6 @@ export default memo(function CreateRecipeForm() {
             <input
               value={recipeInfo.recipeTitle}
               name="recipeTitle"
-              onKeyDown={onKeyEnter}
               onChange={updateDescrTitleOnChange}
               className="w-[100%] p-[7px] text-[13px] bg-[#fff8ef]"
               placeholder="例）炊飯器で簡単！夏バテでも食べられるご飯"
@@ -625,7 +584,6 @@ export default memo(function CreateRecipeForm() {
               <div key={idx}>
                 <div className="flex gap-[15px]">
                   <input
-                    onKeyDown={onKeyEnter}
                     value={recipeIngredients[idx].name}
                     id={`name-${idx}`}
                     onChange={changeIngredientsOnChange}
@@ -635,7 +593,6 @@ export default memo(function CreateRecipeForm() {
                     name={`recipe-ingredient-name-${idx}`}
                   />
                   <input
-                    onKeyDown={onKeyEnter}
                     value={recipeIngredients[idx].amount}
                     id={`amount-${idx}`}
                     onChange={changeIngredientsOnChange}
@@ -688,7 +645,6 @@ export default memo(function CreateRecipeForm() {
                     <div className="border-[1px] border-black absolute h-[25px] w-[25px] rounded-[35px]"></div>
                   </span>
                   <input
-                    onKeyDown={onKeyEnter}
                     value={recipeInstructions[idx].text}
                     onChange={(e) => {
                       const prevArr = [...recipeInstructions];

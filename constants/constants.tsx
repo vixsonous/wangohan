@@ -34,6 +34,7 @@ export const ERR_MSG = {
   ERR30: "誕生日を入力してください", // Please input pet birthdate
   ERR31: "画像を選択してください", // Please input pet picture
   ERR32: "登録に失敗しました。もう一度やり直してください。", //Registration failed.Please try again.
+  ERR33: "画像のアップロードに失敗しました", // Failed Image Upload!
 };
 
 export const SUCC_MSG = {
