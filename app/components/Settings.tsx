@@ -145,12 +145,12 @@ export default function Settings() {
                             </div>
                           </button> */}
           
-                          <button disabled onClick={openSettings} className="w-full opacity-75 hover:opacity-75 px-4 py-1 rounded-full">
+                          <Link href={"/columns"} onClick={openSettings} className="w-full hover:opacity-75 px-4 py-1 rounded-full">
                             <div className="w-full text-sm flex justify-between items-center">
                                 <PawPrint size={20}/>
                                 犬と食に関するコラム
                             </div>
-                          </button>
+                          </Link>
 
                           <Link onClick={openSettings} className={`hover:opacity-75 w-full px-4 py-1 rounded-full`} href={`/user/settings/${user.user_id}?=#register-pet`}>
                             <div className="w-full text-sm flex justify-between items-center">
