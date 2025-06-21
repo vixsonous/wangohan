@@ -67,6 +67,53 @@ const useEditorHelper = () => {
         states.setSubmit(false);
       },
 
+      async editBlog(
+        e: React.MouseEvent<HTMLButtonElement>,
+        states: ReturnType<typeof useEditorStates>,
+        blogId: number
+      ) {
+        e.preventDefault();
+
+        if (states.form.blog_title.length > 40) {
+          states.setFormErrors((prev) => ({
+            ...prev,
+            blog_title: "The title must be less than 40 characters!",
+          }));
+          return;
+        }
+
+        if (states.form.blog_title === "") {
+          states.setFormErrors((prev) => ({
+            ...prev,
+            blog_title: "Please input a title of the blog!",
+          }));
+          return;
+        }
+
+        states.setSubmit(true);
+        const res = await fetch("/api/blog", {
+          method: "PATCH",
+          body: JSON.stringify({
+            blog_id: blogId,
+            editorState: states.state,
+            blog_image: states.form.file,
+            blog_category: states.form.blog_category,
+            title: states.form.blog_title,
+          }),
+        });
+
+        const parsed = await res.json();
+        if (!res.ok) {
+          customDispatch.displayError(parsed.message);
+        }
+
+        sessionStorage.removeItem("editor");
+        states.setHtmlString("");
+        states.setEditorState(content);
+        customDispatch.displaySuccess(parsed.message);
+        states.setSubmit(false);
+      },
+
       insertImageFromList(
         e: React.MouseEvent<HTMLButtonElement>,
         src: string,

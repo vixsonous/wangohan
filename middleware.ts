@@ -11,6 +11,8 @@ export async function middleware(request: NextRequest) {
         || request.nextUrl.pathname.startsWith('/recipe/edit')
         || request.nextUrl.pathname.startsWith('/signup/personal-info')
         || request.nextUrl.pathname.startsWith('/signup/finish')
+        || request.nextUrl.pathname.startsWith('/admin/blog/edit')
+        || request.nextUrl.pathname.startsWith('/admin/blog/create')
     )) {
         return Response.redirect(new URL('/login', request.url));
     }

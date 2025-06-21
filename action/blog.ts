@@ -46,6 +46,38 @@ export const uploadBlogEditorState = async (
   }
 };
 
+export const updateBlogEditorState = async (
+  editorState: JSON,
+  blog_category: string,
+  title: string,
+  blog_id: number,
+  blog_image?: string
+): Promise<boolean> => {
+  try {
+    await db.updateTable("blog_columns_table")
+      .set(eb => {
+        const updateData: any = {
+          editor_state: editorState,
+          blog_category,
+          title,
+        }
+
+        if(blog_image !== undefined && blog_image !== "") {
+          updateData.blog_image = blog_image;
+        }
+
+        return updateData;
+      })
+      .where("blog_id","=", blog_id)
+      .execute();
+
+    return true;
+  } catch (e) {
+    logError((e as Error).message);
+    return false;
+  }
+};
+
 export const getBlogs = async (): Promise<BlogData[]> => {
   try {
     const data: BlogData[] = await get<"blog_columns_table", BlogData[]>(

@@ -20,7 +20,7 @@ import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { LinkPlugin } from "@lexical/react/LexicalLinkPlugin";
-import { memo, useEffect } from "react";
+import React, { memo, useEffect } from "react";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { customGenerateHtmlFromNodes } from "../lib/GenerateHtml";
 import { EMAIL_REGEX, URL_REGEX } from "@/constants/constants";
@@ -54,18 +54,32 @@ export default function EditorLexicalComposer({
   states,
   helper,
   userId,
+  isEdit,
+  blogId
 }: {
   states: ReturnType<typeof useEditorStates>;
   helper: ReturnType<typeof useEditorHelper>;
   userId: number;
+  isEdit: boolean;
+  blogId?: number;
 }) {
   const handleCreateBlog = (
     states: ReturnType<typeof useEditorStates>,
     userId: number
   ) => {
+    console.log("creates!");
     return (e: React.MouseEvent<HTMLButtonElement>) =>
       helper.createBlog(e, states, userId);
   };
+
+  const handleEditBlog = (
+    states: ReturnType<typeof useEditorStates>,
+    blogId: number
+  ) => {
+    console.log("edits!");
+    return (e: React.MouseEvent<HTMLButtonElement>) => 
+      helper.editBlog(e, states, blogId);
+  }
 
   const MATCHERS = [
     createLinkMatcherWithRegExp(URL_REGEX, (text) => {
@@ -113,16 +127,16 @@ export default function EditorLexicalComposer({
       </div>
       <div className="w-full flex justify-center items-center mt-8">
         <GeneralButton
-          onClick={handleCreateBlog(states, userId)}
+          onClick={isEdit && blogId ? handleEditBlog(states, blogId) : handleCreateBlog(states, userId)}
           aria-label="create-recipe-button"
           disabled={states.submit}
           type="submit"
         >
           {!states.submit ? (
-            "作成する"
+            isEdit ? "Edit" : "作成する"
           ) : (
             <span className="flex justify-center items-center">
-              <CircleNotch size={20} className="animate-spin" /> 作成する
+              <CircleNotch size={20} className="animate-spin" /> {isEdit ? "Edit" : "作成する"}
             </span>
           )}
         </GeneralButton>

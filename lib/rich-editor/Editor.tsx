@@ -16,8 +16,9 @@ import EditorLexicalComposer from "./editor-lexical-composer";
 import FetchedImageList from "./fetched-image-list";
 import Label from "@/app/components/ElementComponents/Label";
 import ImageUploadSelection from "./image-upload-selection";
+import { BlogData } from "@/constants/interface";
 
-export default memo(function Editor({ userId }: { userId: number }) {
+export default memo(function Editor({ userId, blogData }: { userId: number, blogData?: BlogData }) {
   const customDispatch = useDisplayMessage();
   const helper = useEditorHelper();
   const states = useEditorStates();
@@ -26,6 +27,15 @@ export default memo(function Editor({ userId }: { userId: number }) {
     const c = sessionStorage.getItem("editor");
     if (c) {
       states.setEditorState(c);
+    }
+
+    if(blogData) {
+      states.setEditorState(JSON.stringify(blogData.editor_state));
+      states.setForm(prev => ({
+        ...prev,
+        blog_category: blogData.blog_category,
+        blog_title: blogData.title,
+      }))
     }
 
     states.setIsMounted(true);
@@ -92,6 +102,8 @@ export default memo(function Editor({ userId }: { userId: number }) {
             states={states}
             helper={helper}
             userId={userId}
+            isEdit={blogData !== undefined}
+            blogId={blogData !== undefined ? blogData.blog_id : undefined}
           />
         </section>
         <Modal modalIdProps={modalIds.editorModal}>

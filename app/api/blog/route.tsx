@@ -1,4 +1,4 @@
-import { uploadBlogEditorState } from "@/action/blog";
+import { updateBlogEditorState, uploadBlogEditorState } from "@/action/blog";
 import { get, logError, logSuccess, sendBasicResponse } from "@/action/common";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -45,3 +45,26 @@ export const POST = async (req: NextRequest) => {
     return sendBasicResponse("Unsuccessful!", undefined, 200);
   }
 };
+
+export const PATCH = async (req: NextRequest) => {
+  try {
+    const { blog_id, blog_image, blog_category, editorState, title } =
+      await req.json();
+
+    const res = await updateBlogEditorState(
+      editorState,
+      blog_category,
+      title,
+      blog_id,
+      blog_image
+    );
+
+    if (!res) throw new Error();
+
+    logSuccess("Successfully updated blog!", "updateBlogEditorState");
+    return sendBasicResponse("Successfully updated blog!", undefined, 200);
+  } catch (e) {
+    logError("Unsuccessful updated of blog!");
+    return sendBasicResponse("Unsuccessful!", undefined, 200);
+  }
+}

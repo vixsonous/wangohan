@@ -8,7 +8,7 @@ const Editor = dynamic(() => import("@/lib/rich-editor/Editor"), {
 
 export default function BlogCreate({ params }: { params: { userId: string } }) {
   const { userId } = params;
-
+  console.log(userId);
   return (
     <div className="w-full px-4 flex flex-col gap-4">
       <Editor userId={Number(userId)} />

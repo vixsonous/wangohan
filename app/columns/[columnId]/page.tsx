@@ -5,7 +5,7 @@ import { get } from "@/action/common";
 import { BlogData } from "@/constants/interface";
 
 type Props = {
-  params: { columnId: String };
+  params: { columnId: string };
   searchParams: { [key: string]: string | string[] | undefined };
 };
 
@@ -14,7 +14,10 @@ export async function generateMetadata(
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const { columnId } = params;
-  const title = `Blog ${columnId}`;
+  const blogData: BlogData = await get<"blog_columns_table", BlogData>(
+    "blog_columns_table"
+  ).findEqualOne("blog_id", columnId);
+  const title = `${blogData.title}`;
 
   return {
     title: title,
@@ -37,8 +40,24 @@ export default async function OneColumn({
     "blog_columns_table"
   ).findEqualOne("blog_id", columnId);
 
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    name: blogData.title,
+    description: blogData.title,
+    image: blogData.blog_image || "",
+    author: {
+      "@type": "Person",
+      name: blogData.user_id,
+    },
+  };
+
   return (
     <div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
       <ColumnDisplay blogData={blogData} />
     </div>
   );
