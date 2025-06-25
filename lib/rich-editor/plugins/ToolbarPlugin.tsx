@@ -1,6 +1,6 @@
 "use client";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import { $getNearestNodeOfType, mergeRegister } from "@lexical/utils";
+import { $getNearestNodeOfType, $insertNodeToNearestRoot, mergeRegister } from "@lexical/utils";
 import {
   ArrowClockwise,
   ArrowCounterClockwise,
@@ -12,6 +12,7 @@ import {
   TextUnderline,
 } from "@phosphor-icons/react/dist/ssr";
 import {
+  $createTextNode,
   $getSelection,
   $isRangeSelection,
   CAN_REDO_COMMAND,
@@ -26,7 +27,7 @@ import {
   SELECTION_CHANGE_COMMAND,
   UNDO_COMMAND,
 } from "lexical";
-import { $isLinkNode } from "@lexical/link";
+import { $createAutoLinkNode, $createLinkNode, $isLinkNode } from "@lexical/link";
 import { $isHeadingNode } from "@lexical/rich-text";
 import { $isListNode, ListNode } from "@lexical/list";
 import { $isCodeNode, getDefaultCodeLanguage } from "@lexical/code";
@@ -59,6 +60,7 @@ import FontSizeDropdown from "./toolbar-groups/font-size";
 import TextHeading from "./toolbar-groups/text-heading";
 import FontFamily from "./toolbar-groups/font-family";
 import useToolbarHelper from "./toolbar-helper";
+import { $createTableNodeWithDimensions } from "@lexical/table";
 
 const LowPriority = 1;
 const IconSize = 20;
@@ -74,6 +76,10 @@ export default function ToolbarPlugin() {
   const editorHelper = useEditorHelper();
   const dispatch = useDisplayMessage();
   const tbHelper = useToolbarHelper(editor, states);
+  const numRows = useRef<HTMLInputElement>(null);
+  const numCols = useRef<HTMLInputElement>(null);
+  const linkText = useRef<HTMLInputElement>(null);
+  const linkUrl = useRef<HTMLInputElement>(null);
 
   const $updateToolbar = useCallback(() => {
     const selection = $getSelection();
@@ -266,6 +272,22 @@ export default function ToolbarPlugin() {
       <Divider />
       <TextHeading states={states} editor={editor} />
       <Divider />
+      <button onClick={() => {
+        dispatch.displayModal(modalIds.addTableModal);
+        states.setModalMode("add-table");
+        states.setImageListPage(0);
+      }}>
+        Add Table
+      </button>
+      <Divider />
+      <button onClick={() => {
+        dispatch.displayModal(modalIds.addLinkModal);
+        states.setModalMode("add-link");
+        states.setImageListPage(0);
+      }}>
+        Add Link
+      </button>
+      <Divider />
       <FontFamily states={states} editor={editor} />
       <Divider />
       <FontSizeDropdown states={states} editor={editor} />
@@ -323,6 +345,17 @@ export default function ToolbarPlugin() {
           />
         </label>
       </Button>
+      <Button
+        className={
+          "toolbar-item flex justify-center items-center spaced cursor-pointer " +
+          (states.isBold ? "active" : "")
+        }
+        aria-label="Format Bold"
+        onClick={tbHelper.resetFontBackgroundColor}
+      >
+        <ArrowClockwise size={IconSize - 4} />
+      </Button>
+      <Divider />
       <Button
         className={
           "toolbar-item flex justify-center items-center spaced cursor-pointer " +
@@ -395,6 +428,95 @@ export default function ToolbarPlugin() {
             editor={editor}
           />
         )}
+      </Modal>
+      <Modal modalIdProps={modalIds.addTableModal}>
+        <div className="relative bg-secondary-bg flex flex-col gap-4 z-[999] py-4 px-8 rounded-lg">
+          <div className="flex flex-col gap-1">
+            <p>Number of rows</p>
+            <input
+              ref={numRows}
+              className="w-[100%] text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]"
+              type="number"
+              name="add-table-rows"
+              placeholder="Rows"
+            />
+          </div>
+          <div className="flex flex-col gap-1">
+            <p>Number of columns</p>
+            <input
+              ref={numCols}
+              className="w-[100%] text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]"
+              type="number"
+              name="add-table-columns"
+              placeholder="Columns"
+            />
+          </div>
+          <Button
+            onClick={() => {
+              if(!numRows.current || !numCols.current) return;
+
+              const numR = numRows.current.value;
+              const numC = numCols.current.value;
+
+              editor.update(() => {
+                const tableNode = $createTableNodeWithDimensions(Number(numR || 0),Number(numC || 0), false);
+                $insertNodeToNearestRoot(tableNode);
+              });
+              dispatch.hideModal();
+            }}
+            className={`w-[100%] bg-[#ffb762] border-[1px] border-primary-text text-primary-text py-2 rounded-md text-sm font-semibold`}
+          >
+            <span>Add Table</span>
+          </Button>
+        </div>
+      </Modal>
+      <Modal modalIdProps={modalIds.addLinkModal}>
+        <div className="relative bg-secondary-bg flex flex-col gap-4 z-[999] py-4 px-8 rounded-lg">
+          <div className="flex flex-col gap-1">
+            <p>Link Text</p>
+            <input
+              ref={linkText}
+              className="w-[100%] text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]"
+              type="text"
+              name="add-link-text"
+              placeholder="Enter link text"
+            />
+          </div>
+          <div className="flex flex-col gap-1">
+            <p>Link URL</p>
+            <input
+              ref={linkUrl}
+              className="w-[100%] text-[12px] sm:text-[16px] px-[10px] py-[10px] border-[2px] rounded-md border-[#ffcd92]"
+              type="text"
+              name="add-link-url"
+              placeholder="Enter link URL"
+            />
+          </div>
+          <Button
+            onClick={() => {
+              if(!linkText.current || !linkUrl.current) return;
+
+              const vlinkText = linkText.current.value;
+              const vlinkUrl = linkUrl.current.value;
+              
+              const filteredUrl = vlinkUrl.startsWith("https://") || vlinkUrl.startsWith("http://") ? vlinkUrl : "https://" + vlinkUrl;
+
+              editor.update(() => {
+                const selection = $getSelection();
+                const link = $createLinkNode(filteredUrl, {target: '_blank'});
+                const text = $createTextNode(vlinkText);
+                link.append(text);
+                if($isRangeSelection(selection)) {
+                  selection.anchor.getNode().insertAfter(link);
+                }
+              });
+              dispatch.hideModal();
+            }}
+            className={`w-[100%] bg-[#ffb762] border-[1px] border-primary-text text-primary-text py-2 rounded-md text-sm font-semibold`}
+          >
+            <span>Add Link</span>
+          </Button>
+        </div>
       </Modal>
     </div>
   );

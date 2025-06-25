@@ -19,6 +19,7 @@ import { YouTubeNode } from "@/lib/nodes/YoutubeNode";
 import { IndentationNode } from "@/lib/nodes/IndentationNode";
 import { parseAllowedColor, parseAllowedFontSize } from "./styleConfig";
 import ExampleTheme from "./Theme";
+import { TableCellNode, TableNode, TableRowNode } from "@lexical/table";
 
 const exportDOM = (
   editor: LexicalEditor,
@@ -122,6 +123,9 @@ export const editorConfig = {
     FontSizeNode,
     FontColorNode,
     FontBackgroundColorNode,
+    TableNode,
+    TableRowNode,
+    TableCellNode
   ],
   onError(error: Error) {
     throw error;

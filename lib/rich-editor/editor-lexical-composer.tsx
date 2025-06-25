@@ -3,7 +3,6 @@ import { editorConfig } from "./editor-config";
 import GeneralButton from "@/app/components/ElementComponents/GeneralButton";
 import useEditorStates from "./editor-states";
 import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
-
 import { FontFamilyPlugin } from "../nodes/FontNode";
 import { FontSizePlugin } from "../nodes/FontSizeNode";
 import { FontColorPlugin } from "../nodes/FontColorNode";
@@ -26,6 +25,7 @@ import { customGenerateHtmlFromNodes } from "../lib/GenerateHtml";
 import { EMAIL_REGEX, URL_REGEX } from "@/constants/constants";
 import { CircleNotch } from "@phosphor-icons/react/dist/ssr";
 import useEditorHelper from "./editor-helper";
+import {TablePlugin} from '@lexical/react/LexicalTablePlugin';
 
 const placeholder = "Enter some rich text...";
 
@@ -121,6 +121,7 @@ export default function EditorLexicalComposer({
           <YouTubePlugin />
           <FontSizePlugin />
           <FontColorPlugin />
+          <TablePlugin />
           <FontBackgroundColorNodePlugin />
           <FontFamilyPlugin />
         </div>
@@ -142,7 +143,7 @@ export default function EditorLexicalComposer({
         </GeneralButton>
       </div>
       <div
-        className="mt-8"
+        className="mt-8 max-w-full whitespace-pre-wrap break-all"
         dangerouslySetInnerHTML={{ __html: states.htmlString }}
       ></div>
     </LexicalComposer>

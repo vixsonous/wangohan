@@ -32,6 +32,16 @@ export default {
       underline: 'editor-text-underline',
       underlineStrikethrough: 'editor-text-underlineStrikethrough',
     },
-    fontFamily: 'font-family'
+    fontFamily: 'font-family',
+    table: 'theme__table',
+    tableCell: 'theme__tableCell',
+    tableCellActionButton: 'theme__tableCellActionButton',
+    tableCellActionButtonContainer:
+      'theme__tableCellActionButtonContainer',
+    tableCellHeader: 'theme__tableCellHeader',
+    tableCellResizer: 'theme__tableCellResizer',
+    tableCellSelected: 'theme__tableCellSelected',
+    tableSelected: 'theme__tableSelected',
+    tableSelection: 'theme__tableSelection',
   };
   

@@ -400,3 +400,141 @@ pre::-webkit-scrollbar-thumb {
   line-height: 16px;
   background-size: contain;
 }
+
+.theme__table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  overflow-y: scroll;
+  overflow-x: scroll;
+  table-layout: fixed;
+  width: 100%;
+  max-width: 100%;
+  margin: 0px 25px 30px 0px;
+}
+.theme__tableSelection *::selection {
+  background-color: transparent;
+}
+.theme__tableSelected {
+  outline: 2px solid rgb(60, 132, 244);
+}
+.theme__tableCell {
+  border: 1px solid #bbb;
+  min-width: 75px;
+  vertical-align: top;
+  text-align: start;
+  padding: 6px 8px;
+  position: relative;
+  outline: none;
+}
+.theme__tableCellResizer {
+  position: absolute;
+  right: -4px;
+  height: 100%;
+  width: 8px;
+  cursor: ew-resize;
+  z-index: 10;
+  top: 0;
+}
+.theme__tableCellHeader {
+  background-color: #f2f3f5;
+  text-align: start;
+}
+.theme__tableCellSelected {
+  caret-color: transparent;
+}
+.theme__tableCellSelected::after {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  mix-blend-mode: multiply;
+  content: '';
+  pointer-events: none;
+}
+.theme__tableAddColumns {
+  position: absolute;
+  background-color: #000;
+  height: 100%;
+  animation: table-controls 0.2s ease;
+  border: 0;
+  cursor: pointer;
+}
+.theme__tableAddColumns:after {
+  background-image: url("/public/next.svg");
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: block;
+  content: ' ';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.4;
+}
+.theme__tableAddColumns:hover,
+.theme__tableAddRows:hover {
+  background-color: #000;
+}
+.theme__tableAddRows {
+  position: absolute;
+  width: calc(100% - 25px);
+  background-color: #eee;
+  animation: table-controls 0.2s ease;
+  border: 0;
+  cursor: pointer;
+}
+.theme__tableAddRows:after {
+  background-image: url("/public/next.svg");
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: block;
+  content: ' ';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.4;
+}
+@keyframes table-controls {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+.theme__tableCellResizeRuler {
+  display: block;
+  position: absolute;
+  width: 1px;
+  background-color: rgb(60, 132, 244);
+  height: 100%;
+  top: 0;
+}
+.theme__tableCellActionButtonContainer {
+  display: block;
+  right: 5px;
+  top: 6px;
+  position: absolute;
+  z-index: 4;
+  width: 20px;
+  height: 20px;
+}
+.theme__tableCellActionButton {
+  background-color: #eee;
+  display: block;
+  border: 0;
+  border-radius: 20px;
+  width: 20px;
+  height: 20px;
+  color: #222;
+  cursor: pointer;
+}
+.theme__tableCellActionButton:hover {
+  background-color: #ddd;
+}

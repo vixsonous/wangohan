@@ -63,23 +63,33 @@ export const get = <T extends keyof Database, Data>(
     }
 
     public findAll = async (): Promise<Data> => {
-      return (await db
+      try {
+        return (await db
         .selectFrom(this.table_name)
         .selectAll()
         .execute()) as Data;
+      } catch (error) {
+        console.log(error);
+        return [] as Data;
+      }
     };
 
     public findEqualOne = async (
       uniq_id: number | string,
       column: string
     ): Promise<Data> => {
-      const { rows } = await db.executeQuery(
-        CompiledQuery.raw(
-          `SELECT * FROM ${this.table_name} WHERE ${column} = ${uniq_id} LIMIT 1;`
-        )
-      );
+      try {
+        const { rows } = await db.executeQuery(
+          CompiledQuery.raw(
+            `SELECT * FROM ${this.table_name} WHERE ${column} = ${uniq_id} LIMIT 1;`
+          )
+        );
 
-      return rows.length > 0 ? (rows[0] as Data) : (undefined as Data);
+        return rows.length > 0 ? (rows[0] as Data) : (undefined as Data);
+      } catch(err) {
+        console.log(err);
+        return undefined as Data;
+      }
     };
   }
 

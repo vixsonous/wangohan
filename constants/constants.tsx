@@ -123,6 +123,8 @@ export const modalIds = {
   toolbarpluginModal: "toolbar-plugin-modal",
   editorModal: "editor-modal",
   recipeoptionsModal: "recipe-options-modal",
+  addTableModal: "add-table-modal",
+  addLinkModal: "add-link-modal",
 };
 
 export const content =

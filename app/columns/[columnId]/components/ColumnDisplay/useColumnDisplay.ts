@@ -10,6 +10,7 @@ import { IndentationNode } from "@/lib/nodes/IndentationNode";
 import { AutoLinkNode, LinkNode } from "@lexical/link";
 import ExampleTheme from "@/lib/rich-editor/Theme";
 import { customGenerateHtmlFromNodes } from "@/lib/lib/GenerateHtml";
+import { TableCellNode, TableNode, TableRowNode } from "@lexical/table";
 
 export default function useColumnDisplay(blogData: BlogData) {
   const [htmlString, setHtmlString] = useState("");
@@ -38,6 +39,9 @@ export default function useColumnDisplay(blogData: BlogData) {
         YouTubeNode,
         HeadingNode,
         IndentationNode,
+        TableNode,
+        TableRowNode,
+        TableCellNode
       ],
       onError(error: Error) {
         throw error;
