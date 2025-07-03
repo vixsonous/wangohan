@@ -26,6 +26,7 @@ import { EMAIL_REGEX, URL_REGEX } from "@/constants/constants";
 import { CircleNotch } from "@phosphor-icons/react/dist/ssr";
 import useEditorHelper from "./editor-helper";
 import {TablePlugin} from '@lexical/react/LexicalTablePlugin';
+import { useRouter } from "next/navigation";
 
 const placeholder = "Enter some rich text...";
 
@@ -63,20 +64,20 @@ export default function EditorLexicalComposer({
   isEdit: boolean;
   blogId?: number;
 }) {
+
+  const router = useRouter();
   const handleCreateBlog = (
     states: ReturnType<typeof useEditorStates>,
     userId: number
   ) => {
-    console.log("creates!");
     return (e: React.MouseEvent<HTMLButtonElement>) =>
-      helper.createBlog(e, states, userId);
+      helper.createBlog(e, states, userId, router);
   };
 
   const handleEditBlog = (
     states: ReturnType<typeof useEditorStates>,
     blogId: number
   ) => {
-    console.log("edits!");
     return (e: React.MouseEvent<HTMLButtonElement>) => 
       helper.editBlog(e, states, blogId);
   }

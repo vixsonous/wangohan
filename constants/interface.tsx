@@ -29,7 +29,7 @@ export interface recipe {
 }
 
 export interface userDetails {
-  pets: DogData[];
+  pets?: DogData[];
   user_codename: string;
   user_detail_id: number;
   user_id: number;

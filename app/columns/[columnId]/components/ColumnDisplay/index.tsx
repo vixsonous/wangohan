@@ -14,7 +14,7 @@ const ColumnDisplay = ({ blogData }: { blogData: BlogData }) => {
 
   return (
     <article className="grid gap-4 grid-cols-12">
-      <section className="col-span-8 mt-6 bg-secondary-bg p-10">
+      <section className="col-span-12 lg:col-span-8 mt-6 bg-secondary-bg p-10">
         <h1 className="text-xl mb-2">{blogData.title}</h1>
         <p className="flex gap-2 items-center mb-6 text-sm text-gray-500">
           <CalendarPlus size={16} />
@@ -32,7 +32,7 @@ const ColumnDisplay = ({ blogData }: { blogData: BlogData }) => {
         />
         <h2 className="text-lg md:text-xl">{blogData.blog_category}</h2>
       </section>
-      <section className="col-span-4 mt-6 bg-secondary-bg max-h-max p-4">
+      <section className="hidden lg:block col-span-4 mt-6 bg-secondary-bg max-h-max p-4">
         Navigation is here
       </section>
     </article>

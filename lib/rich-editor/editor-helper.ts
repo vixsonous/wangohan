@@ -6,6 +6,7 @@ import { content } from "@/constants/constants";
 import useToolbarStates from "./plugins/toolbar-states";
 import { LexicalEditor } from "lexical";
 import { INSERT_IMAGE_COMMAND } from "./plugins/ImagePlugin";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 const useEditorHelper = () => {
   const customDispatch = useDisplayMessage();
@@ -15,7 +16,8 @@ const useEditorHelper = () => {
       async createBlog(
         e: React.MouseEvent<HTMLButtonElement>,
         states: ReturnType<typeof useEditorStates>,
-        userId: number
+        userId: number,
+        router: AppRouterInstance
       ) {
         e.preventDefault();
 
@@ -60,11 +62,13 @@ const useEditorHelper = () => {
           customDispatch.displayError(parsed.message);
         }
 
+        console.log(sessionStorage.getItem("editor"));
         sessionStorage.removeItem("editor");
         states.setHtmlString("");
         states.setEditorState(content);
         customDispatch.displaySuccess(parsed.message);
-        states.setSubmit(false);
+        router.push("/admin/blog/1");
+        // states.setSubmit(false);
       },
 
       async editBlog(

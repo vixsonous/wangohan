@@ -170,6 +170,27 @@ export default function Settings() {
                             )
                           }
                         </div>
+
+                        
+                          {
+                            user.user_id === 1 && (
+                              <div className="font-bold flex flex-col bg-secondary-bg w-full p-2 gap-2 rounded-2xl border border-primary-text">
+                                <Link href={"/columns"} aria-disabled={true} tabIndex={-1} onClick={openSettings} className="w-full hover:opacity-75 px-4 py-1 rounded-full">
+                                  <div className="w-full text-sm flex justify-between items-center">
+                                      <PawPrint size={20}/>
+                                      Admin
+                                  </div>
+                                </Link>
+                                <Link href={"/admin/blog/1"} onClick={openSettings} className="w-full hover:opacity-75 px-4 py-1 rounded-full">
+                                  <div className="w-full text-sm flex justify-between items-center">
+                                      <PawPrint size={20}/>
+                                      Blogs
+                                  </div>
+                                </Link>
+                              </div>
+                            )
+                          }
+                        
                     </div>
                 </motion.div>
             )}

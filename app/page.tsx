@@ -145,12 +145,12 @@ export default async function Home() {
       <MotionDiv>
         <div className="flex flex-col relative mt-16">
           <h1 className="flex justify-center w-[100%] top-4 items-center absolute text-2xl lg:text-4xl font-bold text-[#523636]">
-            コラム近日開設予定
+            役立つコラムはこちら
           </h1>
           <div className="absolute flex justify-center w-[100%] top-14 lg:top-24">
-            <button className=" bg-primary-text rounded-md text-xs text-white py-2 px-4">
+            <Link href={"/columns"} className=" bg-primary-text rounded-md text-xs text-white py-2 px-4">
               Column
-            </button>
+            </Link>
           </div>
           <img
             src={"/LP/column.png"}
