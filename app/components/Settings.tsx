@@ -173,7 +173,7 @@ export default function Settings() {
 
                         
                           {
-                            user.user_id === 1 && (
+                            user.user_id === 3 && (
                               <div className="font-bold flex flex-col bg-secondary-bg w-full p-2 gap-2 rounded-2xl border border-primary-text">
                                 <Link href={"/columns"} aria-disabled={true} tabIndex={-1} onClick={openSettings} className="w-full hover:opacity-75 px-4 py-1 rounded-full">
                                   <div className="w-full text-sm flex justify-between items-center">
