@@ -1,6 +1,6 @@
 import { encrypt } from "@/action/lib";
 import { checkIfUserNotExist, registerUser } from "@/action/users";
-import { ERR_MSG } from "@/constants/constants";
+import { ERR_MSG, getExpireDate } from "@/constants/constants";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from 'bcrypt';
 
@@ -20,7 +20,7 @@ export const POST = async (req: NextRequest) => {
             const user = await registerUser(email, hash);
 
             const response = NextResponse.redirect(process.env.BASE_URL + "/signup/personal-info", {status: 302});
-            const expires = new Date(Date.now() + 10 * 1000);
+            const expires = getExpireDate();
             const session = await encrypt({user, expires});
 
             response.cookies.set('session', session, {

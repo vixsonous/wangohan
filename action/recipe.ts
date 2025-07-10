@@ -405,7 +405,7 @@ export const getWeeklyRecipes = async (
   }
 };
 
-export const getPopularRecipes = async (page: number = 0) => {
+export const getPopularRecipes = async (page: number = 0, limit: number = FRONT_PAGE_RECIPE_QUERY_LIMIT) => {
   try {
     const cacheKey = popularRecipesCacheKey;
     const cachedData = highDynamicData.get(cacheKey) as DisplayRecipe[];
@@ -413,7 +413,7 @@ export const getPopularRecipes = async (page: number = 0) => {
     if (cachedData) {
       return { message: "完了", body: cachedData, status: 200 };
     }
-    const OFFSET = page * FRONT_PAGE_RECIPE_QUERY_LIMIT;
+    const OFFSET = page * limit;
     const recipes = await db
       .selectFrom("recipes_table")
       .select([
@@ -429,7 +429,7 @@ export const getPopularRecipes = async (page: number = 0) => {
         "total_views",
       ])
       .orderBy("total_views", "desc")
-      .limit(FRONT_PAGE_RECIPE_QUERY_LIMIT)
+      .limit(limit)
       .offset(OFFSET)
       .execute();
 

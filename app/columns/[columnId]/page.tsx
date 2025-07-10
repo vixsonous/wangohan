@@ -3,6 +3,8 @@ import IndexLoading from "@/app/loading";
 import { Metadata, ResolvingMetadata } from "next";
 import { get } from "@/action/common";
 import { BlogData } from "@/constants/interface";
+import { getRelatedBlog } from "@/action/blog";
+import { getPopularRecipes } from "@/action/recipe";
 
 type Props = {
   params: { columnId: string };
@@ -40,6 +42,10 @@ export default async function OneColumn({
     "blog_columns_table"
   ).findEqualOne("blog_id", columnId);
 
+  const relatedBlogData: BlogData[] = await getRelatedBlog();
+
+  const {body: topPopularRecipes} = await getPopularRecipes(0, 4);
+
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "Blog",
@@ -58,7 +64,7 @@ export default async function OneColumn({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
-      <ColumnDisplay blogData={blogData} />
+      <ColumnDisplay blogData={blogData} relatedBlogs={relatedBlogData} popularRecipes={topPopularRecipes || []} />
     </div>
   );
 }

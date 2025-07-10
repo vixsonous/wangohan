@@ -65,8 +65,8 @@ export const textColor = {
 };
 
 export const getExpireDate = () => {
-  // 10 minutes (last number is minutes)
-  return new Date(Date.now() + 60 * 1000 * 10);
+  // 60 minutes (last number is minutes)
+  return new Date(Date.now() + 60 * 1000 * 60);
 };
 
 export const validateEmail = (email: string) => {

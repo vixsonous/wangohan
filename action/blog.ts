@@ -1,6 +1,7 @@
 import { db } from "@/lib/database/db";
 import { get, insert, logError } from "./common";
 import { BlogData, userDetails } from "@/constants/interface";
+import { sql } from "kysely";
 
 export const uploadBlogImage = async (url: string, fileName: string) => {
   try {
@@ -88,6 +89,20 @@ export const getBlogs = async (): Promise<BlogData[]> => {
     return [];
   }
 };
+
+export const getRelatedBlog = async (): Promise<BlogData[]> => {
+  try {
+    const data: BlogData[] = await db.selectFrom("blog_columns_table")
+      .orderBy(sql`random()`)
+      .limit(3)
+      .selectAll()
+      .execute();
+
+    return data || [];
+  } catch (e) {
+    return [];
+  }
+} 
 
 export const ADMIN_BLOG_NUMBER_PER_PAGE = 5;
 
