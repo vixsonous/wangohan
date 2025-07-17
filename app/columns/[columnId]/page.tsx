@@ -44,7 +44,7 @@ export default async function OneColumn({
 
   const relatedBlogData: BlogData[] = await getRelatedBlog();
 
-  const {body: topPopularRecipes} = await getPopularRecipes(0, 4);
+  const {body: topPopularRecipes} = await getPopularRecipes(0, 3);
 
   const structuredData = {
     "@context": "https://schema.org",
