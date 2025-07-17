@@ -28,12 +28,13 @@ const icons = {
 const ColumnDisplay = ({ blogData, relatedBlogs, popularRecipes }: { blogData: BlogData, relatedBlogs: BlogData[], popularRecipes: DisplayRecipe[] }) => {
   const { htmlString } = useColumnDisplay(blogData);
   return (
-    <article className="grid gap-4 grid-cols-12">
+    <article className="grid lg:gap-4 grid-cols-12">
       <section className="col-span-12 max-h-max lg:col-span-8 mt-6 bg-secondary-bg p-10">
         <h1 className="text-xl mb-2">{blogData.title}</h1>
         <p className="flex gap-2 items-center mb-6 text-sm text-gray-500">
           <CalendarPlus size={16} />
           {new Date(blogData.created_at).toDateString()}
+          <p className="ml-4">{blogData.blog_category}</p>
         </p>
         <OptImage
           src={blogData.blog_image}
@@ -45,10 +46,9 @@ const ColumnDisplay = ({ blogData, relatedBlogs, popularRecipes }: { blogData: B
           className="my-8 break-all"
           dangerouslySetInnerHTML={{ __html: htmlString }}
         />
-        <h2 className="text-lg md:text-xl">{blogData.blog_category}</h2>
       </section>
-      <section className="hidden lg:flex flex-col gap-12 col-span-4 mt-6 bg-secondary-bg max-h-max p-4">
-        <section className="flex flex-col gap-2">
+      <section className="flex flex-col gap-12 col-span-12 lg:col-span-4 lg:mt-6 bg-secondary-bg max-h-max p-4">
+        <section className="hidden lg:flex flex-col gap-2">
           <header className="flex gap-4 items-center">
             <img
                 src={"/icons/logo-new-v2.png"}
@@ -61,8 +61,8 @@ const ColumnDisplay = ({ blogData, relatedBlogs, popularRecipes }: { blogData: B
           </header>
           <MainSearchForm isInView/>
         </section>
-        <section className="grid grid-cols-1 gap-2 justify-center">
-          <header className="flex gap-4 items-center">
+        <section className="flex flex-col gap-2 items-center">
+          <header className="flex w-full gap-4 items-center">
             <img
               src={"/icons/logo-new-v2.png"}
               className=" h-[20px] w-[20px] relative"
@@ -81,7 +81,16 @@ const ColumnDisplay = ({ blogData, relatedBlogs, popularRecipes }: { blogData: B
               alt="about me image"
             />
           </div>
-          <p>デザイン事務所イラストレーターを経てフリーランスに。このブログは、周りの目を気にせず、心のやってみたいを尊重していく記録です。ブログやクリエイティブ、大好きなコトやモノの中で心がきゅんとときめいた情報だけをお届けしていきます。</p>
+          <p>わんごはんの中の人。愛犬に美味しいご飯を作ってあげたい。そんな愛犬家の皆さんが作る「わんごはん」レシピを共有するサイトを作れたらと思いこのwebアプリを作成。ブログでは、飼い主さんなら知っておきたい知識をお届けしています。</p>
+          <a target="_blank" href="https://www.instagram.com/rei_wangohan?igsh=MTRtcHIzaGQydTg0">
+          <img
+            src={"/icons/sns-ig.svg"}
+            className="mt-8 h-[40px] w-[40px] relative"
+            width={60}
+            height={60}
+            alt="website icon"
+          />
+          </a>
         </section>
         <section className="grid grid-cols-1">
           <header className="flex gap-4 items-center mb-4">
